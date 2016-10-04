@@ -38,8 +38,12 @@ class BounceManager(ModelManager):
         response = self._call('GET', '/bounces/%s' % id)
         return self._init_instance(response.json())
 
-    def all(self, count=500, offset=0):
-        response = self._call('GET', '/bounces/', count=count, offset=offset)
+    def all(self, count=500, offset=0, type=None, inactive=None, emailFilter=None, tag=None, messageID=None,
+            fromdate=None, todate=None):
+        response = self._call(
+            'GET', '/bounces/', count=count, offset=offset, type=type, inactive=inactive, emailFilter=emailFilter,
+            tag=tag, messageID=messageID, fromdate=fromdate, todate=todate
+        )
         return [self._init_instance(bounce) for bounce in response.json()['Bounces']]
 
     def activate(self, id):

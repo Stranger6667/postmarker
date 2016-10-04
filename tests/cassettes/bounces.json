@@ -300,6 +300,65 @@
         },
         "url": "https://api.postmarkapp.com/deliverystats"
       }
+    },
+    {
+      "recorded_at": "2016-10-04T15:04:22",
+      "request": {
+        "body": {
+          "base64_string": "",
+          "encoding": "utf-8"
+        },
+        "headers": {
+          "Accept": [
+            "application/json"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "python-requests/2.11.1"
+          ],
+          "X-Postmark-Server-Token": [
+            "POSTMARK_API_TEST"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://api.postmarkapp.com/bounces/?count=2&offset=0"
+      },
+      "response": {
+        "body": {
+          "base64_string": "eyJUb3RhbENvdW50IjoxNDEsIkJvdW5jZXMiOlt7IkJvdW5jZWRBdCI6IjIwMTYtMDktMTlUMTY6MzQ6MDkuMTMzNjc1Mi0wNDowMCIsIkVtYWlsIjoiZXhhbXBsZUBleGFtcGxlLmNvbSIsIkRldGFpbHMiOiJhY3Rpb246IGZhaWxlZFxyXG4iLCJDYW5BY3RpdmF0ZSI6dHJ1ZSwiRHVtcEF2YWlsYWJsZSI6dHJ1ZSwiSUQiOjk0MzI0NzM1MCwiU3ViamVjdCI6IlRlc3Qgc3ViamVjdCIsIlR5cGVDb2RlIjoxLCJJbmFjdGl2ZSI6dHJ1ZSwiTmFtZSI6IkhhcmQgYm91bmNlIiwiTWVzc2FnZUlEIjoiYjFkNWRmYTgtMmQ3Yy00MTc2LWEyNGUtOGE0N2ZmODYwNjE1IiwiVHlwZSI6IkhhcmRCb3VuY2UiLCJEZXNjcmlwdGlvbiI6IlRoZSBzZXJ2ZXIgd2FzIHVuYWJsZSB0byBkZWxpdmVyIHlvdXIgbWVzc2FnZSAoZXg6IHVua25vd24gdXNlciwgbWFpbGJveCBub3QgZm91bmQpLiJ9LHsiQm91bmNlZEF0IjoiMjAxNi0wOC0wMlQwNzowMjozOC45Nzc4ODI2LTA0OjAwIiwiRW1haWwiOiJleGFtcGxlQGV4YW1wbGUuY29tIiwiRGV0YWlscyI6IlgtUG9zdGZpeDsgTWFpbGJveCBpcyBmdWxsIiwiQ2FuQWN0aXZhdGUiOnRydWUsIkR1bXBBdmFpbGFibGUiOmZhbHNlLCJJRCI6OTI0ODI5NTczLCJTdWJqZWN0IjoiVGVzdCBzdWJqZWN0IiwiVHlwZUNvZGUiOjQwOTYsIkluYWN0aXZlIjpmYWxzZSwiTmFtZSI6IlNvZnQgYm91bmNlIiwiTWVzc2FnZUlEIjoiYWE5ZmE5Y2EtNmM5OS00OTcwLWFjMTctMmU2M2Y5NTE1ZThkIiwiVHlwZSI6IlNvZnRCb3VuY2UiLCJEZXNjcmlwdGlvbiI6IlVuYWJsZSB0byB0ZW1wb3JhcmlseSBkZWxpdmVyIG1lc3NhZ2UgKGkuZS4gbWFpbGJveCBmdWxsLCBhY2NvdW50IGRpc2FibGVkLCBleGNlZWRzIHF1b3RhLCBvdXQgb2YgZGlzayBzcGFjZSkuIn1dfQ==",
+          "encoding": "utf-8"
+        },
+        "headers": {
+          "Cache-Control": [
+            "private"
+          ],
+          "Content-Length": [
+            "943"
+          ],
+          "Content-Type": [
+            "application/json; charset=utf-8"
+          ],
+          "Date": [
+            "Tue, 04 Oct 2016 15:04:22 GMT"
+          ],
+          "Server": [
+            "unicorns-double-rainbow"
+          ],
+          "X-Powered-By": [
+            "ASP.NET"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": "OK"
+        },
+        "url": "https://api.postmarkapp.com/bounces/?count=2&offset=0"
+      }
     }
   ],
   "recorded_with": "betamax/0.8.0"

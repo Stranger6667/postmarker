@@ -40,3 +40,8 @@ class TestManager:
             ],
             'InactiveMails': 136
         }
+
+    def test_all(self, server_client):
+        bounces = server_client.bounces.all(count=2)
+        assert len(bounces) == 2
+        assert all(isinstance(bounce, Bounce) for bounce in bounces)
