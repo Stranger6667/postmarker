@@ -1,0 +1,24 @@
+language: python
+matrix:
+  include:
+    - python: 3.5
+      env:
+      - TOX_ENV=py27
+    - python: 3.5
+      env:
+      - TOX_ENV=py34
+    - python: 3.5
+      env:
+      - TOX_ENV=py35
+    - python: nightly
+      env:
+      - TOX_ENV=py36
+    - python: 3.5
+      env:
+      - TOX_ENV=pypy
+install:
+  - travis_retry pip install tox
+script:
+  - tox -e $TOX_ENV
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
