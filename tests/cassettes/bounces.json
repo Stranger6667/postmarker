@@ -138,9 +138,6 @@
           "Content-Length": [
             "0"
           ],
-          "Content-Type": [
-            "application/json"
-          ],
           "User-Agent": [
             "python-requests/2.11.1"
           ],

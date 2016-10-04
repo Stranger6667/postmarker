@@ -15,7 +15,7 @@ class TestClient:
             'GET',
             'https://api.postmarkapp.com/endpoint',
             headers={'X-Postmark-Server-Token': api_token, 'Accept': 'application/json'},
-            params={}, data=None,
+            params={}, json=None,
         )
 
     def test_account_client(self, account_client, api_token, patched_request):
@@ -24,7 +24,7 @@ class TestClient:
             'GET',
             'https://api.postmarkapp.com/endpoint',
             headers={'X-Postmark-Account-Token': api_token, 'Accept': 'application/json'},
-            params={}, data=None,
+            params={}, json=None,
         )
 
     def test_no_token(self):
@@ -34,19 +34,6 @@ class TestClient:
 
     def test_repr(self, server_client, api_token):
         assert repr(server_client) == '<ServerClient: %s>' % api_token
-
-    def test_content_type_header(self, server_client, api_token, patched_request):
-        server_client._call('POST', 'endpoint')
-        patched_request.assert_called_with(
-            'POST',
-            'https://api.postmarkapp.com/endpoint',
-            headers={
-                'X-Postmark-Server-Token': api_token,
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-            params={}, data=None,
-        )
 
 
 class TestManagersSetup:

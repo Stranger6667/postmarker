@@ -70,10 +70,8 @@ class BaseClient(with_metaclass(ClientMeta)):
             self.auth_header_name: self.token,
             'Accept': 'application/json',
         }
-        if method != 'GET':
-            headers['Content-Type'] = 'application/json'
         url = urljoin(self.root_url, endpoint)
-        return self.session.request(method, url, data=data, params=kwargs, headers=headers)
+        return self.session.request(method, url, json=data, params=kwargs, headers=headers)
 
 
 class ServerClient(BaseClient):
