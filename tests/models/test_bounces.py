@@ -23,3 +23,9 @@ class TestModel:
     def test_activate(self, bounce):
         assert bounce.activate() == 'OK'
         assert not bounce.Inactive
+
+
+class TestManager:
+
+    def test_tags(self, server_client):
+        assert server_client.bounces.tags == []

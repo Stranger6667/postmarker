@@ -14,9 +14,6 @@ class Model(object):
     def _update(self, kwargs):
         self.__dict__.update(kwargs)
 
-    def _call(self, *args, **kwargs):
-        return self._manager._call(*args, **kwargs)
-
     def as_dict(self):
         return self._data
 

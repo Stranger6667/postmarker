@@ -182,6 +182,65 @@
         },
         "url": "https://api.postmarkapp.com/bounces/723626745/activate"
       }
+    },
+    {
+      "recorded_at": "2016-10-04T14:50:16",
+      "request": {
+        "body": {
+          "base64_string": "",
+          "encoding": "utf-8"
+        },
+        "headers": {
+          "Accept": [
+            "application/json"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "python-requests/2.11.1"
+          ],
+          "X-Postmark-Server-Token": [
+            "POSTMARK_API_TEST"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://api.postmarkapp.com/bounces/tags"
+      },
+      "response": {
+        "body": {
+          "base64_string": "W10=",
+          "encoding": "utf-8"
+        },
+        "headers": {
+          "Cache-Control": [
+            "private"
+          ],
+          "Content-Length": [
+            "2"
+          ],
+          "Content-Type": [
+            "application/json; charset=utf-8"
+          ],
+          "Date": [
+            "Tue, 04 Oct 2016 14:50:16 GMT"
+          ],
+          "Server": [
+            "unicorns-double-rainbow"
+          ],
+          "X-Powered-By": [
+            "ASP.NET"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": "OK"
+        },
+        "url": "https://api.postmarkapp.com/bounces/tags"
+      }
     }
   ],
   "recorded_with": "betamax/0.8.0"
