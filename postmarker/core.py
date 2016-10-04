@@ -1,11 +1,34 @@
 # coding: utf-8
 import requests
 
-from ._compat import urljoin
+from ._compat import urljoin, with_metaclass
+from .exceptions import ConfigError
 from .models.bounces import BounceManager
 
 
-class BaseClient(object):
+class ClientMeta(type):
+
+    def __new__(mcs, name, bases, members):
+        new_class = super(ClientMeta, mcs).__new__(mcs, name, bases, members)
+        mcs.check_managers(new_class)
+        return new_class
+
+    @staticmethod
+    def check_managers(new_class):
+        """
+        `_managers` attribute should not contains:
+
+         - Managers with same names
+         - Managers with names that clashes with client's attributes
+        """
+        managers_names = [manager.name for manager in new_class._managers]
+        if len(managers_names) != len(set(managers_names)):
+            raise ConfigError('Defined managers names are not unique')
+        if any(hasattr(new_class, manager_name) for manager_name in managers_names):
+            raise ConfigError('Defined managers names override client\'s members')
+
+
+class BaseClient(with_metaclass(ClientMeta)):
     """
     Basic class for API clients. Provides basic functionality to make requests.
     """

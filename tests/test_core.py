@@ -1,7 +1,10 @@
 # coding: utf-8
 import pytest
 
-from postmarker.core import ServerClient
+from postmarker.core import BaseClient, ServerClient
+from postmarker.exceptions import ConfigError
+from postmarker.models.base import ModelManager
+from postmarker.models.bounces import BounceManager
 
 
 class TestClient:
@@ -44,3 +47,27 @@ class TestClient:
             },
             params={}, data=None,
         )
+
+
+class TestManagersSetup:
+
+    def test_duplicate_names(self):
+        with pytest.raises(ConfigError) as exc:
+            class SuperClient(BaseClient):
+                _managers = (
+                    BounceManager,
+                    BounceManager
+                )
+        assert str(exc.value) == 'Defined managers names are not unique'
+
+    def test_names_overriding(self):
+
+        class BrokenManager(ModelManager):
+            name = 'session'
+
+        with pytest.raises(ConfigError) as exc:
+            class SuperClient(BaseClient):
+                _managers = (
+                    BrokenManager,
+                )
+        assert str(exc.value) == "Defined managers names override client's members"
