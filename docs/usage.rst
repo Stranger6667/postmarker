@@ -14,7 +14,7 @@ Postmarker provides two client classes - ``ServerClient`` for Server API and ``A
     from postmarker.core import ServerClient
 
 
-    server_api = ServerClient(token='POSTMARK_API_TEST')
+    >>> server_client = ServerClient(token='POSTMARK_API_TEST')
 
 
 .. code-block:: python
@@ -22,4 +22,15 @@ Postmarker provides two client classes - ``ServerClient`` for Server API and ``A
     from postmarker.core import AccountClient
 
 
-    server_api = AccountClient(token='POSTMARK_API_TEST')
+    >>> account_client = AccountClient(token='POSTMARK_API_TEST')
+
+Variables ``server_client`` and ``account_client`` from the examples above will be used in next examples.
+
+Bounces
+-------
+
+Information about bounces is available via ``bounces`` manager.
+
+.. code-block:: python
+
+    >>> bounces = server_client.bounces.all()

@@ -11,7 +11,8 @@ class TestClient:
         patched_request.assert_called_with(
             'GET',
             'https://api.postmarkapp.com/endpoint',
-            headers={'X-Postmark-Server-Token': api_token, 'Accept': 'application/json'}
+            headers={'X-Postmark-Server-Token': api_token, 'Accept': 'application/json'},
+            params={}, data=None,
         )
 
     def test_account_client(self, account_client, api_token, patched_request):
@@ -19,7 +20,8 @@ class TestClient:
         patched_request.assert_called_with(
             'GET',
             'https://api.postmarkapp.com/endpoint',
-            headers={'X-Postmark-Account-Token': api_token, 'Accept': 'application/json'}
+            headers={'X-Postmark-Account-Token': api_token, 'Accept': 'application/json'},
+            params={}, data=None,
         )
 
     def test_no_token(self):
