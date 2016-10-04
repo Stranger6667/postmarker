@@ -15,3 +15,6 @@ class TestModel:
 
     def test_repr(self, bounce):
         assert repr(bounce) == '<Bounce: 734860869>'
+
+    def test_dump(self, bounce):
+        assert bounce.dump == {}

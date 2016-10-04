@@ -46,4 +46,4 @@ class BounceManager(ModelManager):
         return self._call('PUT', '/bounces/%s/activate' % id).json()
 
     def get_dump(self, id):
-        return self._call('GET', '/bounces/%s/dump' % id)
+        return self._call('GET', '/bounces/%s/dump' % id).json()

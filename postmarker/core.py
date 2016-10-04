@@ -18,6 +18,9 @@ class BaseClient(object):
         self.token = token
         self._setup_managers()
 
+    def __repr__(self):
+        return '<%s: %s>' % (self.__class__.__name__, self.token)
+
     def _setup_managers(self):
         """
         Allows to access manager by model name.

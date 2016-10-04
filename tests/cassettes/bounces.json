@@ -58,6 +58,65 @@
         },
         "url": "https://api.postmarkapp.com/bounces/734860869"
       }
+    },
+    {
+      "recorded_at": "2016-10-04T14:33:47",
+      "request": {
+        "body": {
+          "base64_string": "",
+          "encoding": "utf-8"
+        },
+        "headers": {
+          "Accept": [
+            "application/json"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "python-requests/2.11.1"
+          ],
+          "X-Postmark-Server-Token": [
+            "POSTMARK_API_TEST"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://api.postmarkapp.com/bounces/734860869/dump"
+      },
+      "response": {
+        "body": {
+          "base64_string": "e30=",
+          "encoding": "utf-8"
+        },
+        "headers": {
+          "Cache-Control": [
+            "private"
+          ],
+          "Content-Length": [
+            "2"
+          ],
+          "Content-Type": [
+            "application/json; charset=utf-8"
+          ],
+          "Date": [
+            "Tue, 04 Oct 2016 14:33:47 GMT"
+          ],
+          "Server": [
+            "unicorns-double-rainbow"
+          ],
+          "X-Powered-By": [
+            "ASP.NET"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": "OK"
+        },
+        "url": "https://api.postmarkapp.com/bounces/734860869/dump"
+      }
     }
   ],
   "recorded_with": "betamax/0.8.0"
