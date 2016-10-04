@@ -2,3 +2,24 @@
 
 Usage
 =====
+
+General
+-------
+
+At the first step you have to initialize the client with proper API token.
+Postmarker provides two client classes - ``ServerClient`` for Server API and ``AccountClient`` for Account API.
+
+.. code-block:: python
+
+    from postmarker.core import ServerClient
+
+
+    server_api = ServerClient(token='POSTMARK_API_TEST')
+
+
+.. code-block:: python
+
+    from postmarker.core import AccountClient
+
+
+    server_api = AccountClient(token='POSTMARK_API_TEST')
