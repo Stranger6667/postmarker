@@ -29,3 +29,14 @@ class TestManager:
 
     def test_tags(self, server_client):
         assert server_client.bounces.tags == []
+
+    def test_deliverystats(self, server_client):
+        assert server_client.bounces.deliverystats == {
+            'Bounces': [
+                {'Count': 141, 'Name': 'All'},
+                {'Count': 136, 'Name': 'Hard bounce', 'Type': 'HardBounce'},
+                {'Count': 4, 'Name': 'Soft bounce', 'Type': 'SoftBounce'},
+                {'Count': 1, 'Name': 'Spam complaint', 'Type': 'SpamComplaint'}
+            ],
+            'InactiveMails': 136
+        }
