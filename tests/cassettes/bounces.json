@@ -117,6 +117,71 @@
         },
         "url": "https://api.postmarkapp.com/bounces/723626745/dump"
       }
+    },
+    {
+      "recorded_at": "2016-10-04T14:45:01",
+      "request": {
+        "body": {
+          "base64_string": "",
+          "encoding": "utf-8"
+        },
+        "headers": {
+          "Accept": [
+            "application/json"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "Content-Length": [
+            "0"
+          ],
+          "Content-Type": [
+            "application/json"
+          ],
+          "User-Agent": [
+            "python-requests/2.11.1"
+          ],
+          "X-Postmark-Server-Token": [
+            "POSTMARK_API_TEST"
+          ]
+        },
+        "method": "PUT",
+        "uri": "https://api.postmarkapp.com/bounces/723626745/activate"
+      },
+      "response": {
+        "body": {
+          "base64_string": "eyJCb3VuY2UiOnsiSUQiOjcyMzYyNjc0NSwiU3ViamVjdCI6IlRlc3Qgc3ViamVjdCIsIk5hbWUiOiJIYXJkIGJvdW5jZSIsIlR5cGUiOiJIYXJkQm91bmNlIiwiRHVtcEF2YWlsYWJsZSI6ZmFsc2UsIkluYWN0aXZlIjpmYWxzZSwiQ2FuQWN0aXZhdGUiOnRydWUsIlR5cGVDb2RlIjoxLCJCb3VuY2VkQXQiOiIyMDE0LTA1LTEzVDE5OjU2OjE0LjQyMTg2MjYtMDQ6MDAiLCJEZXNjcmlwdGlvbiI6IlRoZSBzZXJ2ZXIgd2FzIHVuYWJsZSB0byBkZWxpdmVyIHlvdXIgbWVzc2FnZSAoZXg6IHVua25vd24gdXNlciwgbWFpbGJveCBub3QgZm91bmQpLiIsIkRldGFpbHMiOiJzbXRwOzU1MCA1LjEuMSBUaGUgZW1haWwgYWNjb3VudCB0aGF0IHlvdSB0cmllZCB0byByZWFjaCBkb2VzIG5vdCBleGlzdC4gUGxlYXNlIHRyeSBkb3VibGUtY2hlY2tpbmcgdGhlIHJlY2lwaWVudCdzIGVtYWlsIGFkZHJlc3MgZm9yIHR5cG9zIG9yIHVubmVjZXNzYXJ5IHNwYWNlcy4gTGVhcm4gbW9yZSBhdCBodHRwOi8vc3VwcG9ydC5nb29nbGUuY29tL21haWwvYmluL2Fuc3dlci5weT9hbnN3ZXI9NjU5NiBtNXNpMTg2Mzc5OTVpZ3IuNTIgLSBnc210cCIsIk1lc3NhZ2VJRCI6IjA4NjQxNWFjLTkzMjYtNGRkYi05ZDk1LWMwZDhkYjEzNTMyYiIsIkVtYWlsIjoiZXhhbXBsZUBleGFtcGxlLmNvbSJ9LCJNZXNzYWdlIjoiT0sifQ==",
+          "encoding": "utf-8"
+        },
+        "headers": {
+          "Cache-Control": [
+            "private"
+          ],
+          "Content-Length": [
+            "682"
+          ],
+          "Content-Type": [
+            "application/json; charset=utf-8"
+          ],
+          "Date": [
+            "Tue, 04 Oct 2016 14:45:01 GMT"
+          ],
+          "Server": [
+            "unicorns-double-rainbow"
+          ],
+          "X-Powered-By": [
+            "ASP.NET"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": "OK"
+        },
+        "url": "https://api.postmarkapp.com/bounces/723626745/activate"
+      }
     }
   ],
   "recorded_with": "betamax/0.8.0"

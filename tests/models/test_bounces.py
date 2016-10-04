@@ -19,3 +19,7 @@ class TestModel:
 
     def test_dump(self, bounce):
         assert bounce.dump == {}
+
+    def test_activate(self, bounce):
+        assert bounce.activate() == 'OK'
+        assert not bounce.Inactive
