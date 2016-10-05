@@ -8,7 +8,7 @@ setup(
     name='postmarker',
     url='https://github.com/FriendlyCoders/postmarker',
     version=postmarker.__version__,
-    packages=['postmarker'],
+    packages=['postmarker', 'postmarker.models'],
     license='MIT',
     author='FriendlyCoders',
     keywords=['postmark', 'api', 'client'],
