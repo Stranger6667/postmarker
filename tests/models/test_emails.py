@@ -61,3 +61,9 @@ class TestModel:
         with pytest.raises(AssertionError) as exc:
             Email(From='sender@example.com', To='receiver@example.com', Subject='Postmark test')
         assert str(exc.value) == 'Provide either email TextBody or HtmlBody or both'
+
+    def test_raw_attachment(self, email, patched_request):
+        attachments = [{'Name': 'readme.txt', 'Content': 'dGVzdCBjb250ZW50', 'ContentType': 'text/plain'}]
+        email._data['Attachments'] = attachments
+        email.send()
+        assert patched_request.call_args[1]['json']['Attachments'] == attachments
