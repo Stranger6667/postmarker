@@ -34,4 +34,4 @@ Or you can look at the docs/ directory in the repository.
 Python support
 ==============
 
-Postmarker supports Python 2.7, 3.4+ and PyPy.
+Postmarker supports Python 2.6, 2.7, 3.3+ and PyPy and PyPy3.
