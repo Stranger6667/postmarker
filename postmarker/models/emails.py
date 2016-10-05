@@ -14,6 +14,7 @@ def transform_list(value):
 class Email(Model):
 
     def __init__(self, **kwargs):
+        assert kwargs.get('TextBody') or kwargs.get('HtmlBody'), 'Provide either email TextBody or HtmlBody or both'
         if not kwargs.get('Headers'):
             kwargs['Headers'] = {}
         super(Email, self).__init__(**kwargs)

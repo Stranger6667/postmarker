@@ -82,4 +82,4 @@ def bounce(server_client):
 
 @pytest.fixture(scope='session')
 def email(server_client):
-    return server_client.emails.Email(From='sender@example.com', To='receiver@example.com')
+    return server_client.emails.Email(From='sender@example.com', To='receiver@example.com', TextBody='text')

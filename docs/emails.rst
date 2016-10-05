@@ -64,7 +64,6 @@ To get more flexibility it is possible to use :py:class:`Email` objects.
 
 Then send it:
 
-
 .. code-block:: python
 
     >>> email.send()

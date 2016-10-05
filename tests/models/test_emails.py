@@ -1,6 +1,7 @@
 # coding: utf-8
 import pytest
 
+from postmarker.models.emails import Email
 
 CASSETTE_NAME = 'emails'
 
@@ -48,8 +49,15 @@ class TestSimpleSend:
         assert patched_request.call_args[1]['json']['Headers'] == [{'Name': 'Test', 'Value': 1}]
 
 
-def test_set_header(email):
-    assert email.Headers == {}
-    email['X-Accept-Language'] = 'en-us, en'
-    assert email.Headers == {'X-Accept-Language': 'en-us, en'}
-    assert email.as_dict()['Headers'] == [{'Name': 'X-Accept-Language', 'Value': 'en-us, en'}]
+class TestModel:
+
+    def test_set_header(self, email):
+        assert email.Headers == {}
+        email['X-Accept-Language'] = 'en-us, en'
+        assert email.Headers == {'X-Accept-Language': 'en-us, en'}
+        assert email.as_dict()['Headers'] == [{'Name': 'X-Accept-Language', 'Value': 'en-us, en'}]
+
+    def test_body(self):
+        with pytest.raises(AssertionError) as exc:
+            Email(From='sender@example.com', To='receiver@example.com', Subject='Postmark test')
+        assert str(exc.value) == 'Provide either email TextBody or HtmlBody or both'
