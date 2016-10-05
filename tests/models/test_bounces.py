@@ -18,7 +18,7 @@ class TestModel:
         assert repr(bounce) == '<Bounce: 723626745>'
 
     def test_dump(self, bounce):
-        assert bounce.dump == {}
+        assert bounce.dump is None
 
     def test_activate(self, bounce):
         assert bounce.activate() == 'OK'
