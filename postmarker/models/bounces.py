@@ -25,7 +25,7 @@ class Bounce(Model):
         Gets SMTP data dump.
 
         :return: Dump of SMTP data if it is available.
-        :rtype: str or None
+        :rtype: `str` or `None`
         """
         return self._manager.get_dump(self.ID)
 
@@ -34,7 +34,7 @@ class Bounce(Model):
         Activates the bounce instance and updates it with latest data.
 
         :return: Activation status.
-        :rtype: str
+        :rtype: `str`
         """
         response = self._manager.activate(self.ID)
         self._update(response['Bounce'])
@@ -53,7 +53,7 @@ class BounceManager(ModelManager):
         """
         Returns number of inactive emails and list of bounce types with total counts.
 
-        :rtype: dict
+        :rtype: `dict`
         """
         return self._call('GET', '/deliverystats').json()
 
@@ -62,7 +62,7 @@ class BounceManager(ModelManager):
         """
         A list of tags that have generated bounces for a given server.
 
-        :rtype: list
+        :rtype: `list`
         """
         return self._call('GET', '/bounces/tags').json()
 
@@ -91,7 +91,7 @@ class BounceManager(ModelManager):
         :param date fromdate: Filter messages starting from the date specified (inclusive).
         :param date todate: Filter messages up to the date specified (inclusive).
         :return: A list of :py:class:`Bounce` instances.
-        :rtype: list
+        :rtype: `list`
         """
         response = self._call(
             'GET', '/bounces/', count=count, offset=offset, type=type, inactive=inactive, emailFilter=emailFilter,
@@ -105,7 +105,7 @@ class BounceManager(ModelManager):
 
         :param int id: Bounce ID.
         :return: Activation result and bounce data.
-        :rtype: dict
+        :rtype: `dict`
         """
         return self._call('PUT', '/bounces/%s/activate' % id).json()
 
@@ -115,7 +115,7 @@ class BounceManager(ModelManager):
 
         :param int id: Bounce ID.
         :return: Dump of SMTP data if it is available.
-        :rtype: str or None
+        :rtype: `str` or `None`
         """
         dump = self._call('GET', '/bounces/%s/dump' % id).json()
         return dump.get('Body')
