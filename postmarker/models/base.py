@@ -15,7 +15,7 @@ class Model(object):
         self.__dict__.update(kwargs)
 
     def as_dict(self):
-        return self._data
+        return self._data.copy()
 
 
 class ModelManager(object):

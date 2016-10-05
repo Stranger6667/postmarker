@@ -1,0 +1,73 @@
+{
+  "http_interactions": [
+    {
+      "recorded_at": "2016-10-05T13:00:05",
+      "request": {
+        "body": {
+          "base64_string": "eyJUZXh0Qm9keSI6IG51bGwsICJIdG1sQm9keSI6ICI8aHRtbD48Ym9keT48c3Ryb25nPkhlbGxvPC9zdHJvbmc+IGRlYXIgUG9zdG1hcmsgdXNlci48L2JvZHk+PC9odG1sPiIsICJUbyI6ICJyZWNlaXZlckBleGFtcGxlLmNvbSIsICJSZXBseVRvIjogbnVsbCwgIkF0dGFjaG1lbnRzIjogbnVsbCwgIkJjYyI6IG51bGwsICJUYWciOiBudWxsLCAiVHJhY2tPcGVucyI6IG51bGwsICJTdWJqZWN0IjogIlBvc3RtYXJrIHRlc3QiLCAiQ2MiOiBudWxsLCAiRnJvbSI6ICJzZW5kZXJAZXhhbXBsZS5jb20iLCAiSGVhZGVycyI6IFtdfQ==",
+          "encoding": "utf-8"
+        },
+        "headers": {
+          "Accept": [
+            "application/json"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "Content-Length": [
+            "301"
+          ],
+          "Content-Type": [
+            "application/json"
+          ],
+          "User-Agent": [
+            "python-requests/2.11.1"
+          ],
+          "X-Postmark-Server-Token": [
+            "POSTMARK_API_TEST"
+          ]
+        },
+        "method": "POST",
+        "uri": "https://api.postmarkapp.com/email"
+      },
+      "response": {
+        "body": {
+          "base64_string": "H4sIAAAAAAAEAD2OQQrCMBBFr1Jmbcq0TYPJSlEXLlzZC0zSqVQMKWkUQby7s3L54b3H/8CQwEHmwPOL847fFJcH1yFF2MD16eNcCo/7IlCLjVENKuwHtA7RYV9bxA6NQi1bhAuvK934fBRce7ttJ+E1+klpMq2ikbUy1vgJmdh3JMop55QPaWRw+A+IPvBaqnvyFYXAi3yA7w+aAccWrQAAAA==",
+          "encoding": "utf-8"
+        },
+        "headers": {
+          "Cache-Control": [
+            "private"
+          ],
+          "Content-Encoding": [
+            "gzip"
+          ],
+          "Content-Length": [
+            "163"
+          ],
+          "Content-Type": [
+            "application/json; charset=utf-8"
+          ],
+          "Date": [
+            "Wed, 05 Oct 2016 13:00:05 GMT"
+          ],
+          "Server": [
+            "unicorns-double-rainbow"
+          ],
+          "X-Powered-By": [
+            "ASP.NET"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": "OK"
+        },
+        "url": "https://api.postmarkapp.com/email"
+      }
+    }
+  ],
+  "recorded_with": "betamax/0.8.0"
+}
