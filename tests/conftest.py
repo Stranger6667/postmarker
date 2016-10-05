@@ -78,3 +78,8 @@ def account_client(api_token):
 @pytest.fixture(scope='session')
 def bounce(server_client):
     return server_client.bounces.get(723626745)
+
+
+@pytest.fixture(scope='session')
+def email(server_client):
+    return server_client.emails.Email(From='sender@example.com', To='receiver@example.com')

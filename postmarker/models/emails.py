@@ -2,7 +2,45 @@
 """
 This module provides basic ways to send emails.
 """
-from .base import ModelManager
+from .base import Model, ModelManager
+
+
+def transform_list(value):
+    if isinstance(value, (list, tuple, set)):
+        value = ','.join(value)
+    return value
+
+
+class Email(Model):
+
+    def __init__(self, **kwargs):
+        if not kwargs.get('Headers'):
+            kwargs['Headers'] = {}
+        super(Email, self).__init__(**kwargs)
+
+    def __setitem__(self, key, value):
+        self.Headers[key] = value
+
+    def as_dict(self):
+        """
+        Additionally encodes headers.
+
+        :return:
+        """
+        data = super(Email, self).as_dict()
+        data['Headers'] = [{'Name': name, 'Value': value} for name, value in data['Headers'].items()]
+        for field in ('To', 'Cc', 'Bcc'):
+            data[field] = transform_list(data[field])
+        return data
+
+    def send(self):
+        """
+        Sends email.
+
+        :return: Information about sent email.
+        :rtype: `dict`
+        """
+        return self._manager._send(**self.as_dict())
 
 
 class EmailManager(ModelManager):
@@ -11,6 +49,12 @@ class EmailManager(ModelManager):
     """
     name = 'emails'
 
+    def _send(self, **kwargs):
+        """
+        Low-level send call. Does not apply any transformation to given data.
+        """
+        return self._call('POST', '/email', data=kwargs).json()
+
     def send(self, From, To, Cc=None, Bcc=None, Subject=None, Tag=None, HtmlBody=None, TextBody=None, ReplyTo=None,
              Headers=None, TrackOpens=None, Attachments=None):
         """
@@ -18,34 +62,36 @@ class EmailManager(ModelManager):
 
         :param str From: The sender email address.
         :param To: Recipient email address.
+                   Multiple recipients could be specified as list or string with comma separated values.
         :type To: str or list
         :param Cc: Cc recipient email address.
+                   Multiple Cc recipients could be specified as list or string with comma separated values.
         :type Cc: str or list
         :param Bcc: Bcc recipient email address.
+                    Multiple Bcc recipients could be specified as list or string with comma separated values.
         :type Bcc: str or list
         :param str Subject: Email subject.
         :param str Tag: Email tag.
         :param str HtmlBody: HTML email message.
         :param str TextBody: Plain text email message.
         :param str ReplyTo: Reply To override email address.
-        :param list Headers: List of custom headers to include.
+        :param dict Headers: Dictionary of custom headers to include.
         :param bool TrackOpens: Activate open tracking for this email.
         :param list Attachments: List of attachments.
         :return: Information about sent email.
         :rtype: `dict`
         """
-        data = {
-            'From': From,
-            'To': To,
-            'Cc': Cc,
-            'Bcc': Bcc,
-            'Subject': Subject,
-            'Tag': Tag,
-            'HtmlBody': HtmlBody,
-            'TextBody': TextBody,
-            'ReplyTo': ReplyTo,
-            'Headers': Headers,
-            'TrackOpens': TrackOpens,
-            'Attachments': Attachments
-        }
-        return self._call('POST', '/email', data=data).json()
+        return self.Email(From=From, To=To, Cc=Cc, Bcc=Bcc, Subject=Subject, Tag=Tag, HtmlBody=HtmlBody,
+                          TextBody=TextBody, ReplyTo=ReplyTo, Headers=Headers, TrackOpens=TrackOpens,
+                          Attachments=Attachments).send()
+
+    def Email(self, From, To, Cc=None, Bcc=None, Subject=None, Tag=None, HtmlBody=None, TextBody=None, ReplyTo=None,
+              Headers=None, TrackOpens=None, Attachments=None):
+        """
+        Constructs empty :py:class:`Email` instance.
+
+        :return: :py:class:`Email`
+        """
+        return Email(manager=self, From=From, To=To, Cc=Cc, Bcc=Bcc, Subject=Subject, Tag=Tag, HtmlBody=HtmlBody,
+                     TextBody=TextBody, ReplyTo=ReplyTo, Headers=Headers, TrackOpens=TrackOpens,
+                     Attachments=Attachments)
