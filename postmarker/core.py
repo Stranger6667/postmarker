@@ -4,6 +4,7 @@ import requests
 from ._compat import urljoin, with_metaclass
 from .exceptions import ConfigError
 from .models.bounces import BounceManager
+from .models.emails import EmailManager
 
 
 class ClientMeta(type):
@@ -80,6 +81,7 @@ class ServerClient(BaseClient):
     """
     auth_header_name = 'X-Postmark-Server-Token'
     _managers = (
+        EmailManager,
         BounceManager,
     )
 
