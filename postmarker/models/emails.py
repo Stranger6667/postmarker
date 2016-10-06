@@ -2,13 +2,37 @@
 """
 This module provides basic ways to send emails.
 """
+from email.mime.base import MIMEBase
+
 from .base import Model, ModelManager
 
 
-def transform_list(value):
+def list_to_csv(value):
+    """
+    Converts list to string with comma separated values. For string is no-op.
+    """
     if isinstance(value, (list, tuple, set)):
         value = ','.join(value)
     return value
+
+
+def prepare_attachments(attachment):
+    """
+    Converts incoming attachment into dictionary.
+    """
+    if isinstance(attachment, tuple):
+        attachment = {
+            'Name': attachment[0],
+            'Content': attachment[1],
+            'ContentType': attachment[2],
+        }
+    elif isinstance(attachment, MIMEBase):
+        attachment = {
+            'Name': attachment.get_filename(),
+            'Content': attachment.get_payload(),
+            'ContentType': attachment.get_content_type(),
+        }
+    return attachment
 
 
 class Email(Model):
@@ -17,6 +41,8 @@ class Email(Model):
         assert kwargs.get('TextBody') or kwargs.get('HtmlBody'), 'Provide either email TextBody or HtmlBody or both'
         if not kwargs.get('Headers'):
             kwargs['Headers'] = {}
+        if not kwargs.get('Attachments'):
+            kwargs['Attachments'] = []
         super(Email, self).__init__(**kwargs)
 
     def __setitem__(self, key, value):
@@ -31,7 +57,8 @@ class Email(Model):
         data = super(Email, self).as_dict()
         data['Headers'] = [{'Name': name, 'Value': value} for name, value in data['Headers'].items()]
         for field in ('To', 'Cc', 'Bcc'):
-            data[field] = transform_list(data[field])
+            data[field] = list_to_csv(data[field])
+        data['Attachments'] = [prepare_attachments(attachment) for attachment in data['Attachments']]
         return data
 
     def send(self):

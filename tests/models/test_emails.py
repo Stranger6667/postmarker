@@ -1,9 +1,22 @@
 # coding: utf-8
+from email.mime.base import MIMEBase
+
 import pytest
 
 from postmarker.models.emails import Email
 
+
 CASSETTE_NAME = 'emails'
+
+
+ATTACHMENT = {
+    'Name': 'readme.txt',
+    'Content': 'dGVzdCBjb250ZW50',
+    'ContentType': 'text/plain'
+}
+MIME_ATTACHMENT = MIMEBase('text', 'plain')
+MIME_ATTACHMENT.set_payload('dGVzdCBjb250ZW50')
+MIME_ATTACHMENT.add_header('Content-Disposition', 'attachment', filename='readme.txt')
 
 
 class TestSimpleSend:
@@ -25,8 +38,8 @@ class TestSimpleSend:
         assert response == {
             'ErrorCode': 0,
             'Message': 'Test job accepted',
-            'MessageID': '4b982f10-40bf-4a62-ade4-696bf0eaeb3a',
-            'SubmittedAt': '2016-10-05T09:00:05.900306-04:00',
+            'MessageID': '806aa9ad-689d-48d3-9887-ac0c2bc6f57d',
+            'SubmittedAt': '2016-10-06T04:24:31.2196962-04:00',
             'To': 'receiver@example.com'
         }
 
@@ -48,6 +61,16 @@ class TestSimpleSend:
         server_client.emails.send(**minimal_data)
         assert patched_request.call_args[1]['json']['Headers'] == [{'Name': 'Test', 'Value': 1}]
 
+    @pytest.mark.parametrize('attachment', (
+        ATTACHMENT,
+        MIME_ATTACHMENT,
+        (ATTACHMENT['Name'], ATTACHMENT['Content'], ATTACHMENT['ContentType'])
+    ))
+    def test_attachments(self, server_client, minimal_data, patched_request, attachment):
+        minimal_data['Attachments'] = [attachment]
+        server_client.emails.send(**minimal_data)
+        assert patched_request.call_args[1]['json']['Attachments'] == [ATTACHMENT]
+
 
 class TestModel:
 
@@ -61,9 +84,3 @@ class TestModel:
         with pytest.raises(AssertionError) as exc:
             Email(From='sender@example.com', To='receiver@example.com', Subject='Postmark test')
         assert str(exc.value) == 'Provide either email TextBody or HtmlBody or both'
-
-    def test_raw_attachment(self, email, patched_request):
-        attachments = [{'Name': 'readme.txt', 'Content': 'dGVzdCBjb250ZW50', 'ContentType': 'text/plain'}]
-        email._data['Attachments'] = attachments
-        email.send()
-        assert patched_request.call_args[1]['json']['Attachments'] == attachments
