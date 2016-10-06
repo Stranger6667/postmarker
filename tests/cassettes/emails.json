@@ -67,6 +67,142 @@
         },
         "url": "https://api.postmarkapp.com/email"
       }
+    },
+    {
+      "recorded_at": "2016-10-06T14:05:30",
+      "request": {
+        "body": {
+          "base64_string": "eyJBdHRhY2htZW50cyI6IFtdLCAiUmVwbHlUbyI6ICJyZXBseXRvQGV4YW1wbGUuY29tIiwgIlN1YmplY3QiOiAiVGVzdCBzdWJqZWN0IiwgIlRleHRCb2R5IjogIlRleHQiLCAiSGVhZGVycyI6IFtdLCAiVG8iOiAicmVjZWl2ZXJAZXhhbXBsZS5jb20iLCAiRnJvbSI6ICJzZW5kZXJAZXhhbXBsZS5jb20iLCAiQ2MiOiAiY2NAZXhhbXBsZS5jb20iLCAiQmNjIjogImJjY0BleGFtcGxlLmNvbSJ9",
+          "encoding": "utf-8"
+        },
+        "headers": {
+          "Accept": [
+            "application/json"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "Content-Length": [
+            "225"
+          ],
+          "Content-Type": [
+            "application/json"
+          ],
+          "User-Agent": [
+            "python-requests/2.11.1"
+          ],
+          "X-Postmark-Server-Token": [
+            "POSTMARK_API_TEST"
+          ]
+        },
+        "method": "POST",
+        "uri": "https://api.postmarkapp.com/email"
+      },
+      "response": {
+        "body": {
+          "base64_string": "H4sIAAAAAAAEAD3OQQ7CIBCF4as0s5ZmqC0FVhp14cKVvcAAE1MjoaFoTIx3l5X7/3t5H5gSWMjseX5x3vGb4vLg1qcIG7g+XZxL4bAvNepQKiFRoJokWhzsFtthRCm1wN4iVnDhdaUbn481N4qMloGEcaMXPZERLlAndE/OGDSj0qqSU84pH1JgsPgfqHzitTT35Brynpf6Ab4/iizT560AAAA=",
+          "encoding": "utf-8"
+        },
+        "headers": {
+          "Cache-Control": [
+            "private"
+          ],
+          "Content-Encoding": [
+            "gzip"
+          ],
+          "Content-Length": [
+            "164"
+          ],
+          "Content-Type": [
+            "application/json; charset=utf-8"
+          ],
+          "Date": [
+            "Thu, 06 Oct 2016 14:05:30 GMT"
+          ],
+          "Server": [
+            "unicorns-double-rainbow"
+          ],
+          "X-Powered-By": [
+            "ASP.NET"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": "OK"
+        },
+        "url": "https://api.postmarkapp.com/email"
+      }
+    },
+    {
+      "recorded_at": "2016-10-06T14:26:27",
+      "request": {
+        "body": {
+          "base64_string": "eyJCY2MiOiBudWxsLCAiQXR0YWNobWVudHMiOiBbXSwgIlRvIjogInJlY2VpdmVyQGV4YW1wbGUuY29tIiwgIlN1YmplY3QiOiBudWxsLCAiQ2MiOiBudWxsLCAiUmVwbHlUbyI6IG51bGwsICJGcm9tIjogInNlbmRlckBleGFtcGxlLmNvbSIsICJIZWFkZXJzIjogW10sICJUZXh0Qm9keSI6ICJUZXh0In0=",
+          "encoding": "utf-8"
+        },
+        "headers": {
+          "Accept": [
+            "application/json"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "Content-Length": [
+            "173"
+          ],
+          "Content-Type": [
+            "application/json"
+          ],
+          "User-Agent": [
+            "python-requests/2.11.1"
+          ],
+          "X-Postmark-Server-Token": [
+            "POSTMARK_API_TEST"
+          ]
+        },
+        "method": "POST",
+        "uri": "https://api.postmarkapp.com/email"
+      },
+      "response": {
+        "body": {
+          "base64_string": "H4sIAAAAAAAEAD3OQQ7CIBCF4as0s5ZmGCmlrDTqwoUrewGgY1NjQ0PRmBjvLiv3//fyPtBHsJA48PTitOO3m5cH1yHOsIHr089Tzjzsc4kIpRYSBepeoiVtqa2NQSVbEqgsYhEXXlc38vlYetySafzNCHLtIFRQJDqWjfCNRE1MPnSukFNKMR3iwGDxP1B4z2uu7tFXLgReygn4/gCvxRgbrgAAAA==",
+          "encoding": "utf-8"
+        },
+        "headers": {
+          "Cache-Control": [
+            "private"
+          ],
+          "Content-Encoding": [
+            "gzip"
+          ],
+          "Content-Length": [
+            "166"
+          ],
+          "Content-Type": [
+            "application/json; charset=utf-8"
+          ],
+          "Date": [
+            "Thu, 06 Oct 2016 14:26:27 GMT"
+          ],
+          "Server": [
+            "unicorns-double-rainbow"
+          ],
+          "X-Powered-By": [
+            "ASP.NET"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": "OK"
+        },
+        "url": "https://api.postmarkapp.com/email"
+      }
     }
   ],
   "recorded_with": "betamax/0.8.0"

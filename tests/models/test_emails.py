@@ -1,5 +1,6 @@
 # coding: utf-8
 from email.mime.base import MIMEBase
+from email.mime.text import MIMEText
 
 import pytest
 
@@ -20,6 +21,25 @@ MIME_ATTACHMENT.set_payload('dGVzdCBjb250ZW50')
 MIME_ATTACHMENT.add_header('Content-Disposition', 'attachment', filename='readme.txt')
 
 SUPPORTED_ATTACHMENTS = (ATTACHMENT, MIME_ATTACHMENT, TUPLE_ATTACHMENT)
+
+
+def get_mime_message(text, **kwargs):
+    instance = MIMEText(text)
+    for key, value in kwargs.items():
+        instance[key] = value
+    return instance
+
+MIME_MESSAGE = get_mime_message(
+    'Text',
+    **{
+        'From': 'sender@example.com',
+        'To': 'receiver@example.com',
+        'Subject': 'Test subject',
+        'Cc': 'cc@example.com',
+        'Bcc': 'bcc@example.com',
+        'Reply-To': 'replyto@example.com',
+    }
+)
 
 
 class TestSimpleSend:
@@ -45,6 +65,41 @@ class TestSimpleSend:
             'SubmittedAt': '2016-10-06T04:24:31.2196962-04:00',
             'To': 'receiver@example.com'
         }
+
+    def test_mime_text(self, server_client):
+        response = server_client.emails.send(message=MIME_MESSAGE)
+        assert response == {
+            'ErrorCode': 0,
+            'Message': 'Test job accepted',
+            'MessageID': '96a981da-9b7c-4aa9-bda2-84ab99097686',
+            'SubmittedAt': '2016-10-06T10:05:30.570118-04:00',
+            'To': 'receiver@example.com'
+        }
+
+    def test_incomplete_mime(self, server_client):
+        message = get_mime_message('Text', From='sender@example.com', To='receiver@example.com')
+        response = server_client.emails.send(message=message)
+        assert response == {
+            'ErrorCode': 0,
+            'Message': 'Test job accepted',
+            'MessageID': '03285bf8-2a7d-4c42-9e15-b51062e2bc9a',
+            'SubmittedAt': '2016-10-06T10:26:27.8804172-04:00',
+            'To': 'receiver@example.com'
+        }
+
+    def test_invalid(self, server_client):
+        with pytest.raises(TypeError) as exc:
+            server_client.emails.send(message=object())
+        assert str(exc.value) == 'message should be either Email or MIMEText instance'
+
+    def test_message_and_kwargs(self, server_client, email):
+        with pytest.raises(AssertionError) as exc:
+            server_client.emails.send(message=email, From='test@test.com')
+        assert str(exc.value) == 'You should specify either message or From and To parameters'
+
+    def test_send_email(self, server_client, email, patched_request):
+        server_client.emails.send(message=email)
+        assert patched_request.call_args[1]['json'] == email.as_dict()
 
     @pytest.mark.parametrize('field', ('To', 'Cc', 'Bcc'))
     @pytest.mark.parametrize(
@@ -97,6 +152,11 @@ class TestBatchSend:
         server_client.emails.send_batch(email, email)
         assert patched_request.call_args[1]['json'] == (email.as_dict(), email.as_dict())
 
+    def test_mime(self, server_client, patched_request):
+        server_client.emails.send_batch(MIME_MESSAGE)
+        email = Email.from_mime(MIME_MESSAGE, server_client)
+        assert patched_request.call_args[1]['json'] == (email.as_dict(), )
+
     def test_invalid(self, server_client):
         with pytest.raises(ValueError):
             server_client.emails.send_batch(object())
@@ -137,3 +197,13 @@ class TestEmail:
         email.attach(ATTACHMENT, TUPLE_ATTACHMENT, MIME_ATTACHMENT)
         email.send()
         assert patched_request.call_args[1]['json']['Attachments'] == [ATTACHMENT, ATTACHMENT, ATTACHMENT]
+
+    def test_from_mime(self, server_client):
+        email = Email.from_mime(MIME_MESSAGE, server_client)
+        assert email.TextBody == 'Text'
+        assert email.From == MIME_MESSAGE['From']
+        assert email.To == MIME_MESSAGE['To']
+        assert email.Subject == MIME_MESSAGE['Subject']
+        assert email.Cc == MIME_MESSAGE['Cc']
+        assert email.Bcc == MIME_MESSAGE['Bcc']
+        assert email.ReplyTo == MIME_MESSAGE['Reply-To']

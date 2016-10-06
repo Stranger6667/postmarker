@@ -3,6 +3,7 @@
 This module provides basic ways to send emails.
 """
 from email.mime.base import MIMEBase
+from email.mime.text import MIMEText
 
 from .base import Model, ModelManager
 
@@ -50,6 +51,18 @@ class Email(Model):
 
     def __delitem__(self, key):
         del self.Headers[key]
+
+    @classmethod
+    def from_mime(cls, message, manager):
+        """
+        Instantiates ``Email`` instance from ``MIMEText`` instance.
+
+        :param message: ``email.mime.text.MIMEText`` instance.
+        :param manager: :py:class:`EmailManager` instance.
+        :return: :py:class:`Email`
+        """
+        return cls(manager=manager, From=message['From'], To=message['To'], TextBody=message.get_payload(),
+                   Subject=message['Subject'], Cc=message['Cc'], Bcc=message['Bcc'], ReplyTo=message['Reply-To'])
 
     def as_dict(self):
         """
@@ -111,6 +124,8 @@ class EmailBatch(Model):
         """
         if isinstance(email, dict):
             email = Email(manager=self._manager, **email)
+        elif isinstance(email, MIMEText):
+            email = Email.from_mime(email, self._manager)
         elif not isinstance(email, Email):
             raise ValueError
         return email.as_dict()
@@ -143,11 +158,12 @@ class EmailManager(ModelManager):
         """
         return self._call('POST', '/email/batch', data=emails).json()
 
-    def send(self, From, To, Cc=None, Bcc=None, Subject=None, Tag=None, HtmlBody=None, TextBody=None, ReplyTo=None,
-             Headers=None, TrackOpens=None, Attachments=None):
+    def send(self, message=None, From=None, To=None, Cc=None, Bcc=None, Subject=None, Tag=None, HtmlBody=None,
+             TextBody=None, ReplyTo=None, Headers=None, TrackOpens=None, Attachments=None):
         """
         Sends single email.
 
+        :param message: :py:class:`Email` or ``email.mime.text.MIMEText`` instance.
         :param str From: The sender email address.
         :param To: Recipient email address.
                    Multiple recipients could be specified as list or string with comma separated values.
@@ -169,9 +185,16 @@ class EmailManager(ModelManager):
         :return: Information about sent email.
         :rtype: `dict`
         """
-        return self.Email(From=From, To=To, Cc=Cc, Bcc=Bcc, Subject=Subject, Tag=Tag, HtmlBody=HtmlBody,
-                          TextBody=TextBody, ReplyTo=ReplyTo, Headers=Headers, TrackOpens=TrackOpens,
-                          Attachments=Attachments).send()
+        assert (not (message and (From or To))), 'You should specify either message or From and To parameters'
+        if message is None:
+            message = self.Email(From=From, To=To, Cc=Cc, Bcc=Bcc, Subject=Subject, Tag=Tag, HtmlBody=HtmlBody,
+                                 TextBody=TextBody, ReplyTo=ReplyTo, Headers=Headers, TrackOpens=TrackOpens,
+                                 Attachments=Attachments)
+        elif isinstance(message, MIMEText):
+            message = Email.from_mime(message, self)
+        elif not isinstance(message, Email):
+            raise TypeError('message should be either Email or MIMEText instance')
+        return message.send()
 
     def send_batch(self, *emails):
         """

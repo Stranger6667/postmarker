@@ -24,6 +24,15 @@ Sending emails is super easy! Here is the most simple case:
      'SubmittedAt': '2016-10-05T06:51:08.9753663-04:00',
      'To': 'receiver@example.com'}
 
+Or send ``MIMEText`` instances:
+
+.. code-block:: python
+
+    >>> message = MIMEText('Text')
+    >>> message['From'] = 'sender@example.com'
+    >>> message['To'] = 'receiver@example.com'
+    >>> server_client.emails.send(message=message)
+
 To specify multiple recipients (or ``Cc`` / ``Bcc``) you could pass values as list or string with comma separated values:
 
 .. code-block:: python
@@ -92,7 +101,7 @@ To send email in batch there is :py:meth:`~postmarker.models.emails.EmailManager
         }
     )
 
-You can pass either :py:class:`Email` instances or dictionaries.
+You can pass either :py:class:`Email`/``MIMEText`` instances or dictionaries.
 
 Advanced
 ~~~~~~~~
