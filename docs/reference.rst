@@ -10,7 +10,7 @@ Email
    :members:
 
 .. autoclass:: postmarker.models.emails.Email
-   :members: send
+   :members: attach, send
 
 Bounce
 ------

@@ -99,3 +99,14 @@ To specify headers:
 
     >>> email['X-Accept-Language'] = 'en-us, en'
 
+To add an attachment to email there is :py:meth:`~postmarker.models.emails.Email.attach` method.
+
+.. code-block:: python
+
+    >>> email.attach(msg_1)
+
+To attach multiple attachments pass them all to :py:meth:`~postmarker.models.emails.Email.attach`:
+
+.. code-block:: python
+
+    >>> email.attach(msg_1, msg_2, msg_3)

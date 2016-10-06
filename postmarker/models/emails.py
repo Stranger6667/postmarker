@@ -61,6 +61,16 @@ class Email(Model):
         data['Attachments'] = [prepare_attachments(attachment) for attachment in data['Attachments']]
         return data
 
+    def attach(self, *payloads):
+        """
+        Appends given payloads to current payload.
+
+        :param payloads:
+        :type payloads: `dict`, `tuple`, `list`, `MIMEBase`
+        :return: None.
+        """
+        self.Attachments.extend(payloads)
+
     def send(self):
         """
         Sends email.

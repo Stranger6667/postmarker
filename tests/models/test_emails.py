@@ -14,9 +14,12 @@ ATTACHMENT = {
     'Content': 'dGVzdCBjb250ZW50',
     'ContentType': 'text/plain'
 }
+TUPLE_ATTACHMENT = ATTACHMENT['Name'], ATTACHMENT['Content'], ATTACHMENT['ContentType']
 MIME_ATTACHMENT = MIMEBase('text', 'plain')
 MIME_ATTACHMENT.set_payload('dGVzdCBjb250ZW50')
 MIME_ATTACHMENT.add_header('Content-Disposition', 'attachment', filename='readme.txt')
+
+SUPPORTED_ATTACHMENTS = (ATTACHMENT, MIME_ATTACHMENT, TUPLE_ATTACHMENT)
 
 
 class TestSimpleSend:
@@ -61,11 +64,7 @@ class TestSimpleSend:
         server_client.emails.send(**minimal_data)
         assert patched_request.call_args[1]['json']['Headers'] == [{'Name': 'Test', 'Value': 1}]
 
-    @pytest.mark.parametrize('attachment', (
-        ATTACHMENT,
-        MIME_ATTACHMENT,
-        (ATTACHMENT['Name'], ATTACHMENT['Content'], ATTACHMENT['ContentType'])
-    ))
+    @pytest.mark.parametrize('attachment', SUPPORTED_ATTACHMENTS)
     def test_attachments(self, server_client, minimal_data, patched_request, attachment):
         minimal_data['Attachments'] = [attachment]
         server_client.emails.send(**minimal_data)
@@ -84,3 +83,14 @@ class TestModel:
         with pytest.raises(AssertionError) as exc:
             Email(From='sender@example.com', To='receiver@example.com', Subject='Postmark test')
         assert str(exc.value) == 'Provide either email TextBody or HtmlBody or both'
+
+    @pytest.mark.parametrize('attachment', SUPPORTED_ATTACHMENTS)
+    def test_attach(self, email, patched_request, attachment):
+        email.attach(attachment)
+        email.send()
+        assert patched_request.call_args[1]['json']['Attachments'] == [ATTACHMENT]
+
+    def test_attach_multiple(self, email, patched_request):
+        email.attach(ATTACHMENT, TUPLE_ATTACHMENT, MIME_ATTACHMENT)
+        email.send()
+        assert patched_request.call_args[1]['json']['Attachments'] == [ATTACHMENT, ATTACHMENT, ATTACHMENT]
