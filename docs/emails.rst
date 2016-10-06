@@ -47,6 +47,31 @@ Headers could be specified as dict:
         HtmlBody='<html><body><strong>Hello</strong> dear Postmark user.</body></html>'
     )
 
+Attachments could be specified as a list of items in the following forms:
+
+.. code-block:: python
+
+    # Dictionary
+    >>> msg_1 = {"Name": "readme.txt", "Content": "dGVzdCBjb250ZW50", "ContentType": "text/plain"}
+    # Tuple
+    >>> msg_2 = ("readme.txt", "dGVzdCBjb250ZW50", "text/plain")
+    # MIMEBase instance
+    >>> msg_3 = MIMEBase('text', 'plain')
+    >>> msg_3.set_payload('dGVzdCBjb250ZW50')
+    >>> msg_3.add_header('Content-Disposition', 'attachment', filename='readme.txt')
+
+Then pass them to :py:meth:`~postmarker.models.emails.EmailManager.send`:
+
+.. code-block:: python
+
+    >>> server_client.emails.send(
+        From='sender@example.com',
+        To='receiver@example.com',
+        Subject='Postmark test',
+        HtmlBody='<html><body><strong>Hello</strong> dear Postmark user.</body></html>',
+        Attachments=[msg_1, msg_2, msg_3]
+    )
+
 Advanced
 ~~~~~~~~
 
@@ -79,3 +104,15 @@ Also it is possible to remove header:
 .. code-block:: python
 
     >>> del email['X-Accept-Language']
+
+To add an attachment to email there is :py:meth:`~postmarker.models.emails.Email.attach` method.
+
+.. code-block:: python
+
+    >>> email.attach(msg_1)
+
+To attach multiple attachments pass them all to :py:meth:`~postmarker.models.emails.Email.attach`:
+
+.. code-block:: python
+
+    >>> email.attach(msg_1, msg_2, msg_3)
