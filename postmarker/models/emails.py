@@ -48,6 +48,9 @@ class Email(Model):
     def __setitem__(self, key, value):
         self.Headers[key] = value
 
+    def __delitem__(self, key):
+        del self.Headers[key]
+
     def as_dict(self):
         """
         Additionally encodes headers.

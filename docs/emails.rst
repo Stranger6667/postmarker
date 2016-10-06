@@ -99,6 +99,12 @@ To specify headers:
 
     >>> email['X-Accept-Language'] = 'en-us, en'
 
+Also it is possible to remove header:
+
+.. code-block:: python
+
+    >>> del email['X-Accept-Language']
+
 To add an attachment to email there is :py:meth:`~postmarker.models.emails.Email.attach` method.
 
 .. code-block:: python
