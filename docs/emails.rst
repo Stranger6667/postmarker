@@ -60,6 +60,7 @@ Attachments could be specified as a list of items in the following forms:
     >>> msg_3.set_payload('dGVzdCBjb250ZW50')
     >>> msg_3.add_header('Content-Disposition', 'attachment', filename='readme.txt')
 
+Note! Content should be encoded as Base64 string.
 Then pass them to :py:meth:`~postmarker.models.emails.EmailManager.send`:
 
 .. code-block:: python
