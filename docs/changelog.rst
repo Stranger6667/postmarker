@@ -6,7 +6,7 @@ Changelog
 0.2.0 - TBA
 -----------
 
-- Batch emailing implementation. Closes `#12`_
+- Batch emailing implementation. `#12`_
 - Ability to remove headers from email message. `#24`_
 - Improved attachments interface. `#18`_
 - Support for sending single email. `#11`_
