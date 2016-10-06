@@ -3,6 +3,12 @@
 Changelog
 =========
 
+0.2.0 - TBA
+-----------
+
+- Ability to remove headers from email message. `#24`_
+- Support for sending single email. `#11`_
+
 0.1.1 - 05.10.2016
 ------------------
 
@@ -12,3 +18,7 @@ Changelog
 ------------------
 
 - Initial release.
+
+
+.. _#24: https://github.com/FriendlyCoders/postmarker/issues/24
+.. _#11: https://github.com/FriendlyCoders/postmarker/issues/11

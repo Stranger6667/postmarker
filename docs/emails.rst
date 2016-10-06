@@ -73,3 +73,9 @@ To specify headers:
 .. code-block:: python
 
     >>> email['X-Accept-Language'] = 'en-us, en'
+
+Also it is possible to remove header:
+
+.. code-block:: python
+
+    >>> del email['X-Accept-Language']

@@ -57,6 +57,12 @@ class TestModel:
         assert email.Headers == {'X-Accept-Language': 'en-us, en'}
         assert email.as_dict()['Headers'] == [{'Name': 'X-Accept-Language', 'Value': 'en-us, en'}]
 
+    def test_unset_header(self, email):
+        email['X-Accept-Language'] = 'en-us, en'
+        del email['X-Accept-Language']
+        assert email.Headers == {}
+        assert email.as_dict()['Headers'] == []
+
     def test_body(self):
         with pytest.raises(AssertionError) as exc:
             Email(From='sender@example.com', To='receiver@example.com', Subject='Postmark test')
