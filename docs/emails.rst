@@ -73,15 +73,3 @@ To specify headers:
 .. code-block:: python
 
     >>> email['X-Accept-Language'] = 'en-us, en'
-
-
-Available classes
-~~~~~~~~~~~~~~~~~
-
-All available classes are listed below.
-
-.. autoclass:: postmarker.models.emails.EmailManager
-   :members:
-
-.. autoclass:: postmarker.models.emails.Email
-   :members: send

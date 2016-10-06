@@ -5,9 +5,6 @@ Bounces
 
 .. automodule:: postmarker.models.bounces
 
-Examples
-~~~~~~~~
-
 .. code-block:: python
 
     >>> server_client.bounces
@@ -41,14 +38,3 @@ Or you can get SMTP dump if it is available.
 
     >>> bounce.dump
     'A lot of text'
-
-Available classes
-~~~~~~~~~~~~~~~~~
-
-All available classes are listed below.
-
-.. autoclass:: postmarker.models.bounces.BounceManager
-   :members:
-
-.. autoclass:: postmarker.models.bounces.Bounce
-   :members:
