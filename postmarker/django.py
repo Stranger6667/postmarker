@@ -3,12 +3,7 @@ from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 from django.core.mail.backends.base import BaseEmailBackend
 
-from ..core import ServerClient
-
-
-DEFAULT_CONFIG = {
-    'TOKEN': None,
-}
+from .core import ServerClient
 
 
 class EmailBackend(BaseEmailBackend):
@@ -18,7 +13,7 @@ class EmailBackend(BaseEmailBackend):
 
     def __init__(self, token=None, fail_silently=False, **kwargs):
         super(EmailBackend, self).__init__(fail_silently=fail_silently)
-        postmark_config = getattr(settings, 'POSTMARK', DEFAULT_CONFIG)
+        postmark_config = getattr(settings, 'POSTMARK', {})
         self.token = token or postmark_config.get('TOKEN')
         if self.token is None:
             raise ImproperlyConfigured('You should specify TOKEN to use Postmark email backend')

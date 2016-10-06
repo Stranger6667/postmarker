@@ -8,7 +8,7 @@ For convenience Postmarker provides Django email backend. To use it you have to 
 
 .. code-block:: python
 
-    EMAIL_BACKEND = 'postmarker.django.backend.EmailBackend'
+    EMAIL_BACKEND = 'postmarker.django.EmailBackend'
     POSTMARK = {
         'TOKEN': '<YOUR POSTMARK SERVER TOKEN>'
     }
