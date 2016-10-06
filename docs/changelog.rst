@@ -6,6 +6,7 @@ Changelog
 0.2.0 - TBA
 -----------
 
+- Batch emailing implementation. Closes `#12`_
 - Ability to remove headers from email message. `#24`_
 - Improved attachments interface. `#18`_
 - Support for sending single email. `#11`_
@@ -23,4 +24,5 @@ Changelog
 
 .. _#24: https://github.com/FriendlyCoders/postmarker/issues/24
 .. _#18: https://github.com/FriendlyCoders/postmarker/issues/18
+.. _#12: https://github.com/FriendlyCoders/postmarker/issues/12
 .. _#11: https://github.com/FriendlyCoders/postmarker/issues/11

@@ -71,7 +71,44 @@ class TestSimpleSend:
         assert patched_request.call_args[1]['json']['Attachments'] == [ATTACHMENT]
 
 
-class TestModel:
+class TestBatchSend:
+
+    def test_email_instance(self, server_client, email, patched_request):
+        server_client.emails.send_batch(email)
+        assert patched_request.call_args[1]['json'] == (email.as_dict(), )
+
+    def test_dict(self, server_client, email, patched_request):
+        email_dict = {
+            'From': email.From,
+            'To': email.To,
+            'TextBody': email.TextBody
+        }
+        expected = {
+            'From': email.From,
+            'To': email.To,
+            'TextBody': email.TextBody,
+            'Headers': [],
+            'Attachments': [],
+        }
+        server_client.emails.send_batch(email_dict)
+        assert patched_request.call_args[1]['json'] == (expected, )
+
+    def test_multiple(self, server_client, email, patched_request):
+        server_client.emails.send_batch(email, email)
+        assert patched_request.call_args[1]['json'] == (email.as_dict(), email.as_dict())
+
+    def test_invalid(self, server_client):
+        with pytest.raises(ValueError):
+            server_client.emails.send_batch(object())
+
+
+class TestEmailBatch:
+
+    def test_len(self, email_batch):
+        assert len(email_batch) == 1
+
+
+class TestEmail:
 
     def test_set_header(self, email):
         assert email.Headers == {}

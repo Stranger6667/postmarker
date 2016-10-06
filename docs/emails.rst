@@ -73,6 +73,27 @@ Then pass them to :py:meth:`~postmarker.models.emails.EmailManager.send`:
         Attachments=[msg_1, msg_2, msg_3]
     )
 
+To send email in batch there is :py:meth:`~postmarker.models.emails.EmailManager.send_batch` method.
+
+.. code-block:: python
+
+    >>> server_client.emails.send_batch(
+        {
+            From='sender@example.com',
+            To='receiver@example.com',
+            Subject='Postmark test',
+            HtmlBody='<html><body><strong>Hello</strong> dear Postmark user.</body></html>',
+        },
+        {
+            From='sender2@example.com',
+            To='receiver2@example.com',
+            Subject='Postmark test 2',
+            HtmlBody='<html><body><strong>Hello</strong> dear Postmark user.</body></html>',
+        }
+    )
+
+You can pass either :py:class:`Email` instances or dictionaries.
+
 Advanced
 ~~~~~~~~
 
@@ -117,3 +138,15 @@ To attach multiple attachments pass them all to :py:meth:`~postmarker.models.ema
 .. code-block:: python
 
     >>> email.attach(msg_1, msg_2, msg_3)
+
+Batches are available via :py:meth:`~postmarker.models.emails.EmailManager.EmailBatch` constructor.
+
+.. code-block:: python
+
+    >>> batch = server_client.emails.EmailBatch(email)
+    >>> len(batch)
+    1
+    >>> batch.send()
+
+For now batches expose very limited interface - only :py:meth:`~postmarker.models.emails.EmailBatch.send` method and
+length information via ``len`` function.

@@ -83,3 +83,8 @@ def bounce(server_client):
 @pytest.fixture()
 def email(server_client):
     return server_client.emails.Email(From='sender@example.com', To='receiver@example.com', TextBody='text')
+
+
+@pytest.fixture
+def email_batch(server_client, email):
+    return server_client.emails.EmailBatch(email)

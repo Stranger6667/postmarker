@@ -60,7 +60,8 @@ class Email(Model):
         data = super(Email, self).as_dict()
         data['Headers'] = [{'Name': name, 'Value': value} for name, value in data['Headers'].items()]
         for field in ('To', 'Cc', 'Bcc'):
-            data[field] = list_to_csv(data[field])
+            if field in data:
+                data[field] = list_to_csv(data[field])
         data['Attachments'] = [prepare_attachments(attachment) for attachment in data['Attachments']]
         return data
 
@@ -84,6 +85,46 @@ class Email(Model):
         return self._manager._send(**self.as_dict())
 
 
+class EmailBatch(Model):
+    """
+    Gathers multiple emails in a single batch.
+    """
+
+    def __init__(self, *emails, **kwargs):
+        self.emails = emails
+        super(EmailBatch, self).__init__(**kwargs)
+
+    def __len__(self):
+        return len(self.emails)
+
+    def as_dict(self):
+        """
+        Converts all available emails to dictionaries.
+
+        :return: List of dictionaries.
+        """
+        return [self._construct_email(email) for email in self.emails]
+
+    def _construct_email(self, email):
+        """
+        Converts incoming data to properly structured dictionary.
+        """
+        if isinstance(email, dict):
+            email = Email(manager=self._manager, **email)
+        elif not isinstance(email, Email):
+            raise ValueError
+        return email.as_dict()
+
+    def send(self):
+        """
+        Sends email batch.
+
+        :return: Information about sent emails.
+        :rtype: `list`
+        """
+        return self._manager._send_batch(*self.as_dict())
+
+
 class EmailManager(ModelManager):
     """
     Sends emails via Postmark REST API.
@@ -95,6 +136,12 @@ class EmailManager(ModelManager):
         Low-level send call. Does not apply any transformation to given data.
         """
         return self._call('POST', '/email', data=kwargs).json()
+
+    def _send_batch(self, *emails):
+        """
+        Low-level batch send call.
+        """
+        return self._call('POST', '/email/batch', data=emails).json()
 
     def send(self, From, To, Cc=None, Bcc=None, Subject=None, Tag=None, HtmlBody=None, TextBody=None, ReplyTo=None,
              Headers=None, TrackOpens=None, Attachments=None):
@@ -126,13 +173,31 @@ class EmailManager(ModelManager):
                           TextBody=TextBody, ReplyTo=ReplyTo, Headers=Headers, TrackOpens=TrackOpens,
                           Attachments=Attachments).send()
 
+    def send_batch(self, *emails):
+        """
+        Sends email batch.
+
+        :param emails: :py:class:`Email` instances or dictionaries
+        """
+        return self.EmailBatch(*emails).send()
+
+    # NOTE. The following methods are included here to expose better interface without need to import relevant classes.
+
     def Email(self, From, To, Cc=None, Bcc=None, Subject=None, Tag=None, HtmlBody=None, TextBody=None, ReplyTo=None,
               Headers=None, TrackOpens=None, Attachments=None):
         """
-        Constructs empty :py:class:`Email` instance.
+        Constructs :py:class:`Email` instance.
 
         :return: :py:class:`Email`
         """
         return Email(manager=self, From=From, To=To, Cc=Cc, Bcc=Bcc, Subject=Subject, Tag=Tag, HtmlBody=HtmlBody,
                      TextBody=TextBody, ReplyTo=ReplyTo, Headers=Headers, TrackOpens=TrackOpens,
                      Attachments=Attachments)
+
+    def EmailBatch(self, *emails):
+        """
+        Constructs :py:class:`EmailBatch` instance.
+
+        :return: :py:class:`EmailBatch`
+        """
+        return EmailBatch(*emails, manager=self)
