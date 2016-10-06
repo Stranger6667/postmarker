@@ -6,6 +6,7 @@ Changelog
 0.2.0 - TBA
 -----------
 
+- Django email backend. `#16`_
 - Support for ``MIMEText`` sending. `#25`_
 - Batch emailing implementation. `#12`_
 - Ability to remove headers from email message. `#24`_
@@ -26,5 +27,6 @@ Changelog
 .. _#25: https://github.com/FriendlyCoders/postmarker/issues/25
 .. _#24: https://github.com/FriendlyCoders/postmarker/issues/24
 .. _#18: https://github.com/FriendlyCoders/postmarker/issues/18
+.. _#16: https://github.com/FriendlyCoders/postmarker/issues/16
 .. _#12: https://github.com/FriendlyCoders/postmarker/issues/12
 .. _#11: https://github.com/FriendlyCoders/postmarker/issues/11
