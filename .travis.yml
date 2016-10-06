@@ -25,9 +25,6 @@ matrix:
     - python: 3.5
       env:
       - TOX_ENV=pypy
-    - python: 3.5
-      env:
-      - TOX_ENV=pypy3
 install:
   - travis_retry pip install tox
 script:
