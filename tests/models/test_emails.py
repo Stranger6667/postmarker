@@ -1,4 +1,5 @@
 # coding: utf-8
+import sys
 from email import encoders
 from email.mime.base import MIMEBase
 from email.mime.multipart import MIMEMultipart
@@ -54,6 +55,11 @@ def get_mime_message(text, html_text=None, **kwargs):
 
 MIME_MESSAGE = get_mime_message('Text', **DEFAULT_HEADERS)
 MIME_ALTERNATIVE = get_mime_message('Text', 'HTML content', **DEFAULT_HEADERS)
+
+if sys.version_info[0] < 3:
+    ENCODED_CONTENT = 'dGVzdCBjb250ZW50'
+else:
+    ENCODED_CONTENT = 'dGVzdCBjb250ZW50\n'
 
 
 class TestSimpleSend:
@@ -143,7 +149,7 @@ class TestSimpleSend:
         server_client.emails.send(MIME_ALTERNATIVE)
         assert patched_request.call_args[1]['json'] == {
             'Attachments': [
-                {'Content': 'dGVzdCBjb250ZW50\n', 'ContentType': 'application/octet-stream', 'Name': 'report.pdf'}
+                {'Content': ENCODED_CONTENT, 'ContentType': 'application/octet-stream', 'Name': 'report.pdf'}
             ],
             'Bcc': 'bcc@example.com',
             'Cc': 'cc@example.com',
