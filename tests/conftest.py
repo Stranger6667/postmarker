@@ -80,6 +80,11 @@ def bounce(server_client):
     return server_client.bounces.get(723626745)
 
 
+@pytest.fixture(scope='session')
+def server(server_client):
+    return server_client.server.get()
+
+
 @pytest.fixture()
 def email(server_client):
     return server_client.emails.Email(From='sender@example.com', To='receiver@example.com', TextBody='text')

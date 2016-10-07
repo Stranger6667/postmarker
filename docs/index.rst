@@ -17,6 +17,7 @@ Contents:
    usage
    emails
    bounces
+   server
    django
    reference
    changelog

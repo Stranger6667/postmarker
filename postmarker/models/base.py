@@ -8,10 +8,19 @@ class Model(object):
 
     def __init__(self, manager=None, **kwargs):
         self._manager = manager
-        self._data = kwargs
         self._update(kwargs)
 
+    def __str__(self):
+        return '%s: %s' % (self.__class__.__name__, self._data.get('ID'))
+
+    def __repr__(self):
+        return '<%s>' % self
+
+    def __unicode__(self):
+        return self.__str__()
+
     def _update(self, kwargs):
+        self._data = kwargs
         self.__dict__.update(kwargs)
 
     def as_dict(self):

@@ -1,0 +1,132 @@
+{
+  "http_interactions": [
+    {
+      "recorded_at": "2016-10-07T12:39:06",
+      "request": {
+        "body": {
+          "base64_string": "",
+          "encoding": "utf-8"
+        },
+        "headers": {
+          "Accept": [
+            "application/json"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "python-requests/2.11.1"
+          ],
+          "X-Postmark-Server-Token": [
+            "POSTMARK_API_TEST"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://api.postmarkapp.com/server"
+      },
+      "response": {
+        "body": {
+          "base64_string": "eyJTZXJ2ZXJMaW5rIjoiaHR0cHM6Ly93d3cucG9zdG1hcmthcHAuY29tL3NlcnZlcnMvMS9vdmVydmlldyIsIkFwaVRva2VucyI6WyIyYmNjNTBjYi03MmM2LTRhZTUtOTU0YS1kZmZjMDE2Njc3ODkiXSwiQ29sb3IiOiJyZWQiLCJJbmJvdW5kSGFzaCI6ImE3OWM4YjQ1NWJhNGY4YjUyZmFiODU3NzNiNzBmMjI0IiwiSW5ib3VuZERvbWFpbiI6IiIsIkluYm91bmRIb29rVXJsIjoiIiwiUG9zdEZpcnN0T3Blbk9ubHkiOmZhbHNlLCJJRCI6MSwiU210cEFwaUFjdGl2YXRlZCI6dHJ1ZSwiQm91bmNlSG9va1VybCI6IiIsIlRyYWNrT3BlbnMiOmZhbHNlLCJPcGVuSG9va1VybCI6IiIsIkluYm91bmRBZGRyZXNzIjoiYTc5YzhiNDU1YmE0ZjhiNTJmYWI4NTc3M2I3MGYyMjRAaW5ib3VuZC5wb3N0bWFya2FwcC5jb20iLCJOYW1lIjoiZXhhbXBsZS5jb20iLCJJbmJvdW5kU3BhbVRocmVzaG9sZCI6MCwiUmF3RW1haWxFbmFibGVkIjpmYWxzZX0=",
+          "encoding": "utf-8"
+        },
+        "headers": {
+          "Cache-Control": [
+            "private"
+          ],
+          "Content-Length": [
+            "485"
+          ],
+          "Content-Type": [
+            "application/json; charset=utf-8"
+          ],
+          "Date": [
+            "Fri, 07 Oct 2016 12:39:05 GMT"
+          ],
+          "Server": [
+            "unicorns-double-rainbow"
+          ],
+          "X-Powered-By": [
+            "ASP.NET"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": "OK"
+        },
+        "url": "https://api.postmarkapp.com/server"
+      }
+    },
+    {
+      "recorded_at": "2016-10-07T12:39:07",
+      "request": {
+        "body": {
+          "base64_string": "eyJUcmFja09wZW5zIjogdHJ1ZX0=",
+          "encoding": "utf-8"
+        },
+        "headers": {
+          "Accept": [
+            "application/json"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "Content-Length": [
+            "20"
+          ],
+          "Content-Type": [
+            "application/json"
+          ],
+          "User-Agent": [
+            "python-requests/2.11.1"
+          ],
+          "X-Postmark-Server-Token": [
+            "POSTMARK_API_TEST"
+          ]
+        },
+        "method": "PUT",
+        "uri": "https://api.postmarkapp.com/server"
+      },
+      "response": {
+        "body": {
+          "base64_string": "H4sIAPaa91cC/42QQU/DMAyF/0vO7dqVZul6YrAhkBBDbJwQBydN1appEiXZCkL8d9xtCMaJUxT7+XvP/iAb6fbS3be6IyVpQrC+TJJhGCbW+NCD68DaiTB94g9Cn0wTg+++lQOJyMK2W9NJ7Un5QjIuBE0Fj1kmZnEOksZzmkNc1bVIp7MZY8WcvEbk2ijj0M3JChF3mpudrm7BN1gDNhcFzynlkNcFp1kNvKCMXXCW1lmW/wwsTQ+txpFfDGO6Z6eOtUfMf9M6H9ZW6rVW76SsQXmJ6iUppxHZ9MFi/oUI7R4CZimD22H7ClFCnrG2DkQ3cvy3aPycSU4RFlXlpPf/2OSyPU78PTSyHqCXSJBv0FslT8WTwcZCv23QozEKI6cReYJhhadQKw1cjWsc1vz8Av03M0nbAQAA",
+          "encoding": "utf-8"
+        },
+        "headers": {
+          "Cache-Control": [
+            "private"
+          ],
+          "Content-Encoding": [
+            "gzip"
+          ],
+          "Content-Length": [
+            "315"
+          ],
+          "Content-Type": [
+            "application/json; charset=utf-8"
+          ],
+          "Date": [
+            "Fri, 07 Oct 2016 12:39:06 GMT"
+          ],
+          "Server": [
+            "unicorns-double-rainbow"
+          ],
+          "X-Powered-By": [
+            "ASP.NET"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": "OK"
+        },
+        "url": "https://api.postmarkapp.com/server"
+      }
+    }
+  ],
+  "recorded_with": "betamax/0.8.0"
+}

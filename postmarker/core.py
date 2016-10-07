@@ -5,6 +5,7 @@ from ._compat import urljoin, with_metaclass
 from .exceptions import ConfigError
 from .models.bounces import BounceManager
 from .models.emails import EmailManager
+from .models.server import ServerManager
 
 
 class ClientMeta(type):
@@ -83,6 +84,7 @@ class ServerClient(BaseClient):
     _managers = (
         EmailManager,
         BounceManager,
+        ServerManager,
     )
 
 
