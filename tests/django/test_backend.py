@@ -15,7 +15,7 @@ SEND_KWARGS = {
 }
 
 
-def test_send_mail(patched_request):
+def test_send_mail(patched_request, settings):
     send_mail(**SEND_KWARGS)
     assert patched_request.call_args[1]['json'] == ({
         'ReplyTo': None,
@@ -29,6 +29,7 @@ def test_send_mail(patched_request):
         'HtmlBody': None,
         'From': 'sender@example.com'
     }, )
+    assert patched_request.call_args[1]['headers']['X-Postmark-Server-Token'] == settings.POSTMARK['TOKEN']
 
 
 @pytest.mark.skipif(
