@@ -3,8 +3,8 @@
 Changelog
 =========
 
-0.2.0 - TBA
------------
+0.2.0 - 07.10.2016
+------------------
 
 - Django email backend. `#16`_
 - Support for ``MIMEText`` sending. `#25`_
