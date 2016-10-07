@@ -20,6 +20,7 @@ def test_send_mail(patched_request):
         'Cc': None,
         'Attachments': [],
         'TextBody': 'Here is the message.',
+        'HtmlBody': None,
         'From': 'sender@example.com'
     }, )
 

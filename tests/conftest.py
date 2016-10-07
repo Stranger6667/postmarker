@@ -43,7 +43,7 @@ def betamax_recorder(request, server_client):
         default_cassette_options={
             'preserve_exact_body_bytes': True,
             'serialize_with': 'prettyjson',
-            'match_requests_on': ['uri', 'query', 'method', 'headers'],
+            'match_requests_on': ['uri', 'query', 'method'],
             'record_mode': record_mode
         }
     )

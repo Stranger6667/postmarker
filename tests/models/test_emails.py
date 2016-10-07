@@ -1,5 +1,7 @@
 # coding: utf-8
+from email import encoders
 from email.mime.base import MIMEBase
+from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
 import pytest
@@ -23,23 +25,35 @@ MIME_ATTACHMENT.add_header('Content-Disposition', 'attachment', filename='readme
 SUPPORTED_ATTACHMENTS = (ATTACHMENT, MIME_ATTACHMENT, TUPLE_ATTACHMENT)
 
 
-def get_mime_message(text, **kwargs):
-    instance = MIMEText(text)
+DEFAULT_HEADERS = {
+    'From': 'sender@example.com',
+    'To': 'receiver@example.com',
+    'Subject': 'Test subject',
+    'Cc': 'cc@example.com',
+    'Bcc': 'bcc@example.com',
+    'Reply-To': 'replyto@example.com',
+}
+
+
+def get_mime_message(text, html_text=None, **kwargs):
+    if not html_text:
+        instance = MIMEText(text)
+    else:
+        instance = MIMEMultipart('alternative')
+        instance.attach(MIMEText(text, 'plain'))
+        instance.attach(MIMEText(html_text, 'html'))
+        extra = MIMEBase('application', 'octet-stream')
+        extra.set_payload('test content')
+        encoders.encode_base64(extra)
+        extra.add_header('Content-Disposition', 'attachment', filename='report.pdf')
+        instance.attach(extra)
+        instance['X-Accept-Language'] = 'en-us, en'
     for key, value in kwargs.items():
         instance[key] = value
     return instance
 
-MIME_MESSAGE = get_mime_message(
-    'Text',
-    **{
-        'From': 'sender@example.com',
-        'To': 'receiver@example.com',
-        'Subject': 'Test subject',
-        'Cc': 'cc@example.com',
-        'Bcc': 'bcc@example.com',
-        'Reply-To': 'replyto@example.com',
-    }
-)
+MIME_MESSAGE = get_mime_message('Text', **DEFAULT_HEADERS)
+MIME_ALTERNATIVE = get_mime_message('Text', 'HTML content', **DEFAULT_HEADERS)
 
 
 class TestSimpleSend:
@@ -76,7 +90,7 @@ class TestSimpleSend:
             'To': 'receiver@example.com'
         }
 
-    def test_incomplete_mime(self, server_client):
+    def test_minimum_mime(self, server_client):
         message = get_mime_message('Text', From='sender@example.com', To='receiver@example.com')
         response = server_client.emails.send(message=message)
         assert response == {
@@ -124,6 +138,23 @@ class TestSimpleSend:
         minimal_data['Attachments'] = [attachment]
         server_client.emails.send(**minimal_data)
         assert patched_request.call_args[1]['json']['Attachments'] == [ATTACHMENT]
+
+    def test_mime_multipart(self, server_client, patched_request):
+        server_client.emails.send(MIME_ALTERNATIVE)
+        assert patched_request.call_args[1]['json'] == {
+            'Attachments': [
+                {'Content': 'dGVzdCBjb250ZW50\n', 'ContentType': 'application/octet-stream', 'Name': 'report.pdf'}
+            ],
+            'Bcc': 'bcc@example.com',
+            'Cc': 'cc@example.com',
+            'From': 'sender@example.com',
+            'Headers': [],
+            'HtmlBody': 'HTML content',
+            'ReplyTo': 'replyto@example.com',
+            'Subject': 'Test subject',
+            'TextBody': 'Text',
+            'To': 'receiver@example.com'
+        }
 
 
 class TestBatchSend:

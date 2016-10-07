@@ -3,6 +3,7 @@
 This module provides basic ways to send emails.
 """
 from email.mime.base import MIMEBase
+from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
 from .base import Model, ModelManager
@@ -36,6 +37,19 @@ def prepare_attachments(attachment):
     return attachment
 
 
+def deconstruct_multipart(message):
+    text, html, attachments = None, None, []
+    for part in message.walk():
+        content_type = part.get_content_type()
+        if content_type == 'text/plain':
+            text = part.get_payload()
+        elif content_type == 'text/html':
+            html = part.get_payload()
+        elif content_type != 'multipart/alternative':
+            attachments.append(part)
+    return text, html, attachments
+
+
 class Email(Model):
 
     def __init__(self, **kwargs):
@@ -61,8 +75,13 @@ class Email(Model):
         :param manager: :py:class:`EmailManager` instance.
         :return: :py:class:`Email`
         """
-        return cls(manager=manager, From=message['From'], To=message['To'], TextBody=message.get_payload(),
-                   Subject=message['Subject'], Cc=message['Cc'], Bcc=message['Bcc'], ReplyTo=message['Reply-To'])
+        if isinstance(message, MIMEMultipart):
+            text, html, attachments = deconstruct_multipart(message)
+        else:
+            text, html, attachments = message.get_payload(), None, []
+        return cls(manager=manager, From=message['From'], To=message['To'], TextBody=text, HtmlBody=html,
+                   Subject=message['Subject'], Cc=message['Cc'], Bcc=message['Bcc'], ReplyTo=message['Reply-To'],
+                   Attachments=attachments)
 
     def as_dict(self):
         """
@@ -124,7 +143,7 @@ class EmailBatch(Model):
         """
         if isinstance(email, dict):
             email = Email(manager=self._manager, **email)
-        elif isinstance(email, MIMEText):
+        elif isinstance(email, (MIMEText, MIMEMultipart)):
             email = Email.from_mime(email, self._manager)
         elif not isinstance(email, Email):
             raise ValueError
@@ -190,7 +209,7 @@ class EmailManager(ModelManager):
             message = self.Email(From=From, To=To, Cc=Cc, Bcc=Bcc, Subject=Subject, Tag=Tag, HtmlBody=HtmlBody,
                                  TextBody=TextBody, ReplyTo=ReplyTo, Headers=Headers, TrackOpens=TrackOpens,
                                  Attachments=Attachments)
-        elif isinstance(message, MIMEText):
+        elif isinstance(message, (MIMEText, MIMEMultipart)):
             message = Email.from_mime(message, self)
         elif not isinstance(message, Email):
             raise TypeError('message should be either Email or MIMEText instance')
