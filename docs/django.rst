@@ -21,3 +21,20 @@ For every supported Python version backend is tested on latest Django release th
  - Python 2.7, 3.4, 3.5, 3.6, PyPy - Django 1.10
 
 But it should work for all Django versions since 1.4.
+
+
+Example:
+
+.. code-block:: python
+
+    >>> from django.core.mail import send_mail
+    >>> send_mail(
+        'Subject here',
+        'Here is the message.',
+        'sender@example.com',
+        ['receiver@example.com'],
+        html_message='<html></html>'
+    )
+
+Note! ``html_message`` argument is available only on Django 1.7+.
+To use HTML content in Django < 1.7 you should use ``django.core.mail.messages.EmailMultiAlternatives`` class directly.
