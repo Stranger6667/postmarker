@@ -10,7 +10,8 @@ For convenience Postmarker provides Django email backend. To use it you have to 
 
     EMAIL_BACKEND = 'postmarker.django.EmailBackend'
     POSTMARK = {
-        'TOKEN': '<YOUR POSTMARK SERVER TOKEN>'
+        'TOKEN': '<YOUR POSTMARK SERVER TOKEN>',
+        'TEST_MODE': False,
     }
 
 That's it!
@@ -38,3 +39,6 @@ Example:
 
 Note! ``html_message`` argument is available only on Django 1.7+.
 To use HTML content in Django < 1.7 you should use ``django.core.mail.messages.EmailMultiAlternatives`` class directly.
+
+For testing purposes there is ``TEST_MODE`` option.
+When it is set to ``True`` all interactions will be done with special testing api token - ``POSTMARK_API_TEST``

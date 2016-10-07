@@ -6,6 +6,7 @@ Changelog
 0.3.0 - TBA
 -----------
 
+- Testing feature for ``Django`` backend. `#27`_
 - Logging. `#19`_
 - Server API. `#14`_
 - Improved attachments support. `#23`_
@@ -33,6 +34,7 @@ Changelog
 
 
 .. _#28: https://github.com/FriendlyCoders/postmarker/issues/28
+.. _#27: https://github.com/FriendlyCoders/postmarker/issues/27
 .. _#25: https://github.com/FriendlyCoders/postmarker/issues/25
 .. _#24: https://github.com/FriendlyCoders/postmarker/issues/24
 .. _#23: https://github.com/FriendlyCoders/postmarker/issues/23

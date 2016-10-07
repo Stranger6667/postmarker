@@ -4,14 +4,19 @@ from django import VERSION
 from django.core.exceptions import ImproperlyConfigured
 from django.core.mail import send_mail
 
+from postmarker.core import TEST_TOKEN
+
+
+SEND_KWARGS = {
+    'subject': 'Subject here',
+    'message': 'Here is the message.',
+    'from_email': 'sender@example.com',
+    'recipient_list': ['receiver@example.com']
+}
+
 
 def test_send_mail(patched_request):
-    send_mail(
-        'Subject here',
-        'Here is the message.',
-        'sender@example.com',
-        ['receiver@example.com'],
-    )
+    send_mail(**SEND_KWARGS)
     assert patched_request.call_args[1]['json'] == ({
         'ReplyTo': None,
         'Subject': 'Subject here',
@@ -31,13 +36,7 @@ def test_send_mail(patched_request):
     reason='Django < 1.7 does not support `html_message` argument in `send_mail` function.'
 )
 def test_send_mail_html_message(patched_request):
-    send_mail(
-        'Subject here',
-        'Here is the message.',
-        'sender@example.com',
-        ['receiver@example.com'],
-        html_message='<html></html>'
-    )
+    send_mail(html_message='<html></html>', **SEND_KWARGS)
     assert patched_request.call_args[1]['json'] == ({
         'ReplyTo': None,
         'Subject': 'Subject here',
@@ -55,10 +54,11 @@ def test_send_mail_html_message(patched_request):
 def test_missing_api_key(settings):
     settings.POSTMARK = {}
     with pytest.raises(ImproperlyConfigured) as exc:
-        send_mail(
-            'Subject here',
-            'Here is the message.',
-            'sender@example.com',
-            ['receiver@example.com'],
-        )
+        send_mail(**SEND_KWARGS)
     assert str(exc.value) == 'You should specify TOKEN to use Postmark email backend'
+
+
+def test_test_mode(settings, patched_request):
+    settings.POSTMARK = {'TEST_MODE': True}
+    send_mail(**SEND_KWARGS)
+    assert patched_request.call_args[1]['headers']['X-Postmark-Server-Token'] == TEST_TOKEN

@@ -13,7 +13,7 @@ from .helpers import replace_real_credentials
 
 Betamax.register_serializer(pretty_json.PrettyJSONSerializer)
 
-DEFAULT_API_TOKEN = 'POSTMARK_API_TEST'
+DEFAULT_API_TOKEN = 'SOME_TOKEN'
 CASSETTE_DIR = 'tests/cassettes/'
 API_TOKEN = os.environ.get('API_TOKEN', DEFAULT_API_TOKEN)
 
