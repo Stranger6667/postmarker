@@ -3,6 +3,7 @@ import requests
 
 from ._compat import urljoin, with_metaclass
 from .exceptions import ConfigError
+from .logging import get_logger
 from .models.bounces import BounceManager
 from .models.emails import EmailManager
 from .models.server import ServerManager
@@ -38,9 +39,10 @@ class BaseClient(with_metaclass(ClientMeta)):
     auth_header_name = None
     _managers = ()
 
-    def __init__(self, token=None):
+    def __init__(self, token=None, verbosity=0):
         assert token, 'You have to provide token to use Postmark API'
         self.token = token
+        self.logger = get_logger('Postmarker', verbosity)
         self._setup_managers()
 
     def __repr__(self):
@@ -73,7 +75,11 @@ class BaseClient(with_metaclass(ClientMeta)):
             'Accept': 'application/json',
         }
         url = urljoin(self.root_url, endpoint)
-        return self.session.request(method, url, json=data, params=kwargs, headers=headers)
+        self.logger.debug('Request: %s %s, Data: %s', method, url, data)
+        response = self.session.request(method, url, json=data, params=kwargs, headers=headers)
+        self.logger.debug('Response: %s', response.text)
+        response.raise_for_status()
+        return response
 
 
 class ServerClient(BaseClient):
