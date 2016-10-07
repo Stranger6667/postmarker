@@ -9,7 +9,8 @@ from .core import TEST_TOKEN, ServerClient
 
 
 DEFAULT_CONFIG = {
-    'TEST_MODE': False
+    'TEST_MODE': False,
+    'TRACK_OPENS': False,
 }
 
 
@@ -20,15 +21,21 @@ class EmailBackend(BaseEmailBackend):
 
     def __init__(self, token=None, fail_silently=False, **kwargs):
         super(EmailBackend, self).__init__(fail_silently=fail_silently)
-        postmark_config = getattr(settings, 'POSTMARK', DEFAULT_CONFIG)
-        if postmark_config.get('TEST_MODE'):
+        if self.get_option('TEST_MODE'):
             self.token = TEST_TOKEN
         else:
-            self.token = token or postmark_config.get('TOKEN')
+            self.token = token or self.get_option('TOKEN')
             if self.token is None:
                 raise ImproperlyConfigured('You should specify TOKEN to use Postmark email backend')
+
+    @property
+    def config(self):
+        return getattr(settings, 'POSTMARK', DEFAULT_CONFIG)
+
+    def get_option(self, key):
+        return self.config.get(key, DEFAULT_CONFIG.get(key))
 
     def send_messages(self, email_messages):
         server_client = ServerClient(token=self.token)
         prepared_messages = [message.message() for message in email_messages]
-        return len(server_client.emails.send_batch(*prepared_messages))
+        return len(server_client.emails.send_batch(*prepared_messages, TrackOpens=self.get_option('TRACK_OPENS')))

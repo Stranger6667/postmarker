@@ -6,6 +6,7 @@ Changelog
 0.3.0 - TBA
 -----------
 
+- Pass extra settings to Django backend. `#29`_
 - Testing feature for ``Django`` backend. `#27`_
 - Logging. `#19`_
 - Server API. `#14`_
@@ -33,6 +34,7 @@ Changelog
 - Initial release.
 
 
+.. _#29: https://github.com/FriendlyCoders/postmarker/issues/29
 .. _#28: https://github.com/FriendlyCoders/postmarker/issues/28
 .. _#27: https://github.com/FriendlyCoders/postmarker/issues/27
 .. _#25: https://github.com/FriendlyCoders/postmarker/issues/25
