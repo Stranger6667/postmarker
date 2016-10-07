@@ -3,8 +3,8 @@
 Changelog
 =========
 
-0.3.0 - TBA
------------
+0.3.0 - 07.10.2016
+------------------
 
 - Pass extra settings to Django backend. `#29`_
 - Testing feature for ``Django`` backend. `#27`_
