@@ -6,6 +6,7 @@ Changelog
 0.3.0 - TBA
 -----------
 
+- Server API. `#14`_
 - Improved attachments support. `#23`_
 - Improved MIME messages support. `#28`_
 
@@ -36,5 +37,6 @@ Changelog
 .. _#23: https://github.com/FriendlyCoders/postmarker/issues/23
 .. _#18: https://github.com/FriendlyCoders/postmarker/issues/18
 .. _#16: https://github.com/FriendlyCoders/postmarker/issues/16
+.. _#14: https://github.com/FriendlyCoders/postmarker/issues/14
 .. _#12: https://github.com/FriendlyCoders/postmarker/issues/12
 .. _#11: https://github.com/FriendlyCoders/postmarker/issues/11

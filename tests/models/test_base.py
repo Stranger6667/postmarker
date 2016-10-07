@@ -8,6 +8,10 @@ class TestModel:
         instance = Model(value=1)
         assert instance.as_dict() == {'value': 1}
 
+    def test_str(self):
+        instance = Model(ID=1)
+        assert str(instance) == 'Model: 1'
+
 
 class TestModelManager:
 

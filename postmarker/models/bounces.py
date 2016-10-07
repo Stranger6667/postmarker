@@ -11,14 +11,6 @@ class Bounce(Model):
     Bounce model.
     """
 
-    def __str__(self):
-        return '%s: %s' % (self.__class__.__name__, self._data.get('ID'))
-
-    def __repr__(self):
-        return '<%s>' % self
-
-    __unicode__ = __str__
-
     @property
     def dump(self):
         """
