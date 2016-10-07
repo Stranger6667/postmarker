@@ -24,7 +24,7 @@ Sending emails is super easy! Here is the most simple case:
      'SubmittedAt': '2016-10-05T06:51:08.9753663-04:00',
      'To': 'receiver@example.com'}
 
-Or send ``MIMEText`` instances:
+Or send ``MIMEText``/``MIMEMultipart`` instances:
 
 .. code-block:: python
 
@@ -68,6 +68,8 @@ Attachments could be specified as a list of items in the following forms:
     >>> msg_3 = MIMEBase('text', 'plain')
     >>> msg_3.set_payload('dGVzdCBjb250ZW50')
     >>> msg_3.add_header('Content-Disposition', 'attachment', filename='readme.txt')
+    # File path string. Content type will be detected automatically
+    >>> msg_4 = '/home/user/readme.txt'
 
 Note! Content should be encoded as Base64 string.
 Then pass them to :py:meth:`~postmarker.models.emails.EmailManager.send`:
@@ -79,7 +81,7 @@ Then pass them to :py:meth:`~postmarker.models.emails.EmailManager.send`:
         To='receiver@example.com',
         Subject='Postmark test',
         HtmlBody='<html><body><strong>Hello</strong> dear Postmark user.</body></html>',
-        Attachments=[msg_1, msg_2, msg_3]
+        Attachments=[msg_1, msg_2, msg_3, msg_4]
     )
 
 To send email in batch there is :py:meth:`~postmarker.models.emails.EmailManager.send_batch` method.
@@ -101,7 +103,7 @@ To send email in batch there is :py:meth:`~postmarker.models.emails.EmailManager
         }
     )
 
-You can pass either :py:class:`Email`/``MIMEText`` instances or dictionaries.
+You can pass either :py:class:`Email`/``MIMEText``/``MIMEMultipart`` instances or dictionaries.
 
 Advanced
 ~~~~~~~~
@@ -147,6 +149,13 @@ To attach multiple attachments pass them all to :py:meth:`~postmarker.models.ema
 .. code-block:: python
 
     >>> email.attach(msg_1, msg_2, msg_3)
+
+Also it is possible to attach binary data:
+
+.. code-block:: python
+
+    >>> content = b'test content'
+    >>> email.attach_binary(content=content, filename='readme.txt')
 
 Batches are available via :py:meth:`~postmarker.models.emails.EmailManager.EmailBatch` constructor.
 
