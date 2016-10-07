@@ -9,6 +9,9 @@ from .models.emails import EmailManager
 from .models.server import ServerManager
 
 
+TEST_TOKEN = 'POSTMARK_API_TEST'
+
+
 class ClientMeta(type):
 
     def __new__(mcs, name, bases, members):

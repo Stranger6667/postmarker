@@ -29,7 +29,7 @@ class TestClient:
 
     def test_no_token(self):
         with pytest.raises(AssertionError) as exc:
-            ServerClient()
+            ServerClient(None)
         assert str(exc.value) == 'You have to provide token to use Postmark API'
 
     def test_repr(self, server_client, api_token):

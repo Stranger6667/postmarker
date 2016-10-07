@@ -21,7 +21,7 @@
             "python-requests/2.11.1"
           ],
           "X-Postmark-Server-Token": [
-            "POSTMARK_API_TEST"
+            "API_TOKEN"
           ]
         },
         "method": "GET",
@@ -86,7 +86,7 @@
             "python-requests/2.11.1"
           ],
           "X-Postmark-Server-Token": [
-            "POSTMARK_API_TEST"
+            "API_TOKEN"
           ]
         },
         "method": "PUT",

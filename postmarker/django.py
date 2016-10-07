@@ -5,7 +5,12 @@ from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 from django.core.mail.backends.base import BaseEmailBackend
 
-from .core import ServerClient
+from .core import TEST_TOKEN, ServerClient
+
+
+DEFAULT_CONFIG = {
+    'TEST_MODE': False
+}
 
 
 class EmailBackend(BaseEmailBackend):
@@ -15,10 +20,13 @@ class EmailBackend(BaseEmailBackend):
 
     def __init__(self, token=None, fail_silently=False, **kwargs):
         super(EmailBackend, self).__init__(fail_silently=fail_silently)
-        postmark_config = getattr(settings, 'POSTMARK', {})
-        self.token = token or postmark_config.get('TOKEN')
-        if self.token is None:
-            raise ImproperlyConfigured('You should specify TOKEN to use Postmark email backend')
+        postmark_config = getattr(settings, 'POSTMARK', DEFAULT_CONFIG)
+        if postmark_config.get('TEST_MODE'):
+            self.token = TEST_TOKEN
+        else:
+            self.token = token or postmark_config.get('TOKEN')
+            if self.token is None:
+                raise ImproperlyConfigured('You should specify TOKEN to use Postmark email backend')
 
     def send_messages(self, email_messages):
         server_client = ServerClient(token=self.token)
