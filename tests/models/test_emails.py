@@ -1,4 +1,5 @@
 # coding: utf-8
+import os
 import sys
 from email import encoders
 from email.mime.base import MIMEBase
@@ -13,6 +14,9 @@ from postmarker.models.emails import Email
 CASSETTE_NAME = 'emails'
 
 
+def get_attachment_path(filename):
+    return os.path.abspath(os.path.join(os.path.dirname(__file__), 'attachments/%s' % filename))
+
 ATTACHMENT = {
     'Name': 'readme.txt',
     'Content': 'dGVzdCBjb250ZW50',
@@ -22,8 +26,11 @@ TUPLE_ATTACHMENT = ATTACHMENT['Name'], ATTACHMENT['Content'], ATTACHMENT['Conten
 MIME_ATTACHMENT = MIMEBase('text', 'plain')
 MIME_ATTACHMENT.set_payload('dGVzdCBjb250ZW50')
 MIME_ATTACHMENT.add_header('Content-Disposition', 'attachment', filename='readme.txt')
+PATH_ATTACHMENT = get_attachment_path('readme.txt')
 
-SUPPORTED_ATTACHMENTS = (ATTACHMENT, MIME_ATTACHMENT, TUPLE_ATTACHMENT)
+SUPPORTED_ATTACHMENTS = (ATTACHMENT, MIME_ATTACHMENT, TUPLE_ATTACHMENT, PATH_ATTACHMENT)
+
+UNKNOWN_TYPE_ATTACHMENT = get_attachment_path('report.blabla')
 
 
 DEFAULT_HEADERS = {
@@ -234,6 +241,22 @@ class TestEmail:
         email.attach(ATTACHMENT, TUPLE_ATTACHMENT, MIME_ATTACHMENT)
         email.send()
         assert patched_request.call_args[1]['json']['Attachments'] == [ATTACHMENT, ATTACHMENT, ATTACHMENT]
+
+    def test_attach_unknown_content_type(self, email, patched_request):
+        email.attach(UNKNOWN_TYPE_ATTACHMENT)
+        email.send()
+        assert patched_request.call_args[1]['json']['Attachments'] == [
+            {
+                'Name': 'report.blabla',
+                'Content': 'dGVzdCBjb250ZW50',
+                'ContentType': 'application/octet-stream'
+            }
+        ]
+
+    def test_attach_binary(self, email, patched_request):
+        email.attach_binary(b'test content', 'readme.txt')
+        email.send()
+        assert patched_request.call_args[1]['json']['Attachments'] == [ATTACHMENT]
 
     def test_from_mime(self, server_client):
         email = Email.from_mime(MIME_MESSAGE, server_client)

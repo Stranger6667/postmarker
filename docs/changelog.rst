@@ -6,6 +6,7 @@ Changelog
 0.3.0 - TBA
 -----------
 
+- Improved attachments support. `#23`_
 - Improved MIME messages support. `#28`_
 
 0.2.0 - 07.10.2016
@@ -32,6 +33,7 @@ Changelog
 .. _#28: https://github.com/FriendlyCoders/postmarker/issues/28
 .. _#25: https://github.com/FriendlyCoders/postmarker/issues/25
 .. _#24: https://github.com/FriendlyCoders/postmarker/issues/24
+.. _#23: https://github.com/FriendlyCoders/postmarker/issues/23
 .. _#18: https://github.com/FriendlyCoders/postmarker/issues/18
 .. _#16: https://github.com/FriendlyCoders/postmarker/issues/16
 .. _#12: https://github.com/FriendlyCoders/postmarker/issues/12

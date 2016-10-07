@@ -2,6 +2,9 @@
 """
 This module provides basic ways to send emails.
 """
+import mimetypes
+import os
+from base64 import b64encode
 from email.mime.base import MIMEBase
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
@@ -16,6 +19,13 @@ def list_to_csv(value):
     if isinstance(value, (list, tuple, set)):
         value = ','.join(value)
     return value
+
+
+def guess_content_type(filename):
+    content_type, encoding = mimetypes.guess_type(filename)
+    if content_type is None or encoding is not None:
+        content_type = 'application/octet-stream'
+    return content_type
 
 
 def prepare_attachments(attachment):
@@ -33,6 +43,16 @@ def prepare_attachments(attachment):
             'Name': attachment.get_filename(),
             'Content': attachment.get_payload(),
             'ContentType': attachment.get_content_type(),
+        }
+    elif isinstance(attachment, str):
+        content_type = guess_content_type(attachment)
+        filename = os.path.basename(attachment)
+        with open(attachment, 'rb') as fd:
+            data = fd.read()
+        attachment = {
+            'Name': filename,
+            'Content': b64encode(data).decode('utf-8'),
+            'ContentType': content_type
         }
     return attachment
 
@@ -106,6 +126,22 @@ class Email(Model):
         :return: None.
         """
         self.Attachments.extend(payloads)
+
+    def attach_binary(self, content, filename):
+        """
+        Attaches given binary data.
+
+        :param bytes content: Binary data to be attached.
+        :param str filename:
+        :return: None.
+        """
+        content_type = guess_content_type(filename)
+        payload = {
+            'Name': filename,
+            'Content': b64encode(content).decode('utf-8'),
+            'ContentType': content_type
+        }
+        self.attach(payload)
 
     def send(self):
         """
