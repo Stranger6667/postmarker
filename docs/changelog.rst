@@ -7,6 +7,7 @@ Changelog
 -----------
 
 - Improved MIME messages support. `#28`_
+- Jython support. `#13`_
 
 0.2.0 - 07.10.2016
 ------------------
@@ -34,5 +35,6 @@ Changelog
 .. _#24: https://github.com/FriendlyCoders/postmarker/issues/24
 .. _#18: https://github.com/FriendlyCoders/postmarker/issues/18
 .. _#16: https://github.com/FriendlyCoders/postmarker/issues/16
+.. _#13: https://github.com/FriendlyCoders/postmarker/issues/13
 .. _#12: https://github.com/FriendlyCoders/postmarker/issues/12
 .. _#11: https://github.com/FriendlyCoders/postmarker/issues/11
