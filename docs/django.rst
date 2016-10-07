@@ -42,3 +42,4 @@ To use HTML content in Django < 1.7 you should use ``django.core.mail.messages.E
 
 For testing purposes there is ``TEST_MODE`` option.
 When it is set to ``True`` all interactions will be done with special testing api token - ``POSTMARK_API_TEST``
+To globally turn on ``TrackOpens`` feature set ``TRACK_OPENS`` to ``True``.

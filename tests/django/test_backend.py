@@ -27,6 +27,7 @@ def test_send_mail(patched_request, settings):
         'Attachments': [],
         'TextBody': 'Here is the message.',
         'HtmlBody': None,
+        'TrackOpens': False,
         'From': 'sender@example.com'
     }, )
     assert patched_request.call_args[1]['headers']['X-Postmark-Server-Token'] == settings.POSTMARK['TOKEN']
@@ -48,6 +49,7 @@ def test_send_mail_html_message(patched_request):
         'Attachments': [],
         'TextBody': 'Here is the message.',
         'HtmlBody': '<html></html>',
+        'TrackOpens': False,
         'From': 'sender@example.com'
     }, )
 
@@ -63,3 +65,21 @@ def test_test_mode(settings, patched_request):
     settings.POSTMARK = {'TEST_MODE': True}
     send_mail(**SEND_KWARGS)
     assert patched_request.call_args[1]['headers']['X-Postmark-Server-Token'] == TEST_TOKEN
+
+
+def test_extra_options(settings, patched_request):
+    settings.POSTMARK['TRACK_OPENS'] = True
+    send_mail(**SEND_KWARGS)
+    assert patched_request.call_args[1]['json'] == ({
+        'ReplyTo': None,
+        'Subject': 'Subject here',
+        'To': 'receiver@example.com',
+        'Bcc': None,
+        'Headers': [],
+        'Cc': None,
+        'Attachments': [],
+        'TextBody': 'Here is the message.',
+        'HtmlBody': None,
+        'TrackOpens': True,
+        'From': 'sender@example.com'
+    },)

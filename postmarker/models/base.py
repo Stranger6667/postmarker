@@ -5,6 +5,7 @@ class Model(object):
     """
     Abstract data model for Postmark entities.
     """
+    _data = None
 
     def __init__(self, manager=None, **kwargs):
         self._manager = manager
@@ -20,7 +21,10 @@ class Model(object):
         return self.__str__()
 
     def _update(self, kwargs):
-        self._data = kwargs
+        if self._data:
+            self._data.update(kwargs)
+        else:
+            self._data = kwargs
         self.__dict__.update(kwargs)
 
     def as_dict(self):

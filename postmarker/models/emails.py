@@ -165,15 +165,15 @@ class EmailBatch(Model):
     def __len__(self):
         return len(self.emails)
 
-    def as_dict(self):
+    def as_dict(self, **extra):
         """
         Converts all available emails to dictionaries.
 
         :return: List of dictionaries.
         """
-        return [self._construct_email(email) for email in self.emails]
+        return [self._construct_email(email, **extra) for email in self.emails]
 
-    def _construct_email(self, email):
+    def _construct_email(self, email, **extra):
         """
         Converts incoming data to properly structured dictionary.
         """
@@ -183,16 +183,17 @@ class EmailBatch(Model):
             email = Email.from_mime(email, self._manager)
         elif not isinstance(email, Email):
             raise ValueError
+        email._update(extra)
         return email.as_dict()
 
-    def send(self):
+    def send(self, **extra):
         """
         Sends email batch.
 
         :return: Information about sent emails.
         :rtype: `list`
         """
-        return self._manager._send_batch(*self.as_dict())
+        return self._manager._send_batch(*self.as_dict(**extra))
 
 
 class EmailManager(ModelManager):
@@ -248,16 +249,17 @@ class EmailManager(ModelManager):
         elif isinstance(message, (MIMEText, MIMEMultipart)):
             message = Email.from_mime(message, self)
         elif not isinstance(message, Email):
-            raise TypeError('message should be either Email or MIMEText instance')
+            raise TypeError('message should be either Email or MIMEText or MIMEMultipart instance')
         return message.send()
 
-    def send_batch(self, *emails):
+    def send_batch(self, *emails, **extra):
         """
         Sends email batch.
 
         :param emails: :py:class:`Email` instances or dictionaries
+        :param extra: dictionary with extra arguments for every message in batch.
         """
-        return self.EmailBatch(*emails).send()
+        return self.EmailBatch(*emails).send(**extra)
 
     # NOTE. The following methods are included here to expose better interface without need to import relevant classes.
 
