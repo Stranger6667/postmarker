@@ -15,12 +15,70 @@ Postmarker
 
 Python client library for `Postmark API <http://developer.postmarkapp.com/developer-api-overview.html>`_.
 
+This library is in active development now. Contributions are very welcome!
+
 Installation
 ============
 
 Postmarker can be obtained with ``pip``::
 
     $ pip install postmarker
+
+Example usage
+=============
+
+Send single email:
+
+.. code-block:: python
+
+    >>> from postmarker.core import ServerClient
+    >>> server_client = ServerClient(token='API_TOKEN')
+    >>> server_client.emails.send(
+        From='sender@example.com',
+        To='receiver@example.com',
+        Subject='Postmark test',
+        HtmlBody='<html><body><strong>Hello</strong> dear Postmark user.</body></html>'
+    )
+
+Send batch:
+
+.. code-block:: python
+
+    >>> server_client.emails.send_batch(
+        {
+            From='sender@example.com',
+            To='receiver@example.com',
+            Subject='Postmark test',
+            HtmlBody='<html><body><strong>Hello</strong> dear Postmark user.</body></html>',
+        },
+        {
+            From='sender2@example.com',
+            To='receiver2@example.com',
+            Subject='Postmark test 2',
+            HtmlBody='<html><body><strong>Hello</strong> dear Postmark user.</body></html>',
+        }
+    )
+
+Setup an email:
+
+.. code-block:: python
+
+    >>> email = server_client.emails.Email(
+        From='sender@example.com',
+        To='receiver@example.com',
+        Subject='Postmark test',
+        HtmlBody='<html><body><strong>Hello</strong> dear Postmark user.</body></html>'
+    )
+    >>> email['X-Accept-Language'] = 'en-us, en'
+    >>> email.attach('/home/user/readme.txt')
+    >>> email.attach_binary(content=b'content', filename='readme.txt')
+    >>> email.send()
+
+There a lot of features available. Check it out in our documentation! Just a few of them:
+
+- Support for sending Python email instances.
+- Bounces & Server API.
+- Django email backend.
 
 Documentation
 =============
