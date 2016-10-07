@@ -154,7 +154,7 @@ Also it is possible to attach binary data:
 
 .. code-block:: python
 
-    >>> content = 'test content'
+    >>> content = b'test content'
     >>> email.attach_binary(content=content, filename='readme.txt')
 
 Batches are available via :py:meth:`~postmarker.models.emails.EmailManager.EmailBatch` constructor.
