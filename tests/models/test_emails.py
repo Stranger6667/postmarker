@@ -51,7 +51,7 @@ def get_mime_message(text, html_text=None, **kwargs):
         instance.attach(MIMEText(text, 'plain'))
         instance.attach(MIMEText(html_text, 'html'))
         extra = MIMEBase('application', 'octet-stream')
-        extra.set_payload('test content')
+        extra.set_payload(b'test content')
         encoders.encode_base64(extra)
         extra.add_header('Content-Disposition', 'attachment', filename='report.pdf')
         instance.attach(extra)

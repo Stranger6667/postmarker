@@ -1,7 +1,15 @@
 # coding: utf-8
+import sys
+
 from setuptools import setup
 
 import postmarker
+
+
+if sys.version_info[:2] == (3, 2):
+    install_requires = ['requests<2.11.0']
+else:
+    install_requires = ['requests']
 
 
 setup(
@@ -27,6 +35,7 @@ setup(
         'Programming Language :: Python :: 2.6',
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.2',
         'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
@@ -36,5 +45,5 @@ setup(
         'Topic :: Communications :: Email',
     ],
     include_package_data=True,
-    install_requires=['requests'],
+    install_requires=install_requires,
 )
