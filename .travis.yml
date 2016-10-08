@@ -26,7 +26,7 @@ matrix:
       env:
       - TOX_ENV=pypy
 install:
-  - travis_retry pip install tox
+  - travis_retry pip install tox "virtualenv<14.0.0"
 script:
   - tox -e $TOX_ENV
 after_success:
