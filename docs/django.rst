@@ -18,11 +18,10 @@ That's it!
 For every supported Python version backend is tested on latest Django release that supports given Python version:
 
  - Python 2.6 - Django 1.6
- - Python 3.3, PyPy3 - Django 1.8
+ - Python 3.2, 3.3, PyPy3 - Django 1.8
  - Python 2.7, 3.4, 3.5, 3.6, PyPy - Django 1.10
 
 But it should work for all Django versions since 1.4.
-
 
 Example:
 
@@ -41,5 +40,6 @@ Note! ``html_message`` argument is available only on Django 1.7+.
 To use HTML content in Django < 1.7 you should use ``django.core.mail.messages.EmailMultiAlternatives`` class directly.
 
 For testing purposes there is ``TEST_MODE`` option.
-When it is set to ``True`` all interactions will be done with special testing api token - ``POSTMARK_API_TEST``
+When it is set to ``True`` all interactions will be done with special testing api token - ``POSTMARK_API_TEST``.
+
 To globally turn on ``TrackOpens`` feature set ``TRACK_OPENS`` to ``True``.
