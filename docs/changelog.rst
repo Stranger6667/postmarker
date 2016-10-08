@@ -3,6 +3,11 @@
 Changelog
 =========
 
+0.4.0 - TBA
+-----------
+
+- Python 3.2 support. `#38`_
+
 0.3.0 - 07.10.2016
 ------------------
 
@@ -34,6 +39,7 @@ Changelog
 - Initial release.
 
 
+.. _#38: https://github.com/Stranger6667/postmarker/issues/38
 .. _#29: https://github.com/Stranger6667/postmarker/issues/29
 .. _#28: https://github.com/Stranger6667/postmarker/issues/28
 .. _#27: https://github.com/Stranger6667/postmarker/issues/27
