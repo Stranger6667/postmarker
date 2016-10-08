@@ -7,6 +7,7 @@ from .logging import get_logger
 from .models.bounces import BounceManager
 from .models.emails import EmailManager
 from .models.server import ServerManager
+from .models.templates import TemplateManager
 
 
 TEST_TOKEN = 'POSTMARK_API_TEST'
@@ -94,6 +95,7 @@ class ServerClient(BaseClient):
         EmailManager,
         BounceManager,
         ServerManager,
+        TemplateManager,
     )
 
 
