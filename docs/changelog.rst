@@ -7,6 +7,7 @@ Changelog
 -----------
 
 - Python 3.2 support. `#38`_
+- Templates API. `#15`_
 
 0.3.1 - 08.10.2016
 ------------------
@@ -54,6 +55,7 @@ Changelog
 .. _#19: https://github.com/Stranger6667/postmarker/issues/19
 .. _#18: https://github.com/Stranger6667/postmarker/issues/18
 .. _#16: https://github.com/Stranger6667/postmarker/issues/16
+.. _#15: https://github.com/Stranger6667/postmarker/issues/15
 .. _#14: https://github.com/Stranger6667/postmarker/issues/14
 .. _#12: https://github.com/Stranger6667/postmarker/issues/12
 .. _#11: https://github.com/Stranger6667/postmarker/issues/11
