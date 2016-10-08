@@ -6,15 +6,18 @@ import postmarker
 
 setup(
     name='postmarker',
-    url='https://github.com/FriendlyCoders/postmarker',
+    url='https://github.com/Stranger6667/postmarker',
     version=postmarker.__version__,
     packages=['postmarker', 'postmarker.models'],
     license='MIT',
-    author='FriendlyCoders',
+    author='Dmitry Dygalo',
+    author_email='dadygalo@gmail.com',
+    maintainer='Dmitry Dygalo',
+    maintainer_email='dadygalo@gmail.com',
     keywords=['postmark', 'api', 'client', 'email'],
     description='Python client library for Postmark API',
     classifiers=[
-        'Development Status :: 3 - Alpha',
+        'Development Status :: 4 - Beta',
         'Environment :: Console',
         'Intended Audience :: Developers',
         'Operating System :: OS Independent',

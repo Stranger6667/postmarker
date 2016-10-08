@@ -57,8 +57,8 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'Postmarker'
-copyright = '2016, FriendlyCoders'
-author = 'FriendlyCoders'
+copyright = '2016, Dmitry Dygalo'
+author = 'Dmitry Dygalo'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -267,7 +267,7 @@ latex_elements = {
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
     (master_doc, 'Postmarker.tex', 'Postmarker Documentation',
-     'FriendlyCoders', 'manual'),
+     'Dmitry Dygalo', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of

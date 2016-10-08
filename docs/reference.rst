@@ -20,3 +20,12 @@ Bounce
 
 .. autoclass:: postmarker.models.bounces.Bounce
    :members:
+
+Server
+------
+
+.. autoclass:: postmarker.models.server.ServerManager
+   :members:
+
+.. autoclass:: postmarker.models.server.Server
+   :members:
