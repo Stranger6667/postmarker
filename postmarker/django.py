@@ -5,7 +5,7 @@ from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 from django.core.mail.backends.base import BaseEmailBackend
 
-from .core import TEST_TOKEN, ServerClient
+from .core import TEST_TOKEN, PostmarkClient
 
 
 DEFAULT_CONFIG = {
@@ -36,6 +36,6 @@ class EmailBackend(BaseEmailBackend):
         return self.config.get(key, DEFAULT_CONFIG.get(key))
 
     def send_messages(self, email_messages):
-        server_client = ServerClient(token=self.token)
+        postmark = PostmarkClient(token=self.token)
         prepared_messages = [message.message() for message in email_messages]
-        return len(server_client.emails.send_batch(*prepared_messages, TrackOpens=self.get_option('TRACK_OPENS')))
+        return len(postmark.emails.send_batch(*prepared_messages, TrackOpens=self.get_option('TRACK_OPENS')))

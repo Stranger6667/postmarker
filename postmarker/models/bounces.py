@@ -1,7 +1,7 @@
 # coding: utf-8
 """
 Information about bounces is available via :py:class:`~postmarker.models.bounces.BounceManager`,
-which is an attribute of ``server_client`` instance.
+which is an attribute of ``postmark`` instance.
 """
 from .base import Model, ModelManager
 

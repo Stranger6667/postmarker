@@ -27,11 +27,11 @@ class TestModel:
 
 class TestManager:
 
-    def test_tags(self, server_client):
-        assert server_client.bounces.tags == []
+    def test_tags(self, postmark):
+        assert postmark.bounces.tags == []
 
-    def test_deliverystats(self, server_client):
-        assert server_client.bounces.deliverystats == {
+    def test_deliverystats(self, postmark):
+        assert postmark.bounces.deliverystats == {
             'Bounces': [
                 {'Count': 141, 'Name': 'All'},
                 {'Count': 136, 'Name': 'Hard bounce', 'Type': 'HardBounce'},
@@ -41,7 +41,7 @@ class TestManager:
             'InactiveMails': 136
         }
 
-    def test_all(self, server_client):
-        bounces = server_client.bounces.all(count=2)
+    def test_all(self, postmark):
+        bounces = postmark.bounces.all(count=2)
         assert len(bounces) == 2
         assert all(isinstance(bounce, Bounce) for bounce in bounces)
