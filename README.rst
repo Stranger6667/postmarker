@@ -1,12 +1,12 @@
 Postmarker
 ==========
 
-.. image:: https://travis-ci.org/FriendlyCoders/postmarker.svg?branch=master
-   :target: https://travis-ci.org/FriendlyCoders/postmarker
+.. image:: https://travis-ci.org/Stranger6667/postmarker.svg?branch=master
+   :target: https://travis-ci.org/Stranger6667/postmarker
    :alt: Build Status
 
-.. image:: https://codecov.io/github/FriendlyCoders/postmarker/coverage.svg?branch=master
-   :target: https://codecov.io/github/FriendlyCoders/postmarker?branch=master
+.. image:: https://codecov.io/github/Stranger6667/postmarker/coverage.svg?branch=master
+   :target: https://codecov.io/github/Stranger6667/postmarker?branch=master
    :alt: Coverage Status
 
 .. image:: https://readthedocs.org/projects/postmarker/badge/?version=latest
@@ -93,3 +93,8 @@ Python support
 ==============
 
 Postmarker supports Python 2.6, 2.7, 3.3+ and PyPy and PyPy3.
+
+Thanks
+======
+
+Big thanks to `Shmele <https://github.com/butorov>`_ and `lobziik <https://github.com/lobziik>`_ for their reviews and advices :)

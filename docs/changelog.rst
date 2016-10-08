@@ -34,15 +34,15 @@ Changelog
 - Initial release.
 
 
-.. _#29: https://github.com/FriendlyCoders/postmarker/issues/29
-.. _#28: https://github.com/FriendlyCoders/postmarker/issues/28
-.. _#27: https://github.com/FriendlyCoders/postmarker/issues/27
-.. _#25: https://github.com/FriendlyCoders/postmarker/issues/25
-.. _#24: https://github.com/FriendlyCoders/postmarker/issues/24
-.. _#23: https://github.com/FriendlyCoders/postmarker/issues/23
-.. _#19: https://github.com/FriendlyCoders/postmarker/issues/19
-.. _#18: https://github.com/FriendlyCoders/postmarker/issues/18
-.. _#16: https://github.com/FriendlyCoders/postmarker/issues/16
-.. _#14: https://github.com/FriendlyCoders/postmarker/issues/14
-.. _#12: https://github.com/FriendlyCoders/postmarker/issues/12
-.. _#11: https://github.com/FriendlyCoders/postmarker/issues/11
+.. _#29: https://github.com/Stranger6667/postmarker/issues/29
+.. _#28: https://github.com/Stranger6667/postmarker/issues/28
+.. _#27: https://github.com/Stranger6667/postmarker/issues/27
+.. _#25: https://github.com/Stranger6667/postmarker/issues/25
+.. _#24: https://github.com/Stranger6667/postmarker/issues/24
+.. _#23: https://github.com/Stranger6667/postmarker/issues/23
+.. _#19: https://github.com/Stranger6667/postmarker/issues/19
+.. _#18: https://github.com/Stranger6667/postmarker/issues/18
+.. _#16: https://github.com/Stranger6667/postmarker/issues/16
+.. _#14: https://github.com/Stranger6667/postmarker/issues/14
+.. _#12: https://github.com/Stranger6667/postmarker/issues/12
+.. _#11: https://github.com/Stranger6667/postmarker/issues/11
