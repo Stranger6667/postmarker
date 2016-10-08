@@ -70,15 +70,14 @@ def deconstruct_multipart(message):
     return text, html, attachments
 
 
-class Email(Model):
+class BaseEmail(Model):
 
     def __init__(self, **kwargs):
-        assert kwargs.get('TextBody') or kwargs.get('HtmlBody'), 'Provide either email TextBody or HtmlBody or both'
         if not kwargs.get('Headers'):
             kwargs['Headers'] = {}
         if not kwargs.get('Attachments'):
             kwargs['Attachments'] = []
-        super(Email, self).__init__(**kwargs)
+        super(BaseEmail, self).__init__(**kwargs)
 
     def __setitem__(self, key, value):
         self.Headers[key] = value
@@ -86,30 +85,13 @@ class Email(Model):
     def __delitem__(self, key):
         del self.Headers[key]
 
-    @classmethod
-    def from_mime(cls, message, manager):
-        """
-        Instantiates ``Email`` instance from ``MIMEText`` instance.
-
-        :param message: ``email.mime.text.MIMEText`` instance.
-        :param manager: :py:class:`EmailManager` instance.
-        :return: :py:class:`Email`
-        """
-        if isinstance(message, MIMEMultipart):
-            text, html, attachments = deconstruct_multipart(message)
-        else:
-            text, html, attachments = message.get_payload(), None, []
-        return cls(manager=manager, From=message['From'], To=message['To'], TextBody=text, HtmlBody=html,
-                   Subject=message['Subject'], Cc=message['Cc'], Bcc=message['Bcc'], ReplyTo=message['Reply-To'],
-                   Attachments=attachments)
-
     def as_dict(self):
         """
         Additionally encodes headers.
 
         :return:
         """
-        data = super(Email, self).as_dict()
+        data = super(BaseEmail, self).as_dict()
         data['Headers'] = [{'Name': name, 'Value': value} for name, value in data['Headers'].items()]
         for field in ('To', 'Cc', 'Bcc'):
             if field in data:
@@ -143,14 +125,38 @@ class Email(Model):
         }
         self.attach(payload)
 
-    def send(self):
-        """
-        Sends email.
 
-        :return: Information about sent email.
-        :rtype: `dict`
+class Email(BaseEmail):
+
+    def __init__(self, **kwargs):
+        assert kwargs.get('TextBody') or kwargs.get('HtmlBody'), 'Provide either email TextBody or HtmlBody or both'
+        super(Email, self).__init__(**kwargs)
+
+    @classmethod
+    def from_mime(cls, message, manager):
         """
+        Instantiates ``Email`` instance from ``MIMEText`` instance.
+
+        :param message: ``email.mime.text.MIMEText`` instance.
+        :param manager: :py:class:`EmailManager` instance.
+        :return: :py:class:`Email`
+        """
+        if isinstance(message, MIMEMultipart):
+            text, html, attachments = deconstruct_multipart(message)
+        else:
+            text, html, attachments = message.get_payload(), None, []
+        return cls(manager=manager, From=message['From'], To=message['To'], TextBody=text, HtmlBody=html,
+                   Subject=message['Subject'], Cc=message['Cc'], Bcc=message['Bcc'], ReplyTo=message['Reply-To'],
+                   Attachments=attachments)
+
+    def send(self):
         return self._manager._send(**self.as_dict())
+
+
+class EmailTemplate(BaseEmail):
+
+    def send(self):
+        return self._manager._send_with_template(**self.as_dict())
 
 
 class EmailBatch(Model):
@@ -208,6 +214,9 @@ class EmailManager(ModelManager):
         """
         return self.call('POST', '/email', data=kwargs)
 
+    def _send_with_template(self, **kwargs):
+        return self.call('POST', '/email/withTemplate/', data=kwargs).json()
+
     def _send_batch(self, *emails):
         """
         Low-level batch send call.
@@ -252,6 +261,12 @@ class EmailManager(ModelManager):
             raise TypeError('message should be either Email or MIMEText or MIMEMultipart instance')
         return message.send()
 
+    def send_with_template(self, TemplateId, TemplateModel, From, To, Cc=None, Bcc=None, Subject=None, Tag=None,
+                           ReplyTo=None, Headers=None, TrackOpens=None, Attachments=None, InlineCss=True):
+        return self.EmailTemplate(TemplateId=TemplateId, TemplateModel=TemplateModel, From=From, To=To, Cc=Cc, Bcc=Bcc,
+                                  Subject=Subject, Tag=Tag, ReplyTo=ReplyTo, Headers=Headers, TrackOpens=TrackOpens,
+                                  Attachments=Attachments, InlineCss=InlineCss).send()
+
     def send_batch(self, *emails, **extra):
         """
         Sends email batch.
@@ -273,6 +288,17 @@ class EmailManager(ModelManager):
         return Email(manager=self, From=From, To=To, Cc=Cc, Bcc=Bcc, Subject=Subject, Tag=Tag, HtmlBody=HtmlBody,
                      TextBody=TextBody, ReplyTo=ReplyTo, Headers=Headers, TrackOpens=TrackOpens,
                      Attachments=Attachments)
+
+    def EmailTemplate(self, TemplateId, TemplateModel, From, To, Cc=None, Bcc=None, Subject=None, Tag=None,
+                      ReplyTo=None, Headers=None, TrackOpens=None, Attachments=None, InlineCss=True):
+        """
+        Constructs :py:class:`EmailTemplate` instance.
+
+        :return: :py:class:`EmailTemplate`
+        """
+        return EmailTemplate(manager=self, TemplateId=TemplateId, TemplateModel=TemplateModel, From=From, To=To, Cc=Cc,
+                             Bcc=Bcc, Subject=Subject, Tag=Tag, ReplyTo=ReplyTo, Headers=Headers, TrackOpens=TrackOpens,
+                             Attachments=Attachments, InlineCss=InlineCss)
 
     def EmailBatch(self, *emails):
         """
