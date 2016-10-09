@@ -3,10 +3,11 @@
 Changelog
 =========
 
-0.4.0 - TBA
------------
+0.4.0 - 09.10.2016
+------------------
 
 - Python 3.2 support. `#38`_
+- Refactoring. ``ServerClient`` & ``AccountClient`` were removed. `#41`_
 
 0.3.1 - 08.10.2016
 ------------------
@@ -44,6 +45,7 @@ Changelog
 - Initial release.
 
 
+.. _#41: https://github.com/Stranger6667/postmarker/issues/41
 .. _#38: https://github.com/Stranger6667/postmarker/issues/38
 .. _#29: https://github.com/Stranger6667/postmarker/issues/29
 .. _#28: https://github.com/Stranger6667/postmarker/issues/28
