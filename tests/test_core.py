@@ -1,7 +1,7 @@
 # coding: utf-8
 import pytest
 
-from postmarker.core import PostmarkClient
+from postmarker.core import USER_AGENT, PostmarkClient
 from postmarker.exceptions import ConfigError
 from postmarker.models.base import ModelManager
 from postmarker.models.bounces import BounceManager
@@ -14,7 +14,7 @@ class TestClient:
         patched_request.assert_called_with(
             'GET',
             'https://api.postmarkapp.com/endpoint',
-            headers={'X-Postmark-Server-Token': api_token, 'Accept': 'application/json'},
+            headers={'X-Postmark-Server-Token': api_token, 'Accept': 'application/json', 'User-Agent': USER_AGENT},
             params={}, json=None,
         )
 

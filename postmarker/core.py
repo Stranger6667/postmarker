@@ -1,6 +1,7 @@
 # coding: utf-8
 import requests
 
+from . import __version__
 from ._compat import urljoin, with_metaclass
 from .exceptions import ConfigError
 from .logging import get_logger
@@ -12,6 +13,7 @@ from .models.status import StatusManager
 
 DEFAULT_API = 'https://api.postmarkapp.com/'
 STATUS_API = 'https://status.postmarkapp.com/api/1.0/'
+USER_AGENT = 'Postmarker/%s' % __version__
 TEST_TOKEN = 'POSTMARK_API_TEST'
 
 
@@ -89,7 +91,7 @@ class PostmarkClient(with_metaclass(ClientMeta)):
         return self._call('GET', STATUS_API, endpoint)
 
     def _call(self, method, root, endpoint, data=None, headers=None, **kwargs):
-        default_headers = {'Accept': 'application/json'}
+        default_headers = {'Accept': 'application/json', 'User-Agent': USER_AGENT}
         if headers:
             default_headers.update(headers)
         url = urljoin(root, endpoint)
