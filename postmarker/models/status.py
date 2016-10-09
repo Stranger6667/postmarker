@@ -1,5 +1,5 @@
 # coding: utf-8
-from postmarker.models.base import ModelManager, Model
+from .base import Model, ModelManager
 
 
 class Incident(Model):
