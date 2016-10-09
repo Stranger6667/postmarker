@@ -74,10 +74,10 @@ Setup an email:
     >>> email.attach_binary(content=b'content', filename='readme.txt')
     >>> email.send()
 
-There a lot of features available. Check it out in our documentation! Just a few of them:
+There are a lot of features available. Check it out in our documentation! Just a few of them:
 
 - Support for sending Python email instances.
-- Bounces & Server API.
+- Bounces, Status & Server API.
 - Django email backend.
 
 Documentation
