@@ -1,7 +1,7 @@
 # coding: utf-8
 import pytest
 
-from postmarker.core import BaseClient, ServerClient
+from postmarker.core import PostmarkClient
 from postmarker.exceptions import ConfigError
 from postmarker.models.base import ModelManager
 from postmarker.models.bounces import BounceManager
@@ -9,8 +9,8 @@ from postmarker.models.bounces import BounceManager
 
 class TestClient:
 
-    def test_server_client(self, server_client, api_token, patched_request):
-        server_client._call('GET', 'endpoint')
+    def test_server_client(self, postmark, api_token, patched_request):
+        postmark._call('GET', 'endpoint')
         patched_request.assert_called_with(
             'GET',
             'https://api.postmarkapp.com/endpoint',
@@ -18,29 +18,20 @@ class TestClient:
             params={}, json=None,
         )
 
-    def test_account_client(self, account_client, api_token, patched_request):
-        account_client._call('GET', 'endpoint')
-        patched_request.assert_called_with(
-            'GET',
-            'https://api.postmarkapp.com/endpoint',
-            headers={'X-Postmark-Account-Token': api_token, 'Accept': 'application/json'},
-            params={}, json=None,
-        )
-
     def test_no_token(self):
         with pytest.raises(AssertionError) as exc:
-            ServerClient(None)
+            PostmarkClient(None)
         assert str(exc.value) == 'You have to provide token to use Postmark API'
 
-    def test_repr(self, server_client, api_token):
-        assert repr(server_client) == '<ServerClient: %s>' % api_token
+    def test_repr(self, postmark, api_token):
+        assert repr(postmark) == '<PostmarkClient: %s>' % api_token
 
 
 class TestManagersSetup:
 
     def test_duplicate_names(self):
         with pytest.raises(ConfigError) as exc:
-            class SuperClient(BaseClient):
+            class SuperClient(PostmarkClient):
                 _managers = (
                     BounceManager,
                     BounceManager
@@ -53,7 +44,7 @@ class TestManagersSetup:
             name = 'session'
 
         with pytest.raises(ConfigError) as exc:
-            class SuperClient(BaseClient):
+            class SuperClient(PostmarkClient):
                 _managers = (
                     BrokenManager,
                 )

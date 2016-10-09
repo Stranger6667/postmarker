@@ -12,7 +12,7 @@ Sending emails is super easy! Here is the most simple case:
 
 .. code-block:: python
 
-    >>> server_client.emails.send(
+    >>> postmark.emails.send(
         From='sender@example.com',
         To='receiver@example.com',
         Subject='Postmark test',
@@ -31,13 +31,13 @@ Or send ``MIMEText``/``MIMEMultipart`` instances:
     >>> message = MIMEText('Text')
     >>> message['From'] = 'sender@example.com'
     >>> message['To'] = 'receiver@example.com'
-    >>> server_client.emails.send(message=message)
+    >>> postmark.emails.send(message=message)
 
 To specify multiple recipients (or ``Cc`` / ``Bcc``) you could pass values as list or string with comma separated values:
 
 .. code-block:: python
 
-    >>> server_client.emails.send(
+    >>> postmark.emails.send(
         From='sender@example.com',
         To=['first@example.com', 'second@example.com'],  # The same as 'first@example.com, second@example.com'
         Subject='Postmark test',
@@ -48,7 +48,7 @@ Headers could be specified as dict:
 
 .. code-block:: python
 
-    >>> server_client.emails.send(
+    >>> postmark.emails.send(
         From='sender@example.com',
         To='receiver@example.com',
         Headers={'X-Accept-Language': 'en-us, en'},
@@ -76,7 +76,7 @@ Then pass them to :py:meth:`~postmarker.models.emails.EmailManager.send`:
 
 .. code-block:: python
 
-    >>> server_client.emails.send(
+    >>> postmark.emails.send(
         From='sender@example.com',
         To='receiver@example.com',
         Subject='Postmark test',
@@ -88,7 +88,7 @@ To send email in batch there is :py:meth:`~postmarker.models.emails.EmailManager
 
 .. code-block:: python
 
-    >>> server_client.emails.send_batch(
+    >>> postmark.emails.send_batch(
         {
             From='sender@example.com',
             To='receiver@example.com',
@@ -114,7 +114,7 @@ To get more flexibility it is possible to use :py:class:`Email` objects.
 
 .. code-block:: python
 
-    >>> email = server_client.emails.Email(
+    >>> email = postmark.emails.Email(
         From='sender@example.com',
         To='receiver@example.com',
         Subject='Postmark test',
@@ -162,7 +162,7 @@ Batches are available via :py:meth:`~postmarker.models.emails.EmailManager.Email
 
 .. code-block:: python
 
-    >>> batch = server_client.emails.EmailBatch(email)
+    >>> batch = postmark.emails.EmailBatch(email)
     >>> len(batch)
     1
     >>> batch.send()

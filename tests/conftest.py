@@ -5,7 +5,7 @@ import pytest
 
 from betamax import Betamax
 from betamax_serializers import pretty_json
-from postmarker.core import AccountClient, ServerClient
+from postmarker.core import PostmarkClient
 
 from ._compat import patch
 from .helpers import replace_real_credentials
@@ -28,7 +28,7 @@ def pytest_unconfigure(config):
 
 
 @pytest.yield_fixture(autouse=True, scope='module')
-def betamax_recorder(request, server_client):
+def betamax_recorder(request, postmark):
     """
     Module level Betamax recorder.
     """
@@ -38,7 +38,7 @@ def betamax_recorder(request, server_client):
         record_mode = 'none' if os.environ.get('TRAVIS') else 'once'
     cassette_name = getattr(request.node._obj, 'CASSETTE_NAME', 'default')
     vcr = Betamax(
-        server_client.session,
+        postmark.session,
         cassette_library_dir=CASSETTE_DIR,
         default_cassette_options={
             'preserve_exact_body_bytes': True,
@@ -66,30 +66,25 @@ def api_token():
 
 
 @pytest.fixture(scope='session')
-def server_client(api_token):
-    return ServerClient(token=api_token)
+def postmark(api_token):
+    return PostmarkClient(token=api_token)
 
 
 @pytest.fixture(scope='session')
-def account_client(api_token):
-    return AccountClient(token=api_token)
+def bounce(postmark):
+    return postmark.bounces.get(723626745)
 
 
 @pytest.fixture(scope='session')
-def bounce(server_client):
-    return server_client.bounces.get(723626745)
-
-
-@pytest.fixture(scope='session')
-def server(server_client):
-    return server_client.server.get()
+def server(postmark):
+    return postmark.server.get()
 
 
 @pytest.fixture()
-def email(server_client):
-    return server_client.emails.Email(From='sender@example.com', To='receiver@example.com', TextBody='text')
+def email(postmark):
+    return postmark.emails.Email(From='sender@example.com', To='receiver@example.com', TextBody='text')
 
 
 @pytest.fixture
-def email_batch(server_client, email):
-    return server_client.emails.EmailBatch(email)
+def email_batch(postmark, email):
+    return postmark.emails.EmailBatch(email)

@@ -34,13 +34,16 @@ class ClientMeta(type):
             raise ConfigError('Defined managers names override client\'s members')
 
 
-class BaseClient(with_metaclass(ClientMeta)):
+class PostmarkClient(with_metaclass(ClientMeta)):
     """
     Basic class for API clients. Provides basic functionality to make requests.
     """
     root_url = 'https://api.postmarkapp.com/'
-    auth_header_name = None
-    _managers = ()
+    _managers = (
+        EmailManager,
+        BounceManager,
+        ServerManager,
+    )
 
     def __init__(self, token=None, verbosity=0):
         assert token, 'You have to provide token to use Postmark API'
@@ -55,8 +58,8 @@ class BaseClient(with_metaclass(ClientMeta)):
         """
         Allows to access manager by model name.
 
-        >>> client = ServerClient(token='TEST')
-        >>> client.bounces
+        >>> postmark = PostmarkClient(token='TEST')
+        >>> postmark.bounces
         <BounceManager>
         """
         for manager_class in self._managers:
@@ -74,7 +77,7 @@ class BaseClient(with_metaclass(ClientMeta)):
         Low-level call to Postmark API.
         """
         headers = {
-            self.auth_header_name: self.token,
+            'X-Postmark-Server-Token': self.token,
             'Accept': 'application/json',
         }
         url = urljoin(self.root_url, endpoint)
@@ -83,22 +86,3 @@ class BaseClient(with_metaclass(ClientMeta)):
         self.logger.debug('Response: %s', response.text)
         response.raise_for_status()
         return response
-
-
-class ServerClient(BaseClient):
-    """
-    Provides an interface for actions, that require server level privileges.
-    """
-    auth_header_name = 'X-Postmark-Server-Token'
-    _managers = (
-        EmailManager,
-        BounceManager,
-        ServerManager,
-    )
-
-
-class AccountClient(BaseClient):
-    """
-    Provides an interface for actions, that require account level privileges.
-    """
-    auth_header_name = 'X-Postmark-Account-Token'

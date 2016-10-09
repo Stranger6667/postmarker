@@ -31,9 +31,9 @@ Send single email:
 
 .. code-block:: python
 
-    >>> from postmarker.core import ServerClient
-    >>> server_client = ServerClient(token='API_TOKEN')
-    >>> server_client.emails.send(
+    >>> from postmarker.core import PostmarkClient
+    >>> postmark = PostmarkClient(token='API_TOKEN')
+    >>> postmark.emails.send(
         From='sender@example.com',
         To='receiver@example.com',
         Subject='Postmark test',
@@ -44,7 +44,7 @@ Send batch:
 
 .. code-block:: python
 
-    >>> server_client.emails.send_batch(
+    >>> postmark.emails.send_batch(
         {
             From='sender@example.com',
             To='receiver@example.com',
@@ -63,7 +63,7 @@ Setup an email:
 
 .. code-block:: python
 
-    >>> email = server_client.emails.Email(
+    >>> email = postmark.emails.Email(
         From='sender@example.com',
         To='receiver@example.com',
         Subject='Postmark test',
