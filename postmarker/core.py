@@ -97,4 +97,4 @@ class PostmarkClient(with_metaclass(ClientMeta)):
         response = self.session.request(method, url, json=data, params=kwargs, headers=default_headers)
         self.logger.debug('Response: %s', response.text)
         response.raise_for_status()
-        return response
+        return response.json()
