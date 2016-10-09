@@ -52,5 +52,5 @@ class ModelManager(object):
     def _init_instance(self, data):
         return self.model(manager=self, **data)
 
-    def _call(self, *args, **kwargs):
-        return self.client._call(*args, **kwargs)
+    def call(self, *args, **kwargs):
+        return self.client.call(*args, **kwargs)

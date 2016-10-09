@@ -7,8 +7,11 @@ from .logging import get_logger
 from .models.bounces import BounceManager
 from .models.emails import EmailManager
 from .models.server import ServerManager
+from .models.status import StatusManager
 
 
+DEFAULT_API = 'https://api.postmarkapp.com/'
+STATUS_API = 'https://status.postmarkapp.com/api/1.0/'
 TEST_TOKEN = 'POSTMARK_API_TEST'
 
 
@@ -38,11 +41,11 @@ class PostmarkClient(with_metaclass(ClientMeta)):
     """
     Basic class for API clients. Provides basic functionality to make requests.
     """
-    root_url = 'https://api.postmarkapp.com/'
     _managers = (
         EmailManager,
         BounceManager,
         ServerManager,
+        StatusManager,
     )
 
     def __init__(self, token=None, verbosity=0):
@@ -72,17 +75,26 @@ class PostmarkClient(with_metaclass(ClientMeta)):
             self._session = requests.Session()
         return self._session
 
-    def _call(self, method, endpoint, data=None, **kwargs):
-        """
-        Low-level call to Postmark API.
-        """
-        headers = {
-            'X-Postmark-Server-Token': self.token,
-            'Accept': 'application/json',
-        }
-        url = urljoin(self.root_url, endpoint)
+    def call(self, method, endpoint, data=None, **kwargs):
+        return self._call(
+            method,
+            DEFAULT_API,
+            endpoint,
+            data,
+            {'X-Postmark-Server-Token': self.token},
+            **kwargs
+        )
+
+    def call_status(self, endpoint):
+        return self._call('GET', STATUS_API, endpoint)
+
+    def _call(self, method, root, endpoint, data=None, headers=None, **kwargs):
+        default_headers = {'Accept': 'application/json'}
+        if headers:
+            default_headers.update(headers)
+        url = urljoin(root, endpoint)
         self.logger.debug('Request: %s %s, Data: %s', method, url, data)
-        response = self.session.request(method, url, json=data, params=kwargs, headers=headers)
+        response = self.session.request(method, url, json=data, params=kwargs, headers=default_headers)
         self.logger.debug('Response: %s', response.text)
         response.raise_for_status()
         return response

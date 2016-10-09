@@ -10,7 +10,7 @@ from postmarker.models.bounces import BounceManager
 class TestClient:
 
     def test_server_client(self, postmark, api_token, patched_request):
-        postmark._call('GET', 'endpoint')
+        postmark.call('GET', 'endpoint')
         patched_request.assert_called_with(
             'GET',
             'https://api.postmarkapp.com/endpoint',

@@ -26,7 +26,7 @@ def replace_real_credentials(cassette_dir, production_token, test_token):
             data = json.load(fp)
         rewrite_required = False
         for record in data['http_interactions']:
-            if record['request']['headers']['X-Postmark-Server-Token'] == [production_token]:
+            if record['request']['headers'].get('X-Postmark-Server-Token') == [production_token]:
                 record['request']['headers']['X-Postmark-Server-Token'] = [test_token]
                 rewrite_required = True
         if rewrite_required:

@@ -206,13 +206,13 @@ class EmailManager(ModelManager):
         """
         Low-level send call. Does not apply any transformation to given data.
         """
-        return self._call('POST', '/email', data=kwargs).json()
+        return self.call('POST', '/email', data=kwargs).json()
 
     def _send_batch(self, *emails):
         """
         Low-level batch send call.
         """
-        return self._call('POST', '/email/batch', data=emails).json()
+        return self.call('POST', '/email/batch', data=emails).json()
 
     def send(self, message=None, From=None, To=None, Cc=None, Bcc=None, Subject=None, Tag=None, HtmlBody=None,
              TextBody=None, ReplyTo=None, Headers=None, TrackOpens=None, Attachments=None):
