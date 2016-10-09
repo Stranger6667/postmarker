@@ -2,7 +2,7 @@
 import pytest
 
 
-@pytest.fixture(autouse=True)
+@pytest.fixture
 def outbox(settings):
     """
     It is necessary, because pytest-django uses django.utils.setup_test_environment, where
