@@ -8,6 +8,7 @@ Changelog
 
 - Status API. `#39`_
 - Add custom user agent. `#43`_
+- Jython support. `#13`_
 
 0.4.0 - 09.10.2016
 ------------------
@@ -65,5 +66,6 @@ Changelog
 .. _#18: https://github.com/Stranger6667/postmarker/issues/18
 .. _#16: https://github.com/Stranger6667/postmarker/issues/16
 .. _#14: https://github.com/Stranger6667/postmarker/issues/14
+.. _#13: https://github.com/Stranger6667/postmarker/issues/13
 .. _#12: https://github.com/Stranger6667/postmarker/issues/12
 .. _#11: https://github.com/Stranger6667/postmarker/issues/11

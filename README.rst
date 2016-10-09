@@ -92,7 +92,7 @@ Or you can look at the docs/ directory in the repository.
 Python support
 ==============
 
-Postmarker supports Python 2.6, 2.7, 3.2, 3.3, 3.4, 3.5, 3.6, PyPy and PyPy3.
+Postmarker supports Python 2.6, 2.7, 3.2, 3.3, 3.4, 3.5, 3.6, PyPy, PyPy3 and Jython.
 
 Thanks
 ======

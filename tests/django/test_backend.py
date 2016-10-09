@@ -7,6 +7,9 @@ from django.core.mail import send_mail
 from postmarker.core import TEST_TOKEN
 
 
+pytestmark = pytest.mark.usefixtures('outbox')
+
+
 SEND_KWARGS = {
     'subject': 'Subject here',
     'message': 'Here is the message.',

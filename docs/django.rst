@@ -43,3 +43,10 @@ For testing purposes there is ``TEST_MODE`` option.
 When it is set to ``True`` all interactions will be done with special testing api token - ``POSTMARK_API_TEST``.
 
 To globally turn on ``TrackOpens`` feature set ``TRACK_OPENS`` to ``True``.
+
+Known issues
+~~~~~~~~~~~~
+
+Django related **tests** are not working on Jython due some ``pytest-django`` problems.
+As a consequence Django support on this platform is not guaranteed but the backend should work anyway.
+This problem will be fixed soon.
