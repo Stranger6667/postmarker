@@ -17,13 +17,13 @@ class IncidentsManager(ModelManager):
 
     @property
     def last(self):
-        return self._init_instance(self.call('last_incident').json())
+        return self._init_instance(self.call('last_incident'))
 
     def all(self):
-        return [self._init_instance(incident) for incident in self.call('incidents').json()]
+        return self._init_many(self.call('incidents'))
 
     def get(self, id):
-        return self._init_instance(self.call('incidents/%s' % id).json())
+        return self._init_instance(self.call('incidents/%s' % id))
 
 
 class StatusManager(ModelManager):
@@ -40,16 +40,16 @@ class StatusManager(ModelManager):
         return self.client.call_status(*args, **kwargs)
 
     def get(self):
-        return self.call('status').json()
+        return self.call('status')
 
     @property
     def services(self):
-        return self.call('services').json()
+        return self.call('services')
 
     @property
     def availability(self):
-        return self.call('services/availability').json()
+        return self.call('services/availability')
 
     @property
     def delivery(self):
-        return self.call('delivery').json()
+        return self.call('delivery')

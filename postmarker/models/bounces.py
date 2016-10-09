@@ -47,7 +47,7 @@ class BounceManager(ModelManager):
 
         :rtype: `dict`
         """
-        return self.call('GET', '/deliverystats').json()
+        return self.call('GET', '/deliverystats')
 
     @property
     def tags(self):
@@ -56,7 +56,7 @@ class BounceManager(ModelManager):
 
         :rtype: `list`
         """
-        return self.call('GET', '/bounces/tags').json()
+        return self.call('GET', '/bounces/tags')
 
     def get(self, id):
         """
@@ -66,7 +66,7 @@ class BounceManager(ModelManager):
         :rtype: :py:class:`Bounce`
         """
         response = self.call('GET', '/bounces/%s' % id)
-        return self._init_instance(response.json())
+        return self._init_instance(response)
 
     def all(self, count=500, offset=0, type=None, inactive=None, emailFilter=None, tag=None, messageID=None,
             fromdate=None, todate=None):
@@ -89,7 +89,7 @@ class BounceManager(ModelManager):
             'GET', '/bounces/', count=count, offset=offset, type=type, inactive=inactive, emailFilter=emailFilter,
             tag=tag, messageID=messageID, fromdate=fromdate, todate=todate
         )
-        return [self._init_instance(bounce) for bounce in response.json()['Bounces']]
+        return self._init_many(response['Bounces'])
 
     def activate(self, id):
         """
@@ -99,7 +99,7 @@ class BounceManager(ModelManager):
         :return: Activation result and bounce data.
         :rtype: `dict`
         """
-        return self.call('PUT', '/bounces/%s/activate' % id).json()
+        return self.call('PUT', '/bounces/%s/activate' % id)
 
     def get_dump(self, id):
         """
@@ -109,5 +109,4 @@ class BounceManager(ModelManager):
         :return: Dump of SMTP data if it is available.
         :rtype: `str` or `None`
         """
-        dump = self.call('GET', '/bounces/%s/dump' % id).json()
-        return dump.get('Body')
+        return self.call('GET', '/bounces/%s/dump' % id).get('Body')

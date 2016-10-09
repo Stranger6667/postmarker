@@ -21,7 +21,7 @@ class ServerManager(ModelManager):
 
     def get(self):
         response = self.call('GET', '/server')
-        return self._init_instance(response.json())
+        return self._init_instance(response)
 
     def edit(self, **kwargs):
-        return self.call('PUT', '/server', data=kwargs).json()
+        return self.call('PUT', '/server', data=kwargs)
