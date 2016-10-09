@@ -7,6 +7,7 @@ Changelog
 -----------
 
 - Status API. `#39`_
+- Add custom user agent. `#43`_
 
 0.4.0 - 09.10.2016
 ------------------
@@ -50,6 +51,7 @@ Changelog
 - Initial release.
 
 
+.. _#43: https://github.com/Stranger6667/postmarker/issues/43
 .. _#41: https://github.com/Stranger6667/postmarker/issues/41
 .. _#39: https://github.com/Stranger6667/postmarker/issues/39
 .. _#38: https://github.com/Stranger6667/postmarker/issues/38
