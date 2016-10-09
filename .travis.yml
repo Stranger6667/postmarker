@@ -31,12 +31,12 @@ matrix:
     - python: 3.5
       env:
       - TOX_ENV=jython
-before_install:
-  - export JYTHON_URL='http://search.maven.org/remotecontent?filepath=org/python/jython-installer/2.7.0/jython-installer-2.7.0.jar'
-  - if [ $TOX_ENV = "jython" ]; then wget $JYTHON_URL -O jython_installer.jar; java -jar jython_installer.jar -s -d $HOME/jython; export PATH=$HOME/jython/bin:$PATH; fi
 install:
   - if [ $TOX_ENV = "py32" ]; then travis_retry pip install "virtualenv<14.0.0"; fi
   - travis_retry pip install tox
+before_script:
+  - export JYTHON_URL='http://search.maven.org/remotecontent?filepath=org/python/jython-installer/2.7.0/jython-installer-2.7.0.jar'
+  - if [ $TOX_ENV = "jython" ]; then wget $JYTHON_URL -O jython_installer.jar; java -jar jython_installer.jar -s -d $HOME/jython; export PATH=$HOME/jython/bin:$PATH; fi
 script:
   - tox -e $TOX_ENV
 after_success:
