@@ -9,6 +9,7 @@ Changelog
 - Status API. `#39`_
 - Add custom user agent. `#43`_
 - Jython support. `#13`_
+- Handle more than 500 emails in batches. `#46`_
 
 0.4.0 - 09.10.2016
 ------------------
@@ -52,6 +53,7 @@ Changelog
 - Initial release.
 
 
+.. _#46: https://github.com/Stranger6667/postmarker/issues/46
 .. _#43: https://github.com/Stranger6667/postmarker/issues/43
 .. _#41: https://github.com/Stranger6667/postmarker/issues/41
 .. _#39: https://github.com/Stranger6667/postmarker/issues/39

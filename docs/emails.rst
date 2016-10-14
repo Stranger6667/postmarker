@@ -106,6 +106,8 @@ To send email in batch there is :py:meth:`~postmarker.models.emails.EmailManager
 You can pass either :py:class:`Email`/``MIMEText``/``MIMEMultipart`` instances or dictionaries.
 Additionally you may pass extra keywords to use with every email in batch.
 
+Batch size is not limited, but if the batch has more than 500 emails, then before sending it will be split into chunks of 500 emails.
+
 Advanced
 ~~~~~~~~
 

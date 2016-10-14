@@ -9,6 +9,7 @@ from email.mime.base import MIMEBase
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
+from ..utils import chunks
 from .base import Model, ModelManager
 
 
@@ -157,6 +158,7 @@ class EmailBatch(Model):
     """
     Gathers multiple emails in a single batch.
     """
+    MAX_SIZE = 500
 
     def __init__(self, *emails, **kwargs):
         self.emails = emails
@@ -193,7 +195,8 @@ class EmailBatch(Model):
         :return: Information about sent emails.
         :rtype: `list`
         """
-        return self._manager._send_batch(*self.as_dict(**extra))
+        emails = self.as_dict(**extra)
+        return [self._manager._send_batch(*batch) for batch in chunks(emails, self.MAX_SIZE)]
 
 
 class EmailManager(ModelManager):
