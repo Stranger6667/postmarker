@@ -9,7 +9,7 @@ from email.mime.base import MIMEBase
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
-from postmarker.utils import chunks
+from ..utils import chunks
 from .base import Model, ModelManager
 
 
