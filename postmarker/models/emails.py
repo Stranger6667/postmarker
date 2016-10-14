@@ -196,8 +196,7 @@ class EmailBatch(Model):
         :rtype: `list`
         """
         emails = self.as_dict(**extra)
-        for batch in chunks(emails, self.MAX_SIZE):
-            return self._manager._send_batch(*batch)
+        return [self._manager._send_batch(*batch) for batch in chunks(emails, self.MAX_SIZE)]
 
 
 class EmailManager(ModelManager):
