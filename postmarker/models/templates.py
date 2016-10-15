@@ -44,7 +44,7 @@ class TemplateManager(ModelManager):
             'HtmlBody': HtmlBody,
             'TextBody': TextBody,
         }
-        return self.call('POST', '/templates', data=data)
+        return self._init_instance(self.call('POST', '/templates', data=data))
 
     def edit(self, id, Name=None, Subject=None, HtmlBody=None, TextBody=None):
         data = {
@@ -62,7 +62,7 @@ class TemplateManager(ModelManager):
     def delete(self, id):
         return self.call('DELETE', '/templates/%s' % id)['Message']
 
-    def validate(self, Subject, HtmlBody, TextBody, TestRenderModel, InlineCssForHtmlTestRender=True):
+    def validate(self, Subject, HtmlBody=None, TextBody=None, TestRenderModel=None, InlineCssForHtmlTestRender=True):
         data = {
             'Subject': Subject,
             'HtmlBody': HtmlBody,

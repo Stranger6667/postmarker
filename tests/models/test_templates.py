@@ -30,3 +30,31 @@ class TestManager:
         response = postmark.templates.all()
         assert len(response) == 1
         assert isinstance(response[0], Template)
+
+    def test_create(self, postmark):
+        template = postmark.templates.create(
+            Name='TestX',
+            Subject='TestSubj',
+            TextBody='Test content'
+        )
+        assert isinstance(template, Template)
+        assert template.Name == 'TestX'
+        assert template.delete() == 'Template 1003802 removed.'
+
+    def test_validate(self, postmark):
+        response = postmark.templates.validate(Subject='Test', TextBody='Test')
+        assert response == {
+            'AllContentIsValid': True,
+            'HtmlBody': None,
+            'Subject': {
+                'ContentIsValid': True,
+                'RenderedContent': 'Test',
+                'ValidationErrors': []
+                },
+            'SuggestedTemplateModel': {},
+            'TextBody': {
+                'ContentIsValid': True,
+                'RenderedContent': 'Test',
+                'ValidationErrors': []
+                }
+            }
