@@ -9,8 +9,8 @@ Postmarker
    :target: https://codecov.io/github/Stranger6667/postmarker?branch=master
    :alt: Coverage Status
 
-.. image:: https://readthedocs.org/projects/postmarker/badge/?version=latest
-   :target: http://postmarker.readthedocs.io/en/latest/?badge=latest
+.. image:: https://readthedocs.org/projects/postmarker/badge/?version=stable
+   :target: http://postmarker.readthedocs.io/en/stable/?badge=stable
    :alt: Documentation Status
 
 Python client library for `Postmark API <http://developer.postmarkapp.com/developer-api-overview.html>`_.
@@ -85,7 +85,7 @@ Documentation
 
 You can view documentation online at:
 
-- https://postmarker.readthedocs.io
+- https://postmarker.readthedocs.io/en/stable/
 
 Or you can look at the docs/ directory in the repository.
 
