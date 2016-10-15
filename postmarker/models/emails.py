@@ -218,7 +218,7 @@ class EmailManager(ModelManager):
         return self.call('POST', '/email', data=kwargs)
 
     def _send_with_template(self, **kwargs):
-        return self.call('POST', '/email/withTemplate/', data=kwargs).json()
+        return self.call('POST', '/email/withTemplate/', data=kwargs)
 
     def _send_batch(self, *emails):
         """

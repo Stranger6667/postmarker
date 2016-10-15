@@ -169,6 +169,18 @@ class TestSimpleSend:
             'To': 'receiver@example.com'
         }
 
+    def test_send_with_template(self, postmark):
+        response = postmark.emails.send_with_template(
+            TemplateId=983381, TemplateModel={}, From='sender@example.com', To='receiver@example.com'
+        )
+        assert response == {
+            'ErrorCode': 0,
+            'Message': 'OK',
+            'MessageID': 'cf639975-1685-4c70-aba1-b1115b4f6d12',
+            'SubmittedAt': '2016-10-15T14:42:56.1508279-04:00',
+            'To': 'receiver@example.com'
+        }
+
 
 class TestBatchSend:
 
