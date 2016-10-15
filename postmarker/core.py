@@ -9,6 +9,7 @@ from .models.bounces import BounceManager
 from .models.emails import EmailManager
 from .models.server import ServerManager
 from .models.status import StatusManager
+from .models.templates import TemplateManager
 
 
 DEFAULT_API = 'https://api.postmarkapp.com/'
@@ -48,6 +49,7 @@ class PostmarkClient(with_metaclass(ClientMeta)):
         BounceManager,
         ServerManager,
         StatusManager,
+        TemplateManager,
     )
 
     def __init__(self, token=None, verbosity=0):

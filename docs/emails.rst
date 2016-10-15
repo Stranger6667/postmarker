@@ -108,6 +108,19 @@ Additionally you may pass extra keywords to use with every email in batch.
 
 Batch size is not limited, but if the batch has more than 500 emails, then before sending it will be split into chunks of 500 emails.
 
+Postmark provides an interface to send emails with template. Example of usage with Postmarker:
+
+.. code-block:: python
+
+    >>> postmark.emails.send_with_template(
+        TemplateId=123,
+        TemplateModel={'username': 'Test'}
+        From='sender@example.com',
+        To='receiver@example.com',
+    )
+
+Attachments and headers work in the same way as in basic email sending.
+
 Advanced
 ~~~~~~~~
 

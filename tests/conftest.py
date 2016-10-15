@@ -88,3 +88,8 @@ def email(postmark):
 @pytest.fixture
 def email_batch(postmark, email):
     return postmark.emails.EmailBatch(email)
+
+
+@pytest.fixture(scope='session')
+def template(postmark):
+    return postmark.templates.get(983381)
