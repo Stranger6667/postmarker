@@ -16,6 +16,7 @@ Contents:
 
    usage
    emails
+   templates
    bounces
    server
    status
