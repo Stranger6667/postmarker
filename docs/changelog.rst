@@ -3,6 +3,11 @@
 Changelog
 =========
 
+0.5.1 - TBA
+-----------
+
+- Fixed invalid messages count in email batches. `#55`_
+
 0.5.0 - 15.10.2016
 ------------------
 
@@ -54,6 +59,7 @@ Changelog
 - Initial release.
 
 
+.. _#55: https://github.com/Stranger6667/postmarker/issues/55
 .. _#46: https://github.com/Stranger6667/postmarker/issues/46
 .. _#43: https://github.com/Stranger6667/postmarker/issues/43
 .. _#41: https://github.com/Stranger6667/postmarker/issues/41
