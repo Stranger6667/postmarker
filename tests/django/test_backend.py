@@ -96,6 +96,7 @@ def test_extra_options(settings, patched_request):
     },)
 
 
+@pytest.mark.skipif(VERSION[:2] < (1, 8), reason='Context manager protocol was added in Django 1.8')
 def test_context_manager(patched_request):
     with mail.get_connection() as connection:
         send_with_connection(connection)
@@ -114,6 +115,7 @@ def test_context_manager(patched_request):
     },)
 
 
+@pytest.mark.skipif(VERSION[:2] < (1, 8), reason='Context manager protocol was added in Django 1.8')
 class TestExceptions:
 
     @pytest.fixture(autouse=True)
@@ -130,6 +132,7 @@ class TestExceptions:
                 send_with_connection(connection)
 
 
+@pytest.mark.skipif(VERSION[:2] < (1, 8), reason='Context manager protocol was added in Django 1.8')
 def test_close_closed_connection():
     with mail.get_connection() as connection:
         connection.close()
