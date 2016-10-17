@@ -1,6 +1,7 @@
 # coding: utf-8
 import pytest
 from django import VERSION
+from django.core import mail
 from django.core.exceptions import ImproperlyConfigured
 from django.core.mail import send_mail
 
@@ -16,6 +17,13 @@ SEND_KWARGS = {
     'from_email': 'sender@example.com',
     'recipient_list': ['receiver@example.com']
 }
+
+
+def send_with_connection(connection):
+    mail.EmailMessage(
+        'Subject', 'Body', 'sender@example.com', ['receiver@example.com'],
+        connection=connection,
+    ).send()
 
 
 def test_send_mail(patched_request, settings):
@@ -86,3 +94,41 @@ def test_extra_options(settings, patched_request):
         'TrackOpens': True,
         'From': 'sender@example.com'
     },)
+
+
+def test_context_manager(patched_request):
+    with mail.get_connection() as connection:
+        send_with_connection(connection)
+    assert patched_request.call_args[1]['json'] == ({
+        'ReplyTo': None,
+        'Subject': 'Subject',
+        'To': 'receiver@example.com',
+        'Bcc': None,
+        'Headers': [],
+        'Cc': None,
+        'Attachments': [],
+        'TextBody': 'Body',
+        'HtmlBody': None,
+        'TrackOpens': True,
+        'From': 'sender@example.com'
+    },)
+
+
+class TestExceptions:
+
+    @pytest.fixture(autouse=True)
+    def setup(self, patched_request):
+        patched_request().json.side_effect = ValueError
+
+    def test_silent_exception(self):
+        with mail.get_connection(fail_silently=True) as connection:
+            send_with_connection(connection)
+
+    def test_loud_exception(self):
+        with mail.get_connection() as connection, pytest.raises(ValueError):
+            send_with_connection(connection)
+
+
+def test_close_closed_connection():
+    with mail.get_connection() as connection:
+        connection.close()

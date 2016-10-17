@@ -21,6 +21,7 @@ class EmailBackend(BaseEmailBackend):
 
     def __init__(self, token=None, fail_silently=False, **kwargs):
         super(EmailBackend, self).__init__(fail_silently=fail_silently)
+        self.client = None
         if self.get_option('TEST_MODE'):
             self.token = TEST_TOKEN
         else:
@@ -35,7 +36,28 @@ class EmailBackend(BaseEmailBackend):
     def get_option(self, key):
         return self.config.get(key, DEFAULT_CONFIG.get(key))
 
+    def open(self):
+        if self.client is None:
+            self.client = PostmarkClient(token=self.token)
+            return True
+        return False
+
+    def close(self):
+        try:
+            if self.client is not None:
+                self.client.session.close()
+        finally:
+            self.client = None
+
     def send_messages(self, email_messages):
-        postmark = PostmarkClient(token=self.token)
-        prepared_messages = [message.message() for message in email_messages]
-        return len(postmark.emails.send_batch(*prepared_messages, TrackOpens=self.get_option('TRACK_OPENS')))
+        try:
+            client_created = self.open()
+            prepared_messages = [message.message() for message in email_messages]
+            response = self.client.emails.send_batch(*prepared_messages, TrackOpens=self.get_option('TRACK_OPENS'))
+            msg_count = len(response)
+            if client_created:
+                self.close()
+            return msg_count
+        except Exception:
+            if not self.fail_silently:
+                raise

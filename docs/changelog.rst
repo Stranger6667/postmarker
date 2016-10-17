@@ -7,6 +7,7 @@ Changelog
 -----------
 
 - Fixed invalid messages count in email batches. `#55`_
+- Better Django support. `#51`_
 
 0.5.0 - 15.10.2016
 ------------------
@@ -60,6 +61,7 @@ Changelog
 
 
 .. _#55: https://github.com/Stranger6667/postmarker/issues/55
+.. _#51: https://github.com/Stranger6667/postmarker/issues/51
 .. _#46: https://github.com/Stranger6667/postmarker/issues/46
 .. _#43: https://github.com/Stranger6667/postmarker/issues/43
 .. _#41: https://github.com/Stranger6667/postmarker/issues/41
