@@ -125,8 +125,9 @@ class TestExceptions:
             send_with_connection(connection)
 
     def test_loud_exception(self):
-        with mail.get_connection() as connection, pytest.raises(ValueError):
-            send_with_connection(connection)
+        with mail.get_connection() as connection:
+            with pytest.raises(ValueError):
+                send_with_connection(connection)
 
 
 def test_close_closed_connection():
