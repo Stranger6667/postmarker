@@ -3,8 +3,8 @@
 Changelog
 =========
 
-0.5.1 - TBA
------------
+0.5.1 - 18.10.2016
+------------------
 
 - Fixed invalid messages count in email batches. `#55`_
 - Better Django support. `#51`_
