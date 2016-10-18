@@ -102,7 +102,7 @@ class BaseEmail(Model):
 
     def attach(self, *payloads):
         """
-        Appends given payloads to current payload.
+        Appends given payloads to the current payload.
 
         :param payloads:
         :type payloads: `dict`, `tuple`, `list`, `MIMEBase`
@@ -230,18 +230,18 @@ class EmailManager(ModelManager):
     def send(self, message=None, From=None, To=None, Cc=None, Bcc=None, Subject=None, Tag=None, HtmlBody=None,
              TextBody=None, ReplyTo=None, Headers=None, TrackOpens=None, Attachments=None):
         """
-        Sends single email.
+        Sends a single email.
 
         :param message: :py:class:`Email` or ``email.mime.text.MIMEText`` instance.
         :param str From: The sender email address.
-        :param To: Recipient email address.
-                   Multiple recipients could be specified as list or string with comma separated values.
+        :param To: Recipient's email address.
+                   Multiple recipients could be specified as a list or string with comma separated values.
         :type To: str or list
-        :param Cc: Cc recipient email address.
-                   Multiple Cc recipients could be specified as list or string with comma separated values.
+        :param Cc: Cc recipient's email address.
+                   Multiple Cc recipients could be specified as a list or string with comma separated values.
         :type Cc: str or list
-        :param Bcc: Bcc recipient email address.
-                    Multiple Bcc recipients could be specified as list or string with comma separated values.
+        :param Bcc: Bcc recipient's email address.
+                    Multiple Bcc recipients could be specified as a list or string with comma separated values.
         :type Bcc: str or list
         :param str Subject: Email subject.
         :param str Tag: Email tag.
@@ -273,10 +273,10 @@ class EmailManager(ModelManager):
 
     def send_batch(self, *emails, **extra):
         """
-        Sends email batch.
+        Sends an email batch.
 
         :param emails: :py:class:`Email` instances or dictionaries
-        :param extra: dictionary with extra arguments for every message in batch.
+        :param extra: dictionary with extra arguments for every message in the batch.
         """
         return self.EmailBatch(*emails).send(**extra)
 

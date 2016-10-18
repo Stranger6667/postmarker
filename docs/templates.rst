@@ -3,7 +3,7 @@
 Templates
 =========
 
-Templates API is available via ``templates`` manager:
+The Templates API is available via the ``templates`` manager:
 
 .. code-block:: python
 

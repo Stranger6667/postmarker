@@ -74,7 +74,7 @@ Setup an email:
     >>> email.attach_binary(content=b'content', filename='readme.txt')
     >>> email.send()
 
-There are a lot of features available. Check it out in our documentation! Just a few of them:
+There are a lot of features available. Check it out in our documentation! Here's just a few of them:
 
 - Support for sending Python email instances.
 - Bounces, Templates, Status & Server API.
@@ -83,7 +83,7 @@ There are a lot of features available. Check it out in our documentation! Just a
 Documentation
 =============
 
-You can view documentation online at:
+You can view the documentation online at:
 
 - https://postmarker.readthedocs.io/en/stable/
 
@@ -97,4 +97,4 @@ Postmarker supports Python 2.6, 2.7, 3.2, 3.3, 3.4, 3.5, 3.6, PyPy, PyPy3 and Jy
 Thanks
 ======
 
-Big thanks to `Shmele <https://github.com/butorov>`_ and `lobziik <https://github.com/lobziik>`_ for their reviews and advices :)
+Many thanks to `Shmele <https://github.com/butorov>`_ and `lobziik <https://github.com/lobziik>`_ for their reviews and advices :)

@@ -3,7 +3,7 @@
 Django email backend
 ====================
 
-For convenience Postmarker provides Django email backend. To use it you have to update your project settings:
+For convenience, Postmarker provides a Django email backend. To use it you have to update your project settings:
 
 
 .. code-block:: python
@@ -15,13 +15,13 @@ For convenience Postmarker provides Django email backend. To use it you have to 
     }
 
 That's it!
-For every supported Python version backend is tested on latest Django release that supports given Python version:
+For every supported Python version, the backend is tested on the latest Django release that supports given the Python version:
 
  - Python 2.6 - Django 1.6
  - Python 3.2, 3.3, PyPy3 - Django 1.8
  - Python 2.7, 3.4, 3.5, 3.6, PyPy - Django 1.10
 
-But it should work for all Django versions since 1.4.
+But it should work for all Django versions from 1.4.
 
 Example:
 
@@ -36,17 +36,17 @@ Example:
         html_message='<html></html>'
     )
 
-Note! ``html_message`` argument is available only on Django 1.7+.
-To use HTML content in Django < 1.7 you should use ``django.core.mail.messages.EmailMultiAlternatives`` class directly.
+Note! The ``html_message`` argument is available only on Django 1.7+.
+To use HTML content in Django < 1.7 you should use the ``django.core.mail.messages.EmailMultiAlternatives`` class directly.
 
-For testing purposes there is ``TEST_MODE`` option.
-When it is set to ``True`` all interactions will be done with special testing api token - ``POSTMARK_API_TEST``.
+For testing purposes, there is the ``TEST_MODE`` option.
+When it is set to ``True`` all interactions will be conducted with a special testing API token - ``POSTMARK_API_TEST``.
 
-To globally turn on ``TrackOpens`` feature set ``TRACK_OPENS`` to ``True``.
+To globally turn on ``TrackOpens`` feature, set ``TRACK_OPENS`` to ``True``.
 
 Known issues
 ~~~~~~~~~~~~
 
-Django related **tests** are not working on Jython due some ``pytest-django`` problems.
-As a consequence Django support on this platform is not guaranteed but the backend should work anyway.
+Django related **tests** are currently not working on Jython due to some ``pytest-django`` problems.
+As a consequence, Django support on this platform is not guaranteed but the backend should work anyway.
 This problem will be fixed soon.

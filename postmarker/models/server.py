@@ -14,7 +14,7 @@ class Server(Model):
 
 class ServerManager(ModelManager):
     """
-    Lets you get or edit details for a specific server.
+    Lets you get or edit details of the specific server.
     """
     name = 'server'
     model = Server

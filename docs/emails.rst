@@ -8,7 +8,7 @@ Emails
 Basic
 ~~~~~
 
-Sending emails is super easy! Here is the most simple case:
+Sending emails is super easy! Here is the simplest case:
 
 .. code-block:: python
 
@@ -33,7 +33,7 @@ Or send ``MIMEText``/``MIMEMultipart`` instances:
     >>> message['To'] = 'receiver@example.com'
     >>> postmark.emails.send(message=message)
 
-To specify multiple recipients (or ``Cc`` / ``Bcc``) you could pass values as list or string with comma separated values:
+To specify multiple recipients (or ``Cc`` / ``Bcc``) you could pass values as a list or string with comma separated values:
 
 .. code-block:: python
 
@@ -44,7 +44,7 @@ To specify multiple recipients (or ``Cc`` / ``Bcc``) you could pass values as li
         HtmlBody='<html><body><strong>Hello</strong> dear Postmark user.</body></html>'
     )
 
-Headers could be specified as dict:
+Headers could be specified as a dict:
 
 .. code-block:: python
 
@@ -72,7 +72,7 @@ Attachments could be specified as a list of items in the following forms:
     >>> msg_4 = '/home/user/readme.txt'
 
 Note! Content should be encoded as Base64 string.
-Then pass them to :py:meth:`~postmarker.models.emails.EmailManager.send`:
+Then pass the attachments to :py:meth:`~postmarker.models.emails.EmailManager.send`:
 
 .. code-block:: python
 
@@ -84,7 +84,7 @@ Then pass them to :py:meth:`~postmarker.models.emails.EmailManager.send`:
         Attachments=[msg_1, msg_2, msg_3, msg_4]
     )
 
-To send email in batch there is :py:meth:`~postmarker.models.emails.EmailManager.send_batch` method.
+To send email in a batch there is :py:meth:`~postmarker.models.emails.EmailManager.send_batch` method.
 
 .. code-block:: python
 
@@ -104,11 +104,11 @@ To send email in batch there is :py:meth:`~postmarker.models.emails.EmailManager
     )
 
 You can pass either :py:class:`Email`/``MIMEText``/``MIMEMultipart`` instances or dictionaries.
-Additionally you may pass extra keywords to use with every email in batch.
+Additionally, you may pass extra keywords to use with every email in a batch.
 
-Batch size is not limited, but if the batch has more than 500 emails, then before sending it will be split into chunks of 500 emails.
+The batch size is not limited, but if the batch has more than 500 emails, then before sending, it will be split into chunks of 500 emails.
 
-Postmark provides an interface to send emails with template. Example of usage with Postmarker:
+Postmark provides an interface to send emails created with a template. Example of usage with Postmarker:
 
 .. code-block:: python
 
@@ -148,19 +148,19 @@ To specify headers:
 
     >>> email['X-Accept-Language'] = 'en-us, en'
 
-Also it is possible to remove header:
+Also it is possible to remove the header:
 
 .. code-block:: python
 
     >>> del email['X-Accept-Language']
 
-To add an attachment to email there is :py:meth:`~postmarker.models.emails.Email.attach` method.
+To add an attachment to an email there is :py:meth:`~postmarker.models.emails.Email.attach` method.
 
 .. code-block:: python
 
     >>> email.attach(msg_1)
 
-To attach multiple attachments pass them all to :py:meth:`~postmarker.models.emails.Email.attach`:
+To attach multiple attachments, pass them all to :py:meth:`~postmarker.models.emails.Email.attach`:
 
 .. code-block:: python
 
@@ -173,7 +173,7 @@ Also it is possible to attach binary data:
     >>> content = b'test content'
     >>> email.attach_binary(content=content, filename='readme.txt')
 
-Batches are available via :py:meth:`~postmarker.models.emails.EmailManager.EmailBatch` constructor.
+Batches are available via the :py:meth:`~postmarker.models.emails.EmailManager.EmailBatch` constructor.
 
 .. code-block:: python
 
@@ -182,5 +182,5 @@ Batches are available via :py:meth:`~postmarker.models.emails.EmailManager.Email
     1
     >>> batch.send()
 
-For now batches expose very limited interface - only :py:meth:`~postmarker.models.emails.EmailBatch.send` method and
-length information via ``len`` function.
+For now, batches expose a very limited interface - only :py:meth:`~postmarker.models.emails.EmailBatch.send` method and
+length information via the ``len`` function.

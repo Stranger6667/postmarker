@@ -3,7 +3,7 @@
 Status
 ======
 
-Status API is available via ``status`` manager:
+The Status API is available via the ``status`` manager:
 
 .. code-block:: python
 

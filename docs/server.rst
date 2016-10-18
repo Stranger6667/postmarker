@@ -3,7 +3,7 @@
 Server
 ======
 
-Server API is available via ``ServerManager``:
+The Server API is available via the ``server`` manager:
 
 .. code-block:: python
 

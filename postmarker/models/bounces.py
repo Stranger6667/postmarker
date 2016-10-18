@@ -1,6 +1,6 @@
 # coding: utf-8
 """
-Information about bounces is available via :py:class:`~postmarker.models.bounces.BounceManager`,
+Information about bounces is available via the :py:class:`~postmarker.models.bounces.BounceManager`,
 which is an attribute of ``postmark`` instance.
 """
 from .base import Model, ModelManager
@@ -23,7 +23,7 @@ class Bounce(Model):
 
     def activate(self):
         """
-        Activates the bounce instance and updates it with latest data.
+        Activates the bounce instance and updates it with the latest data.
 
         :return: Activation status.
         :rtype: `str`
@@ -103,10 +103,10 @@ class BounceManager(ModelManager):
 
     def get_dump(self, id):
         """
-        Gets SMTP data dump.
+        Gets an SMTP data dump.
 
         :param int id: Bounce ID.
-        :return: Dump of SMTP data if it is available.
+        :return: A dump of SMTP data if it is available.
         :rtype: `str` or `None`
         """
         return self.call('GET', '/bounces/%s/dump' % id).get('Body')
