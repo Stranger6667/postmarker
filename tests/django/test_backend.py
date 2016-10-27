@@ -46,11 +46,18 @@ def test_send_mail(patched_request, settings):
     assert patched_request.call_args[1]['headers']['X-Postmark-Server-Token'] == settings.POSTMARK['TOKEN']
 
 
-def test_unicode_header(patched_request):
-    kwargs = SEND_KWARGS.copy()
-    kwargs['subject'] = 'Тест'
+def test_headers_encoding(patched_request):
+    kwargs = {
+        'subject': 'Тест',
+        'message': 'Here is the message.',
+        'from_email': 'Тест <sender@example.com>',
+        'recipient_list': ['Тест <receiver@example.com>', 'Тест2 <receiver@example.com>']
+    }
     send_mail(**kwargs)
-    assert patched_request.call_args[1]['json'][0]['Subject'] == kwargs['subject']
+    request = patched_request.call_args[1]['json'][0]
+    assert request['Subject'] == kwargs['subject']
+    assert request['From'] == kwargs['from_email']
+    assert request['To'] == ', '.join(kwargs['recipient_list'])
 
 
 @pytest.mark.skipif(
