@@ -150,7 +150,7 @@ class Email(BaseEmail):
         subject = message['Subject']
         if subject is not None:
             subject, encoding = decode_header(subject)[0]
-            if isinstance(subject, bytes):
+            if isinstance(subject, bytes) and encoding is not None:
                 subject = subject.decode(encoding)
         return cls(manager=manager, From=message['From'], To=message['To'], TextBody=text, HtmlBody=html,
                    Subject=subject, Cc=message['Cc'], Bcc=message['Bcc'], ReplyTo=message['Reply-To'],

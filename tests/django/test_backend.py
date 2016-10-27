@@ -1,4 +1,6 @@
 # coding: utf-8
+from __future__ import unicode_literals
+
 import pytest
 from django import VERSION
 from django.core import mail
@@ -48,7 +50,7 @@ def test_unicode_header(patched_request):
     kwargs = SEND_KWARGS.copy()
     kwargs['subject'] = 'Тест'
     send_mail(**kwargs)
-    assert patched_request.call_args[1]['json'][0]['Subject'] == 'Тест'
+    assert patched_request.call_args[1]['json'][0]['Subject'] == kwargs['subject']
 
 
 @pytest.mark.skipif(
