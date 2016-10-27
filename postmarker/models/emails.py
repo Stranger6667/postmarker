@@ -15,7 +15,7 @@ from ..utils import chunks
 from .base import Model, ModelManager
 
 
-if sys.version_info[0] == 2:
+if sys.version_info[:2] <= (3, 2):
     SEPARATOR = ' '
 else:
     SEPARATOR = ''
