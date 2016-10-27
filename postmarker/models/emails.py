@@ -4,13 +4,21 @@ This module provides basic ways to send emails.
 """
 import mimetypes
 import os
+import sys
 from base64 import b64encode
+from email.header import decode_header
 from email.mime.base import MIMEBase
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
 from ..utils import chunks
 from .base import Model, ModelManager
+
+
+if sys.version_info[:2] <= (3, 2):
+    SEPARATOR = ' '
+else:
+    SEPARATOR = ''
 
 
 def list_to_csv(value):
@@ -127,6 +135,21 @@ class BaseEmail(Model):
         self.attach(payload)
 
 
+def maybe_decode(value, encoding):
+    if isinstance(value, bytes):
+        if encoding is not None:
+            value = value.decode(encoding)
+        else:
+            value = value.decode()
+    return value
+
+
+def prepare_header(value):
+    if value is None:
+        return value
+    return SEPARATOR.join([maybe_decode(value, encoding) for value, encoding in decode_header(value)])
+
+
 class Email(BaseEmail):
 
     def __init__(self, **kwargs):
@@ -146,9 +169,14 @@ class Email(BaseEmail):
             text, html, attachments = deconstruct_multipart(message)
         else:
             text, html, attachments = message.get_payload(), None, []
-        return cls(manager=manager, From=message['From'], To=message['To'], TextBody=text, HtmlBody=html,
-                   Subject=message['Subject'], Cc=message['Cc'], Bcc=message['Bcc'], ReplyTo=message['Reply-To'],
-                   Attachments=attachments)
+        subject = prepare_header(message['Subject'])
+        sender = prepare_header(message['From'])
+        to = prepare_header(message['To'])
+        cc = prepare_header(message['Cc'])
+        bcc = prepare_header(message['Bcc'])
+        reply_to = prepare_header(message['Reply-To'])
+        return cls(manager=manager, From=sender, To=to, TextBody=text, HtmlBody=html, Subject=subject, Cc=cc, Bcc=bcc,
+                   ReplyTo=reply_to, Attachments=attachments)
 
     def send(self):
         return self._manager._send(**self.as_dict())

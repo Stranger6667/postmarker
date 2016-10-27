@@ -1,4 +1,6 @@
 # coding: utf-8
+from __future__ import unicode_literals
+
 import pytest
 from django import VERSION
 from django.core import mail
@@ -42,6 +44,20 @@ def test_send_mail(patched_request, settings):
         'From': 'sender@example.com'
     }, )
     assert patched_request.call_args[1]['headers']['X-Postmark-Server-Token'] == settings.POSTMARK['TOKEN']
+
+
+def test_headers_encoding(patched_request):
+    kwargs = {
+        'subject': 'Тест',
+        'message': 'Here is the message.',
+        'from_email': 'Тест <sender@example.com>',
+        'recipient_list': ['Тест <receiver@example.com>', 'Тест2 <receiver@example.com>']
+    }
+    send_mail(**kwargs)
+    request = patched_request.call_args[1]['json'][0]
+    assert request['Subject'] == kwargs['subject']
+    assert request['From'] == kwargs['from_email']
+    assert request['To'] == ', '.join(kwargs['recipient_list'])
 
 
 @pytest.mark.skipif(
