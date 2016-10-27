@@ -44,6 +44,20 @@ When it is set to ``True`` all interactions will be conducted with a special tes
 
 To globally turn on ``TrackOpens`` feature, set ``TRACK_OPENS`` to ``True``.
 
+To mark messages with tags you could use ``postmarker.django.PostmarkEmailMessage`` /  ``postmarker.django.PostmarkEmailMultiAlternatives``
+instead of ``EmailMessage`` / ``EmailMultiAlternatives`` from Django.
+Example:
+
+.. code-block:: python
+
+    >>> from postmarker.django import PostmarkEmailMessage
+    >>> PostmarkEmailMessage(
+        'Subject', 'Body', 'sender@example.com', ['receiver@example.com'],
+        tag='Test tag'
+    ).send()
+
+You can get the same feature for your own classes with ``PostmarkEmailMixin``.
+
 Known issues
 ~~~~~~~~~~~~
 

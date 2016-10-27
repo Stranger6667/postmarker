@@ -40,6 +40,7 @@ def test_send_mail(patched_request, settings):
         'Attachments': [],
         'TextBody': 'Here is the message.',
         'HtmlBody': None,
+        'Tag': None,
         'TrackOpens': False,
         'From': 'sender@example.com'
     }, )
@@ -77,6 +78,7 @@ def test_send_mail_html_message(patched_request):
         'TextBody': 'Here is the message.',
         'HtmlBody': '<html></html>',
         'TrackOpens': False,
+        'Tag': None,
         'From': 'sender@example.com'
     }, )
 
@@ -107,6 +109,7 @@ def test_extra_options(settings, patched_request):
         'Attachments': [],
         'TextBody': 'Here is the message.',
         'HtmlBody': None,
+        'Tag': None,
         'TrackOpens': True,
         'From': 'sender@example.com'
     },)
@@ -126,6 +129,7 @@ def test_context_manager(patched_request):
         'Attachments': [],
         'TextBody': 'Body',
         'HtmlBody': None,
+        'Tag': None,
         'TrackOpens': True,
         'From': 'sender@example.com'
     },)

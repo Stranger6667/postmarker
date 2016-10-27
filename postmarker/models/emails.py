@@ -175,8 +175,9 @@ class Email(BaseEmail):
         cc = prepare_header(message['Cc'])
         bcc = prepare_header(message['Bcc'])
         reply_to = prepare_header(message['Reply-To'])
+        tag = getattr(message, 'tag', None)
         return cls(manager=manager, From=sender, To=to, TextBody=text, HtmlBody=html, Subject=subject, Cc=cc, Bcc=bcc,
-                   ReplyTo=reply_to, Attachments=attachments)
+                   ReplyTo=reply_to, Attachments=attachments, Tag=tag)
 
     def send(self):
         return self._manager._send(**self.as_dict())
