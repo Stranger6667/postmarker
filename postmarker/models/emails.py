@@ -5,6 +5,7 @@ This module provides basic ways to send emails.
 import mimetypes
 import os
 from base64 import b64encode
+from email.header import decode_header
 from email.mime.base import MIMEBase
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
@@ -146,8 +147,13 @@ class Email(BaseEmail):
             text, html, attachments = deconstruct_multipart(message)
         else:
             text, html, attachments = message.get_payload(), None, []
+        subject = message['Subject']
+        if subject is not None:
+            subject, encoding = decode_header(subject)[0]
+            if isinstance(subject, bytes):
+                subject = subject.decode(encoding)
         return cls(manager=manager, From=message['From'], To=message['To'], TextBody=text, HtmlBody=html,
-                   Subject=message['Subject'], Cc=message['Cc'], Bcc=message['Bcc'], ReplyTo=message['Reply-To'],
+                   Subject=subject, Cc=message['Cc'], Bcc=message['Bcc'], ReplyTo=message['Reply-To'],
                    Attachments=attachments)
 
     def send(self):

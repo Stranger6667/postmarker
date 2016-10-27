@@ -44,6 +44,13 @@ def test_send_mail(patched_request, settings):
     assert patched_request.call_args[1]['headers']['X-Postmark-Server-Token'] == settings.POSTMARK['TOKEN']
 
 
+def test_unicode_header(patched_request):
+    kwargs = SEND_KWARGS.copy()
+    kwargs['subject'] = 'Тест'
+    send_mail(**kwargs)
+    assert patched_request.call_args[1]['json'][0]['Subject'] == 'Тест'
+
+
 @pytest.mark.skipif(
     VERSION[:2] < (1, 7),
     reason='Django < 1.7 does not support `html_message` argument in `send_mail` function.'

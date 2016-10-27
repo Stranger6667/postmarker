@@ -3,6 +3,11 @@
 Changelog
 =========
 
+0.5.2 - 27.10.2016
+------------------
+
+- Fixed headers decoding. `#60`_
+
 0.5.1 - 18.10.2016
 ------------------
 
@@ -60,6 +65,7 @@ Changelog
 - Initial release.
 
 
+.. _#60: https://github.com/Stranger6667/postmarker/issues/60
 .. _#55: https://github.com/Stranger6667/postmarker/issues/55
 .. _#51: https://github.com/Stranger6667/postmarker/issues/51
 .. _#46: https://github.com/Stranger6667/postmarker/issues/46
