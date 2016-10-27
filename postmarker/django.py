@@ -3,6 +3,7 @@ from __future__ import absolute_import
 
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
+from django.core.mail import EmailMessage, EmailMultiAlternatives
 from django.core.mail.backends.base import BaseEmailBackend
 
 from .core import TEST_TOKEN, PostmarkClient
@@ -52,7 +53,7 @@ class EmailBackend(BaseEmailBackend):
     def send_messages(self, email_messages):
         try:
             client_created = self.open()
-            prepared_messages = [message.message() for message in email_messages]
+            prepared_messages = [self.prepare_message(message) for message in email_messages]
             response = self.client.emails.send_batch(*prepared_messages, TrackOpens=self.get_option('TRACK_OPENS'))
             msg_count = len(response)
             if client_created:
@@ -61,3 +62,26 @@ class EmailBackend(BaseEmailBackend):
         except Exception:
             if not self.fail_silently:
                 raise
+
+    def prepare_message(self, message):
+        instance = message.message()
+        instance.tag = getattr(message, 'tag', None)
+        return instance
+
+
+class PostmarkEmailMixin(object):
+    """
+    Provides an ability to set tags on Django email instances.
+    """
+
+    def __init__(self, *args, **kwargs):
+        self.tag = kwargs.pop('tag', None)
+        super(PostmarkEmailMixin, self).__init__(*args, **kwargs)
+
+
+class PostmarkEmailMessage(PostmarkEmailMixin, EmailMessage):
+    pass
+
+
+class PostmarkEmailMultiAlternatives(PostmarkEmailMixin, EmailMultiAlternatives):
+    pass

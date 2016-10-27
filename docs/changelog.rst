@@ -3,6 +3,11 @@
 Changelog
 =========
 
+0.5.3 - TBD
+-----------
+
+- Tags for Django messages. `#59`_
+
 0.5.2 - 27.10.2016
 ------------------
 
@@ -66,6 +71,7 @@ Changelog
 
 
 .. _#60: https://github.com/Stranger6667/postmarker/issues/60
+.. _#59: https://github.com/Stranger6667/postmarker/issues/59
 .. _#55: https://github.com/Stranger6667/postmarker/issues/55
 .. _#51: https://github.com/Stranger6667/postmarker/issues/51
 .. _#46: https://github.com/Stranger6667/postmarker/issues/46

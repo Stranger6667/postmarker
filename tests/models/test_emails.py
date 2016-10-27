@@ -166,6 +166,7 @@ class TestSimpleSend:
             'ReplyTo': 'replyto@example.com',
             'Subject': 'Test subject',
             'TextBody': 'Text',
+            'Tag': None,
             'To': 'receiver@example.com'
         }
 
