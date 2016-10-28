@@ -257,7 +257,7 @@ class EmailManager(ModelManager):
         return self.call('POST', '/email/batch', data=emails)
 
     def send(self, message=None, From=None, To=None, Cc=None, Bcc=None, Subject=None, Tag=None, HtmlBody=None,
-             TextBody=None, ReplyTo=None, Headers=None, TrackOpens=None, Attachments=None):
+             TextBody=None, ReplyTo=None, Headers=None, TrackOpens=None, TrackLinks='None', Attachments=None):
         """
         Sends a single email.
 
@@ -279,15 +279,17 @@ class EmailManager(ModelManager):
         :param str ReplyTo: Reply To override email address.
         :param dict Headers: Dictionary of custom headers to include.
         :param bool TrackOpens: Activate open tracking for this email.
+        :param str TrackLinks: Activate link tracking for links in the HTML or Text bodies of this email.
         :param list Attachments: List of attachments.
         :return: Information about sent email.
         :rtype: `dict`
         """
         assert (not (message and (From or To))), 'You should specify either message or From and To parameters'
+        assert TrackLinks in ('None', 'HtmlAndText', 'HtmlOnly', 'TextOnly')
         if message is None:
             message = self.Email(From=From, To=To, Cc=Cc, Bcc=Bcc, Subject=Subject, Tag=Tag, HtmlBody=HtmlBody,
                                  TextBody=TextBody, ReplyTo=ReplyTo, Headers=Headers, TrackOpens=TrackOpens,
-                                 Attachments=Attachments)
+                                 TrackLinks=TrackLinks, Attachments=Attachments)
         elif isinstance(message, (MIMEText, MIMEMultipart)):
             message = Email.from_mime(message, self)
         elif not isinstance(message, Email):
@@ -295,10 +297,11 @@ class EmailManager(ModelManager):
         return message.send()
 
     def send_with_template(self, TemplateId, TemplateModel, From, To, Cc=None, Bcc=None, Subject=None, Tag=None,
-                           ReplyTo=None, Headers=None, TrackOpens=None, Attachments=None, InlineCss=True):
+                           ReplyTo=None, Headers=None, TrackOpens=None, TrackLinks='None', Attachments=None,
+                           InlineCss=True):
         return self.EmailTemplate(TemplateId=TemplateId, TemplateModel=TemplateModel, From=From, To=To, Cc=Cc, Bcc=Bcc,
                                   Subject=Subject, Tag=Tag, ReplyTo=ReplyTo, Headers=Headers, TrackOpens=TrackOpens,
-                                  Attachments=Attachments, InlineCss=InlineCss).send()
+                                  TrackLinks=TrackLinks, Attachments=Attachments, InlineCss=InlineCss).send()
 
     def send_batch(self, *emails, **extra):
         """
@@ -312,18 +315,18 @@ class EmailManager(ModelManager):
     # NOTE. The following methods are included here to expose better interface without need to import relevant classes.
 
     def Email(self, From, To, Cc=None, Bcc=None, Subject=None, Tag=None, HtmlBody=None, TextBody=None, ReplyTo=None,
-              Headers=None, TrackOpens=None, Attachments=None):
+              Headers=None, TrackOpens=None, TrackLinks='None', Attachments=None):
         """
         Constructs :py:class:`Email` instance.
 
         :return: :py:class:`Email`
         """
         return Email(manager=self, From=From, To=To, Cc=Cc, Bcc=Bcc, Subject=Subject, Tag=Tag, HtmlBody=HtmlBody,
-                     TextBody=TextBody, ReplyTo=ReplyTo, Headers=Headers, TrackOpens=TrackOpens,
+                     TextBody=TextBody, ReplyTo=ReplyTo, Headers=Headers, TrackOpens=TrackOpens, TrackLinks=TrackLinks,
                      Attachments=Attachments)
 
     def EmailTemplate(self, TemplateId, TemplateModel, From, To, Cc=None, Bcc=None, Subject=None, Tag=None,
-                      ReplyTo=None, Headers=None, TrackOpens=None, Attachments=None, InlineCss=True):
+                      ReplyTo=None, Headers=None, TrackOpens=None, TrackLinks='None', Attachments=None, InlineCss=True):
         """
         Constructs :py:class:`EmailTemplate` instance.
 
@@ -331,7 +334,7 @@ class EmailManager(ModelManager):
         """
         return EmailTemplate(manager=self, TemplateId=TemplateId, TemplateModel=TemplateModel, From=From, To=To, Cc=Cc,
                              Bcc=Bcc, Subject=Subject, Tag=Tag, ReplyTo=ReplyTo, Headers=Headers, TrackOpens=TrackOpens,
-                             Attachments=Attachments, InlineCss=InlineCss)
+                             TrackLinks=TrackLinks, Attachments=Attachments, InlineCss=InlineCss)
 
     def EmailBatch(self, *emails):
         """
