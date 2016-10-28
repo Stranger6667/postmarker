@@ -18,10 +18,13 @@ Received: from cloud1.example.io ([2a01:4f8:212:46::2])
         for <receiver@gmail.com>
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
         Tue, 04 Oct 2016 01:34:04 -0700 (PDT)
-Received-SPF: pass (google.com: domain of info@example.eu designates 2a01:4f8:212:46::2 as permitted sender) client-ip=2a01:4f8:212:46::2;
+Received-SPF: pass (google.com: domain of info@example.eu designates 2a01:4f8:212:46::2 as permitted sender)
+client-ip=2a01:4f8:212:46::2;
 Authentication-Results: mx.google.com;
-       spf=pass (google.com: domain of info@example.eu designates 2a01:4f8:212:46::2 as permitted sender) smtp.mailfrom=info@example.eu
-Received: from 0fdec0828b6b (unknown [172.17.2.33]) by cloud1.example.io (Postfix) with ESMTP id 645481AE0A73 for <receiver@gmail.com>; Tue,
+       spf=pass (google.com: domain of info@example.eu designates 2a01:4f8:212:46::2 as permitted sender)
+       smtp.mailfrom=info@example.eu
+Received: from 0fdec0828b6b (unknown [172.17.2.33]) by cloud1.example.io (Postfix) with ESMTP id 645481AE0A73
+for <receiver@gmail.com>; Tue,
   4 Oct 2016 10:34:04 +0200 (CEST)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
