@@ -3,7 +3,7 @@ import requests
 
 from . import __version__
 from ._compat import urljoin, with_metaclass
-from .exceptions import ConfigError
+from .exceptions import ClientError, ConfigError
 from .logging import get_logger
 from .models.bounces import BounceManager
 from .models.emails import EmailManager
@@ -100,5 +100,13 @@ class PostmarkClient(with_metaclass(ClientMeta)):
         self.logger.debug('Request: %s %s, Data: %s', method, url, data)
         response = self.session.request(method, url, json=data, params=kwargs, headers=default_headers)
         self.logger.debug('Response: %s', response.text)
-        response.raise_for_status()
+        self.check_response(response)
         return response.json()
+
+    def check_response(self, response):
+        try:
+            response.raise_for_status()
+        except requests.HTTPError:
+            data = response.json()
+            message = '[%s] %s' % (data['ErrorCode'], data['Message'])
+            raise ClientError(message, error_code=data['ErrorCode'])
