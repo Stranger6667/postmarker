@@ -79,6 +79,7 @@ There are a lot of features available. Check it out in our documentation! Here's
 - Support for sending Python email instances.
 - Bounces, Templates, Status & Server API.
 - Django email backend.
+- Spam check API.
 
 Documentation
 =============
