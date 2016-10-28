@@ -3,7 +3,7 @@ import requests
 
 from . import __version__
 from ._compat import urljoin, with_metaclass
-from .exceptions import ClientError, ConfigError
+from .exceptions import ClientError, ConfigError, SpamAssassinError
 from .logging import get_logger
 from .models.bounces import BounceManager
 from .models.emails import EmailManager
@@ -14,6 +14,7 @@ from .models.templates import TemplateManager
 
 DEFAULT_API = 'https://api.postmarkapp.com/'
 STATUS_API = 'https://status.postmarkapp.com/api/1.0/'
+SPAMCHECK_API = 'http://spamcheck.postmarkapp.com/filter/'
 USER_AGENT = 'Postmarker/%s' % __version__
 TEST_TOKEN = 'POSTMARK_API_TEST'
 
@@ -92,6 +93,16 @@ class PostmarkClient(with_metaclass(ClientMeta)):
     def call_status(self, endpoint):
         return self._call('GET', STATUS_API, endpoint)
 
+    def spamcheck(self, dump, options='long'):
+        data = {
+            'email': dump,
+            'options': options
+        }
+        response = self._call('POST', SPAMCHECK_API, '', data)
+        if not response['success']:
+            raise SpamAssassinError(response['message'])
+        return response
+
     def _call(self, method, root, endpoint, data=None, headers=None, **kwargs):
         default_headers = {'Accept': 'application/json', 'User-Agent': USER_AGENT}
         if headers:
@@ -106,6 +117,7 @@ class PostmarkClient(with_metaclass(ClientMeta)):
     def check_response(self, response):
         try:
             response.raise_for_status()
+            print(response.text)
         except requests.HTTPError:
             data = response.json()
             message = '[%s] %s' % (data['ErrorCode'], data['Message'])

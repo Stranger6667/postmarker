@@ -21,6 +21,7 @@ Contents:
    server
    status
    django
+   spamcheck
    reference
    changelog
 
