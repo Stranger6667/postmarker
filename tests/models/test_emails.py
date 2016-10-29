@@ -70,11 +70,11 @@ else:
     ENCODED_CONTENT = 'dGVzdCBjb250ZW50\n'
 
 
-IMAGE = MIMEImage('test content', 'png', name='image1.png')
+IMAGE = MIMEImage(b'test content', 'png', name='image1.png')
 IMAGE.add_header('Content-ID', '<image1@example.com>')
-IMAGE_NO_BRACKETS = MIMEImage('test content', 'png', name='image2.png')
+IMAGE_NO_BRACKETS = MIMEImage(b'test content', 'png', name='image2.png')
 IMAGE_NO_BRACKETS.add_header('Content-ID', 'image2@example.com')
-INLINE_IMAGE = MIMEImage('test content', 'png', name='image3.png')
+INLINE_IMAGE = MIMEImage(b'test content', 'png', name='image3.png')
 INLINE_IMAGE.add_header('Content-ID', '<image3@example.com>')
 INLINE_IMAGE.add_header('Content-Disposition', 'inline', filename='image3.png')
 
@@ -311,7 +311,7 @@ class TestEmail:
             }
         ),
         (
-                IMAGE_NO_BRACKETS,
+            IMAGE_NO_BRACKETS,
             {
                 'Name': 'image2.png',
                 'Content': ENCODED_CONTENT,
