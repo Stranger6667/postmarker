@@ -9,6 +9,7 @@ Changelog
 - Support for link tracking. `#62`_
 - Better exceptions handling. `#50`_
 - Support for spam check API. `#57`_
+- Inline images support. `#52`_
 
 0.5.3 - 27.10.2016
 ------------------
@@ -82,6 +83,7 @@ Changelog
 .. _#59: https://github.com/Stranger6667/postmarker/issues/59
 .. _#57: https://github.com/Stranger6667/postmarker/issues/57
 .. _#55: https://github.com/Stranger6667/postmarker/issues/55
+.. _#52: https://github.com/Stranger6667/postmarker/issues/52
 .. _#51: https://github.com/Stranger6667/postmarker/issues/51
 .. _#50: https://github.com/Stranger6667/postmarker/issues/50
 .. _#46: https://github.com/Stranger6667/postmarker/issues/46
