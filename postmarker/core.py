@@ -117,7 +117,6 @@ class PostmarkClient(with_metaclass(ClientMeta)):
     def check_response(self, response):
         try:
             response.raise_for_status()
-            print(response.text)
         except requests.HTTPError:
             data = response.json()
             message = '[%s] %s' % (data['ErrorCode'], data['Message'])
