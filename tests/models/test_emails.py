@@ -3,6 +3,7 @@ import os
 import sys
 from email import encoders
 from email.mime.base import MIMEBase
+from email.mime.image import MIMEImage
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
@@ -67,6 +68,15 @@ if sys.version_info[0] < 3:
     ENCODED_CONTENT = 'dGVzdCBjb250ZW50'
 else:
     ENCODED_CONTENT = 'dGVzdCBjb250ZW50\n'
+
+
+IMAGE = MIMEImage(b'test content', 'png', name='image1.png')
+IMAGE.add_header('Content-ID', '<image1@example.com>')
+IMAGE_NO_BRACKETS = MIMEImage(b'test content', 'png', name='image2.png')
+IMAGE_NO_BRACKETS.add_header('Content-ID', 'image2@example.com')
+INLINE_IMAGE = MIMEImage(b'test content', 'png', name='image3.png')
+INLINE_IMAGE.add_header('Content-ID', '<image3@example.com>')
+INLINE_IMAGE.add_header('Content-Disposition', 'inline', filename='image3.png')
 
 
 class TestSimpleSend:
@@ -280,3 +290,46 @@ class TestEmail:
         assert email.Cc == MIME_MESSAGE['Cc']
         assert email.Bcc == MIME_MESSAGE['Bcc']
         assert email.ReplyTo == MIME_MESSAGE['Reply-To']
+
+    @pytest.mark.parametrize('image, expected', (
+        (
+            ('image', 'content', 'image/png', 'cid:image@example.com'),
+            {
+                'Name': 'image',
+                'Content': 'content',
+                'ContentType': 'image/png',
+                'ContentID': 'cid:image@example.com'
+            },
+        ),
+        (
+            IMAGE,
+            {
+                'Name': 'image1.png',
+                'Content': ENCODED_CONTENT,
+                'ContentType': 'image/png',
+                'ContentID': 'image1@example.com'
+            }
+        ),
+        (
+            IMAGE_NO_BRACKETS,
+            {
+                'Name': 'image2.png',
+                'Content': ENCODED_CONTENT,
+                'ContentType': 'image/png',
+                'ContentID': 'image2@example.com'
+            }
+        ),
+        (
+            INLINE_IMAGE,
+            {
+                'Name': 'image3.png',
+                'Content': ENCODED_CONTENT,
+                'ContentType': 'image/png',
+                'ContentID': 'cid:image3@example.com'
+            }
+        ),
+    ))
+    def test_inline_image(self, email, patched_request, image, expected):
+        email.attach(image)
+        email.send()
+        assert patched_request.call_args[1]['json']['Attachments'] == [expected]

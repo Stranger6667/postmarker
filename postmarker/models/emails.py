@@ -42,28 +42,39 @@ def prepare_attachments(attachment):
     Converts incoming attachment into dictionary.
     """
     if isinstance(attachment, tuple):
-        attachment = {
+        result = {
             'Name': attachment[0],
             'Content': attachment[1],
             'ContentType': attachment[2],
         }
+        if len(attachment) == 4:
+            result['ContentID'] = attachment[3]
     elif isinstance(attachment, MIMEBase):
-        attachment = {
+        result = {
             'Name': attachment.get_filename(),
             'Content': attachment.get_payload(),
             'ContentType': attachment.get_content_type(),
         }
+        content_id = attachment.get('Content-ID')
+        if content_id:
+            if content_id.startswith('<') and content_id.endswith('>'):
+                content_id = content_id[1:-1]
+            if (attachment.get('Content-Disposition') or '').startswith('inline'):
+                content_id = 'cid:%s' % content_id
+            result['ContentID'] = content_id
     elif isinstance(attachment, str):
         content_type = guess_content_type(attachment)
         filename = os.path.basename(attachment)
         with open(attachment, 'rb') as fd:
             data = fd.read()
-        attachment = {
+        result = {
             'Name': filename,
             'Content': b64encode(data).decode('utf-8'),
             'ContentType': content_type
         }
-    return attachment
+    else:
+        result = attachment
+    return result
 
 
 def deconstruct_multipart(message):

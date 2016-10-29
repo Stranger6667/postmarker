@@ -84,6 +84,24 @@ Then pass the attachments to :py:meth:`~postmarker.models.emails.EmailManager.se
         Attachments=[msg_1, msg_2, msg_3, msg_4]
     )
 
+Postmarker also supports inline images. Here are the possible usage options:
+
+.. code-block:: python
+
+    >>> tuple_image = ('image', 'content', 'image/png', 'cid:image@example.com')
+    >>> mime = MIMEImage('test content', 'png', name='image1.png')
+    >>> mime.add_header('Content-ID', '<image1@example.com>')
+    >>> mime_inline = MIMEImage('test content', 'png', name='image3.png')
+    >>> mime_inline.add_header('Content-ID', '<image3@example.com>')
+    >>> mime_inline.add_header('Content-Disposition', 'inline', filename='image3.png')
+    >>> postmark.emails.send(
+        From='sender@example.com',
+        To='receiver@example.com',
+        Subject='Postmark test',
+        HtmlBody='<html><body><strong>Hello</strong> dear Postmark user.</body></html>',
+        Attachments=[tuple_image, mime, mime_inline]
+    )
+
 To send email in a batch there is :py:meth:`~postmarker.models.emails.EmailManager.send_batch` method.
 
 .. code-block:: python
