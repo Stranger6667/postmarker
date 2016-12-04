@@ -9,12 +9,12 @@ from postmarker.models.bounces import BounceManager
 
 class TestClient:
 
-    def test_server_client(self, postmark, api_token, patched_request):
+    def test_server_client(self, postmark, server_token, patched_request):
         postmark.call('GET', 'endpoint')
         patched_request.assert_called_with(
             'GET',
             'https://api.postmarkapp.com/endpoint',
-            headers={'X-Postmark-Server-Token': api_token, 'Accept': 'application/json', 'User-Agent': USER_AGENT},
+            headers={'X-Postmark-Server-Token': server_token, 'Accept': 'application/json', 'User-Agent': USER_AGENT},
             params={}, json=None,
         )
 
@@ -23,8 +23,8 @@ class TestClient:
             PostmarkClient(None)
         assert str(exc.value) == 'You have to provide token to use Postmark API'
 
-    def test_repr(self, postmark, api_token):
-        assert repr(postmark) == '<PostmarkClient: %s>' % api_token
+    def test_repr(self, postmark, server_token):
+        assert repr(postmark) == '<PostmarkClient: %s>' % server_token
 
 
 class TestManagersSetup:

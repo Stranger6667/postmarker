@@ -13,9 +13,11 @@ from .helpers import replace_real_credentials
 
 Betamax.register_serializer(pretty_json.PrettyJSONSerializer)
 
-DEFAULT_API_TOKEN = 'SOME_TOKEN'
+DEFAULT_SERVER_TOKEN = 'SERVER_TOKEN'
+DEFAULT_ACCOUNT_TOKEN = 'ACCOUNT_TOKEN'
 CASSETTE_DIR = 'tests/cassettes/'
-API_TOKEN = os.environ.get('API_TOKEN', DEFAULT_API_TOKEN)
+SERVER_TOKEN = os.environ.get('SERVER_TOKEN', DEFAULT_SERVER_TOKEN)
+ACCOUNT_TOKEN = os.environ.get('ACCOUNT_TOKEN', DEFAULT_ACCOUNT_TOKEN)
 
 
 def pytest_addoption(parser):
@@ -24,7 +26,8 @@ def pytest_addoption(parser):
 
 def pytest_unconfigure(config):
     if config.getoption('--record'):
-        replace_real_credentials(CASSETTE_DIR, API_TOKEN, DEFAULT_API_TOKEN)
+        replace_real_credentials(CASSETTE_DIR, SERVER_TOKEN, 'X-Postmark-Server-Token', DEFAULT_SERVER_TOKEN)
+        replace_real_credentials(CASSETTE_DIR, ACCOUNT_TOKEN, 'X-Postmark-Account-Token', DEFAULT_ACCOUNT_TOKEN)
 
 
 @pytest.yield_fixture(autouse=True, scope='module')
@@ -61,13 +64,18 @@ def patched_request():
 
 
 @pytest.fixture(scope='session')
-def api_token():
-    return API_TOKEN
+def server_token():
+    return SERVER_TOKEN
 
 
 @pytest.fixture(scope='session')
-def postmark(api_token):
-    return PostmarkClient(token=api_token)
+def account_token():
+    return ACCOUNT_TOKEN
+
+
+@pytest.fixture(scope='session')
+def postmark(server_token, account_token):
+    return PostmarkClient(token=server_token, account_token=account_token)
 
 
 @pytest.fixture(scope='session')
@@ -93,3 +101,8 @@ def email_batch(postmark, email):
 @pytest.fixture(scope='session')
 def template(postmark):
     return postmark.templates.get(983381)
+
+
+@pytest.fixture(scope='session')
+def domain(postmark):
+    return postmark.domains.get(64054)

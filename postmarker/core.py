@@ -6,6 +6,7 @@ from ._compat import urljoin, with_metaclass
 from .exceptions import ClientError, ConfigError, SpamAssassinError
 from .logging import get_logger
 from .models.bounces import BounceManager
+from .models.domains import DomainsManager
 from .models.emails import EmailManager
 from .models.server import ServerManager
 from .models.status import StatusManager
@@ -46,16 +47,18 @@ class PostmarkClient(with_metaclass(ClientMeta)):
     Basic class for API clients. Provides basic functionality to make requests.
     """
     _managers = (
-        EmailManager,
         BounceManager,
+        DomainsManager,
+        EmailManager,
         ServerManager,
         StatusManager,
         TemplateManager,
     )
 
-    def __init__(self, token=None, verbosity=0):
+    def __init__(self, token=None, account_token=None, verbosity=0):
         assert token, 'You have to provide token to use Postmark API'
         self.token = token
+        self.account_token = account_token
         self.logger = get_logger('Postmarker', verbosity)
         self._setup_managers()
 
@@ -80,13 +83,20 @@ class PostmarkClient(with_metaclass(ClientMeta)):
             self._session = requests.Session()
         return self._session
 
-    def call(self, method, endpoint, data=None, **kwargs):
+    def call(self, method, endpoint, token_type='server', data=None, **kwargs):
+        if token_type == 'account':
+            header = 'X-Postmark-Account-Token'
+            token = self.account_token
+        else:
+            header = 'X-Postmark-Server-Token'
+            token = self.token
+        print(header, token, token_type)
         return self._call(
             method,
             DEFAULT_API,
             endpoint,
             data,
-            {'X-Postmark-Server-Token': self.token},
+            {header: token},
             **kwargs
         )
 

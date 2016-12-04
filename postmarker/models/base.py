@@ -37,6 +37,7 @@ class ModelManager(object):
     """
     name = None
     model = None
+    token_type = 'server'
 
     def __init__(self, client):
         self.client = client
@@ -56,4 +57,5 @@ class ModelManager(object):
         return [self._init_instance(part) for part in data]
 
     def call(self, *args, **kwargs):
+        kwargs['token_type'] = self.token_type
         return self.client.call(*args, **kwargs)

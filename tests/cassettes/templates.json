@@ -21,7 +21,7 @@
             "Postmarker/0.5.0.dev"
           ],
           "X-Postmark-Server-Token": [
-            "SOME_TOKEN"
+            "SERVER_TOKEN"
           ]
         },
         "method": "GET",
@@ -83,7 +83,7 @@
             "Postmarker/0.5.0.dev"
           ],
           "X-Postmark-Server-Token": [
-            "SOME_TOKEN"
+            "SERVER_TOKEN"
           ]
         },
         "method": "GET",
@@ -151,7 +151,7 @@
             "Postmarker/0.5.0.dev"
           ],
           "X-Postmark-Server-Token": [
-            "SOME_TOKEN"
+            "SERVER_TOKEN"
           ]
         },
         "method": "PUT",
@@ -219,7 +219,7 @@
             "Postmarker/0.5.0.dev"
           ],
           "X-Postmark-Server-Token": [
-            "SOME_TOKEN"
+            "SERVER_TOKEN"
           ]
         },
         "method": "PUT",
@@ -281,7 +281,7 @@
             "Postmarker/0.5.0.dev"
           ],
           "X-Postmark-Server-Token": [
-            "SOME_TOKEN"
+            "SERVER_TOKEN"
           ]
         },
         "method": "GET",
@@ -349,7 +349,7 @@
             "Postmarker/0.5.0.dev"
           ],
           "X-Postmark-Server-Token": [
-            "SOME_TOKEN"
+            "SERVER_TOKEN"
           ]
         },
         "method": "POST",
@@ -414,7 +414,7 @@
             "Postmarker/0.5.0.dev"
           ],
           "X-Postmark-Server-Token": [
-            "SOME_TOKEN"
+            "SERVER_TOKEN"
           ]
         },
         "method": "DELETE",
@@ -482,7 +482,7 @@
             "Postmarker/0.5.0.dev"
           ],
           "X-Postmark-Server-Token": [
-            "SOME_TOKEN"
+            "SERVER_TOKEN"
           ]
         },
         "method": "POST",

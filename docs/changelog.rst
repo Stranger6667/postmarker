@@ -10,6 +10,7 @@ Changelog
 - Better exceptions handling. `#50`_
 - Support for spam check API. `#57`_
 - Inline images support. `#52`_
+- Domains API. `#64`_
 
 0.5.3 - 27.10.2016
 ------------------
@@ -78,6 +79,7 @@ Changelog
 - Initial release.
 
 
+.. _#64: https://github.com/Stranger6667/postmarker/issues/64
 .. _#62: https://github.com/Stranger6667/postmarker/issues/62
 .. _#60: https://github.com/Stranger6667/postmarker/issues/60
 .. _#59: https://github.com/Stranger6667/postmarker/issues/59

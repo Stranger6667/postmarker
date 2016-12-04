@@ -19,15 +19,15 @@ def encode(value):
     return base64.b64encode(json.dumps(value, separators=(',', ':')).encode())
 
 
-def replace_real_credentials(cassette_dir, production_token, test_token):
+def replace_real_credentials(cassette_dir, production_token, header, test_token):
     cassettes = glob.glob(os.path.join(cassette_dir, '*.json'))
     for cassette_path in cassettes:
         with open(cassette_path) as fp:
             data = json.load(fp)
         rewrite_required = False
         for record in data['http_interactions']:
-            if record['request']['headers'].get('X-Postmark-Server-Token') == [production_token]:
-                record['request']['headers']['X-Postmark-Server-Token'] = [test_token]
+            if record['request']['headers'].get(header) == [production_token]:
+                record['request']['headers'][header] = [test_token]
                 rewrite_required = True
         if rewrite_required:
             with open(cassette_path, 'w') as fp:
