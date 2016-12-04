@@ -1,7 +1,7 @@
 {
   "http_interactions": [
     {
-      "recorded_at": "2016-12-04T09:10:37",
+      "recorded_at": "2016-12-04T20:21:59",
       "request": {
         "body": {
           "base64_string": "",
@@ -46,7 +46,7 @@
             "application/json; charset=utf-8"
           ],
           "Date": [
-            "Sun, 04 Dec 2016 09:10:36 GMT"
+            "Sun, 04 Dec 2016 20:21:57 GMT"
           ],
           "Server": [
             "unicorns-double-rainbow"
@@ -63,7 +63,69 @@
       }
     },
     {
-      "recorded_at": "2016-12-04T09:10:38",
+      "recorded_at": "2016-12-04T20:21:59",
+      "request": {
+        "body": {
+          "base64_string": "",
+          "encoding": "utf-8"
+        },
+        "headers": {
+          "Accept": [
+            "application/json"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "Postmarker/0.6.0.dev"
+          ],
+          "X-Postmark-Account-Token": [
+            "ACCOUNT_TOKEN"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://api.postmarkapp.com/domains/64054"
+      },
+      "response": {
+        "body": {
+          "base64_string": "H4sIAPHgQ1gC/22QT2uDQBDFv4rsOYjbmhyEHkptaAgR0TQ9liE7JuL+EV3FUNrP3jVuG609zsyb33szHySN1y+q1iQg2IEoObpHJciCJKibSsagz6ESkMun6HH3fADeoJGWwp2qw+1m91oy0Jhq0E1tNAes8ixHZqfW5M6jS++erqjnU+q5BvTOrvwCL3+YJtkvI9BVgwPov16CrSqQWY9hd4+d/snbPtRlRh1wROfk8sgbhoHpuEJD3boStfMFnJu9CATOXvGGUPQuJMiA1zj/zS2SFfTqsb/lOe21XpBNSIKV7y39OWvI3wNilCyXp9FRkOFeJShUi/biLV7WlRJhlE687XQcYQqdTD6/AV4NOboGAgAA",
+          "encoding": "utf-8"
+        },
+        "headers": {
+          "Cache-Control": [
+            "private"
+          ],
+          "Content-Encoding": [
+            "gzip"
+          ],
+          "Content-Length": [
+            "463"
+          ],
+          "Content-Type": [
+            "application/json; charset=utf-8"
+          ],
+          "Date": [
+            "Sun, 04 Dec 2016 20:21:58 GMT"
+          ],
+          "Server": [
+            "unicorns-double-rainbow"
+          ],
+          "X-Powered-By": [
+            "ASP.NET"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": "OK"
+        },
+        "url": "https://api.postmarkapp.com/domains/64054"
+      }
+    },
+    {
+      "recorded_at": "2016-12-04T20:21:59",
       "request": {
         "body": {
           "base64_string": "",
@@ -108,7 +170,7 @@
             "application/json; charset=utf-8"
           ],
           "Date": [
-            "Sun, 04 Dec 2016 09:10:37 GMT"
+            "Sun, 04 Dec 2016 20:21:58 GMT"
           ],
           "Server": [
             "unicorns-double-rainbow"

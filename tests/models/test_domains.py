@@ -9,6 +9,7 @@ class TestModel:
 
     def test_get(self, domain):
         assert isinstance(domain, Domain)
+        assert domain.get()
 
     def test_str(self, domain):
         assert str(domain) == 'Domain: example.com (64054)'
