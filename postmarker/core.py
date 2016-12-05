@@ -90,7 +90,6 @@ class PostmarkClient(with_metaclass(ClientMeta)):
         else:
             header = 'X-Postmark-Server-Token'
             token = self.token
-        print(header, token, token_type)
         return self._call(
             method,
             DEFAULT_API,

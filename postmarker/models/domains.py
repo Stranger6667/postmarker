@@ -13,7 +13,8 @@ class Domain(Model):
         return self
 
     def edit(self, **kwargs):
-        return self._manager.edit(self.ID, **kwargs)
+        response = self._manager.edit(self.ID, **kwargs)
+        self._update(response)
 
     def delete(self):
         return self._manager.delete(self.ID)
