@@ -18,6 +18,7 @@ CASSETTE_NAME = 'emails'
 def get_attachment_path(filename):
     return os.path.abspath(os.path.join(os.path.dirname(__file__), 'attachments/%s' % filename))
 
+
 ATTACHMENT = {
     'Name': 'readme.txt',
     'Content': 'dGVzdCBjb250ZW50',
@@ -60,6 +61,7 @@ def get_mime_message(text, html_text=None, **kwargs):
     for key, value in kwargs.items():
         instance[key] = value
     return instance
+
 
 MIME_MESSAGE = get_mime_message('Text', **DEFAULT_HEADERS)
 MIME_ALTERNATIVE = get_mime_message('Text', 'HTML content', **DEFAULT_HEADERS)
