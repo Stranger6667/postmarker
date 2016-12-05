@@ -3,8 +3,8 @@
 Changelog
 =========
 
-0.6.0 - TBA
------------
+0.6.0 - 05.12.2016
+------------------
 
 - Support for link tracking. `#62`_
 - Better exceptions handling. `#50`_
