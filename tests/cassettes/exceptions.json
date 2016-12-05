@@ -21,7 +21,7 @@
             "Postmarker/0.6.0.dev"
           ],
           "X-Postmark-Server-Token": [
-            "SOME_TOKEN"
+            "SERVER_TOKEN"
           ]
         },
         "method": "GET",

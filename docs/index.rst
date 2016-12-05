@@ -20,6 +20,7 @@ Contents:
    bounces
    server
    status
+   domains
    django
    spamcheck
    reference
