@@ -3,8 +3,8 @@
 Changelog
 =========
 
-0.7.0.dev0 - TBA
-----------------
+0.6.1 - 01.01.2017
+------------------
 
 - Fixed handling of `quoted-printable` payload. `#76`_
 
