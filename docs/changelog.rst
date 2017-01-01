@@ -3,6 +3,11 @@
 Changelog
 =========
 
+0.7.0.dev0 - TBA
+----------------
+
+- Fixed handling of `quoted-printable` payload. `#76`_
+
 0.6.0 - 05.12.2016
 ------------------
 
@@ -79,6 +84,7 @@ Changelog
 - Initial release.
 
 
+.. _#76: https://github.com/Stranger6667/postmarker/issues/76
 .. _#64: https://github.com/Stranger6667/postmarker/issues/64
 .. _#62: https://github.com/Stranger6667/postmarker/issues/62
 .. _#60: https://github.com/Stranger6667/postmarker/issues/60
