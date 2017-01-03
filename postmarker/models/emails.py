@@ -82,9 +82,9 @@ def deconstruct_multipart(message):
     for part in message.walk():
         content_type = part.get_content_type()
         if content_type == 'text/plain':
-            text = part.get_payload(decode=True).decode()
+            text = part.get_payload(decode=True).decode('utf8')
         elif content_type == 'text/html':
-            html = part.get_payload(decode=True).decode()
+            html = part.get_payload(decode=True).decode('utf8')
         elif content_type != 'multipart/alternative':
             attachments.append(part)
     return text, html, attachments
@@ -179,7 +179,7 @@ class Email(BaseEmail):
         if isinstance(message, MIMEMultipart):
             text, html, attachments = deconstruct_multipart(message)
         else:
-            text, html, attachments = message.get_payload(decode=True).decode(), None, []
+            text, html, attachments = message.get_payload(decode=True).decode('utf8'), None, []
         subject = prepare_header(message['Subject'])
         sender = prepare_header(message['From'])
         to = prepare_header(message['To'])
