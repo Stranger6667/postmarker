@@ -67,6 +67,7 @@ def test_headers_encoding(patched_request):
 )
 @pytest.mark.parametrize('html_message', (
     '<html></html>',
+    '<html>Тест</html>',
     '''<html>
        <body>
            <div>
