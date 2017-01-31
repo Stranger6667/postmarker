@@ -28,11 +28,9 @@ matrix:
     - python: 3.5
       env:
       - TOX_ENV=pypy
-    - python: 3.4
+    - python: 3.5
       env:
       - TOX_ENV=jython
-  allow_failures:
-    - python: 3.4
   fast_finish: true
 install:
   - if [ $TOX_ENV = "py32" ]; then travis_retry pip install "virtualenv<14.0.0"; fi
