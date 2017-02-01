@@ -20,6 +20,7 @@ Contents:
    bounces
    server
    status
+   stats
    domains
    django
    spamcheck
