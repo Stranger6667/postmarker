@@ -1,0 +1,799 @@
+{
+  "http_interactions": [
+    {
+      "recorded_at": "2017-02-01T08:29:23",
+      "request": {
+        "body": {
+          "base64_string": "",
+          "encoding": "utf-8"
+        },
+        "headers": {
+          "Accept": [
+            "application/json"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "Postmarker/0.7.0.dev0"
+          ],
+          "X-Postmark-Server-Token": [
+            "SERVER_TOKEN"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://api.postmarkapp.com/stats/outbound?fromdate=2017-01-30"
+      },
+      "response": {
+        "body": {
+          "base64_string": "H4sIAAAAAAAEAGWQyw6CMBBF/6VrYiDEBeyUuNNAAOO6KaNO6MtSVsZ/tw+iGJdz7s3MaZ+kA2lJWeQJ2atZMhhImSakO/XNTuPBGGWmQGLaUgtu3PiKpqJSQnOK0sbOL1p1e0PZ6Ff7O7UG6fpbx88SHzMsICtcUVnKK45sjBtj4YhynAJd9C5o72526i0wZQaPszzyhlN7VUaskiImLdChRwH/iT8QHFHePge81hd682C3vCU4xc9LX29XpLGhRwEAAA==",
+          "encoding": "utf-8"
+        },
+        "headers": {
+          "Cache-Control": [
+            "private"
+          ],
+          "Content-Encoding": [
+            "gzip"
+          ],
+          "Content-Length": [
+            "196"
+          ],
+          "Content-Type": [
+            "application/json; charset=utf-8"
+          ],
+          "Date": [
+            "Wed, 01 Feb 2017 08:29:22 GMT"
+          ],
+          "Server": [
+            "unicorns-double-rainbow"
+          ],
+          "X-Powered-By": [
+            "ASP.NET"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": "OK"
+        },
+        "url": "https://api.postmarkapp.com/stats/outbound?fromdate=2017-01-30"
+      }
+    },
+    {
+      "recorded_at": "2017-02-01T08:29:23",
+      "request": {
+        "body": {
+          "base64_string": "",
+          "encoding": "utf-8"
+        },
+        "headers": {
+          "Accept": [
+            "application/json"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "Postmarker/0.7.0.dev0"
+          ],
+          "X-Postmark-Server-Token": [
+            "SERVER_TOKEN"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://api.postmarkapp.com/stats/outbound/sends?fromdate=2017-01-30"
+      },
+      "response": {
+        "body": {
+          "base64_string": "H4sIAAAAAAAEAKtWckmsLFayiq4GMkpSlayUjAwMzXUNDHWNDZR0lIJT80qUrIzNa3Uw5Q3h8qYmGPJGQCVweaPaWBjT0rgWAJGKnXdzAAAA",
+          "encoding": "utf-8"
+        },
+        "headers": {
+          "Cache-Control": [
+            "private"
+          ],
+          "Content-Encoding": [
+            "gzip"
+          ],
+          "Content-Length": [
+            "81"
+          ],
+          "Content-Type": [
+            "application/json; charset=utf-8"
+          ],
+          "Date": [
+            "Wed, 01 Feb 2017 08:29:23 GMT"
+          ],
+          "Server": [
+            "unicorns-double-rainbow"
+          ],
+          "X-Powered-By": [
+            "ASP.NET"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": "OK"
+        },
+        "url": "https://api.postmarkapp.com/stats/outbound/sends?fromdate=2017-01-30"
+      }
+    },
+    {
+      "recorded_at": "2017-02-01T08:29:23",
+      "request": {
+        "body": {
+          "base64_string": "",
+          "encoding": "utf-8"
+        },
+        "headers": {
+          "Accept": [
+            "application/json"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "Postmarker/0.7.0.dev0"
+          ],
+          "X-Postmark-Server-Token": [
+            "SERVER_TOKEN"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://api.postmarkapp.com/stats/outbound/bounces?fromdate=2017-01-30"
+      },
+      "response": {
+        "body": {
+          "base64_string": "H4sIAAAAAAAEAKtWckmsLFayio6tBQBnJIrzCwAAAA==",
+          "encoding": "utf-8"
+        },
+        "headers": {
+          "Cache-Control": [
+            "private"
+          ],
+          "Content-Encoding": [
+            "gzip"
+          ],
+          "Content-Length": [
+            "31"
+          ],
+          "Content-Type": [
+            "application/json; charset=utf-8"
+          ],
+          "Date": [
+            "Wed, 01 Feb 2017 08:29:23 GMT"
+          ],
+          "Server": [
+            "unicorns-double-rainbow"
+          ],
+          "X-Powered-By": [
+            "ASP.NET"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": "OK"
+        },
+        "url": "https://api.postmarkapp.com/stats/outbound/bounces?fromdate=2017-01-30"
+      }
+    },
+    {
+      "recorded_at": "2017-02-01T08:29:24",
+      "request": {
+        "body": {
+          "base64_string": "",
+          "encoding": "utf-8"
+        },
+        "headers": {
+          "Accept": [
+            "application/json"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "Postmarker/0.7.0.dev0"
+          ],
+          "X-Postmark-Server-Token": [
+            "SERVER_TOKEN"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://api.postmarkapp.com/stats/outbound/spam?fromdate=2017-01-30"
+      },
+      "response": {
+        "body": {
+          "base64_string": "H4sIAAAAAAAEAKtWckmsLFayio6tBQBnJIrzCwAAAA==",
+          "encoding": "utf-8"
+        },
+        "headers": {
+          "Cache-Control": [
+            "private"
+          ],
+          "Content-Encoding": [
+            "gzip"
+          ],
+          "Content-Length": [
+            "31"
+          ],
+          "Content-Type": [
+            "application/json; charset=utf-8"
+          ],
+          "Date": [
+            "Wed, 01 Feb 2017 08:29:23 GMT"
+          ],
+          "Server": [
+            "unicorns-double-rainbow"
+          ],
+          "X-Powered-By": [
+            "ASP.NET"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": "OK"
+        },
+        "url": "https://api.postmarkapp.com/stats/outbound/spam?fromdate=2017-01-30"
+      }
+    },
+    {
+      "recorded_at": "2017-02-01T08:29:24",
+      "request": {
+        "body": {
+          "base64_string": "",
+          "encoding": "utf-8"
+        },
+        "headers": {
+          "Accept": [
+            "application/json"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "Postmarker/0.7.0.dev0"
+          ],
+          "X-Postmark-Server-Token": [
+            "SERVER_TOKEN"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://api.postmarkapp.com/stats/outbound/tracked?fromdate=2017-01-30"
+      },
+      "response": {
+        "body": {
+          "base64_string": "H4sIAAAAAAAEAKtWckmsLFayiq4GMkpSlayUjAwMzXUNDHWNDZR0lEKKEpOzU1OUrIzNa3UwlRgiKzE1wVBiBFSFrMSoNhaJZ2lcCwAfi9kTfwAAAA==",
+          "encoding": "utf-8"
+        },
+        "headers": {
+          "Cache-Control": [
+            "private"
+          ],
+          "Content-Encoding": [
+            "gzip"
+          ],
+          "Content-Length": [
+            "85"
+          ],
+          "Content-Type": [
+            "application/json; charset=utf-8"
+          ],
+          "Date": [
+            "Wed, 01 Feb 2017 08:29:23 GMT"
+          ],
+          "Server": [
+            "unicorns-double-rainbow"
+          ],
+          "X-Powered-By": [
+            "ASP.NET"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": "OK"
+        },
+        "url": "https://api.postmarkapp.com/stats/outbound/tracked?fromdate=2017-01-30"
+      }
+    },
+    {
+      "recorded_at": "2017-02-01T08:29:24",
+      "request": {
+        "body": {
+          "base64_string": "",
+          "encoding": "utf-8"
+        },
+        "headers": {
+          "Accept": [
+            "application/json"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "Postmarker/0.7.0.dev0"
+          ],
+          "X-Postmark-Server-Token": [
+            "SERVER_TOKEN"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://api.postmarkapp.com/stats/outbound/opens?fromdate=2017-01-30"
+      },
+      "response": {
+        "body": {
+          "base64_string": "H4sIAAAAAAAEAKtWckmsLFayiq4GMkpSlayUjAwMzXUNDHWNDZR0lPwLUvOAsmY6SqF5mYWlQHnjWh1MpYYIpcaWCLWGmIqNgOoRik2RzY1FCBsgmWFZCwBUQPR8pAAAAA==",
+          "encoding": "utf-8"
+        },
+        "headers": {
+          "Cache-Control": [
+            "private"
+          ],
+          "Content-Encoding": [
+            "gzip"
+          ],
+          "Content-Length": [
+            "97"
+          ],
+          "Content-Type": [
+            "application/json; charset=utf-8"
+          ],
+          "Date": [
+            "Wed, 01 Feb 2017 08:29:23 GMT"
+          ],
+          "Server": [
+            "unicorns-double-rainbow"
+          ],
+          "X-Powered-By": [
+            "ASP.NET"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": "OK"
+        },
+        "url": "https://api.postmarkapp.com/stats/outbound/opens?fromdate=2017-01-30"
+      }
+    },
+    {
+      "recorded_at": "2017-02-01T08:29:24",
+      "request": {
+        "body": {
+          "base64_string": "",
+          "encoding": "utf-8"
+        },
+        "headers": {
+          "Accept": [
+            "application/json"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "Postmarker/0.7.0.dev0"
+          ],
+          "X-Postmark-Server-Token": [
+            "SERVER_TOKEN"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://api.postmarkapp.com/stats/outbound/opens/platforms?fromdate=2017-01-30"
+      },
+      "response": {
+        "body": {
+          "base64_string": "H4sIAAAAAAAEAKtWckmsLFayiq4GMkpSlayUjAwMzXUNDHWNDZR0lFxSi7NL8guUrAx1lHzzkzJzUsHM0LzsvPzyPCC7VgdToyGyRiNk1ZjKjYA6lJCUGNfGImk2xmGraS0ApuqGybgAAAA=",
+          "encoding": "utf-8"
+        },
+        "headers": {
+          "Cache-Control": [
+            "private"
+          ],
+          "Content-Encoding": [
+            "gzip"
+          ],
+          "Content-Length": [
+            "107"
+          ],
+          "Content-Type": [
+            "application/json; charset=utf-8"
+          ],
+          "Date": [
+            "Wed, 01 Feb 2017 08:29:24 GMT"
+          ],
+          "Server": [
+            "unicorns-double-rainbow"
+          ],
+          "X-Powered-By": [
+            "ASP.NET"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": "OK"
+        },
+        "url": "https://api.postmarkapp.com/stats/outbound/opens/platforms?fromdate=2017-01-30"
+      }
+    },
+    {
+      "recorded_at": "2017-02-01T08:29:24",
+      "request": {
+        "body": {
+          "base64_string": "",
+          "encoding": "utf-8"
+        },
+        "headers": {
+          "Accept": [
+            "application/json"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "Postmarker/0.7.0.dev0"
+          ],
+          "X-Postmark-Server-Token": [
+            "SERVER_TOKEN"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://api.postmarkapp.com/stats/outbound/opens/emailclients?fromdate=2017-01-30"
+      },
+      "response": {
+        "body": {
+          "base64_string": "H4sIAAAAAAAEAKtWckmsLFayiq4GMkpSlayUjAwMzXUNDHWNDZR0lNxzEzNzlKwMdZRCMkrzUlKLkjKLUoD8Wh1M9YYI9WZo6o0w1BsBtSDUG9fGIuwyQNNsXAsAPCp2d6UAAAA=",
+          "encoding": "utf-8"
+        },
+        "headers": {
+          "Cache-Control": [
+            "private"
+          ],
+          "Content-Encoding": [
+            "gzip"
+          ],
+          "Content-Length": [
+            "101"
+          ],
+          "Content-Type": [
+            "application/json; charset=utf-8"
+          ],
+          "Date": [
+            "Wed, 01 Feb 2017 08:29:24 GMT"
+          ],
+          "Server": [
+            "unicorns-double-rainbow"
+          ],
+          "X-Powered-By": [
+            "ASP.NET"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": "OK"
+        },
+        "url": "https://api.postmarkapp.com/stats/outbound/opens/emailclients?fromdate=2017-01-30"
+      }
+    },
+    {
+      "recorded_at": "2017-02-01T08:29:24",
+      "request": {
+        "body": {
+          "base64_string": "",
+          "encoding": "utf-8"
+        },
+        "headers": {
+          "Accept": [
+            "application/json"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "Postmarker/0.7.0.dev0"
+          ],
+          "X-Postmark-Server-Token": [
+            "SERVER_TOKEN"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://api.postmarkapp.com/stats/outbound/opens/readtimes?fromdate=2017-01-30"
+      },
+      "response": {
+        "body": {
+          "base64_string": "H4sIAAAAAAAEAKtWckmsLFayiq4GMkpSlayUjAwMzXUNDHWNDZR0lAyAUoY6SoZmELo0LzsvvzwPyK7VwdRgCNRgZFCsrWRlpKNkUgymLCAaLSE8uH4zDP1GQCOUkFQY18ZiWE+k4YYGtQCghepl1wAAAA==",
+          "encoding": "utf-8"
+        },
+        "headers": {
+          "Cache-Control": [
+            "private"
+          ],
+          "Content-Encoding": [
+            "gzip"
+          ],
+          "Content-Length": [
+            "115"
+          ],
+          "Content-Type": [
+            "application/json; charset=utf-8"
+          ],
+          "Date": [
+            "Wed, 01 Feb 2017 08:29:24 GMT"
+          ],
+          "Server": [
+            "unicorns-double-rainbow"
+          ],
+          "X-Powered-By": [
+            "ASP.NET"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": "OK"
+        },
+        "url": "https://api.postmarkapp.com/stats/outbound/opens/readtimes?fromdate=2017-01-30"
+      }
+    },
+    {
+      "recorded_at": "2017-02-01T08:29:25",
+      "request": {
+        "body": {
+          "base64_string": "",
+          "encoding": "utf-8"
+        },
+        "headers": {
+          "Accept": [
+            "application/json"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "Postmarker/0.7.0.dev0"
+          ],
+          "X-Postmark-Server-Token": [
+            "SERVER_TOKEN"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://api.postmarkapp.com/stats/outbound/clicks"
+      },
+      "response": {
+        "body": {
+          "base64_string": "eyJEYXlzIjpbXX0=",
+          "encoding": "utf-8"
+        },
+        "headers": {
+          "Cache-Control": [
+            "private"
+          ],
+          "Content-Length": [
+            "11"
+          ],
+          "Content-Type": [
+            "application/json; charset=utf-8"
+          ],
+          "Date": [
+            "Wed, 01 Feb 2017 08:29:24 GMT"
+          ],
+          "Server": [
+            "unicorns-double-rainbow"
+          ],
+          "X-Powered-By": [
+            "ASP.NET"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": "OK"
+        },
+        "url": "https://api.postmarkapp.com/stats/outbound/clicks"
+      }
+    },
+    {
+      "recorded_at": "2017-02-01T08:29:25",
+      "request": {
+        "body": {
+          "base64_string": "",
+          "encoding": "utf-8"
+        },
+        "headers": {
+          "Accept": [
+            "application/json"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "Postmarker/0.7.0.dev0"
+          ],
+          "X-Postmark-Server-Token": [
+            "SERVER_TOKEN"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://api.postmarkapp.com/stats/outbound/clicks/browserfamilies"
+      },
+      "response": {
+        "body": {
+          "base64_string": "eyJEYXlzIjpbXX0=",
+          "encoding": "utf-8"
+        },
+        "headers": {
+          "Cache-Control": [
+            "private"
+          ],
+          "Content-Length": [
+            "11"
+          ],
+          "Content-Type": [
+            "application/json; charset=utf-8"
+          ],
+          "Date": [
+            "Wed, 01 Feb 2017 08:29:24 GMT"
+          ],
+          "Server": [
+            "unicorns-double-rainbow"
+          ],
+          "X-Powered-By": [
+            "ASP.NET"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": "OK"
+        },
+        "url": "https://api.postmarkapp.com/stats/outbound/clicks/browserfamilies"
+      }
+    },
+    {
+      "recorded_at": "2017-02-01T08:29:25",
+      "request": {
+        "body": {
+          "base64_string": "",
+          "encoding": "utf-8"
+        },
+        "headers": {
+          "Accept": [
+            "application/json"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "Postmarker/0.7.0.dev0"
+          ],
+          "X-Postmark-Server-Token": [
+            "SERVER_TOKEN"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://api.postmarkapp.com/stats/outbound/clicks/platforms"
+      },
+      "response": {
+        "body": {
+          "base64_string": "eyJEYXlzIjpbXX0=",
+          "encoding": "utf-8"
+        },
+        "headers": {
+          "Cache-Control": [
+            "private"
+          ],
+          "Content-Length": [
+            "11"
+          ],
+          "Content-Type": [
+            "application/json; charset=utf-8"
+          ],
+          "Date": [
+            "Wed, 01 Feb 2017 08:29:25 GMT"
+          ],
+          "Server": [
+            "unicorns-double-rainbow"
+          ],
+          "X-Powered-By": [
+            "ASP.NET"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": "OK"
+        },
+        "url": "https://api.postmarkapp.com/stats/outbound/clicks/platforms"
+      }
+    },
+    {
+      "recorded_at": "2017-02-01T08:29:25",
+      "request": {
+        "body": {
+          "base64_string": "",
+          "encoding": "utf-8"
+        },
+        "headers": {
+          "Accept": [
+            "application/json"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "Postmarker/0.7.0.dev0"
+          ],
+          "X-Postmark-Server-Token": [
+            "SERVER_TOKEN"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://api.postmarkapp.com/stats/outbound/clicks/location"
+      },
+      "response": {
+        "body": {
+          "base64_string": "eyJEYXlzIjpbXX0=",
+          "encoding": "utf-8"
+        },
+        "headers": {
+          "Cache-Control": [
+            "private"
+          ],
+          "Content-Length": [
+            "11"
+          ],
+          "Content-Type": [
+            "application/json; charset=utf-8"
+          ],
+          "Date": [
+            "Wed, 01 Feb 2017 08:29:25 GMT"
+          ],
+          "Server": [
+            "unicorns-double-rainbow"
+          ],
+          "X-Powered-By": [
+            "ASP.NET"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": "OK"
+        },
+        "url": "https://api.postmarkapp.com/stats/outbound/clicks/location"
+      }
+    }
+  ],
+  "recorded_with": "betamax/0.8.0"
+}
