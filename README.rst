@@ -77,7 +77,7 @@ Setup an email:
 There are a lot of features available. Check it out in our documentation! Here's just a few of them:
 
 - Support for sending Python email instances.
-- Bounces, Domains, Templates, Status, Stats & Server API.
+- Bounces, Domains, Templates, Sender signatures, Status, Stats & Server API.
 - Django email backend.
 - Spam check API.
 
