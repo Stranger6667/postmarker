@@ -7,6 +7,7 @@ Changelog
 ----------------
 
 - Stats API. (`#72`_)
+- Sender Signatures API. (`#73`_)
 
 0.6.2 - 02.01.2017
 ------------------
@@ -96,6 +97,7 @@ Changelog
 
 .. _#78: https://github.com/Stranger6667/postmarker/issues/78
 .. _#76: https://github.com/Stranger6667/postmarker/issues/76
+.. _#73: https://github.com/Stranger6667/postmarker/issues/73
 .. _#72: https://github.com/Stranger6667/postmarker/issues/72
 .. _#64: https://github.com/Stranger6667/postmarker/issues/64
 .. _#62: https://github.com/Stranger6667/postmarker/issues/62

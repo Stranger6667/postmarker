@@ -8,6 +8,7 @@ from .logging import get_logger
 from .models.bounces import BounceManager
 from .models.domains import DomainsManager
 from .models.emails import EmailManager
+from .models.senders import SenderSignaturesManager
 from .models.server import ServerManager
 from .models.stats import StatsManager
 from .models.status import StatusManager
@@ -51,6 +52,7 @@ class PostmarkClient(with_metaclass(ClientMeta)):
         BounceManager,
         DomainsManager,
         EmailManager,
+        SenderSignaturesManager,
         ServerManager,
         StatsManager,
         StatusManager,
