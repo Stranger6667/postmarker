@@ -37,6 +37,7 @@ matrix:
   fast_finish: true
 install:
   - if [ $TOX_ENV = "py32" ]; then travis_retry pip install "virtualenv<14.0.0"; fi
+  - if [ $TOX_ENV = "pypy3" ]; then travis_retry pip install "virtualenv<14.0.0"; fi
   - travis_retry pip install tox
 before_script:
   - export JYTHON_URL='http://search.maven.org/remotecontent?filepath=org/python/jython-installer/2.7.0/jython-installer-2.7.0.jar'
