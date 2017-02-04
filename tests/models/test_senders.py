@@ -21,6 +21,12 @@ def test_get(postmark):
     assert data == new_data
 
 
+def test_edit(postmark):
+    sender_signature = postmark.senders.get(128462)
+    sender_signature.edit(Name='Test')
+    assert sender_signature.Name == 'Test'
+
+
 def test_all_methods(postmark):
     new_signature = postmark.senders.create('exampleX@blablaz.com', 'Test')
     assert new_signature.resend() == 'Confirmation email for Sender Signature exampleX@blablaz.com was re-sent.'

@@ -513,6 +513,136 @@
         },
         "url": "https://api.postmarkapp.com/senders/723694"
       }
+    },
+    {
+      "recorded_at": "2017-02-04T20:34:25",
+      "request": {
+        "body": {
+          "base64_string": "",
+          "encoding": "utf-8"
+        },
+        "headers": {
+          "Accept": [
+            "application/json"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "Postmarker/0.7.0.dev0"
+          ],
+          "X-Postmark-Account-Token": [
+            "ACCOUNT_TOKEN"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://api.postmarkapp.com/senders/128462"
+      },
+      "response": {
+        "body": {
+          "base64_string": "H4sIAIk7llgC/21SXY+aUBD9K8RXG6qIym5j0gsIokhAcHV5aa4wIApc5GvRpv3tBavG1X25ydw5M3PmzPndEmfKXIfYDWJ/QrK89Uq1Wt+o8/c1ZjpdtsMwg+bt9egkon+5JMJBvIcjDRWOkhDWtEOipnABeZHGOs634hnzBmngBeDWjTwcZlBDFLEOugzHDpjLJAuq/A2HBTTj9qM0wz+oZDRXZG+OOrJgHmRT2fREY8wjY4kQK2tIFPjAmPG+Icg6Eg6Vzsf9kuN7kx3LrKd6vyNJu9g+Hdcv5swyp8PvhYO4sATfdwY4mqxWhN06W5Kk01Lw3kVp386cNEeDtAwr7gX5ls2fJlrn/WS7B11Vd8Nt3D71h9aGLG3b0FiktlM1xaJygI1Pjtz0JG9WpwCyzNqIC1tYVc5ORapUZsTlrFk2CdX1hyIiA/GNTKYuXeV9VLARZJm4OAczx3mRNZibinVew9FZJwvq+v+t7kTO0wK+OMP1rivA+2bA3TlM7IFFFhCREhZQkj24MzhKKYlEzbzH6dKnO5WjLPG6FKaiigpiJyxceK1/6CjHWUnHkFN/cRieN7pReHZLEh4tMq7zIXLdtJbv3oEXOo/GvPj1E5uvvCdoaD6+IWrf3qg9DHjq1OSeRX2kednG/vm4lkBiL0ijW+2ff3IqjoxoAwAA",
+          "encoding": "utf-8"
+        },
+        "headers": {
+          "Cache-Control": [
+            "private"
+          ],
+          "Content-Encoding": [
+            "gzip"
+          ],
+          "Content-Length": [
+            "524"
+          ],
+          "Content-Type": [
+            "application/json; charset=utf-8"
+          ],
+          "Date": [
+            "Sat, 04 Feb 2017 20:34:24 GMT"
+          ],
+          "Server": [
+            "unicorns-double-rainbow"
+          ],
+          "X-Powered-By": [
+            "ASP.NET"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": "OK"
+        },
+        "url": "https://api.postmarkapp.com/senders/128462"
+      }
+    },
+    {
+      "recorded_at": "2017-02-04T20:34:25",
+      "request": {
+        "body": {
+          "base64_string": "eyJSZXBseVRvRW1haWwiOiBudWxsLCAiUmV0dXJuUGF0aERvbWFpbiI6IG51bGwsICJOYW1lIjogIlRlc3QifQ==",
+          "encoding": "utf-8"
+        },
+        "headers": {
+          "Accept": [
+            "application/json"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "Content-Length": [
+            "64"
+          ],
+          "Content-Type": [
+            "application/json"
+          ],
+          "User-Agent": [
+            "Postmarker/0.7.0.dev0"
+          ],
+          "X-Postmark-Account-Token": [
+            "ACCOUNT_TOKEN"
+          ]
+        },
+        "method": "PUT",
+        "uri": "https://api.postmarkapp.com/senders/128462"
+      },
+      "response": {
+        "body": {
+          "base64_string": "H4sIAIk7llgC/21SXY+aUBD9K8RXG6qIym5j0gsIokhAcHV5aa4wIApc5GvRpv3tBavG1X25ydw5M3PmzPndEmfKXIfYDWJ/QrK89Uq1Wt+o8/c1ZjpdtsMwg+bt9egkon+5JMJBvIcjDRWOkhDWtEOipnABeZHGOs634hnzBmngBeDWjTwcZlBDFLEOugzHDpjLJAuq/A2HBTTj9qM0wz+oZDRXZG+OOrJgHmRT2fREY8wjY4kQK2tIFPjAmPG+Icg6Eg6Vzsf9kuN7kx3LrKd6vyNJu9g+Hdcv5swyp8PvhYO4sATfdwY4mqxWhN06W5Kk01Lw3kVp386cNEeDtAwr7gX5ls2fJlrn/WS7B11Vd8Nt3D71h9aGLG3b0FiktlM1xaJygI1Pjtz0JG9WpwCyzNqIC1tYVc5ORapUZsTlrFk2CdX1hyIiA/GNTKYuXeV9VLARZJm4OAczx3mRNZibinVew9FZJwvq+v+t7kTO0wK+OMP1rivA+2bA3TlM7IFFFhCREhZQkj24MzhKKYlEzbzH6dKnO5WjLPG6FKaiigpiJyxceK1/6CjHWUnHkFN/cRieN7pReHZLEh4tMq7zIXLdtJbv3oEXOo/GvPj1E5uvvCdoaD6+IWrf3qg9DHjq1OSeRX2kednG/vm4lkBiL0ijW+2ff3IqjoxoAwAA",
+          "encoding": "utf-8"
+        },
+        "headers": {
+          "Cache-Control": [
+            "private"
+          ],
+          "Content-Encoding": [
+            "gzip"
+          ],
+          "Content-Length": [
+            "512"
+          ],
+          "Content-Type": [
+            "application/json; charset=utf-8"
+          ],
+          "Date": [
+            "Sat, 04 Feb 2017 20:34:25 GMT"
+          ],
+          "Server": [
+            "unicorns-double-rainbow"
+          ],
+          "X-Powered-By": [
+            "ASP.NET"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": "OK"
+        },
+        "url": "https://api.postmarkapp.com/senders/128462"
+      }
     }
   ],
   "recorded_with": "betamax/0.8.0"
