@@ -30,6 +30,9 @@ matrix:
       - TOX_ENV=pypy
     - python: 3.5
       env:
+      - TOX_ENV=pypy3
+    - python: 3.5
+      env:
       - TOX_ENV=jython
   fast_finish: true
 install:
