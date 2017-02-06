@@ -57,10 +57,3 @@ Example:
     ).send()
 
 You can get the same feature for your own classes with ``PostmarkEmailMixin``.
-
-Known issues
-~~~~~~~~~~~~
-
-Django related **tests** are currently not working on Jython due to some ``pytest-django`` problems.
-As a consequence, Django support on this platform is not guaranteed but the backend should work anyway.
-This problem will be fixed soon.
