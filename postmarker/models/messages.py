@@ -5,7 +5,7 @@ from .base import Model, ModelManager, SubModelManager
 class Open(Model):
 
     def __str__(self):
-        return 'Open from %s' % str(self._data.get('Recipient'))
+        return 'Open from %s' % self._data.get('Recipient')
 
 
 class OpensManager(ModelManager):

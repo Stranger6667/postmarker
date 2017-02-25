@@ -1,6 +1,6 @@
 # coding: utf-8
-from ..utils import ManageableMeta
 from .._compat import with_metaclass
+from ..utils import ManageableMeta
 
 
 class Model(object):
