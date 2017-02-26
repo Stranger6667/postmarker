@@ -3,16 +3,18 @@ import requests
 
 from . import __version__
 from ._compat import urljoin, with_metaclass
-from .exceptions import ClientError, ConfigError, SpamAssassinError
+from .exceptions import ClientError, SpamAssassinError
 from .logging import get_logger
 from .models.bounces import BounceManager
 from .models.domains import DomainsManager
 from .models.emails import EmailManager
+from .models.messages import MessageManager
 from .models.senders import SenderSignaturesManager
 from .models.server import ServerManager
 from .models.stats import StatsManager
 from .models.status import StatusManager
 from .models.templates import TemplateManager
+from .utils import ManageableMeta
 
 
 DEFAULT_API = 'https://api.postmarkapp.com/'
@@ -22,29 +24,7 @@ USER_AGENT = 'Postmarker/%s' % __version__
 TEST_TOKEN = 'POSTMARK_API_TEST'
 
 
-class ClientMeta(type):
-
-    def __new__(mcs, name, bases, members):
-        new_class = super(ClientMeta, mcs).__new__(mcs, name, bases, members)
-        mcs.check_managers(new_class)
-        return new_class
-
-    @staticmethod
-    def check_managers(new_class):
-        """
-        `_managers` attribute should not contains:
-
-         - Managers with same names
-         - Managers with names that clashes with client's attributes
-        """
-        managers_names = [manager.name for manager in new_class._managers]
-        if len(managers_names) != len(set(managers_names)):
-            raise ConfigError('Defined managers names are not unique')
-        if any(hasattr(new_class, manager_name) for manager_name in managers_names):
-            raise ConfigError('Defined managers names override client\'s members')
-
-
-class PostmarkClient(with_metaclass(ClientMeta)):
+class PostmarkClient(with_metaclass(ManageableMeta)):
     """
     Basic class for API clients. Provides basic functionality to make requests.
     """
@@ -52,6 +32,7 @@ class PostmarkClient(with_metaclass(ClientMeta)):
         BounceManager,
         DomainsManager,
         EmailManager,
+        MessageManager,
         SenderSignaturesManager,
         ServerManager,
         StatsManager,

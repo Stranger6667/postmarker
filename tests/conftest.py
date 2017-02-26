@@ -106,3 +106,8 @@ def template(postmark):
 @pytest.fixture(scope='session')
 def domain(postmark):
     return postmark.domains.get(64054)
+
+
+@pytest.fixture(scope='session')
+def outbound_message(postmark):
+    return postmark.messages.outbound.all(count=1)[0]

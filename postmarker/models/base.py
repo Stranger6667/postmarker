@@ -1,4 +1,6 @@
 # coding: utf-8
+from .._compat import with_metaclass
+from ..utils import ManageableMeta
 
 
 class Model(object):
@@ -59,3 +61,23 @@ class ModelManager(object):
     def call(self, *args, **kwargs):
         kwargs['token_type'] = self.token_type
         return self.client.call(*args, **kwargs)
+
+
+class SubModelManager(with_metaclass(ManageableMeta, ModelManager)):
+    """
+    Works with multiple model managers. Example:
+
+    >>> postmark = PostmarkClient(token='TEST')
+    >>> postmark.messages.outbound.all()
+    []
+    """
+    _managers = ()
+
+    def __init__(self, *args, **kwargs):
+        super(SubModelManager, self).__init__(*args, **kwargs)
+        self._setup_managers()
+
+    def _setup_managers(self):
+        for manager_class in self._managers:
+            instance = manager_class(self.client)
+            setattr(self, instance.name, instance)
