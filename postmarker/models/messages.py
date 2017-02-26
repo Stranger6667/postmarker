@@ -35,7 +35,8 @@ class BaseMessage(Model):
 class OutboundMessage(BaseMessage):
 
     def __str__(self):
-        return '%s message to %s' % (self._data.get('Status'), str(self._data.get('Recipients')))
+        recipients = ', '.join(self._data.get('Recipients'))
+        return '%s message to %s' % (self._data.get('Status'), recipients)
 
     def get_dump(self):
         return self._manager.get_dump(self.MessageID)

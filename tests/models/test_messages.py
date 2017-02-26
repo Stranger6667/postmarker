@@ -5,7 +5,7 @@ import pytest
 
 from postmarker.exceptions import ClientError
 from postmarker.models.base import ModelManager
-from postmarker.models.messages import OutboundMessage, InboundMessage, Open
+from postmarker.models.messages import InboundMessage, Open, OutboundMessage
 
 
 CASSETTE_NAME = 'messages'
@@ -36,7 +36,7 @@ class TestOutboundMessages:
 
     def test_message(self, outbound_message):
         assert isinstance(outbound_message, OutboundMessage)
-        assert str(outbound_message) == "Sent message to ['test@example.com']"
+        assert str(outbound_message) == "Sent message to test@example.com"
 
     def test_get_details(self, outbound_message):
         assert outbound_message.get_details()['Body'] == 'Body example'
