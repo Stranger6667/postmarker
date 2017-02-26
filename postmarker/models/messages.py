@@ -28,14 +28,14 @@ class OpensManager(ModelManager):
 
 class BaseMessage(Model):
 
-    def __str__(self):
-        return '%s message to %s' % (self._data.get('Status'), str(self._data.get('Recipients')))
-
     def get_details(self):
         return self._manager.get_details(self.MessageID)
 
 
 class OutboundMessage(BaseMessage):
+
+    def __str__(self):
+        return '%s message to %s' % (self._data.get('Status'), str(self._data.get('Recipients')))
 
     def get_dump(self):
         return self._manager.get_dump(self.MessageID)
@@ -78,10 +78,13 @@ class OutboundMessageManager(SubModelManager):
         return self.call('GET', '/messages/outbound/%s/details' % id)
 
     def get_dump(self, id):
-        return self.call('GET', '/messages/outbound/%s/dump' % id)
+        return self.call('GET', '/messages/outbound/%s/dump' % id).get('Body')
 
 
 class InboundMessage(BaseMessage):
+
+    def __str__(self):
+        return '%s message from %s' % (self._data.get('Status'), self._data.get('From'))
 
     def bypass(self):
         return self._manager.bypass(self.MessageID)
@@ -112,10 +115,9 @@ class InboundMessageManager(ModelManager):
         :rtype: `list`
         """
         response = self.call(
-            'GET', '/messages/outbound', count=count, offset=offset, recipient=recipient, fromemail=fromemail, tag=tag,
+            'GET', '/messages/inbound', count=count, offset=offset, recipient=recipient, fromemail=fromemail, tag=tag,
             subject=subject, mailboxhash=mailboxhash, status=status, todate=todate, fromdate=fromdate,
         )
-        # TODO. Test if there are no messages
         return self._init_many(response['InboundMessages'])
 
     def get_details(self, id):

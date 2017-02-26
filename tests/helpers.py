@@ -1,22 +1,29 @@
 # coding: utf-8
 import base64
 import glob
+import gzip
 import json
 import os
 
 
-def decode(value):
+def decode(value, decompress=False):
     """
     Decodes response from Base64 encoded string.
     """
-    return json.loads(base64.b64decode(value).decode())
+    decoded = base64.b64decode(value)
+    if decompress:
+        decoded = gzip.decompress(decoded)
+    return json.loads(decoded.decode())
 
 
-def encode(value):
+def encode(value, compress=False):
     """
     Converts dict to JSON and encodes it to Base64.
     """
-    return base64.b64encode(json.dumps(value, separators=(',', ':')).encode())
+    encoded = json.dumps(value, separators=(',', ':')).encode()
+    if compress:
+        encoded = gzip.compress(encoded)
+    return base64.b64encode(encoded).decode()
 
 
 def replace_real_credentials(cassette_dir, production_token, header, test_token):
