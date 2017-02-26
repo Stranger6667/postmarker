@@ -68,8 +68,11 @@ class TestInboundMessages:
             inbound_message.bypass()
 
     def test_retry(self, inbound_message):
-        with not_found('[701] This message was not found or cannot be bypassed.'):
+        with not_found('[701] This message was not found or cannot be retried.'):
             inbound_message.retry()
+
+    def test_all(self, postmark):
+        assert postmark.messages.inbound.all() == []
 
 
 def test_opens(postmark):

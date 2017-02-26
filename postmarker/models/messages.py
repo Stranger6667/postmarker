@@ -91,7 +91,7 @@ class InboundMessage(BaseMessage):
         return self._manager.bypass(self.MessageID)
 
     def retry(self):
-        return self._manager.bypass(self.MessageID)
+        return self._manager.retry(self.MessageID)
 
 
 class InboundMessageManager(ModelManager):
