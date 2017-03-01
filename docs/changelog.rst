@@ -9,6 +9,7 @@ Changelog
 - Stats API. (`#72`_)
 - Sender Signatures API. (`#73`_)
 - Messages API. (`#71`_)
+- InboundHook wrapper. (`#87`_)
 
 0.6.2 - 02.01.2017
 ------------------
@@ -96,6 +97,7 @@ Changelog
 - Initial release.
 
 
+.. _#87: https://github.com/Stranger6667/postmarker/issues/87
 .. _#78: https://github.com/Stranger6667/postmarker/issues/78
 .. _#76: https://github.com/Stranger6667/postmarker/issues/76
 .. _#73: https://github.com/Stranger6667/postmarker/issues/73
