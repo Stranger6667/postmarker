@@ -135,7 +135,7 @@ class Attachment(object):
 
     @property
     def decoded(self):
-        return b64decode(self.Content)
+        return b64decode(self.Content.encode('ascii'))
 
     def save(self, directory):
         filename = join(directory, self.Name)
