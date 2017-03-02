@@ -46,16 +46,16 @@ Send batch:
 
     >>> postmark.emails.send_batch(
         {
-            From='sender@example.com',
-            To='receiver@example.com',
-            Subject='Postmark test',
-            HtmlBody='<html><body><strong>Hello</strong> dear Postmark user.</body></html>',
+            'From': 'sender@example.com',
+            'To': 'receiver@example.com',
+            'Subject': 'Postmark test',
+            'HtmlBody': '<html><body><strong>Hello</strong> dear Postmark user.</body></html>',
         },
         {
-            From='sender2@example.com',
-            To='receiver2@example.com',
-            Subject='Postmark test 2',
-            HtmlBody='<html><body><strong>Hello</strong> dear Postmark user.</body></html>',
+            'From': 'sender2@example.com',
+            'To': 'receiver2@example.com',
+            'Subject': 'Postmark test 2',
+            'HtmlBody': '<html><body><strong>Hello</strong> dear Postmark user.</body></html>',
         }
     )
 
