@@ -1,15 +1,18 @@
 # coding: utf-8
-import json
 from base64 import b64decode
 from email.mime.base import MIMEBase
-
+from json import loads
 from os.path import join
 
 
 class InboundWebhook(object):
 
-    def __init__(self, data):
-        self._data = json.loads(data)
+    def __init__(self, data=None, json=None):
+        assert not (data and json), 'You could pass only `data` or `json`, not both'
+        if json is not None:
+            self._data = json
+        else:
+            self._data = loads(data)
 
     def __getitem__(self, item):
         for header in self._data['Headers']:

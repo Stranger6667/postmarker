@@ -9,7 +9,7 @@ Changelog
 - Stats API. (`#72`_)
 - Sender Signatures API. (`#73`_)
 - Messages API. (`#71`_)
-- InboundHook wrapper. (`#87`_)
+- Inbound webhook wrapper. (`#87`_)
 
 0.6.2 - 02.01.2017
 ------------------

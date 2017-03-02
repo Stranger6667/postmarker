@@ -4,12 +4,17 @@ from email.mime.base import MIMEBase
 
 import pytest
 
-from postmarker.webhooks import Attachment
+from postmarker.webhooks import Attachment, InboundWebhook
 from .conftest import INBOUND_WEBHOOK
 
 
+DECODED_HOOK = json.loads(INBOUND_WEBHOOK)
+SIMPLE_ATTRIBUTES = [value for value in DECODED_HOOK.keys() if value != 'Attachments']
+ATTACHMENT_ATTRIBUTES = DECODED_HOOK['Attachments'][0].keys()
+
+
 def test_parsing(inbound_webhook):
-    assert isinstance(inbound_webhook._data, dict)
+    assert inbound_webhook._data == DECODED_HOOK
 
 
 def test_headers(inbound_webhook):
@@ -21,16 +26,20 @@ def test_not_existing_header(inbound_webhook):
         assert inbound_webhook['Unknown']
 
 
-DECODED_HOOK = json.loads(INBOUND_WEBHOOK)
-SIMPLE_ATTRIBUTES = [value for value in DECODED_HOOK.keys() if value != 'Attachments']
+def test_init_with_parsed():
+    instance = InboundWebhook(json=DECODED_HOOK)
+    assert instance._data == DECODED_HOOK
+
+
+def test_init_error():
+    with pytest.raises(AssertionError) as exc:
+        InboundWebhook(data=INBOUND_WEBHOOK, json=DECODED_HOOK)
+    assert str(exc.value) == 'You could pass only `data` or `json`, not both'
 
 
 @pytest.mark.parametrize('attribute', SIMPLE_ATTRIBUTES)
 def test_attribute(inbound_webhook, attribute):
     assert getattr(inbound_webhook, attribute) == inbound_webhook._data[attribute]
-
-
-ATTACHMENT_ATTRIBUTES = DECODED_HOOK['Attachments'][0].keys()
 
 
 class TestAttachment:
