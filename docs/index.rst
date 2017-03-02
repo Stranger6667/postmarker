@@ -25,6 +25,7 @@ Contents:
    domains
    django
    spamcheck
+   webhooks
    reference
    changelog
 
