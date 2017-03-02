@@ -59,7 +59,7 @@ The interface is the same - all keys-value pairs in JSON data are attributes of 
     >>> attachment.Name
     test.txt
 
-Besides it you could do the following with attachments:
+Besides it, you could do the following with attachments:
 
 - Access the decoded content
 - Check it length
