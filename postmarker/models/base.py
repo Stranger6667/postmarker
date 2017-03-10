@@ -68,13 +68,7 @@ class ModelManager(object):
         count = kwargs.pop(self.count_key)
         offset = kwargs.pop(self.offset_key)
         return [
-            self.call(
-                *args,
-                **construct_kwargs(
-                    kwargs,
-                    **{self.count_key: _count, self.offset_key: _offset}
-                )
-            )
+            self.call(*args, **self.update_kwargs(kwargs, _count, _offset))
             for _count, _offset in sizes(count, offset)
         ]
 
@@ -84,14 +78,12 @@ class ModelManager(object):
         ]
         return sum(items, [])
 
-
-def construct_kwargs(kwargs, **extra):
-    """
-    Helper to support dictionaries merging on all Python versions.
-    """
-    for key, value in extra.items():
-        kwargs[key] = value
-    return kwargs
+    def update_kwargs(self, kwargs, count, offset):
+        """
+        Helper to support handy dictionaries merging on all Python versions.
+        """
+        kwargs.update({self.count_key: count, self.offset_key: offset})
+        return kwargs
 
 
 class SubModelManager(with_metaclass(ManageableMeta, ModelManager)):
