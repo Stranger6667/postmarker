@@ -62,6 +62,12 @@ class ModelManager(object):
         kwargs['token_type'] = self.token_type
         return self.client.call(*args, **kwargs)
 
+    def expand_responses(self, responses, key):
+        items = [
+            self._init_many(response[key]) for response in responses
+        ]
+        return sum(items, [])
+
 
 class SubModelManager(with_metaclass(ManageableMeta, ModelManager)):
     """

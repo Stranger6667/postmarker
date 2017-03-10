@@ -60,8 +60,7 @@ class TemplateManager(ModelManager):
         responses = [
             self.call('GET', '/templates', Count=_count, Offset=_offset) for _count, _offset in sizes(Count, Offset)
         ]
-        items = [self._init_many(response['Templates']) for response in responses]
-        return sum(items, [])
+        return self.expand_responses(responses, 'Templates')
 
     def delete(self, id):
         return self.call('DELETE', '/templates/%s' % id)['Message']

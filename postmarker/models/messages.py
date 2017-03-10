@@ -23,8 +23,7 @@ class OpensManager(ModelManager):
                 os_family=os_family, os_company=os_company, platform=platform, country=country, region=region, city=city
             ) for _count, _offset in sizes(count, offset)
         ]
-        items = [self._init_many(response['Opens']) for response in responses]
-        return sum(items, [])
+        return self.expand_responses(responses, 'Opens')
 
     def get(self, id, count=500, offset=0):
         return self.call('GET', '/messages/outbound/opens/%s' % id, count=count, offset=offset)
@@ -80,8 +79,7 @@ class OutboundMessageManager(SubModelManager):
                 status=status, todate=todate, fromdate=fromdate,
             ) for _count, _offset in sizes(count, offset)
         ]
-        items = [self._init_many(response['Messages']) for response in responses]
-        return sum(items, [])
+        return self.expand_responses(responses, 'Messages')
 
     def get_details(self, id):
         return self.call('GET', '/messages/outbound/%s/details' % id)
@@ -130,8 +128,7 @@ class InboundMessageManager(ModelManager):
                 subject=subject, mailboxhash=mailboxhash, status=status, todate=todate, fromdate=fromdate,
             ) for _count, _offset in sizes(count, offset)
         ]
-        items = [self._init_many(response['InboundMessages']) for response in responses]
-        return sum(items, [])
+        return self.expand_responses(responses, 'InboundMessages')
 
     def get_details(self, id):
         return self.call('GET', '/messages/inbound/%s/details' % id)

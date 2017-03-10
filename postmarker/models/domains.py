@@ -51,8 +51,7 @@ class DomainsManager(ModelManager):
         responses = [
             self.call('GET', '/domains', count=_count, offset=_offset) for _count, _offset in sizes(count, offset)
         ]
-        items = [self._init_many(response['Domains']) for response in responses]
-        return sum(items, [])
+        return self.expand_responses(responses, 'Domains')
 
     def delete(self, id):
         return self.call('DELETE', '/domains/%s' % id)['Message']

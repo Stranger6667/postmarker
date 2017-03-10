@@ -92,8 +92,7 @@ class BounceManager(ModelManager):
                 tag=tag, messageID=messageID, fromdate=fromdate, todate=todate
             ) for _count, _offset in sizes(count, offset)
         ]
-        items = [self._init_many(response['Bounces']) for response in responses]
-        return sum(items, [])
+        return self.expand_responses(responses, 'Bounces')
 
     def activate(self, id):
         """
