@@ -12,6 +12,7 @@ from .core import TEST_TOKEN, PostmarkClient
 DEFAULT_CONFIG = {
     'TEST_MODE': False,
     'TRACK_OPENS': False,
+    'VERBOSITY': 0,
 }
 
 
@@ -39,7 +40,7 @@ class EmailBackend(BaseEmailBackend):
 
     def open(self):
         if self.client is None:
-            self.client = PostmarkClient(token=self.token)
+            self.client = PostmarkClient(token=self.token, verbosity=self.get_option('VERBOSITY'))
             return True
         return False
 
