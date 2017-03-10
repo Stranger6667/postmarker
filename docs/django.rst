@@ -12,6 +12,7 @@ For convenience, Postmarker provides a Django email backend. To use it you have 
     POSTMARK = {
         'TOKEN': '<YOUR POSTMARK SERVER TOKEN>',
         'TEST_MODE': False,
+        'VERBOSITY': 0,
     }
 
 That's it!
