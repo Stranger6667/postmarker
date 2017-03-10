@@ -3,6 +3,11 @@
 Changelog
 =========
 
+0.7.1 - 10.03.2017
+------------------
+
+- Added `VERBOSITY` option to the Django backend. `#92`_
+
 0.7.0 - 02.03.2017
 ------------------
 
@@ -97,6 +102,7 @@ Changelog
 - Initial release.
 
 
+.. _#92: https://github.com/Stranger6667/postmarker/issues/92
 .. _#87: https://github.com/Stranger6667/postmarker/issues/87
 .. _#78: https://github.com/Stranger6667/postmarker/issues/78
 .. _#76: https://github.com/Stranger6667/postmarker/issues/76
