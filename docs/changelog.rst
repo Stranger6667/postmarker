@@ -3,6 +3,11 @@
 Changelog
 =========
 
+0.8.0 - TBA
+-----------
+
+- Added an ability to download more than 500 items. `#70`_
+
 0.7.1 - 10.03.2017
 ------------------
 
@@ -109,6 +114,7 @@ Changelog
 .. _#73: https://github.com/Stranger6667/postmarker/issues/73
 .. _#72: https://github.com/Stranger6667/postmarker/issues/72
 .. _#71: https://github.com/Stranger6667/postmarker/issues/71
+.. _#70: https://github.com/Stranger6667/postmarker/issues/70
 .. _#64: https://github.com/Stranger6667/postmarker/issues/64
 .. _#62: https://github.com/Stranger6667/postmarker/issues/62
 .. _#60: https://github.com/Stranger6667/postmarker/issues/60

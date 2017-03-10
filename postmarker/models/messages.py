@@ -1,4 +1,5 @@
 # coding: utf-8
+from ..utils import sizes
 from .base import Model, ModelManager, SubModelManager
 
 
@@ -15,12 +16,15 @@ class OpensManager(ModelManager):
     def all(self, count=500, offset=0, recipient=None, tag=None, client_name=None, client_company=None,
             client_family=None, os_name=None, os_family=None, os_company=None, platform=None, country=None, region=None,
             city=None):
-        response = self.call(
-            'GET', '/messages/outbound/opens', count=count, offset=offset, recipient=recipient, tag=tag,
-            client_name=client_name, client_company=client_company, client_family=client_family, os_name=os_name,
-            os_family=os_family, os_company=os_company, platform=platform, country=country, region=region, city=city
-        )
-        return self._init_many(response['Opens'])
+        responses = [
+            self.call(
+                'GET', '/messages/outbound/opens', count=_count, offset=_offset, recipient=recipient, tag=tag,
+                client_name=client_name, client_company=client_company, client_family=client_family, os_name=os_name,
+                os_family=os_family, os_company=os_company, platform=platform, country=country, region=region, city=city
+            ) for _count, _offset in sizes(count, offset)
+        ]
+        items = [self._init_many(response['Opens']) for response in responses]
+        return sum(items, [])
 
     def get(self, id, count=500, offset=0):
         return self.call('GET', '/messages/outbound/opens/%s' % id, count=count, offset=offset)
@@ -69,11 +73,15 @@ class OutboundMessageManager(SubModelManager):
         :return: A list of :py:class:`OutboundMessage` instances.
         :rtype: `list`
         """
-        response = self.call(
-            'GET', '/messages/outbound', count=count, offset=offset, recipient=recipient, fromemail=fromemail, tag=tag,
-            status=status, todate=todate, fromdate=fromdate,
-        )
-        return self._init_many(response['Messages'])
+        responses = [
+            self.call(
+                'GET', '/messages/outbound', count=_count, offset=_offset, recipient=recipient, fromemail=fromemail,
+                tag=tag,
+                status=status, todate=todate, fromdate=fromdate,
+            ) for _count, _offset in sizes(count, offset)
+        ]
+        items = [self._init_many(response['Messages']) for response in responses]
+        return sum(items, [])
 
     def get_details(self, id):
         return self.call('GET', '/messages/outbound/%s/details' % id)
@@ -115,11 +123,15 @@ class InboundMessageManager(ModelManager):
         :return: A list of :py:class:`InboundMessage` instances.
         :rtype: `list`
         """
-        response = self.call(
-            'GET', '/messages/inbound', count=count, offset=offset, recipient=recipient, fromemail=fromemail, tag=tag,
-            subject=subject, mailboxhash=mailboxhash, status=status, todate=todate, fromdate=fromdate,
-        )
-        return self._init_many(response['InboundMessages'])
+        responses = [
+            self.call(
+                'GET', '/messages/inbound', count=_count, offset=_offset, recipient=recipient, fromemail=fromemail,
+                tag=tag,
+                subject=subject, mailboxhash=mailboxhash, status=status, todate=todate, fromdate=fromdate,
+            ) for _count, _offset in sizes(count, offset)
+        ]
+        items = [self._init_many(response['InboundMessages']) for response in responses]
+        return sum(items, [])
 
     def get_details(self, id):
         return self.call('GET', '/messages/inbound/%s/details' % id)

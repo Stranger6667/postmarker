@@ -1,4 +1,5 @@
 # coding: utf-8
+from ..utils import sizes
 from .base import Model, ModelManager
 
 
@@ -56,8 +57,11 @@ class TemplateManager(ModelManager):
         return self.call('PUT', '/templates/%s' % id, data=data)
 
     def all(self, Count=100, Offset=0):
-        response = self.call('GET', '/templates', Count=Count, Offset=Offset)
-        return self._init_many(response['Templates'])
+        responses = [
+            self.call('GET', '/templates', Count=_count, Offset=_offset) for _count, _offset in sizes(Count, Offset)
+        ]
+        items = [self._init_many(response['Templates']) for response in responses]
+        return sum(items, [])
 
     def delete(self, id):
         return self.call('DELETE', '/templates/%s' % id)['Message']

@@ -1,6 +1,7 @@
 # coding: utf-8
 import warnings
 
+from ..utils import sizes
 from .base import Model, ModelManager
 
 
@@ -37,8 +38,11 @@ class SenderSignaturesManager(ModelManager):
         """
         Gets a list of sender signatures containing brief details associated with your account.
         """
-        response = self.call('GET', '/senders/', count=count, offset=offset)
-        return self._init_many(response['SenderSignatures'])
+        responses = [
+            self.call('GET', '/senders/', count=_count, offset=_offset) for _count, _offset in sizes(count, offset)
+        ]
+        items = [self._init_many(response['SenderSignatures']) for response in responses]
+        return sum(items, [])
 
     def get(self, id):
         """
