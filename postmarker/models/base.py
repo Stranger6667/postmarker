@@ -1,6 +1,6 @@
 # coding: utf-8
 from .._compat import with_metaclass
-from ..utils import ManageableMeta
+from ..utils import ManageableMeta, sizes
 
 
 class Model(object):
@@ -40,6 +40,8 @@ class ModelManager(object):
     name = None
     model = None
     token_type = 'server'
+    count_key = 'count'
+    offset_key = 'offset'
 
     def __init__(self, client):
         self.client = client
@@ -62,11 +64,34 @@ class ModelManager(object):
         kwargs['token_type'] = self.token_type
         return self.client.call(*args, **kwargs)
 
+    def call_many(self, *args, **kwargs):
+        count = kwargs.pop(self.count_key)
+        offset = kwargs.pop(self.offset_key)
+        return [
+            self.call(
+                *args,
+                **construct_kwargs(
+                    kwargs,
+                    **{self.count_key: _count, self.offset_key: _offset}
+                )
+            )
+            for _count, _offset in sizes(count, offset)
+        ]
+
     def expand_responses(self, responses, key):
         items = [
             self._init_many(response[key]) for response in responses
         ]
         return sum(items, [])
+
+
+def construct_kwargs(kwargs, **extra):
+    """
+    Helper to support dictionaries merging on all Python versions.
+    """
+    for key, value in extra.items():
+        kwargs[key] = value
+    return kwargs
 
 
 class SubModelManager(with_metaclass(ManageableMeta, ModelManager)):

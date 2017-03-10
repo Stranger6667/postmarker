@@ -1,5 +1,4 @@
 # coding: utf-8
-from ..utils import sizes
 from .base import Model, ModelManager
 
 
@@ -23,6 +22,8 @@ class Template(Model):
 class TemplateManager(ModelManager):
     name = 'templates'
     model = Template
+    count_key = 'Count'
+    offset_key = 'Offset'
 
     def get(self, id):
         response = self.call('GET', '/templates/%s' % id)
@@ -57,9 +58,7 @@ class TemplateManager(ModelManager):
         return self.call('PUT', '/templates/%s' % id, data=data)
 
     def all(self, Count=100, Offset=0):
-        responses = [
-            self.call('GET', '/templates', Count=_count, Offset=_offset) for _count, _offset in sizes(Count, Offset)
-        ]
+        responses = self.call_many('GET', '/templates', Count=Count, Offset=Offset)
         return self.expand_responses(responses, 'Templates')
 
     def delete(self, id):

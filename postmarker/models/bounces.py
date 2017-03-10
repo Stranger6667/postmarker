@@ -3,7 +3,6 @@
 Information about bounces is available via the :py:class:`~postmarker.models.bounces.BounceManager`,
 which is an attribute of ``postmark`` instance.
 """
-from ..utils import sizes
 from .base import Model, ModelManager
 
 
@@ -86,12 +85,10 @@ class BounceManager(ModelManager):
         :return: A list of :py:class:`Bounce` instances.
         :rtype: `list`
         """
-        responses = [
-            self.call(
-                'GET', '/bounces/', count=_count, offset=_offset, type=type, inactive=inactive, emailFilter=emailFilter,
-                tag=tag, messageID=messageID, fromdate=fromdate, todate=todate
-            ) for _count, _offset in sizes(count, offset)
-        ]
+        responses = self.call_many(
+            'GET', '/bounces/', count=count, offset=offset, type=type, inactive=inactive, emailFilter=emailFilter,
+            tag=tag, messageID=messageID, fromdate=fromdate, todate=todate
+        )
         return self.expand_responses(responses, 'Bounces')
 
     def activate(self, id):
