@@ -8,6 +8,11 @@ Changelog
 
 - Added an ability to download more than 500 items. `#70`_
 
+0.7.2 - 11.03.2017
+------------------
+
+- Fixed Django backend crash with attachments. `#98`_
+
 0.7.1 - 10.03.2017
 ------------------
 
@@ -107,6 +112,7 @@ Changelog
 - Initial release.
 
 
+.. _#98: https://github.com/Stranger6667/postmarker/issues/98
 .. _#92: https://github.com/Stranger6667/postmarker/issues/92
 .. _#87: https://github.com/Stranger6667/postmarker/issues/87
 .. _#78: https://github.com/Stranger6667/postmarker/issues/78
