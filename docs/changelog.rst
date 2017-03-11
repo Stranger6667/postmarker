@@ -3,8 +3,8 @@
 Changelog
 =========
 
-0.7.2dev0 - TBA
----------------
+0.7.2 - 11.03.2017
+------------------
 
 - Fixed Django backend crash with attachments. `#98`_
 
