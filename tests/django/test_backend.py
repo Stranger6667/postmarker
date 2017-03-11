@@ -47,7 +47,6 @@ def test_send_mail(patched_request, settings):
     assert patched_request.call_args[1]['headers']['X-Postmark-Server-Token'] == settings.POSTMARK['TOKEN']
 
 
-@pytest.mark.xfail
 def test_send_mail_with_attachment():
     """
     Test sending email with attachment
@@ -65,10 +64,27 @@ def test_send_mail_with_attachment():
     msg.attach('hello.txt', 'Hello World', 'text/plain')
     with mail.get_connection() as connection:
         prepared_msg = connection.prepare_message(msg)
-        email_as_dict = connection.client.emails.EmailBatch(*[prepared_msg]).as_dict()
-        obj = email_as_dict[0]['Attachments'][0]['Content'][0]
-        import json
-        json.dumps(obj)
+        assert connection.client.emails.EmailBatch(*[prepared_msg]).as_dict() == [
+            {
+                'TextBody': 'text_content',
+                'Attachments': [
+                    {
+                        'Name': 'hello.txt',
+                        'Content': 'Hello World',
+                        'ContentType': 'text/plain',
+                    }
+                ],
+                'From': 'sender@example.com',
+                'HtmlBody': None,
+                'ReplyTo': None,
+                'Subject': 'subject',
+                'To': 'receiver@example.com',
+                'Headers': [],
+                'Cc': None,
+                'Bcc': None,
+                'Tag': None
+            }
+        ]
 
 
 def test_headers_encoding(patched_request):
