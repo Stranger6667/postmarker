@@ -80,6 +80,8 @@ def prepare_attachments(attachment):
 def deconstruct_multipart(message):
     text, html, attachments = None, None, []
     for part in message.walk():
+        if part is message:
+            continue
         content_type = part.get_content_type()
         if content_type == 'text/plain':
             text = part.get_payload(decode=True).decode('utf8')
