@@ -73,7 +73,7 @@ class BounceManager(ModelManager):
         """
         Returns many bounces.
 
-        :param int count: Number of bounces to return per request. Max 500.
+        :param int count: Number of bounces to return per request.
         :param int offset: Number of bounces to skip.
         :param str type: Filter by type of bounce.
         :param bool inactive: Filter by emails that were deactivated by Postmark due to the bounce.

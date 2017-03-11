@@ -17,6 +17,16 @@ You can get a list of bounces with the :py:meth:`~postmarker.models.bounces.Boun
     >>> postmark.bounces.all()
     [<Bounce: 943247350>, <Bounce: 924829573>]
 
+Default number of bounces, which will be returned is 500 to fit in single network request.
+More than 500 items will be fetching in multiple network requests:
+
+.. code-block:: python
+
+    >>> postmark.bounces.all(count=1001)
+    [<Bounce: 943247350>, <Bounce: 924829573>, ...]
+
+Here it will be 3 network requests, single one is limited by 500 items.
+
 Every bounce instance is represented by its ID. You can search be specifying the ID.
 
 .. code-block:: python

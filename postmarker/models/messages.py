@@ -58,7 +58,7 @@ class OutboundMessageManager(SubModelManager):
         Lets you get all the details about any outbound or inbound message that you sent or received
         through a specific server. Messages expire after 45 days.
 
-        :param int count: Number of messages to return per request. Max 500.
+        :param int count: Number of messages to return per request.
         :param int offset: Number of messages to skip.
         :param str recipient: Filter by the user who was receiving the email.
         :param str fromemail: Filter by the sender email address.
@@ -102,7 +102,7 @@ class InboundMessageManager(ModelManager):
             status=None, todate=None, fromdate=None):
         """
 
-        :param count: Number of messages to return per request. Max 500.
+        :param count: Number of messages to return per request.
         :param offset: Number of messages to skip.
         :param recipient: Filter by the user who was receiving the email.
         :param fromemail: Filter by the sender email address.
