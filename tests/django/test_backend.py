@@ -47,7 +47,7 @@ def test_send_mail(patched_request, settings):
     assert patched_request.call_args[1]['headers']['X-Postmark-Server-Token'] == settings.POSTMARK['TOKEN']
 
 
-def test_send_mail_with_attachment():
+def test_send_mail_with_attachment(patched_request):
     """
     Test sending email with attachment
 
@@ -62,29 +62,27 @@ def test_send_mail_with_attachment():
         subject='subject', body='text_content', from_email='sender@example.com',
         to=['receiver@example.com'])
     msg.attach('hello.txt', 'Hello World', 'text/plain')
-    with mail.get_connection() as connection:
-        prepared_msg = connection.prepare_message(msg)
-        assert connection.client.emails.EmailBatch(*[prepared_msg]).as_dict() == [
+    msg.send()
+    assert patched_request.call_args[1]['json'][0] == {
+        'TextBody': 'text_content',
+        'Attachments': [
             {
-                'TextBody': 'text_content',
-                'Attachments': [
-                    {
-                        'Name': 'hello.txt',
-                        'Content': 'Hello World',
-                        'ContentType': 'text/plain',
-                    }
-                ],
-                'From': 'sender@example.com',
-                'HtmlBody': None,
-                'ReplyTo': None,
-                'Subject': 'subject',
-                'To': 'receiver@example.com',
-                'Headers': [],
-                'Cc': None,
-                'Bcc': None,
-                'Tag': None
+                'Name': 'hello.txt',
+                'Content': 'Hello World',
+                'ContentType': 'text/plain',
             }
-        ]
+        ],
+        'From': 'sender@example.com',
+        'HtmlBody': None,
+        'ReplyTo': None,
+        'Subject': 'subject',
+        'To': 'receiver@example.com',
+        'Headers': [],
+        'TrackOpens': False,
+        'Cc': None,
+        'Bcc': None,
+        'Tag': None
+    }
 
 
 def test_headers_encoding(patched_request):
