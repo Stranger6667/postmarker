@@ -71,8 +71,7 @@ class OutboundMessageManager(SubModelManager):
         """
         responses = self.call_many(
             'GET', '/messages/outbound', count=count, offset=offset, recipient=recipient, fromemail=fromemail,
-            tag=tag,
-            status=status, todate=todate, fromdate=fromdate,
+            tag=tag, status=status, todate=todate, fromdate=fromdate,
         )
         return self.expand_responses(responses, 'Messages')
 
@@ -118,8 +117,7 @@ class InboundMessageManager(ModelManager):
         """
         responses = self.call_many(
             'GET', '/messages/inbound', count=count, offset=offset, recipient=recipient, fromemail=fromemail,
-            tag=tag,
-            subject=subject, mailboxhash=mailboxhash, status=status, todate=todate, fromdate=fromdate,
+            tag=tag, subject=subject, mailboxhash=mailboxhash, status=status, todate=todate, fromdate=fromdate,
         )
         return self.expand_responses(responses, 'InboundMessages')
 

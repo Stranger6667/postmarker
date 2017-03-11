@@ -42,6 +42,7 @@ class ModelManager(object):
     token_type = 'server'
     count_key = 'count'
     offset_key = 'offset'
+    max_chunk_size = 500
 
     def __init__(self, client):
         self.client = client
@@ -69,7 +70,7 @@ class ModelManager(object):
         offset = kwargs.pop(self.offset_key)
         return [
             self.call(*args, **self.update_kwargs(kwargs, _count, _offset))
-            for _count, _offset in sizes(count, offset)
+            for _count, _offset in sizes(count, offset, self.max_chunk_size)
         ]
 
     def expand_responses(self, responses, key):
