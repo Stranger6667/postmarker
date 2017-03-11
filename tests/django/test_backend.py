@@ -5,8 +5,7 @@ import pytest
 from django import VERSION
 from django.core import mail
 from django.core.exceptions import ImproperlyConfigured
-from django.core.mail import send_mail
-from django.core.mail import EmailMultiAlternatives
+from django.core.mail import EmailMultiAlternatives, send_mail
 
 from postmarker.core import TEST_TOKEN
 
