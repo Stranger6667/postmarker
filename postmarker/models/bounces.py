@@ -73,7 +73,7 @@ class BounceManager(ModelManager):
         """
         Returns many bounces.
 
-        :param int count: Number of bounces to return per request. Max 500.
+        :param int count: Number of bounces to return per request.
         :param int offset: Number of bounces to skip.
         :param str type: Filter by type of bounce.
         :param bool inactive: Filter by emails that were deactivated by Postmark due to the bounce.
@@ -85,11 +85,11 @@ class BounceManager(ModelManager):
         :return: A list of :py:class:`Bounce` instances.
         :rtype: `list`
         """
-        response = self.call(
+        responses = self.call_many(
             'GET', '/bounces/', count=count, offset=offset, type=type, inactive=inactive, emailFilter=emailFilter,
             tag=tag, messageID=messageID, fromdate=fromdate, todate=todate
         )
-        return self._init_many(response['Bounces'])
+        return self.expand_responses(responses, 'Bounces')
 
     def activate(self, id):
         """

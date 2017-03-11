@@ -5,6 +5,7 @@ from email.mime.base import MIMEBase
 import pytest
 
 from postmarker.webhooks import Attachment, InboundWebhook
+
 from .conftest import INBOUND_WEBHOOK
 
 

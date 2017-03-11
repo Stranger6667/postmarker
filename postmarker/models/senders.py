@@ -37,8 +37,8 @@ class SenderSignaturesManager(ModelManager):
         """
         Gets a list of sender signatures containing brief details associated with your account.
         """
-        response = self.call('GET', '/senders/', count=count, offset=offset)
-        return self._init_many(response['SenderSignatures'])
+        responses = self.call_many('GET', '/senders/', count=count, offset=offset)
+        return self.expand_responses(responses, 'SenderSignatures')
 
     def get(self, id):
         """

@@ -1,5 +1,9 @@
 # coding: utf-8
+import pytest
+
 from postmarker.models.bounces import Bounce
+
+from .._compat import patch
 
 
 CASSETTE_NAME = 'bounces'
@@ -45,3 +49,18 @@ class TestManager:
         bounces = postmark.bounces.all(count=2)
         assert len(bounces) == 2
         assert all(isinstance(bounce, Bounce) for bounce in bounces)
+
+
+class TestLoadAllBounces:
+
+    @pytest.mark.parametrize('chunk_size, call_count', (
+        (50, 1),
+        (1, 2),
+    ))
+    def test_multiple_calls(self, postmark, chunk_size, call_count):
+        with patch.object(postmark.bounces, 'max_chunk_size', chunk_size):
+            with patch.object(postmark.bounces, 'call', wraps=postmark.bounces.call) as call:
+                bounces = postmark.bounces.all(count=2)
+                assert call.call_count == call_count
+                assert len(bounces) == 2
+                assert all(isinstance(bounce, Bounce) for bounce in bounces)

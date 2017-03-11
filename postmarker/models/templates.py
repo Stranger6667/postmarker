@@ -22,6 +22,8 @@ class Template(Model):
 class TemplateManager(ModelManager):
     name = 'templates'
     model = Template
+    count_key = 'Count'
+    offset_key = 'Offset'
 
     def get(self, id):
         response = self.call('GET', '/templates/%s' % id)
@@ -56,8 +58,8 @@ class TemplateManager(ModelManager):
         return self.call('PUT', '/templates/%s' % id, data=data)
 
     def all(self, Count=100, Offset=0):
-        response = self.call('GET', '/templates', Count=Count, Offset=Offset)
-        return self._init_many(response['Templates'])
+        responses = self.call_many('GET', '/templates', Count=Count, Offset=Offset)
+        return self.expand_responses(responses, 'Templates')
 
     def delete(self, id):
         return self.call('DELETE', '/templates/%s' % id)['Message']

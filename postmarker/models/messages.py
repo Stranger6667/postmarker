@@ -15,12 +15,12 @@ class OpensManager(ModelManager):
     def all(self, count=500, offset=0, recipient=None, tag=None, client_name=None, client_company=None,
             client_family=None, os_name=None, os_family=None, os_company=None, platform=None, country=None, region=None,
             city=None):
-        response = self.call(
+        responses = self.call_many(
             'GET', '/messages/outbound/opens', count=count, offset=offset, recipient=recipient, tag=tag,
             client_name=client_name, client_company=client_company, client_family=client_family, os_name=os_name,
             os_family=os_family, os_company=os_company, platform=platform, country=country, region=region, city=city
         )
-        return self._init_many(response['Opens'])
+        return self.expand_responses(responses, 'Opens')
 
     def get(self, id, count=500, offset=0):
         return self.call('GET', '/messages/outbound/opens/%s' % id, count=count, offset=offset)
@@ -58,7 +58,7 @@ class OutboundMessageManager(SubModelManager):
         Lets you get all the details about any outbound or inbound message that you sent or received
         through a specific server. Messages expire after 45 days.
 
-        :param int count: Number of messages to return per request. Max 500.
+        :param int count: Number of messages to return per request.
         :param int offset: Number of messages to skip.
         :param str recipient: Filter by the user who was receiving the email.
         :param str fromemail: Filter by the sender email address.
@@ -69,11 +69,11 @@ class OutboundMessageManager(SubModelManager):
         :return: A list of :py:class:`OutboundMessage` instances.
         :rtype: `list`
         """
-        response = self.call(
+        responses = self.call_many(
             'GET', '/messages/outbound', count=count, offset=offset, recipient=recipient, fromemail=fromemail, tag=tag,
             status=status, todate=todate, fromdate=fromdate,
         )
-        return self._init_many(response['Messages'])
+        return self.expand_responses(responses, 'Messages')
 
     def get_details(self, id):
         return self.call('GET', '/messages/outbound/%s/details' % id)
@@ -102,7 +102,7 @@ class InboundMessageManager(ModelManager):
             status=None, todate=None, fromdate=None):
         """
 
-        :param count: Number of messages to return per request. Max 500.
+        :param count: Number of messages to return per request.
         :param offset: Number of messages to skip.
         :param recipient: Filter by the user who was receiving the email.
         :param fromemail: Filter by the sender email address.
@@ -115,11 +115,11 @@ class InboundMessageManager(ModelManager):
         :return: A list of :py:class:`InboundMessage` instances.
         :rtype: `list`
         """
-        response = self.call(
+        responses = self.call_many(
             'GET', '/messages/inbound', count=count, offset=offset, recipient=recipient, fromemail=fromemail, tag=tag,
             subject=subject, mailboxhash=mailboxhash, status=status, todate=todate, fromdate=fromdate,
         )
-        return self._init_many(response['InboundMessages'])
+        return self.expand_responses(responses, 'InboundMessages')
 
     def get_details(self, id):
         return self.call('GET', '/messages/inbound/%s/details' % id)
