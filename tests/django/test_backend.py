@@ -5,7 +5,7 @@ import pytest
 from django import VERSION
 from django.core import mail
 from django.core.exceptions import ImproperlyConfigured
-from django.core.mail import send_mail
+from django.core.mail import EmailMultiAlternatives, send_mail
 
 from postmarker.core import TEST_TOKEN
 
@@ -45,6 +45,30 @@ def test_send_mail(patched_request, settings):
         'From': 'sender@example.com'
     }, )
     assert patched_request.call_args[1]['headers']['X-Postmark-Server-Token'] == settings.POSTMARK['TOKEN']
+
+
+@pytest.mark.xfail
+def test_send_mail_with_attachment():
+    """
+    Test sending email with attachment
+
+    The Django backend crashes when sending an email with an attachment.
+    https://github.com/Stranger6667/postmarker/issues/98
+
+    This test does not send any mail. Instead, it demonstrates the bug by
+    constructing the same underlying datastructures that the backend would
+    construct.
+    """
+    msg = EmailMultiAlternatives(
+        subject='subject', body='text_content', from_email='sender@example.com',
+        to=['receiver@example.com'])
+    msg.attach('hello.txt', 'Hello World', 'text/plain')
+    with mail.get_connection() as connection:
+        prepared_msg = connection.prepare_message(msg)
+        email_as_dict = connection.client.emails.EmailBatch(*[prepared_msg]).as_dict()
+        obj = email_as_dict[0]['Attachments'][0]['Content'][0]
+        import json
+        json.dumps(obj)
 
 
 def test_headers_encoding(patched_request):
