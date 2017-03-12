@@ -6,7 +6,8 @@ from django.core.exceptions import ImproperlyConfigured
 from django.core.mail import EmailMessage, EmailMultiAlternatives
 from django.core.mail.backends.base import BaseEmailBackend
 
-from .core import TEST_TOKEN, PostmarkClient
+from ..core import TEST_TOKEN, PostmarkClient
+from .signals import post_send, pre_send
 
 
 DEFAULT_CONFIG = {
@@ -55,7 +56,9 @@ class EmailBackend(BaseEmailBackend):
         try:
             client_created = self.open()
             prepared_messages = [self.prepare_message(message) for message in email_messages]
+            pre_send.send_robust(self.__class__, messages=prepared_messages)
             response = self.client.emails.send_batch(*prepared_messages, TrackOpens=self.get_option('TRACK_OPENS'))
+            post_send.send_robust(self.__class__, messages=prepared_messages, response=response)
             msg_count = len(response)
             if client_created:
                 self.close()

@@ -6,8 +6,12 @@ from django import VERSION
 from django.core import mail
 from django.core.exceptions import ImproperlyConfigured
 from django.core.mail import EmailMultiAlternatives, send_mail
+from requests import Response
 
 from postmarker.core import TEST_TOKEN
+from postmarker.django import EmailBackend
+from postmarker.django.signals import post_send, pre_send
+from postmarker.models.emails import Email
 
 
 pytestmark = pytest.mark.usefixtures('outbox')
@@ -226,3 +230,50 @@ class TestExceptions:
 def test_close_closed_connection():
     with mail.get_connection() as connection:
         connection.close()
+
+
+@pytest.mark.usefixtures('patched_request')
+class TestSignals:
+
+    def test_pre_send(self, catch_signal):
+        with catch_signal(pre_send) as handler:
+            send_mail(**SEND_KWARGS)
+        assert handler.called
+        kwargs = handler.call_args[1]
+        assert kwargs['sender'] == EmailBackend
+        assert kwargs['signal'] == pre_send
+        assert len(kwargs['messages']) == 1
+        message = kwargs['messages'][0]
+        assert Email.from_mime(message, None).as_dict() == {
+            'Attachments': [],
+            'Bcc': None,
+            'Cc': None,
+            'From': 'sender@example.com',
+            'Headers': [],
+            'HtmlBody': None,
+            'ReplyTo': None,
+            'Subject': 'Subject here',
+            'Tag': None,
+            'TextBody': 'Here is the message.',
+            'To': 'receiver@example.com'
+        }
+
+    def test_post_send(self, catch_signal, patched_request):
+        patched_request.return_value = Response()
+        patched_request.return_value.status_code = 200
+        patched_request.return_value._content = b'[{"ErrorCode": 0, "To": "receiver@example.com", "SubmittedAt": ' \
+                                                b'"2016-10-06T10:05:30.570118-04:00", "Message": "Test job accepted",' \
+                                                b' "MessageID": "96a981da-9b7c-4aa9-bda2-84ab99097686"}]'
+        with catch_signal(post_send) as handler:
+            send_mail(**SEND_KWARGS)
+        assert handler.called
+        kwargs = handler.call_args[1]
+        assert kwargs['sender'] == EmailBackend
+        assert kwargs['signal'] == post_send
+        assert kwargs['response'] == [{
+            'ErrorCode': 0,
+            'Message': 'Test job accepted',
+            'MessageID': '96a981da-9b7c-4aa9-bda2-84ab99097686',
+            'SubmittedAt': '2016-10-06T10:05:30.570118-04:00',
+            'To': 'receiver@example.com'
+        }]

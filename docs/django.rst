@@ -45,6 +45,9 @@ When it is set to ``True`` all interactions will be conducted with a special tes
 
 To globally turn on ``TrackOpens`` feature, set ``TRACK_OPENS`` to ``True``.
 
+Messages
+========
+
 To mark messages with tags you could use ``postmarker.django.PostmarkEmailMessage`` /  ``postmarker.django.PostmarkEmailMultiAlternatives``
 instead of ``EmailMessage`` / ``EmailMultiAlternatives`` from Django.
 Example:
@@ -58,3 +61,14 @@ Example:
     ).send()
 
 You can get the same feature for your own classes with ``PostmarkEmailMixin``.
+
+Signals
+=======
+
+There are two signals, which are emitted:
+
+- ``postmarker.django.pre_send`` is emitted just before the send
+- ``postmarker.django.post_send`` is emitted just after the send
+
+Both signals contain ``messages`` kwarg which contains all MIME messages, that are sent.
+``post_send`` signal has ``response`` kwargs, which contains decoded response from Postmark.

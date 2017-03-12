@@ -1,5 +1,6 @@
 # coding: utf-8
 import os
+from contextlib import contextmanager
 
 import pytest
 
@@ -8,7 +9,7 @@ from betamax_serializers import pretty_json
 from postmarker.core import PostmarkClient
 from postmarker.webhooks import InboundWebhook
 
-from ._compat import patch
+from ._compat import Mock, patch
 from .helpers import replace_real_credentials
 
 
@@ -167,3 +168,16 @@ def inbound_webhook():
 @pytest.fixture
 def attachment(inbound_webhook):
     return inbound_webhook.Attachments[0]
+
+
+@contextmanager
+def _catch_signal(signal):
+    handler = Mock()
+    signal.connect(handler)
+    yield handler
+    signal.disconnect(handler)
+
+
+@pytest.fixture
+def catch_signal():
+    return _catch_signal
