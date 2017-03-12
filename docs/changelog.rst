@@ -8,6 +8,7 @@ Changelog
 
 - Added an ability to download more than 500 items. `#70`_
 - Added `pre_send` and `post_send` Django signals. `#83`_
+- Inbound rules triggers API. `#75`_
 
 0.7.2 - 11.03.2017
 ------------------
@@ -119,6 +120,7 @@ Changelog
 .. _#83: https://github.com/Stranger6667/postmarker/issues/83
 .. _#78: https://github.com/Stranger6667/postmarker/issues/78
 .. _#76: https://github.com/Stranger6667/postmarker/issues/76
+.. _#75: https://github.com/Stranger6667/postmarker/issues/75
 .. _#73: https://github.com/Stranger6667/postmarker/issues/73
 .. _#72: https://github.com/Stranger6667/postmarker/issues/72
 .. _#71: https://github.com/Stranger6667/postmarker/issues/71
