@@ -18,6 +18,7 @@ Contents:
    emails
    templates
    bounces
+   messages
    sender_signatures
    server
    status
