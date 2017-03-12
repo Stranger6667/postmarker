@@ -23,6 +23,7 @@ Contents:
    server
    status
    stats
+   triggers
    domains
    django
    spamcheck
