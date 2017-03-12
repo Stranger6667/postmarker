@@ -232,21 +232,6 @@ def test_close_closed_connection():
         connection.close()
 
 
-EXPECTED_MESSAGE = {
-    'Attachments': [],
-    'Bcc': None,
-    'Cc': None,
-    'From': 'sender@example.com',
-    'Headers': [],
-    'HtmlBody': None,
-    'ReplyTo': None,
-    'Subject': 'Subject here',
-    'Tag': None,
-    'TextBody': 'Here is the message.',
-    'To': 'receiver@example.com'
-}
-
-
 @pytest.mark.usefixtures('patched_request')
 class TestSignals:
 
@@ -259,7 +244,19 @@ class TestSignals:
         assert kwargs['signal'] == pre_send
         assert len(kwargs['messages']) == 1
         message = kwargs['messages'][0]
-        assert Email.from_mime(message, None).as_dict() == EXPECTED_MESSAGE
+        assert Email.from_mime(message, None).as_dict() == {
+            'Attachments': [],
+            'Bcc': None,
+            'Cc': None,
+            'From': 'sender@example.com',
+            'Headers': [],
+            'HtmlBody': None,
+            'ReplyTo': None,
+            'Subject': 'Subject here',
+            'Tag': None,
+            'TextBody': 'Here is the message.',
+            'To': 'receiver@example.com'
+        }
 
     def test_post_send(self, catch_signal, patched_request):
         patched_request.return_value = Response()
