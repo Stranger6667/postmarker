@@ -14,6 +14,7 @@ from .models.server import ServerManager
 from .models.stats import StatsManager
 from .models.status import StatusManager
 from .models.templates import TemplateManager
+from .models.triggers import TriggersManager
 from .utils import ManageableMeta
 
 
@@ -38,6 +39,7 @@ class PostmarkClient(with_metaclass(ManageableMeta)):
         StatsManager,
         StatusManager,
         TemplateManager,
+        TriggersManager,
     )
 
     def __init__(self, token=None, account_token=None, verbosity=0):
