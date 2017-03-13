@@ -3,8 +3,8 @@
 Changelog
 =========
 
-0.8.0 - TBA
------------
+0.8.0 - 13.03.2017
+------------------
 
 - Added an ability to download more than 500 items. `#70`_
 - Added `pre_send` and `post_send` Django signals. `#83`_
