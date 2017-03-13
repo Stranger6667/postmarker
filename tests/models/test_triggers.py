@@ -48,11 +48,11 @@ class TestTagsTriggers:
         tag = postmark.triggers.tags.all()[0]
         assert isinstance(tag.get(), Tag)
 
-    def edit(self, postmark):
-        tag = postmark.triggers.tags.all()[0]
+    def test_edit(self, postmark):
+        tag = postmark.triggers.tags.create('welcome2')
         tag.edit(MatchName='blabla')
         assert tag.MatchName == 'blabla'
 
     def test_delete(self, postmark):
-        rule = postmark.triggers.tags.all()[0]
-        assert rule.delete() == 'Tag 1616731 removed.'
+        tag = postmark.triggers.tags.all()[0]
+        assert tag.delete() == 'Tag 1616731 removed.'
