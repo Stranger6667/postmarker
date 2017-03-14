@@ -3,6 +3,11 @@
 Changelog
 =========
 
+0.8.1 - TBA
+-----------
+
+- Fixed needless requests when `count` is more than number of available items. `#103`_
+
 0.8.0 - 13.03.2017
 ------------------
 
@@ -116,6 +121,7 @@ Changelog
 - Initial release.
 
 
+.. _#103: https://github.com/Stranger6667/postmarker/issues/103
 .. _#102: https://github.com/Stranger6667/postmarker/issues/102
 .. _#98: https://github.com/Stranger6667/postmarker/issues/98
 .. _#92: https://github.com/Stranger6667/postmarker/issues/92
