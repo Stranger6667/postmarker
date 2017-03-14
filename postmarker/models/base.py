@@ -66,12 +66,21 @@ class ModelManager(object):
         return self.client.call(*args, **kwargs)
 
     def call_many(self, *args, **kwargs):
+        return list(self._call_many(*args, **kwargs))
+
+    def _call_many(self, *args, **kwargs):
         count = kwargs.pop(self.count_key)
         offset = kwargs.pop(self.offset_key)
-        return [
-            self.call(*args, **self.update_kwargs(kwargs, _count, _offset))
-            for _count, _offset in sizes(count, offset, self.max_chunk_size)
-        ]
+        loaded_items_count = 0
+        for _count, _offset in sizes(count, offset, self.max_chunk_size):
+            response = self.call(*args, **self.update_kwargs(kwargs, _count, _offset))
+            loaded_items_count += _count
+            yield response
+            # We expect, that we will load `TotalCount` - offset items.
+            # This number will be less or equal to number of already loaded items.
+            # It could be less in case if latest response contains less items than provided `count` value.
+            if response['TotalCount'] - offset <= loaded_items_count:
+                break
 
     def expand_responses(self, responses, key):
         items = [
