@@ -3,8 +3,8 @@
 Changelog
 =========
 
-0.8.1 - TBA
------------
+0.8.1 - 15.03.2017
+------------------
 
 - Fixed needless requests when `count` is more than number of available items. `#103`_
 
