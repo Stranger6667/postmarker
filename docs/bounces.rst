@@ -26,6 +26,7 @@ More than 500 items will be fetching in multiple network requests:
     [<Bounce: 943247350>, <Bounce: 924829573>, ...]
 
 Here it will be 3 network requests, single one is limited by 500 items.
+To load all available data, pass `None` as `count` value.
 
 Every bounce instance is represented by its ID. You can search be specifying the ID.
 
