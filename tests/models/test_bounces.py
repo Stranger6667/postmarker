@@ -57,6 +57,7 @@ class TestLoadAllBounces:
         (2, 50, 1),
         (2, 1, 2),
         (4, 1, 2),
+        (None, 1, 2),
     ))
     def test_multiple_calls(self, postmark, count, chunk_size, call_count):
         with patch.object(postmark.bounces, 'max_chunk_size', chunk_size):
