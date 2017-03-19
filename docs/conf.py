@@ -19,6 +19,8 @@
 #
 import os
 import sys
+from datetime import date
+
 sys.path.insert(0, os.path.abspath('..'))
 
 
@@ -57,7 +59,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'Postmarker'
-copyright = '2016, Dmitry Dygalo'
+copyright = '%s, Dmitry Dygalo' % date.today().year
 author = 'Dmitry Dygalo'
 
 # The version info for the project you're documenting, acts as replacement for
