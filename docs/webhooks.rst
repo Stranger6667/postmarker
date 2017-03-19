@@ -85,7 +85,6 @@ Delivery
 
 For delivery webhook there is another wrapper - ``DeliveryWebhook`` with the same interface as above:
 
-
 .. code-block:: python
 
     >>> from postmarker.webhooks import DeliveryWebhook
