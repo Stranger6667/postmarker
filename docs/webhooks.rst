@@ -5,6 +5,9 @@ Webhooks
 
 .. automodule:: postmarker.webhooks
 
+Inbound
+-------
+
 Basic
 ~~~~~
 
@@ -76,3 +79,15 @@ Besides it, you could do the following with attachments:
     /directory/to/save/test.txt
     >>> attachment.as_mime()
     <email.mime.base.MIMEBase at 0x10424b7b8>
+
+Delivery
+--------
+
+For delivery webhook there is another wrapper - ``DeliveryWebhook`` with the same interface as above:
+
+.. code-block:: python
+
+    >>> from postmarker.webhooks import DeliveryWebhook
+    >>> with open('/path/to/raw_content.json') as fd:
+            data = fd.read()
+    >>> delivery = DeliveryWebhook(data)
