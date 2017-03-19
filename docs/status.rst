@@ -39,7 +39,7 @@ Incidents are also available:
 
     >>> postmark.incidents.last
     <Incident: 1965>
-    >>> postmark.incidents.all
+    >>> postmark.incidents.all()
     [<Incident: 1965>, ...]
     >>> postmark.incidents.get(1965)
     <Incident: 1965>
