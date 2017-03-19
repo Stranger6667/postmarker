@@ -6,7 +6,7 @@ import pytest
 
 from postmarker.webhooks import Attachment, InboundWebhook
 
-from .conftest import INBOUND_WEBHOOK
+from .conftest import DELIVERY_WEBHOOK, INBOUND_WEBHOOK
 
 
 DECODED_HOOK = json.loads(INBOUND_WEBHOOK)
@@ -71,3 +71,11 @@ class TestAttachment:
         assert message['Content-Transfer-Encoding'] == 'base64'
         assert message['Content-Disposition'] == 'attachment; filename="test.txt"'
         assert message.get_payload(decode=True) == b'This is attachment contents, base-64 encoded.'
+
+
+DECODED_DELIVERY_HOOK = json.loads(DELIVERY_WEBHOOK)
+
+
+@pytest.mark.parametrize('attribute', DECODED_DELIVERY_HOOK.keys())
+def test_delivery_webhook(delivery_webhook, attribute):
+    assert getattr(delivery_webhook, attribute) == delivery_webhook._data[attribute]

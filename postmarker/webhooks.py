@@ -5,7 +5,7 @@ from json import loads
 from os.path import join
 
 
-class InboundWebhook(object):
+class Webhook(object):
 
     def __init__(self, data=None, json=None):
         assert not (data and json), 'You could pass only `data` or `json`, not both'
@@ -13,6 +13,9 @@ class InboundWebhook(object):
             self._data = json
         else:
             self._data = loads(data)
+
+
+class InboundWebhook(Webhook):
 
     def __getitem__(self, item):
         for header in self._data['Headers']:
@@ -153,3 +156,30 @@ class Attachment(object):
         message['Content-Transfer-Encoding'] = 'base64'
         message.add_header('Content-Disposition', 'attachment', filename=self.Name)
         return message
+
+
+class DeliveryWebhook(Webhook):
+
+    @property
+    def ServerId(self):
+        return self._data.get('ServerId')
+
+    @property
+    def MessageID(self):
+        return self._data.get('MessageID')
+
+    @property
+    def Recipient(self):
+        return self._data.get('Recipient')
+
+    @property
+    def Tag(self):
+        return self._data.get('Tag')
+
+    @property
+    def DeliveredAt(self):
+        return self._data.get('DeliveredAt')
+
+    @property
+    def Details(self):
+        return self._data.get('Details')
