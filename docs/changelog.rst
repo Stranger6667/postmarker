@@ -8,6 +8,7 @@ Changelog
 
 - Added an ability to load all items without specifying exact `count` value. `#106`_
 - Added delivery webhook wrapper. `#95`_
+- Added open webhook wrapper. `#96`_
 
 0.8.1 - 15.03.2017
 ------------------
@@ -131,6 +132,7 @@ Changelog
 .. _#106: https://github.com/Stranger6667/postmarker/issues/106
 .. _#102: https://github.com/Stranger6667/postmarker/issues/102
 .. _#98: https://github.com/Stranger6667/postmarker/issues/98
+.. _#96: https://github.com/Stranger6667/postmarker/issues/96
 .. _#95: https://github.com/Stranger6667/postmarker/issues/95
 .. _#92: https://github.com/Stranger6667/postmarker/issues/92
 .. _#87: https://github.com/Stranger6667/postmarker/issues/87

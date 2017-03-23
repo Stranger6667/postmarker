@@ -183,3 +183,50 @@ class DeliveryWebhook(Webhook):
     @property
     def Details(self):
         return self._data.get('Details')
+
+
+class OpenWebhook(Webhook):
+
+    @property
+    def FirstOpen(self):
+        return self._data.get('FirstOpen')
+
+    @property
+    def Client(self):
+        return self._data.get('Client')
+
+    @property
+    def OS(self):
+        return self._data.get('OS')
+
+    @property
+    def Platform(self):
+        return self._data.get('Platform')
+
+    @property
+    def UserAgent(self):
+        return self._data.get('UserAgent')
+
+    @property
+    def ReadSeconds(self):
+        return self._data.get('ReadSeconds')
+
+    @property
+    def Geo(self):
+        return self._data.get('Geo')
+
+    @property
+    def MessageID(self):
+        return self._data.get('MessageID')
+
+    @property
+    def ReceivedAt(self):
+        return self._data.get('ReceivedAt')
+
+    @property
+    def Tag(self):
+        return self._data.get('Tag')
+
+    @property
+    def Recipient(self):
+        return self._data.get('Recipient')
