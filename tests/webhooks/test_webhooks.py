@@ -6,8 +6,7 @@ import pytest
 
 from postmarker.webhooks import Attachment, InboundWebhook
 
-from .conftest import DELIVERY_WEBHOOK, INBOUND_WEBHOOK
-
+from .conftest import DELIVERY_WEBHOOK, INBOUND_WEBHOOK, OPEN_WEBHOOK
 
 DECODED_HOOK = json.loads(INBOUND_WEBHOOK)
 SIMPLE_ATTRIBUTES = [value for value in DECODED_HOOK.keys() if value != 'Attachments']
@@ -79,3 +78,11 @@ DECODED_DELIVERY_HOOK = json.loads(DELIVERY_WEBHOOK)
 @pytest.mark.parametrize('attribute', DECODED_DELIVERY_HOOK.keys())
 def test_delivery_webhook(delivery_webhook, attribute):
     assert getattr(delivery_webhook, attribute) == delivery_webhook._data[attribute]
+
+
+DECODED_OPEN_HOOK = json.loads(OPEN_WEBHOOK)
+
+
+@pytest.mark.parametrize('attribute', DECODED_OPEN_HOOK.keys())
+def test_open_webhook(open_webhook, attribute):
+    assert getattr(open_webhook, attribute) == open_webhook._data[attribute]
