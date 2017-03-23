@@ -90,4 +90,16 @@ For delivery webhook there is another wrapper - ``DeliveryWebhook`` with the sam
     >>> from postmarker.webhooks import DeliveryWebhook
     >>> with open('/path/to/raw_content.json') as fd:
             data = fd.read()
-    >>> delivery = DeliveryWebhook(data)
+    >>> hook = DeliveryWebhook(data)
+
+Open
+----
+
+For open webhook there is another wrapper - ``OpenWebhook`` with the same interface as above:
+
+.. code-block:: python
+
+    >>> from postmarker.webhooks import OpenWebhook
+    >>> with open('/path/to/raw_content.json') as fd:
+            data = fd.read()
+    >>> hook = OpenWebhook(data)
