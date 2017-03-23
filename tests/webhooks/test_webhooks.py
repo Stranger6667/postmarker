@@ -84,5 +84,5 @@ DECODED_OPEN_HOOK = json.loads(OPEN_WEBHOOK)
 
 
 @pytest.mark.parametrize('attribute', DECODED_OPEN_HOOK.keys())
-def test_delivery_webhook(open_webhook, attribute):
+def test_open_webhook(open_webhook, attribute):
     assert getattr(open_webhook, attribute) == open_webhook._data[attribute]

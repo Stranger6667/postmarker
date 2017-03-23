@@ -17,7 +17,7 @@ OPEN_WEBHOOK = '''{
     "Family": "OS X 10"
   },
   "Platform": "WebMail",
-  "UserAgent": "Mozilla\/5.0 (Macintosh; Intel Mac OS X 10_7_5) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/35.0.1916.153 Safari\/537.36",
+  "UserAgent": "Some UA string",
   "ReadSeconds": 5,
   "Geo": {
     "CountryISOCode": "RS",
