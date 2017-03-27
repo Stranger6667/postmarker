@@ -13,6 +13,10 @@ Postmarker
    :target: http://postmarker.readthedocs.io/en/stable/?badge=stable
    :alt: Documentation Status
 
+.. image:: https://img.shields.io/pypi/v/postmarker.svg
+    :target: https://pypi.python.org/pypi/postmarker
+    :alt: Latest PyPI version
+
 Python client library for `Postmark API <http://developer.postmarkapp.com/developer-api-overview.html>`_.
 
 This library is in active development now. Contributions are very welcome!
