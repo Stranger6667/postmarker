@@ -107,11 +107,24 @@ For open webhook there is another wrapper - ``OpenWebhook`` with the same interf
 Bounce
 ------
 
-For bounce webhook there is another wrapper - ``BounceWebhook`` with the same interface as above:
+For bounce webhook processing there is ``Bounce`` constructor in ``bounces`` manager.
+It constructs new ``Bounce`` instance from given JSON string.
 
 .. code-block:: python
 
-    >>> from postmarker.webhooks import BounceWebhook
     >>> with open('/path/to/raw_content.json') as fd:
             data = fd.read()
-    >>> hook = BounceWebhook(data)
+    >>> bounce = postmarker.bounces.Bounce(data)
+    >>> bounce.activate()
+    'OK'
+
+Another way to parse a bounce - use ``Bounce.from_json`` method:
+
+.. code-block:: python
+
+    >>> from postmarker.models.bounces import Bounce
+    >>> with open('/path/to/raw_content.json') as fd:
+            data = fd.read()
+    >>> bounce = Bounce.from_json(data)
+
+But in this case, there is no possibility to work with the bounce - only parsed data will be available.
