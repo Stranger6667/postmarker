@@ -103,3 +103,15 @@ For open webhook there is another wrapper - ``OpenWebhook`` with the same interf
     >>> with open('/path/to/raw_content.json') as fd:
             data = fd.read()
     >>> hook = OpenWebhook(data)
+
+Bounce
+------
+
+For bounce webhook there is another wrapper - ``BounceWebhook`` with the same interface as above:
+
+.. code-block:: python
+
+    >>> from postmarker.webhooks import BounceWebhook
+    >>> with open('/path/to/raw_content.json') as fd:
+            data = fd.read()
+    >>> hook = BounceWebhook(data)
