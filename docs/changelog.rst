@@ -3,8 +3,8 @@
 Changelog
 =========
 
-0.9.0 - TBA
------------
+0.9.0 - 28.03.2017
+------------------
 
 - Added an ability to load all items without specifying exact `count` value. `#106`_
 - Added delivery webhook wrapper. `#95`_
