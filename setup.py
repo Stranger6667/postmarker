@@ -12,6 +12,10 @@ else:
     install_requires = ['requests']
 
 
+with open('README.rst') as file:
+    long_description = file.read()
+
+
 setup(
     name='postmarker',
     url='https://github.com/Stranger6667/postmarker',
@@ -24,6 +28,7 @@ setup(
     maintainer_email='dadygalo@gmail.com',
     keywords=['postmark', 'api', 'client', 'email'],
     description='Python client library for Postmark API',
+    long_description=long_description,
     classifiers=[
         'Development Status :: 4 - Beta',
         'Environment :: Console',

@@ -9,6 +9,7 @@ Changelog
 - Added an ability to load all items without specifying exact `count` value. `#106`_
 - Added delivery webhook wrapper. `#95`_
 - Added open webhook wrapper. `#96`_
+- Fixed PyPI package display. `#116`_
 
 0.8.1 - 15.03.2017
 ------------------
@@ -128,6 +129,7 @@ Changelog
 - Initial release.
 
 
+.. _#116: https://github.com/Stranger6667/postmarker/issues/116
 .. _#107: https://github.com/Stranger6667/postmarker/issues/107
 .. _#106: https://github.com/Stranger6667/postmarker/issues/106
 .. _#102: https://github.com/Stranger6667/postmarker/issues/102
