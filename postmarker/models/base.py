@@ -1,4 +1,6 @@
 # coding: utf-8
+from json import loads
+
 from .._compat import with_metaclass
 from ..utils import ManageableMeta, sizes
 
@@ -28,6 +30,11 @@ class Model(object):
         else:
             self._data = kwargs
         self.__dict__.update(kwargs)
+
+    @classmethod
+    def from_json(cls, json, manager=None):
+        data = loads(json)
+        return cls(manager=manager, **data)
 
     def as_dict(self):
         return self._data.copy()

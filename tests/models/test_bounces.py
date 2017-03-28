@@ -4,6 +4,7 @@ import pytest
 from postmarker.models.bounces import Bounce
 
 from .._compat import patch
+from ..conftest import BOUNCE_WEBHOOK
 
 
 CASSETTE_NAME = 'bounces'
@@ -49,6 +50,10 @@ class TestManager:
         bounces = postmark.bounces.all(count=2)
         assert len(bounces) == 2
         assert all(isinstance(bounce, Bounce) for bounce in bounces)
+
+    def test_init_bounce(self, postmark):
+        bounce = postmark.bounces.Bounce(BOUNCE_WEBHOOK)
+        assert bounce._manager is postmark.bounces
 
 
 class TestLoadAllBounces:
