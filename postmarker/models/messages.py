@@ -1,4 +1,8 @@
 # coding: utf-8
+from base64 import b64decode
+from email.mime.base import MIMEBase
+from os.path import join
+
 from .base import Model, ModelManager, SubModelManager
 
 
@@ -24,6 +28,9 @@ class OpensManager(ModelManager):
 
     def get(self, id, count=500, offset=0):
         return self.call('GET', '/messages/outbound/opens/%s' % id, count=count, offset=offset)
+
+    def Open(self, json):
+        return self.model.from_json(json, manager=self)
 
 
 class BaseMessage(Model):
@@ -87,11 +94,52 @@ class InboundMessage(BaseMessage):
     def __str__(self):
         return '%s message from %s' % (self._data.get('Status'), self._data.get('From'))
 
+    def __getitem__(self, item):
+        for header in self._data['Headers']:
+            if header['Name'] == item:
+                return header['Value']
+        raise KeyError
+
+    @property
+    def Attachments(self):
+        attachments = self._data.get('Attachments', ())
+        return [Attachment(**data) for data in attachments]
+
     def bypass(self):
         return self._manager.bypass(self.MessageID)
 
     def retry(self):
         return self._manager.retry(self.MessageID)
+
+
+class Attachment(Model):
+
+    def __str__(self):
+        return self.Name
+
+    def __repr__(self):
+        return '<%s: %s>' % (self.__class__.__name__, self)
+
+    def __len__(self):
+        return self.ContentLength
+
+    @property
+    def decoded(self):
+        return b64decode(self.Content.encode('ascii'))
+
+    def save(self, directory):
+        filename = join(directory, self.Name)
+        with open(filename, 'wb') as fd:
+            fd.write(self.decoded)
+        return filename
+
+    def as_mime(self):
+        maintype, subtype = self.ContentType.split('/')
+        message = MIMEBase(maintype, subtype)
+        message.set_payload(self.Content)
+        message['Content-Transfer-Encoding'] = 'base64'
+        message.add_header('Content-Disposition', 'attachment', filename=self.Name)
+        return message
 
 
 class InboundMessageManager(ModelManager):
@@ -129,6 +177,9 @@ class InboundMessageManager(ModelManager):
 
     def retry(self, id):
         return self.call('PUT', '/messages/inbound/%s/retry' % id)
+
+    def InboundMessage(self, json):
+        return self.model.from_json(json, manager=self)
 
 
 class MessageManager(SubModelManager):

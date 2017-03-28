@@ -12,6 +12,11 @@ Changelog
 - Added bounce webhook wrapper. `#97`_
 - Fixed PyPI package display. `#116`_
 
+Changed
+~~~~~~~
+
+- ``postmarker.webhooks.InboundWebhook`` class was superseded by ``postmark.messages.inbound.InboundMessage`` constructor, which works in the same way.
+
 0.8.1 - 15.03.2017
 ------------------
 

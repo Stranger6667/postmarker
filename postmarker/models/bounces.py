@@ -110,3 +110,12 @@ class BounceManager(ModelManager):
         :rtype: `str` or `None`
         """
         return self.call('GET', '/bounces/%s/dump' % id).get('Body')
+
+    def Bounce(self, json):
+        """
+        Constructs new Bounce instance from JSON-encoded string. Intended to use for bounce webhook processing.
+
+        :param json: `str`
+        :return: :py:class:`Bounce`
+        """
+        return self.model.from_json(json, manager=self)

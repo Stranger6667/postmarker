@@ -80,7 +80,7 @@ There are a lot of features available. Check it out in our documentation! Here's
 - Bounces, Domains, Messages, Templates, Sender signatures, Status, Stats & Server API.
 - Django email backend.
 - Spam check API.
-- Inbound webhook wrapper.
+- Wrappers for Bounce, Inbound, Open and Delivery webhooks.
 
 Documentation
 =============
