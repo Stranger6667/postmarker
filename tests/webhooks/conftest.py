@@ -1,7 +1,32 @@
 # coding: utf-8
 import pytest
 
-from postmarker.webhooks import DeliveryWebhook, InboundWebhook, OpenWebhook
+from postmarker.webhooks import BounceWebhook, DeliveryWebhook, InboundWebhook, OpenWebhook
+
+
+BOUNCE_WEBHOOK = '''{
+  "ID": 42,
+  "Type": "HardBounce",
+  "TypeCode": 1,
+  "Name": "Hard bounce",
+  "Tag": "Test",
+  "MessageID": "883953f4-6105-42a2-a16a-77a8eac79483",
+  "ServerId": 23,
+  "Description": "The server was unable to deliver your message (ex: unknown user, mailbox not found).",
+  "Details": "Test bounce details",
+  "Email": "john@example.com",
+  "From": "sender@example.com",
+  "BouncedAt": "2014-08-01T13:28:10.2735393-04:00",
+  "DumpAvailable": true,
+  "Inactive": true,
+  "CanActivate": true,
+  "Subject": "Test subject"
+}'''
+
+
+@pytest.fixture
+def bounce_webhook():
+    return BounceWebhook(BOUNCE_WEBHOOK)
 
 
 OPEN_WEBHOOK = '''{
