@@ -21,7 +21,7 @@ There is a simple way to access the headers in the ``InboundMessage`` instance:
 Attachments
 ~~~~~~~~~~~
 
-To access the attachments you could use the ``Attachments`` attribute of the ``InboundWebhook`` which returns a list
+To access the attachments you could use the ``Attachments`` attribute of the ``InboundMessage`` which returns a list
 of attachments.
 
 .. code-block:: python
