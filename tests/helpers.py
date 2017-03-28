@@ -39,3 +39,14 @@ def replace_real_credentials(cassette_dir, production_token, header, test_token)
         if rewrite_required:
             with open(cassette_path, 'w') as fp:
                 json.dump(data, fp, sort_keys=True, indent=2, separators=(',', ': '))
+
+
+def recursive_gettatr(obj, field_name):
+    if '.' in field_name:
+        fields = field_name.split('.')
+        value = recursive_gettatr(obj, fields[0])
+        for field in fields[1:]:
+            value = recursive_gettatr(value, field)
+        return value
+    return getattr(obj, field_name, None)
+

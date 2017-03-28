@@ -7,6 +7,7 @@ import pytest
 from postmarker.webhooks import Attachment, InboundWebhook
 
 from ..conftest import BOUNCE_WEBHOOK, OPEN_WEBHOOK
+from ..helpers import recursive_gettatr
 from .conftest import DELIVERY_WEBHOOK, INBOUND_WEBHOOK
 
 
@@ -82,17 +83,11 @@ def test_delivery_webhook(delivery_webhook, attribute):
     assert getattr(delivery_webhook, attribute) == delivery_webhook._data[attribute]
 
 
-DECODED_OPEN_HOOK = json.loads(OPEN_WEBHOOK)
-
-
-@pytest.mark.parametrize('attribute', DECODED_OPEN_HOOK.keys())
-def test_open_webhook(open_webhook, attribute):
-    assert getattr(open_webhook, attribute) == open_webhook._data[attribute]
-
-
-DECODED_BOUNCE_HOOK = json.loads(BOUNCE_WEBHOOK)
-
-
-@pytest.mark.parametrize('attribute', DECODED_BOUNCE_HOOK.keys())
-def test_bounce_webhook(bounce_webhook, attribute):
-    assert getattr(bounce_webhook, attribute) == bounce_webhook._data[attribute]
+@pytest.mark.parametrize('constructor, data', (
+    ('bounces.Bounce', BOUNCE_WEBHOOK),
+    ('messages.outbound.Open', OPEN_WEBHOOK),
+))
+def test_attributes(postmark, constructor, data):
+    instance = recursive_gettatr(postmark, constructor)(data)
+    for attribute in json.loads(data):
+        assert getattr(instance, attribute) == instance._data[attribute]
