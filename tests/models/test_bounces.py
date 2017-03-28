@@ -2,9 +2,9 @@
 import pytest
 
 from postmarker.models.bounces import Bounce
-from tests.conftest import BOUNCE_WEBHOOK
 
 from .._compat import patch
+from ..conftest import BOUNCE_WEBHOOK
 
 
 CASSETTE_NAME = 'bounces'

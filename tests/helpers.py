@@ -49,4 +49,3 @@ def recursive_gettatr(obj, field_name):
             value = recursive_gettatr(value, field)
         return value
     return getattr(obj, field_name, None)
-
