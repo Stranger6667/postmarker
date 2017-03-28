@@ -38,13 +38,13 @@ For delivery webhook there is a wrapper - ``Delivery`` with the regular model in
 Open
 ----
 
-Opens could be processed by ``postmark.messages.outbound.Open``:
+Opens could be processed by ``postmark.messages.outbound.opens.Open``:
 
 .. code-block:: python
 
     >>> with open('/path/to/raw_content.json') as fd:
             data = fd.read()
-    >>> open = postmark.messages.outbound.Open(data)
+    >>> open = postmark.messages.outbound.opens.Open(data)
 
 Bounce
 ------

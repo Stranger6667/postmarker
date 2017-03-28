@@ -187,7 +187,7 @@ OPEN_WEBHOOK = '''{
 
 @pytest.fixture
 def open_webhook(postmark):
-    return postmark.messages.outbound.Open(json=OPEN_WEBHOOK)
+    return postmark.messages.outbound.opens.Open(json=OPEN_WEBHOOK)
 
 
 INBOUND_WEBHOOK = '''{

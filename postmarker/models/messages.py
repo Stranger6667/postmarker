@@ -29,6 +29,9 @@ class OpensManager(ModelManager):
     def get(self, id, count=500, offset=0):
         return self.call('GET', '/messages/outbound/opens/%s' % id, count=count, offset=offset)
 
+    def Open(self, json):
+        return self.model.from_json(json, manager=self)
+
 
 class BaseMessage(Model):
 
@@ -84,9 +87,6 @@ class OutboundMessageManager(SubModelManager):
 
     def get_dump(self, id):
         return self.call('GET', '/messages/outbound/%s/dump' % id).get('Body')
-
-    def Open(self, json):
-        return self.model.from_json(json, manager=self)
 
 
 class InboundMessage(BaseMessage):

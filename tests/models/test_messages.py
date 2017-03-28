@@ -113,7 +113,13 @@ class TestAttachment:
         assert message.get_payload(decode=True) == b'This is attachment contents, base-64 encoded.'
 
 
-def test_opens(postmark):
-    open = postmark.messages.outbound.opens.all(count=1)[0]
-    assert isinstance(open, Open)
-    assert str(open) == 'Open from test@example.com'
+class TestOpens:
+
+    def test_model(self, postmark):
+        open = postmark.messages.outbound.opens.all(count=1)[0]
+        assert isinstance(open, Open)
+        assert str(open) == 'Open from test@example.com'
+
+    def test_webhook(self, open_webhook):
+        assert isinstance(open_webhook, Open)
+        assert str(open_webhook) == 'Open from john@example.com'
