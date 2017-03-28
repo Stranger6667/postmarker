@@ -7,7 +7,7 @@ import pytest
 from betamax import Betamax
 from betamax_serializers import pretty_json
 from postmarker.core import PostmarkClient
-from postmarker.webhooks import DeliveryWebhook
+from postmarker.models.emails import Delivery
 
 from ._compat import Mock, patch
 from .helpers import replace_real_credentials
@@ -257,4 +257,4 @@ DELIVERY_WEBHOOK = '''{
 
 @pytest.fixture
 def delivery_webhook():
-    return DeliveryWebhook(DELIVERY_WEBHOOK)
+    return Delivery.from_json(DELIVERY_WEBHOOK)

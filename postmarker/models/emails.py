@@ -248,6 +248,12 @@ class EmailBatch(Model):
         return sum(responses, [])
 
 
+class Delivery(Model):
+
+    def __str__(self):
+        return 'Delivery to %s' % self._data.get('Recipient')
+
+
 class EmailManager(ModelManager):
     """
     Sends emails via Postmark REST API.

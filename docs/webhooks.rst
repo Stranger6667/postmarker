@@ -24,14 +24,16 @@ It works in the same way as a regular ``InboundMessage``.
 Delivery
 --------
 
-For delivery webhook there is another wrapper - ``DeliveryWebhook`` with the same interface as above:
+For delivery webhook there is a wrapper - ``Delivery`` with the regular model interface as in any other model (e.g. ``InboundMessage``):
 
 .. code-block:: python
 
-    >>> from postmarker.webhooks import DeliveryWebhook
+    >>> from postmarker.models.emails import Delivery
     >>> with open('/path/to/raw_content.json') as fd:
             data = fd.read()
-    >>> hook = DeliveryWebhook(data)
+    >>> hook = Delivery.from_json(data)
+    >>> hook.Recipient
+    john@example.com
 
 Open
 ----

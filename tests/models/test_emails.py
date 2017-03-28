@@ -335,3 +335,9 @@ class TestEmail:
         email.attach(image)
         email.send()
         assert patched_request.call_args[1]['json']['Attachments'] == [expected]
+
+
+class TestDelivery:
+
+    def test_str(self, delivery_webhook):
+        assert str(delivery_webhook) == 'Delivery to john@example.com'
