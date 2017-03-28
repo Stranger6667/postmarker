@@ -95,14 +95,13 @@ For delivery webhook there is another wrapper - ``DeliveryWebhook`` with the sam
 Open
 ----
 
-For open webhook there is another wrapper - ``OpenWebhook`` with the same interface as above:
+Opens could be processed by ``postmark.messages.outbound.Open``:
 
 .. code-block:: python
 
-    >>> from postmarker.webhooks import OpenWebhook
     >>> with open('/path/to/raw_content.json') as fd:
             data = fd.read()
-    >>> hook = OpenWebhook(data)
+    >>> open = postmark.messages.outbound.Open(data)
 
 Bounce
 ------
@@ -114,7 +113,7 @@ It constructs new ``Bounce`` instance from given JSON string.
 
     >>> with open('/path/to/raw_content.json') as fd:
             data = fd.read()
-    >>> bounce = postmarker.bounces.Bounce(data)
+    >>> bounce = postmark.bounces.Bounce(data)
     >>> bounce.activate()
     'OK'
 

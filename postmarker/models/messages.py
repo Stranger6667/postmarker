@@ -81,6 +81,9 @@ class OutboundMessageManager(SubModelManager):
     def get_dump(self, id):
         return self.call('GET', '/messages/outbound/%s/dump' % id).get('Body')
 
+    def Open(self, json):
+        return self.model.from_json(json, manager=self)
+
 
 class InboundMessage(BaseMessage):
 

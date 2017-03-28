@@ -1,44 +1,7 @@
 # coding: utf-8
 import pytest
 
-from postmarker.webhooks import DeliveryWebhook, InboundWebhook, OpenWebhook
-
-
-OPEN_WEBHOOK = '''{
-  "FirstOpen": true,
-  "Client": {
-    "Name": "Chrome 35.0.1916.153",
-    "Company": "Google",
-    "Family": "Chrome"
-  },
-  "OS": {
-    "Name": "OS X 10.7 Lion",
-    "Company": "Apple Computer, Inc.",
-    "Family": "OS X 10"
-  },
-  "Platform": "WebMail",
-  "UserAgent": "Some UA string",
-  "ReadSeconds": 5,
-  "Geo": {
-    "CountryISOCode": "RS",
-    "Country": "Serbia",
-    "RegionISOCode": "VO",
-    "Region": "Autonomna Pokrajina Vojvodina",
-    "City": "Novi Sad",
-    "Zip": "21000",
-    "Coords": "45.2517,19.8369",
-    "IP": "188.2.95.4"
-  },
-  "MessageID": "883953f4-6105-42a2-a16a-77a8eac79483",
-  "ReceivedAt": "2014-06-01T12:00:00",
-  "Tag": "welcome-email",
-  "Recipient": "john@example.com"
-}'''
-
-
-@pytest.fixture
-def open_webhook():
-    return OpenWebhook(OPEN_WEBHOOK)
+from postmarker.webhooks import DeliveryWebhook, InboundWebhook
 
 
 DELIVERY_WEBHOOK = '''{

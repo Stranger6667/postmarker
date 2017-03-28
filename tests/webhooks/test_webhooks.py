@@ -6,8 +6,8 @@ import pytest
 
 from postmarker.webhooks import Attachment, InboundWebhook
 
-from ..conftest import BOUNCE_WEBHOOK
-from .conftest import DELIVERY_WEBHOOK, INBOUND_WEBHOOK, OPEN_WEBHOOK
+from ..conftest import BOUNCE_WEBHOOK, OPEN_WEBHOOK
+from .conftest import DELIVERY_WEBHOOK, INBOUND_WEBHOOK
 
 
 DECODED_HOOK = json.loads(INBOUND_WEBHOOK)
