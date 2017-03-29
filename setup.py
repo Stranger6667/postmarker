@@ -20,7 +20,7 @@ setup(
     name='postmarker',
     url='https://github.com/Stranger6667/postmarker',
     version=postmarker.__version__,
-    packages=['postmarker', 'postmarker.models'],
+    packages=['postmarker', 'postmarker.models', 'postmarker.django'],
     license='MIT',
     author='Dmitry Dygalo',
     author_email='dadygalo@gmail.com',

@@ -6,6 +6,11 @@ Changelog
 `Unreleased`_
 -------------
 
+Fixed
+~~~~~
+
+- Fix packaging issue.
+
 `0.9.0`_ - 2017-03-28
 ---------------------
 
