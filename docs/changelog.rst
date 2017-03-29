@@ -3,109 +3,176 @@
 Changelog
 =========
 
-0.9.0 - 28.03.2017
-------------------
+`Unreleased`_
+-------------
 
-- Added an ability to load all items without specifying exact `count` value. `#106`_
-- Added delivery webhook wrapper. `#95`_
-- Added open webhook wrapper. `#96`_
-- Added bounce webhook wrapper. `#97`_
-- Fixed PyPI package display. `#116`_
+`0.9.0`_ - 2017-03-28
+---------------------
+
+Added
+~~~~~
+
+- Ability to load all items without specifying exact `count` value. `#106`_
+- Delivery webhook wrapper. `#95`_
+- Open webhook wrapper. `#96`_
+- Bounce webhook wrapper. `#97`_
 
 Changed
 ~~~~~~~
 
 - ``postmarker.webhooks.InboundWebhook`` class was superseded by ``postmark.messages.inbound.InboundMessage`` constructor, which works in the same way.
 
-0.8.1 - 15.03.2017
-------------------
+Fixed
+~~~~~
 
-- Fixed needless requests when `count` is more than number of available items. `#107`_
+- Fix PyPI package display. `#116`_
 
-0.8.0 - 13.03.2017
-------------------
+`0.8.1`_ - 2017-03-15
+---------------------
 
-- Added an ability to download more than 500 items. `#70`_
-- Added `pre_send` and `post_send` Django signals. `#83`_
+Fixed
+~~~~~
+- Fix needless requests when `count` is more than number of available items. `#107`_
+
+`0.8.0`_ - 2017-03-13
+---------------------
+
+Added
+~~~~~
+
+- Ability to download more than 500 items. `#70`_
+- `pre_send` and `post_send` Django signals. `#83`_
 - Inbound rules triggers API. `#75`_
-- Changed logs output stream to default ``sys.stderr``. `#102`_
 - Tags triggers API. `#74`_
 
-0.7.2 - 11.03.2017
-------------------
+Changed
+~~~~~~~
 
-- Fixed Django backend crash with attachments. `#98`_
+- Output logs stream to default ``sys.stderr``. `#102`_
 
-0.7.1 - 10.03.2017
-------------------
+`0.7.2`_ - 2017-03-11
+---------------------
 
-- Added `VERBOSITY` option to the Django backend. `#92`_
+Fixed
+~~~~~
 
-0.7.0 - 02.03.2017
-------------------
+- Fix Django backend crash with attachments. `#98`_
+
+`0.7.1`_ - 2017-03-10
+---------------------
+
+Added
+~~~~~
+
+- `VERBOSITY` option to the Django backend. `#92`_
+
+`0.7.0`_ - 2017-03-02
+---------------------
+
+Added
+~~~~~
 
 - Stats API. (`#72`_)
 - Sender Signatures API. (`#73`_)
 - Messages API. (`#71`_)
 - Inbound webhook wrapper. (`#87`_)
 
-0.6.2 - 02.01.2017
-------------------
+`0.6.2`_ - 2017-01-02
+---------------------
 
-- Fixed Unicode string handling on Python 2. `#78`_
+Fixed
+~~~~~
+- Fix Unicode string handling on Python 2. `#78`_
 
-0.6.1 - 01.01.2017
-------------------
+`0.6.1`_ - 2017-01-01
+---------------------
 
-- Fixed handling of `quoted-printable` payload. `#76`_
+Fixed
+~~~~~
 
-0.6.0 - 05.12.2016
-------------------
+- Fix handling of `quoted-printable` payload. `#76`_
 
-- Support for link tracking. `#62`_
-- Better exceptions handling. `#50`_
-- Support for spam check API. `#57`_
+`0.6.0`_ - 2016-12-05
+---------------------
+
+Added
+~~~~~
+
+- Link tracking support. `#62`_
+- Spam check API support. `#57`_
 - Inline images support. `#52`_
 - Domains API. `#64`_
 
-0.5.3 - 27.10.2016
-------------------
+Changed
+~~~~~~~
+
+- Better exceptions handling. `#50`_
+
+`0.5.3`_ - 2016-10-27
+---------------------
+
+Added
+~~~~~
 
 - Tags for Django messages. `#59`_
 
-0.5.2 - 27.10.2016
-------------------
+`0.5.2`_ - 2016-10-27
+---------------------
 
-- Fixed headers decoding. `#60`_
+Fixed
+~~~~~
 
-0.5.1 - 18.10.2016
-------------------
+- Fix headers decoding. `#60`_
 
-- Fixed invalid messages count in email batches. `#55`_
+`0.5.1`_ - 2016-10-18
+---------------------
+
+Fixed
+~~~~~
+
+- Fix invalid messages count in email batches. `#55`_
+
+Changed
+~~~~~~~
+
 - Better Django support. `#51`_
 
-0.5.0 - 15.10.2016
-------------------
+`0.5.0`_ - 2016-10-15
+---------------------
+
+Added
+~~~~~
 
 - Status API. `#39`_
-- Add custom user agent. `#43`_
+- Custom user agent. `#43`_
 - Jython support. `#13`_
-- Handle more than 500 emails in batches. `#46`_
+- Handling more than 500 emails in batches. `#46`_
 - Templates API. `#15`_
 
-0.4.0 - 09.10.2016
-------------------
+`0.4.0`_ - 2016-10-09
+---------------------
 
+Added
+~~~~~
 - Python 3.2 support. `#38`_
-- Refactoring. ``ServerClient`` & ``AccountClient`` were removed. `#41`_
 
-0.3.1 - 08.10.2016
-------------------
+Removed
+~~~~~~~
+- ``ServerClient`` & ``AccountClient`` were removed. `#41`_
+
+`0.3.1`_ - 2016-10-08
+---------------------
+
+Changed
+~~~~~~~
 
 - Move repo.
 
-0.3.0 - 07.10.2016
-------------------
+`0.3.0`_ - 2016-10-07
+---------------------
+
+Added
+~~~~~
 
 - Pass extra settings to Django backend. `#29`_
 - Testing feature for ``Django`` backend. `#27`_
@@ -114,8 +181,11 @@ Changed
 - Improved attachments support. `#23`_
 - Improved MIME messages support. `#28`_
 
-0.2.0 - 07.10.2016
-------------------
+`0.2.0`_ - 2016-10-07
+---------------------
+
+Added
+~~~~~
 
 - Django email backend. `#16`_
 - Support for ``MIMEText`` sending. `#25`_
@@ -124,16 +194,38 @@ Changed
 - Improved attachments interface. `#18`_
 - Support for sending single email. `#11`_
 
-0.1.1 - 05.10.2016
-------------------
+`0.1.1`_ - 2016-10-05
+---------------------
 
-- Fixed packaging issue
+Fixed
+~~~~~
 
-0.1.0 - 05.10.2016
+- Fix packaging issue
+
+0.1.0 - 2016-10-05
 ------------------
 
 - Initial release.
 
+.. _Unreleased: https://github.com/Stranger6667/postmarker/compare/0.9.0...HEAD
+.. _0.9.0: https://github.com/Stranger6667/postmarker/compare/0.8.1...0.9.0
+.. _0.8.1: https://github.com/Stranger6667/postmarker/compare/0.8.0...0.8.1
+.. _0.8.0: https://github.com/Stranger6667/postmarker/compare/0.7.2...0.8.0
+.. _0.7.2: https://github.com/Stranger6667/postmarker/compare/0.7.1...0.7.2
+.. _0.7.1: https://github.com/Stranger6667/postmarker/compare/0.7.0...0.7.1
+.. _0.7.0: https://github.com/Stranger6667/postmarker/compare/0.6.2...0.7.0
+.. _0.6.2: https://github.com/Stranger6667/postmarker/compare/0.6.1...0.6.2
+.. _0.6.1: https://github.com/Stranger6667/postmarker/compare/0.6.0...0.6.1
+.. _0.6.0: https://github.com/Stranger6667/postmarker/compare/0.5.3...0.6.0
+.. _0.5.3: https://github.com/Stranger6667/postmarker/compare/0.5.2...0.5.3
+.. _0.5.2: https://github.com/Stranger6667/postmarker/compare/0.5.1...0.5.2
+.. _0.5.1: https://github.com/Stranger6667/postmarker/compare/0.5.0...0.5.1
+.. _0.5.0: https://github.com/Stranger6667/postmarker/compare/0.4.0...0.5.0
+.. _0.4.0: https://github.com/Stranger6667/postmarker/compare/0.3.1...0.4.0
+.. _0.3.1: https://github.com/Stranger6667/postmarker/compare/0.3.0...0.3.1
+.. _0.3.0: https://github.com/Stranger6667/postmarker/compare/0.2.0...0.3.0
+.. _0.2.0: https://github.com/Stranger6667/postmarker/compare/0.1.1...0.2.0
+.. _0.1.1: https://github.com/Stranger6667/postmarker/compare/0.1.0...0.1.1
 
 .. _#116: https://github.com/Stranger6667/postmarker/issues/116
 .. _#107: https://github.com/Stranger6667/postmarker/issues/107
