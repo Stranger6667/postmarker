@@ -6,6 +6,11 @@ Changelog
 `Unreleased`_
 -------------
 
+Added
+~~~~~
+
+- Short-circuit send of empty batches in `Django` backend. `#123`_
+
 `0.9.2`_ - 2017-03-29
 ---------------------
 
@@ -245,6 +250,7 @@ Fixed
 .. _0.2.0: https://github.com/Stranger6667/postmarker/compare/0.1.1...0.2.0
 .. _0.1.1: https://github.com/Stranger6667/postmarker/compare/0.1.0...0.1.1
 
+.. _#123: https://github.com/Stranger6667/postmarker/issues/123
 .. _#116: https://github.com/Stranger6667/postmarker/issues/116
 .. _#107: https://github.com/Stranger6667/postmarker/issues/107
 .. _#106: https://github.com/Stranger6667/postmarker/issues/106
