@@ -53,6 +53,8 @@ class EmailBackend(BaseEmailBackend):
             self.client = None
 
     def send_messages(self, email_messages):
+        if not email_messages:
+            return
         try:
             client_created = self.open()
             prepared_messages = [self.prepare_message(message) for message in email_messages]

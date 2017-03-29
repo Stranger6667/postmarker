@@ -5,13 +5,16 @@ import pytest
 from django import VERSION
 from django.core import mail
 from django.core.exceptions import ImproperlyConfigured
-from django.core.mail import EmailMultiAlternatives, send_mail
+from django.core.mail import EmailMultiAlternatives, send_mail, send_mass_mail
 from requests import Response
 
 from postmarker.core import TEST_TOKEN
 from postmarker.django import EmailBackend
 from postmarker.django.signals import post_send, pre_send
 from postmarker.models.emails import Email
+
+
+from .._compat import patch
 
 
 pytestmark = pytest.mark.usefixtures('outbox')
@@ -49,6 +52,12 @@ def test_send_mail(patched_request, settings):
         'From': 'sender@example.com'
     }, )
     assert patched_request.call_args[1]['headers']['X-Postmark-Server-Token'] == settings.POSTMARK['TOKEN']
+
+
+def test_send_mass():
+    with patch('postmarker.models.emails.EmailBatch.send') as send:
+        assert send_mass_mail([]) is None
+        assert not send.called
 
 
 def test_send_mail_with_attachment(patched_request):
