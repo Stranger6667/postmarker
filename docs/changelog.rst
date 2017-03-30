@@ -16,6 +16,7 @@ Changed
 
 - ``OutboundMessageManager.get_details`` and ``InboundMessageManager.get_details`` were methods were renamed to ``get``.
   Now they returns ``OutboundMessage`` and ``InboundMessage`` instances respectively. `#125`_
+- Renamed ``token`` kwarg in `PostmarkClient` to ``server_token``. `#130`_
 
 Fixed
 ~~~~~
@@ -262,6 +263,7 @@ Fixed
 .. _0.2.0: https://github.com/Stranger6667/postmarker/compare/0.1.1...0.2.0
 .. _0.1.1: https://github.com/Stranger6667/postmarker/compare/0.1.0...0.1.1
 
+.. _#130: https://github.com/Stranger6667/postmarker/issues/130
 .. _#128: https://github.com/Stranger6667/postmarker/issues/128
 .. _#125: https://github.com/Stranger6667/postmarker/issues/125
 .. _#123: https://github.com/Stranger6667/postmarker/issues/123

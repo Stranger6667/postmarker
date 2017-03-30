@@ -28,10 +28,10 @@ class EmailBackend(BaseEmailBackend):
         super(EmailBackend, self).__init__(fail_silently=fail_silently)
         self.client = None
         if self.get_option('TEST_MODE'):
-            self.token = TEST_TOKEN
+            self.server_token = TEST_TOKEN
         else:
-            self.token = token or self.get_option('TOKEN')
-            if self.token is None:
+            self.server_token = token or self.get_option('TOKEN')
+            if self.server_token is None:
                 raise ImproperlyConfigured('You should specify TOKEN to use Postmark email backend')
 
     @property
@@ -43,7 +43,7 @@ class EmailBackend(BaseEmailBackend):
 
     def open(self):
         if self.client is None:
-            self.client = PostmarkClient(token=self.token, verbosity=self.get_option('VERBOSITY'))
+            self.client = PostmarkClient(server_token=self.server_token, verbosity=self.get_option('VERBOSITY'))
             return True
         return False
 
