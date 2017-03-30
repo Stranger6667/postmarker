@@ -106,7 +106,7 @@ class SubModelManager(ModelManager):
     """
     Works with multiple model managers. Example:
 
-    >>> postmark = PostmarkClient(token='TEST')
+    >>> postmark = PostmarkClient(server_token='TEST')
     >>> postmark.messages.outbound.all()
     []
     """

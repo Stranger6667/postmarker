@@ -36,7 +36,7 @@ Send single email:
 .. code-block:: python
 
     >>> from postmarker.core import PostmarkClient
-    >>> postmark = PostmarkClient(token='API_TOKEN')
+    >>> postmark = PostmarkClient(server_token='API_TOKEN')
     >>> postmark.emails.send(
         From='sender@example.com',
         To='receiver@example.com',

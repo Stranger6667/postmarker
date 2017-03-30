@@ -41,21 +41,21 @@ class PostmarkClient(object):
         TriggersManager,
     )
 
-    def __init__(self, token=None, account_token=None, verbosity=0):
-        assert token, 'You have to provide token to use Postmark API'
-        self.token = token
+    def __init__(self, server_token=None, account_token=None, verbosity=0):
+        assert server_token, 'You have to provide token to use Postmark API'
+        self.server_token = server_token
         self.account_token = account_token
         self.logger = get_logger('Postmarker', verbosity)
         self._setup_managers()
 
     def __repr__(self):
-        return '<%s: %s>' % (self.__class__.__name__, self.token)
+        return '<%s: %s>' % (self.__class__.__name__, self.server_token)
 
     def _setup_managers(self):
         """
         Allows to access manager by model name.
 
-        >>> postmark = PostmarkClient(token='TEST')
+        >>> postmark = PostmarkClient(server_token='TEST')
         >>> postmark.bounces
         <BounceManager>
         """
@@ -75,7 +75,7 @@ class PostmarkClient(object):
             token = self.account_token
         else:
             header = 'X-Postmark-Server-Token'
-            token = self.token
+            token = self.server_token
         return self._call(
             method,
             DEFAULT_API,

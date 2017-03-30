@@ -77,7 +77,7 @@ def account_token():
 
 @pytest.fixture(scope='session')
 def postmark(server_token, account_token):
-    return PostmarkClient(token=server_token, account_token=account_token)
+    return PostmarkClient(server_token=server_token, account_token=account_token)
 
 
 @pytest.fixture(scope='session')
