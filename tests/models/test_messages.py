@@ -40,7 +40,7 @@ class TestOutboundMessages:
         assert str(outbound_message) == 'Sent message to test@example.com'
 
     def test_get_details(self, outbound_message):
-        assert outbound_message.get_details()['Body'] == 'Body example'
+        assert outbound_message.get().Body == 'Body example'
 
     def test_get_dump(self, outbound_message):
         assert outbound_message.get_dump() == 'Body example'
@@ -62,7 +62,7 @@ class TestInboundMessages:
 
     def test_get_details(self, inbound_message):
         with not_found():
-            inbound_message.get_details()
+            inbound_message.get()
 
     def test_bypass(self, inbound_message):
         with not_found('[701] This message was not found or cannot be bypassed.'):

@@ -11,6 +11,12 @@ Added
 
 - Short-circuit send of empty batches in `Django` backend. `#123`_
 
+Changed
+~~~~~~~
+
+- ``OutboundMessageManager.get_details`` and ``InboundMessageManager.get_details`` were methods were renamed to ``get``.
+  Now they returns ``OutboundMessage`` and ``InboundMessage`` instances respectively.
+
 `0.9.2`_ - 2017-03-29
 ---------------------
 
