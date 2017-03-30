@@ -2,7 +2,7 @@
 import requests
 
 from . import __version__
-from ._compat import urljoin, with_metaclass
+from ._compat import urljoin
 from .exceptions import ClientError, SpamAssassinError
 from .logging import get_logger
 from .models.bounces import BounceManager
@@ -15,7 +15,6 @@ from .models.stats import StatsManager
 from .models.status import StatusManager
 from .models.templates import TemplateManager
 from .models.triggers import TriggersManager
-from .utils import ManageableMeta
 
 
 DEFAULT_API = 'https://api.postmarkapp.com/'
@@ -25,7 +24,7 @@ USER_AGENT = 'Postmarker/%s' % __version__
 TEST_TOKEN = 'POSTMARK_API_TEST'
 
 
-class PostmarkClient(with_metaclass(ManageableMeta)):
+class PostmarkClient(object):
     """
     Basic class for API clients. Provides basic functionality to make requests.
     """
