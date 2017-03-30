@@ -1,7 +1,7 @@
 # coding=utf-8
 
 
-class PostmarkerException(BaseException):
+class PostmarkerException(Exception):
     """
     Base class for all exceptions in Postmarker.
     """

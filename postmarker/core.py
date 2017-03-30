@@ -114,5 +114,8 @@ class PostmarkClient(object):
             response.raise_for_status()
         except requests.HTTPError:
             data = response.json()
-            message = '[%s] %s' % (data['ErrorCode'], data['Message'])
+            message = self.format_exception_message(data)
             raise ClientError(message, error_code=data['ErrorCode'])
+
+    def format_exception_message(self, data):
+        return '[%s] %s' % (data['ErrorCode'], data['Message'])
