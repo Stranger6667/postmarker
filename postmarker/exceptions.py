@@ -7,12 +7,6 @@ class PostmarkerException(BaseException):
     """
 
 
-class ConfigError(PostmarkerException):
-    """
-    Indicates that some entities have invalid configuration.
-    """
-
-
 class ClientError(PostmarkerException):
     """
     Indicates client's error.

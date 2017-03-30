@@ -1,8 +1,7 @@
 # coding: utf-8
 from json import loads
 
-from .._compat import with_metaclass
-from ..utils import ManageableMeta, sizes
+from ..utils import sizes
 
 
 class Model(object):
@@ -103,7 +102,7 @@ class ModelManager(object):
         return kwargs
 
 
-class SubModelManager(with_metaclass(ManageableMeta, ModelManager)):
+class SubModelManager(ModelManager):
     """
     Works with multiple model managers. Example:
 
