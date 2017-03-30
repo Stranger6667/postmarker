@@ -2,7 +2,7 @@
 import pytest
 
 from postmarker.core import USER_AGENT, PostmarkClient
-from postmarker.models.messages import OutboundMessageManager, MessageManager
+from postmarker.models.messages import MessageManager, OutboundMessageManager
 from postmarker.models.triggers import TriggersManager
 
 
