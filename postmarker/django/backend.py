@@ -5,8 +5,10 @@ from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 from django.core.mail import EmailMessage, EmailMultiAlternatives
 from django.core.mail.backends.base import BaseEmailBackend
+from django.utils.functional import partition
 
 from ..core import TEST_TOKEN, PostmarkClient
+from ..exceptions import PostmarkerException
 from .signals import post_send, pre_send
 
 
@@ -55,19 +57,34 @@ class EmailBackend(BaseEmailBackend):
     def send_messages(self, email_messages):
         if not email_messages:
             return
+        msg_count = 0
         try:
             client_created = self.open()
             prepared_messages = [self.prepare_message(message) for message in email_messages]
             pre_send.send_robust(self.__class__, messages=prepared_messages)
-            response = self.client.emails.send_batch(*prepared_messages, TrackOpens=self.get_option('TRACK_OPENS'))
-            post_send.send_robust(self.__class__, messages=prepared_messages, response=response)
-            msg_count = len([1 for chunk in response if chunk['ErrorCode'] == 0])
+            responses = self.client.emails.send_batch(*prepared_messages, TrackOpens=self.get_option('TRACK_OPENS'))
+            post_send.send_robust(self.__class__, messages=prepared_messages, response=responses)
+            sent, not_sent = partition(lambda x: x['ErrorCode'] != 0, responses)
+            msg_count = len(sent)
+            if not_sent:
+                self.raise_for_response(not_sent)
             if client_created:
                 self.close()
-            return msg_count
         except Exception:
             if not self.fail_silently:
                 raise
+        return msg_count
+
+    def raise_for_response(self, responses):
+        """
+        Constructs appropriate exception from list of responses and raises it.
+        """
+        exception_messages = [self.client.format_exception_message(response) for response in responses]
+        if len(exception_messages) == 1:
+            message = exception_messages[0]
+        else:
+            message = '[%s]' % ', '.join(exception_messages)
+        raise PostmarkerException(message)
 
     def prepare_message(self, message):
         instance = message.message()

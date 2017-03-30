@@ -9,7 +9,7 @@ Changelog
 Added
 ~~~~~
 
-- Short-circuit send of empty batches in `Django` backend. `#123`_
+- Short-circuit send of empty batches in Django backend. `#123`_
 
 Changed
 ~~~~~~~
@@ -21,6 +21,7 @@ Fixed
 ~~~~~
 
 - Fix counting of successfully sent messages in Django backend. `#122`_
+- Propagate API exceptions in Django backend. `#128`_
 
 `0.9.2`_ - 2017-03-29
 ---------------------
@@ -261,6 +262,7 @@ Fixed
 .. _0.2.0: https://github.com/Stranger6667/postmarker/compare/0.1.1...0.2.0
 .. _0.1.1: https://github.com/Stranger6667/postmarker/compare/0.1.0...0.1.1
 
+.. _#128: https://github.com/Stranger6667/postmarker/issues/128
 .. _#125: https://github.com/Stranger6667/postmarker/issues/125
 .. _#123: https://github.com/Stranger6667/postmarker/issues/123
 .. _#122: https://github.com/Stranger6667/postmarker/issues/122

@@ -1,6 +1,8 @@
 # coding: utf-8
 from __future__ import unicode_literals
 
+from contextlib import contextmanager
+
 import pytest
 from django import VERSION
 from django.core import mail
@@ -11,6 +13,7 @@ from requests import Response
 from postmarker.core import TEST_TOKEN
 from postmarker.django import EmailBackend
 from postmarker.django.signals import post_send, pre_send
+from postmarker.exceptions import PostmarkerException
 from postmarker.models.emails import Email
 
 
@@ -54,12 +57,6 @@ def test_send_mail(patched_request, settings):
     assert patched_request.call_args[1]['headers']['X-Postmark-Server-Token'] == settings.POSTMARK['TOKEN']
 
 
-def test_send_mass():
-    with patch('postmarker.models.emails.EmailBatch.send') as send:
-        assert send_mass_mail([]) is None
-        assert not send.called
-
-
 EXAMPLE_BATCH_RESPONSE = [
     {
         "ErrorCode": 0,
@@ -78,12 +75,42 @@ EXAMPLE_BATCH_RESPONSE = [
 ]
 
 
-def test_sent_messages_count():
-    with patch('postmarker.models.emails.EmailBatch.send', return_value=EXAMPLE_BATCH_RESPONSE):
-        assert send_mass_mail([
-            ('Subject', 'Body', 'sender@example.com', ['receiver@example.com']),
-            ('Subject', 'Body', 'sender@example.com', ['invalid@example.com'])
-        ]) == 1
+class TestMassSend:
+    messages = [
+        ('Subject', 'Body', 'sender@example.com', ['receiver@example.com']),
+        ('Subject', 'Body', 'sender@example.com', ['invalid@example.com'])
+    ]
+
+    @pytest.fixture
+    def batch_send(self):
+
+        @contextmanager
+        def manager(return_value=EXAMPLE_BATCH_RESPONSE):
+            with patch('postmarker.models.emails.EmailBatch.send', return_value=return_value) as send:
+                yield send
+
+        return manager
+
+    def test_send_mass(self, batch_send):
+        with batch_send() as send:
+            assert send_mass_mail([]) is None
+            assert not send.called
+
+    def test_sent_messages_count(self, batch_send):
+        with batch_send():
+            assert send_mass_mail(self.messages, fail_silently=True) == 1
+
+    def test_single_exception_propagation(self, batch_send):
+        with batch_send():
+            with pytest.raises(PostmarkerException) as exc:
+                send_mass_mail(self.messages, fail_silently=False)
+            assert str(exc.value) == '[406] Bla bla, inactive recipient'
+
+    def test_multiple_exceptions_propagation(self, batch_send):
+        with batch_send(EXAMPLE_BATCH_RESPONSE * 2):
+            with pytest.raises(PostmarkerException) as exc:
+                send_mass_mail(self.messages * 2, fail_silently=False)
+            assert str(exc.value) == '[[406] Bla bla, inactive recipient, [406] Bla bla, inactive recipient]'
 
 
 def test_send_mail_with_attachment(patched_request):
