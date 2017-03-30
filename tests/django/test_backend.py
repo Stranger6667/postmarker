@@ -60,6 +60,32 @@ def test_send_mass():
         assert not send.called
 
 
+EXAMPLE_BATCH_RESPONSE = [
+    {
+        "ErrorCode": 0,
+        "Message": "OK",
+        "MessageID": "b7bc2f4a-e38e-4336-af7d-e6c392c2f817",
+        "SubmittedAt": "2010-11-26T12:01:05.1794748-05:00",
+        "To": "receiver@example.com"
+    },
+    {
+        "ErrorCode": 406,
+        "Message": "Bla bla, inactive recipient",
+        "MessageID": "e2ecbbfc-fe12-463d-b933-9fe22915106d",
+        "SubmittedAt": "2010-11-26T12:01:05.1794748-05:00",
+        "To": "invalid@example.com"
+    }
+]
+
+
+def test_sent_messages_count():
+    with patch('postmarker.models.emails.EmailBatch.send', return_value=EXAMPLE_BATCH_RESPONSE):
+        assert send_mass_mail([
+            ('Subject', 'Body', 'sender@example.com', ['receiver@example.com']),
+            ('Subject', 'Body', 'sender@example.com', ['invalid@example.com'])
+        ]) == 1
+
+
 def test_send_mail_with_attachment(patched_request):
     """
     Test sending email with attachment

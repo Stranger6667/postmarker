@@ -61,7 +61,7 @@ class EmailBackend(BaseEmailBackend):
             pre_send.send_robust(self.__class__, messages=prepared_messages)
             response = self.client.emails.send_batch(*prepared_messages, TrackOpens=self.get_option('TRACK_OPENS'))
             post_send.send_robust(self.__class__, messages=prepared_messages, response=response)
-            msg_count = len(response)
+            msg_count = len([1 for chunk in response if chunk['ErrorCode'] == 0])
             if client_created:
                 self.close()
             return msg_count
