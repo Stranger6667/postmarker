@@ -8,6 +8,8 @@ from postmarker.exceptions import ClientError
 from postmarker.models.base import ModelManager
 from postmarker.models.messages import Attachment, InboundMessage, Open, OutboundMessage
 
+from .._compat import patch
+
 
 CASSETTE_NAME = 'messages'
 
@@ -39,8 +41,8 @@ class TestOutboundMessages:
         assert isinstance(outbound_message, OutboundMessage)
         assert str(outbound_message) == 'Sent message to test@example.com'
 
-    def test_get_details(self, outbound_message):
-        assert outbound_message.get_details()['Body'] == 'Body example'
+    def test_get(self, outbound_message):
+        assert outbound_message.get().Body == 'Body example'
 
     def test_get_dump(self, outbound_message):
         assert outbound_message.get_dump() == 'Body example'
@@ -60,9 +62,10 @@ class TestInboundMessages:
         assert isinstance(inbound_message, InboundMessage)
         assert str(inbound_message) == 'Blocked message from test@example.com'
 
-    def test_get_details(self, inbound_message):
-        with not_found():
-            inbound_message.get_details()
+    def test_get(self, inbound_message):
+        with patch.object(inbound_message._manager, 'call', return_value=inbound_message.as_dict()):
+            instance = inbound_message.get()
+        assert isinstance(instance, InboundMessage)
 
     def test_bypass(self, inbound_message):
         with not_found('[701] This message was not found or cannot be bypassed.'):

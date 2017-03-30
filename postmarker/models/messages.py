@@ -35,8 +35,8 @@ class OpensManager(ModelManager):
 
 class BaseMessage(Model):
 
-    def get_details(self):
-        return self._manager.get_details(self.MessageID)
+    def get(self):
+        return self._manager.get(self.MessageID)
 
 
 class OutboundMessage(BaseMessage):
@@ -82,8 +82,9 @@ class OutboundMessageManager(SubModelManager):
         )
         return self.expand_responses(responses, 'Messages')
 
-    def get_details(self, id):
-        return self.call('GET', '/messages/outbound/%s/details' % id)
+    def get(self, id):
+        response = self.call('GET', '/messages/outbound/%s/details' % id)
+        return self._init_instance(response)
 
     def get_dump(self, id):
         return self.call('GET', '/messages/outbound/%s/dump' % id).get('Body')
@@ -169,8 +170,9 @@ class InboundMessageManager(ModelManager):
         )
         return self.expand_responses(responses, 'InboundMessages')
 
-    def get_details(self, id):
-        return self.call('GET', '/messages/inbound/%s/details' % id)
+    def get(self, id):
+        response = self.call('GET', '/messages/inbound/%s/details' % id)
+        return self._init_instance(response)
 
     def bypass(self, id):
         return self.call('PUT', '/messages/inbound/%s/bypass' % id)
