@@ -60,7 +60,9 @@ def test_send_mail(patched_request, settings):
 @pytest.mark.parametrize('kwarg, key', (
     ('bcc', 'Bcc'),
     ('cc', 'Cc'),
-    ('reply_to', 'ReplyTo'),
+    pytest.mark.skipif(VERSION[:2] < (1, 7), reason='Django < 1.7 doesn\'t support `reply_to`')(
+        ('reply_to', 'ReplyTo')
+    ),
 ))
 def test_reply_to_cc_bcc(patched_request, kwarg, key):
     message = mail.EmailMessage(
