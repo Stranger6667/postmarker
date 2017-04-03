@@ -57,6 +57,20 @@ def test_send_mail(patched_request, settings):
     assert patched_request.call_args[1]['headers']['X-Postmark-Server-Token'] == settings.POSTMARK['TOKEN']
 
 
+@pytest.mark.parametrize('kwarg, key', (
+    ('bcc', 'Bcc'),
+    ('cc', 'Cc'),
+    ('reply_to', 'ReplyTo'),
+))
+def test_reply_to_cc_bcc(patched_request, kwarg, key):
+    message = mail.EmailMessage(
+        'Subject', 'Body', 'sender@example.com', ['receiver@example.com'],
+        **{kwarg: ['r1@example.com', 'r2@example.com']}
+    )
+    message.send()
+    assert patched_request.call_args[1]['json'][0][key] == 'r1@example.com, r2@example.com'
+
+
 EXAMPLE_BATCH_RESPONSE = [
     {
         "ErrorCode": 0,

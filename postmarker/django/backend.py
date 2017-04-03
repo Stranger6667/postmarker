@@ -5,6 +5,7 @@ from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 from django.core.mail import EmailMessage, EmailMultiAlternatives
 from django.core.mail.backends.base import BaseEmailBackend
+from django.utils.encoding import force_text
 from django.utils.functional import partition
 
 from ..core import TEST_TOKEN, PostmarkClient
@@ -89,6 +90,8 @@ class EmailBackend(BaseEmailBackend):
     def prepare_message(self, message):
         instance = message.message()
         instance.tag = getattr(message, 'tag', None)
+        if message.bcc:
+            instance['Bcc'] = ', '.join(map(force_text, message.bcc))
         return instance
 
 
