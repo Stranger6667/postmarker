@@ -32,10 +32,6 @@ class Bounce(MessageModel):
         self._update(response['Bounce'])
         return response['Message']
 
-    @property
-    def message(self):
-        return self._manager.client.messages.outbound.get(self.MessageID)
-
 
 class BounceManager(ModelManager):
     """
