@@ -14,7 +14,7 @@ class TestClient:
             'GET',
             'https://api.postmarkapp.com/endpoint',
             headers={'X-Postmark-Server-Token': server_token, 'Accept': 'application/json', 'User-Agent': USER_AGENT},
-            params={}, json=None,
+            params={}, json=None, timeout=None
         )
 
     def test_no_token(self):
