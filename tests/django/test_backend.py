@@ -8,11 +8,11 @@ from django import VERSION
 from django.core import mail
 from django.core.exceptions import ImproperlyConfigured
 from django.core.mail import EmailMultiAlternatives, send_mail, send_mass_mail
-from requests import Response
+from requests import ConnectTimeout, Response
 
 from postmarker.core import TEST_TOKEN
 from postmarker.django import EmailBackend
-from postmarker.django.signals import post_send, pre_send
+from postmarker.django.signals import on_exception, post_send, pre_send
 from postmarker.exceptions import PostmarkerException
 from postmarker.models.emails import Email
 
@@ -355,3 +355,14 @@ class TestSignals:
             'SubmittedAt': '2016-10-06T10:05:30.570118-04:00',
             'To': 'receiver@example.com'
         }]
+
+    def test_on_exception(self, catch_signal):
+        with patch('requests.Session.request', side_effect=ConnectTimeout):
+            with catch_signal(on_exception) as handler:
+                send_mail(fail_silently=True, **SEND_KWARGS)
+        assert handler.called
+        kwargs = handler.call_args[1]
+        assert kwargs['sender'] == EmailBackend
+        assert kwargs['signal'] == on_exception
+        assert isinstance(kwargs['exception'], ConnectTimeout)
+        assert len(kwargs['raw_messages']) == 1

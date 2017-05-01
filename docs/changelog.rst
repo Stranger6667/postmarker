@@ -11,6 +11,7 @@ Added
 
 - ``message`` property for ``Bounce``, ``Delivery`` and ``Open`` classes to access corresponding ``OutboundMessage`` instance. `#119`_
 - An ability to control timeout and retries behaviour. `#82`_
+- Signal for exceptions in Django backend. `#126`_
 
 `0.10.1`_ - 2017-04-03
 ----------------------
@@ -285,6 +286,7 @@ Fixed
 .. _#135: https://github.com/Stranger6667/postmarker/issues/135
 .. _#130: https://github.com/Stranger6667/postmarker/issues/130
 .. _#128: https://github.com/Stranger6667/postmarker/issues/128
+.. _#126: https://github.com/Stranger6667/postmarker/issues/126
 .. _#125: https://github.com/Stranger6667/postmarker/issues/125
 .. _#123: https://github.com/Stranger6667/postmarker/issues/123
 .. _#122: https://github.com/Stranger6667/postmarker/issues/122
