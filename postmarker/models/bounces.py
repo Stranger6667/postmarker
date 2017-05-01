@@ -3,10 +3,10 @@
 Information about bounces is available via the :py:class:`~postmarker.models.bounces.BounceManager`,
 which is an attribute of ``postmark`` instance.
 """
-from .base import Model, ModelManager
+from .base import MessageModel, ModelManager
 
 
-class Bounce(Model):
+class Bounce(MessageModel):
     """
     Bounce model.
     """
@@ -31,6 +31,10 @@ class Bounce(Model):
         response = self._manager.activate(self.ID)
         self._update(response['Bounce'])
         return response['Message']
+
+    @property
+    def message(self):
+        return self._manager.client.messages.outbound.get(self.MessageID)
 
 
 class BounceManager(ModelManager):

@@ -12,7 +12,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
 from ..utils import chunks
-from .base import Model, ModelManager
+from .base import MessageModel, Model, ModelManager
 
 
 if sys.version_info[:2] <= (3, 2):
@@ -248,7 +248,7 @@ class EmailBatch(Model):
         return sum(responses, [])
 
 
-class Delivery(Model):
+class Delivery(MessageModel):
 
     def __str__(self):
         return 'Delivery to %s' % self._data.get('Recipient')

@@ -49,3 +49,11 @@ Or you can get an SMTP dump if it is available.
 
     >>> bounce.dump
     'A lot of text'
+
+Also, you can access to corresponding ``OutboundMessage`` instance via ``message`` property.
+
+
+.. code-block:: python
+
+    >>> bounce.message
+    <Sent message to test@example.com>

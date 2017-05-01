@@ -769,6 +769,68 @@
         },
         "url": "https://api.postmarkapp.com/bounces/?count=1&offset=1"
       }
+    },
+    {
+      "recorded_at": "2017-05-01T10:04:35",
+      "request": {
+        "body": {
+          "base64_string": "",
+          "encoding": "utf-8"
+        },
+        "headers": {
+          "Accept": [
+            "application/json"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "Postmarker/0.10.1"
+          ],
+          "X-Postmark-Server-Token": [
+            "80c543fe-56ec-45b9-bc0a-cb0538a086a5"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://api.postmarkapp.com/messages/outbound/086415ac-9326-4ddb-9d95-c0d8db13532b/details"
+      },
+      "response": {
+        "body": {
+          "base64_string": "H4sIAD4LB1kC/4WR3W6CQBCFX4XMNRgWEGTTNNVqYxNtk8qdeLEsQ0uVn8BibIzv3lkkjUmb9Gpnd+bsfGfmDFEj5P61xrIFrpoOTXhDifkR06kCDo7NAsv2LBZEzOOOy1135PqebXs+PXPbBhM2XfKJUldH2CqjHa4mLFVxmFXpF2WW0XplJDo2YSYl8O3OhDW2rXjHxRFLRe235396j/2RH4ShN3F+es9RifxA4jPMqq6U+DwnJbNdd+wHTjDu8YpCNBpCSJVXJTcykmAaN3EJFxOirxopeZWn0A8gr3NioldFjh7wJIr6gCNZFXAh7qeGAg5x7zcG405XObdl99rm1bk+DFmVSn9INEqojnhhc70PM+ixpcyYN8lCS0xYYnkylJYIfNdyQ+Zk6DAWBglJoqqf1aIgG38hmvAiCm2ph+0XvMrLvW6qNzIt0whP6taoHv7vf0j8OGxqqpSQH8VQurt8A8DW/iU4AgAA",
+          "encoding": "utf-8"
+        },
+        "headers": {
+          "Cache-Control": [
+            "private"
+          ],
+          "Content-Encoding": [
+            "gzip"
+          ],
+          "Content-Length": [
+            "760"
+          ],
+          "Content-Type": [
+            "application/json; charset=utf-8"
+          ],
+          "Date": [
+            "Mon, 01 May 2017 10:04:35 GMT"
+          ],
+          "Server": [
+            "unicorns-double-rainbow"
+          ],
+          "X-Powered-By": [
+            "ASP.NET"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": "OK"
+        },
+        "url": "https://api.postmarkapp.com/messages/outbound/086415ac-9326-4ddb-9d95-c0d8db13532b/details"
+      }
     }
   ],
   "recorded_with": "betamax/0.8.0"

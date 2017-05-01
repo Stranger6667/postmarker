@@ -120,3 +120,10 @@ class SubModelManager(ModelManager):
         for manager_class in self._managers:
             instance = manager_class(self.client)
             setattr(self, instance.name, instance)
+
+
+class MessageModel(Model):
+
+    @property
+    def message(self):
+        return self._manager.client.messages.outbound.get(self.MessageID)
