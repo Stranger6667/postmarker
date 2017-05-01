@@ -11,7 +11,6 @@ MOCK_SEND_RESPONSE = b'{"ErrorCode": 0, "To": "receiver@example.com", "Submitted
                      b' "MessageID": "96a981da-9b7c-4aa9-bda2-84ab99097686"}'
 
 
-@pytest.mark.gen_test
 class TestPostmarkMixin:
 
     @pytest.fixture(autouse=True)
@@ -21,7 +20,7 @@ class TestPostmarkMixin:
         self.patched_request = patched_request
 
     def assert_response(self, url, body):
-        response = yield self.http_client.fetch(url)
+        response = self.http_client.fetch(url)
         assert response.code == 200
         assert response.body == body
 
@@ -36,3 +35,7 @@ class TestPostmarkMixin:
     def test_handlers(self, url, response, expected):
         self.set_postmark_response(response)
         self.assert_response(url, expected)
+
+    def test_reuse_client(self):
+        self.set_postmark_response('')
+        self.assert_response('/reuse/', b'True')
