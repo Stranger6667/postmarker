@@ -10,7 +10,7 @@ from django.utils.functional import partition
 
 from ..core import TEST_TOKEN, PostmarkClient
 from ..exceptions import PostmarkerException
-from .signals import post_send, pre_send
+from .signals import on_exception, post_send, pre_send
 
 
 DEFAULT_CONFIG = {
@@ -71,7 +71,8 @@ class EmailBackend(BaseEmailBackend):
                 self.raise_for_response(not_sent)
             if client_created:
                 self.close()
-        except Exception:
+        except Exception as exc:
+            on_exception.send_robust(self.__class__, raw_messages=email_messages, exception=exc)
             if not self.fail_silently:
                 raise
         return msg_count

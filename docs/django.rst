@@ -65,10 +65,12 @@ You can get the same feature for your own classes with ``PostmarkEmailMixin``.
 Signals
 =======
 
-There are two signals, which are emitted:
+There are three signals, which are emitted:
 
-- ``postmarker.django.pre_send`` is emitted just before the send
-- ``postmarker.django.post_send`` is emitted just after the send
+- ``postmarker.django.pre_send`` is emitted just before the send;
+- ``postmarker.django.post_send`` is emitted just after the send;
+- ``postmarker.django.on_exception`` is emitted in case of exception.
 
-Both signals contain ``messages`` kwarg which contains all MIME messages, that are sent.
+``pre_send`` and ``post_send`` signals contain ``messages`` kwarg which contains all MIME messages, that are sent.
 ``post_send`` signal has ``response`` kwargs, which contains decoded response from Postmark.
+``on_exception`` contains not prepared email instances in ``raw_messages`` kwarg and exception instance in ``exception``.
