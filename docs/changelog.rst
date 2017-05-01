@@ -10,6 +10,7 @@ Added
 ~~~~~
 
 - ``message`` property for ``Bounce``, ``Delivery`` and ``Open`` classes to access corresponding ``OutboundMessage`` instance. `#119`_
+- An ability to control timeout and retries behaviour. `#82`_
 
 `0.10.1`_ - 2017-04-03
 ----------------------
@@ -299,6 +300,7 @@ Fixed
 .. _#92: https://github.com/Stranger6667/postmarker/issues/92
 .. _#87: https://github.com/Stranger6667/postmarker/issues/87
 .. _#83: https://github.com/Stranger6667/postmarker/issues/83
+.. _#82: https://github.com/Stranger6667/postmarker/issues/82
 .. _#78: https://github.com/Stranger6667/postmarker/issues/78
 .. _#76: https://github.com/Stranger6667/postmarker/issues/76
 .. _#75: https://github.com/Stranger6667/postmarker/issues/75

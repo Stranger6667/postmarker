@@ -41,10 +41,12 @@ class PostmarkClient(object):
         TriggersManager,
     )
 
-    def __init__(self, server_token=None, account_token=None, verbosity=0):
+    def __init__(self, server_token=None, account_token=None, verbosity=0, max_retries=0, timeout=None):
         assert server_token, 'You have to provide token to use Postmark API'
         self.server_token = server_token
         self.account_token = account_token
+        self.max_retries = max_retries
+        self.timeout = timeout
         self.logger = get_logger('Postmarker', verbosity)
         self._setup_managers()
 
@@ -67,6 +69,9 @@ class PostmarkClient(object):
     def session(self):
         if not hasattr(self, '_session'):
             self._session = requests.Session()
+            adapter = requests.adapters.HTTPAdapter(max_retries=self.max_retries)
+            self._session.mount('http://', adapter)
+            self._session.mount('https://', adapter)
         return self._session
 
     def call(self, method, endpoint, token_type='server', data=None, **kwargs):
@@ -104,7 +109,9 @@ class PostmarkClient(object):
             default_headers.update(headers)
         url = urljoin(root, endpoint)
         self.logger.debug('Request: %s %s, Data: %s', method, url, data)
-        response = self.session.request(method, url, json=data, params=kwargs, headers=default_headers)
+        response = self.session.request(
+            method, url, json=data, params=kwargs, headers=default_headers, timeout=self.timeout
+        )
         self.logger.debug('Response: %s', response.text)
         self.check_response(response)
         return response.json()
