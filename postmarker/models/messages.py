@@ -3,10 +3,10 @@ from base64 import b64decode
 from email.mime.base import MIMEBase
 from os.path import join
 
-from .base import Model, ModelManager, SubModelManager
+from .base import MessageModel, Model, ModelManager, SubModelManager
 
 
-class Open(Model):
+class Open(MessageModel):
 
     def __str__(self):
         return 'Open from %s' % self._data.get('Recipient')

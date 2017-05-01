@@ -74,3 +74,10 @@ The opens API handler is located in ``messages.outbound.opens`` manager.
 
     >>> postmark.messages.outbound.opens.all()
     [<Open: Open from test@example.com>, ...]
+
+Also, you can access to corresponding ``OutboundMessage`` instance via ``message`` property.
+
+.. code-block:: python
+
+    >>> open.message
+    <Sent message to test@example.com>

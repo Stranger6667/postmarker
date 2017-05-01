@@ -2,6 +2,7 @@
 import pytest
 
 from postmarker.models.bounces import Bounce
+from postmarker.models.messages import OutboundMessage
 
 from .._compat import patch
 from ..conftest import BOUNCE_WEBHOOK
@@ -71,3 +72,9 @@ class TestLoadAllBounces:
                 assert call.call_count == call_count
                 assert len(bounces) == 2
                 assert all(isinstance(bounce, Bounce) for bounce in bounces)
+
+
+def test_message(bounce):
+    message = bounce.message
+    assert isinstance(message, OutboundMessage)
+    assert str(message) == 'Sent message to test@example.com'

@@ -6,6 +6,11 @@ Changelog
 `Unreleased`_
 -------------
 
+Added
+~~~~~
+
+- ``message`` property for ``Bounce``, ``Delivery`` and ``Open`` classes to access corresponding ``OutboundMessage`` instance. `#119`_
+
 `0.10.1`_ - 2017-04-03
 ----------------------
 
@@ -282,6 +287,7 @@ Fixed
 .. _#125: https://github.com/Stranger6667/postmarker/issues/125
 .. _#123: https://github.com/Stranger6667/postmarker/issues/123
 .. _#122: https://github.com/Stranger6667/postmarker/issues/122
+.. _#119: https://github.com/Stranger6667/postmarker/issues/119
 .. _#116: https://github.com/Stranger6667/postmarker/issues/116
 .. _#107: https://github.com/Stranger6667/postmarker/issues/107
 .. _#106: https://github.com/Stranger6667/postmarker/issues/106

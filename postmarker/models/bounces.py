@@ -3,10 +3,10 @@
 Information about bounces is available via the :py:class:`~postmarker.models.bounces.BounceManager`,
 which is an attribute of ``postmark`` instance.
 """
-from .base import Model, ModelManager
+from .base import MessageModel, ModelManager
 
 
-class Bounce(Model):
+class Bounce(MessageModel):
     """
     Bounce model.
     """
