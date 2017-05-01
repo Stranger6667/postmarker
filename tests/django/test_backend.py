@@ -357,8 +357,9 @@ class TestSignals:
         }]
 
     def test_on_exception(self, catch_signal):
-        with patch('requests.Session.request', side_effect=ConnectTimeout), catch_signal(on_exception) as handler:
-            send_mail(fail_silently=True, **SEND_KWARGS)
+        with patch('requests.Session.request', side_effect=ConnectTimeout):
+            with catch_signal(on_exception) as handler:
+                send_mail(fail_silently=True, **SEND_KWARGS)
         assert handler.called
         kwargs = handler.call_args[1]
         assert kwargs['sender'] == EmailBackend
