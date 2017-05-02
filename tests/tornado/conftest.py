@@ -8,42 +8,52 @@ from postmarker.tornado import PostmarkMixin
 from tornado.web import Application, RequestHandler
 
 
-class Handler(PostmarkMixin, RequestHandler):
+class BaseHandler(PostmarkMixin, RequestHandler):
 
     def get(self):
-        self.write(self.postmark_client.server_token)
+        self.write(str(self.get_value()))
 
 
-class SendHandler(PostmarkMixin, RequestHandler):
+class Handler(BaseHandler):
 
-    def get(self):
-        response = self.send(
+    def get_value(self):
+        return self.postmark_client.server_token
+
+
+class MaxRetriesHandler(BaseHandler):
+
+    def get_value(self):
+        return self.postmark_client.max_retries
+
+
+class SendHandler(BaseHandler):
+
+    def get_value(self):
+        return self.send(
             From='sender@example.com',
             To='receiver@example.com',
             Subject='Postmark test',
             HtmlBody='<html><body><strong>Hello</strong> dear Postmark user.</body></html>'
-        )
-        self.write(response['Message'])
+        )['Message']
 
 
-class SendBatchHandler(PostmarkMixin, RequestHandler):
+class SendBatchHandler(BaseHandler):
 
-    def get(self):
-        response = self.send_batch(
+    def get_value(self):
+        return self.send_batch(
             {
                 'From': 'sender@example.com',
                 'To': 'receiver@example.com',
                 'Subject': 'Postmark test',
                 'HtmlBody': '<html><body><strong>Hello</strong> dear Postmark user.</body></html>'
             }
-        )
-        self.write(response[0]['Message'])
+        )[0]['Message']
 
 
-class ReuseHandler(PostmarkMixin, RequestHandler):
+class ReuseHandler(BaseHandler):
 
-    def get(self):
-        self.write(str(self.postmark_client is self.postmark_client))
+    def get_value(self):
+        return self.postmark_client is self.postmark_client
 
 
 @pytest.fixture
@@ -54,6 +64,7 @@ def app():
             (r'/send/', SendHandler),
             (r'/send_batch/', SendBatchHandler),
             (r'/reuse/', ReuseHandler),
+            (r'/max_retries/', MaxRetriesHandler),
         ],
         postmark_server_token='Test token'
     )

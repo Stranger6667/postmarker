@@ -56,3 +56,10 @@ To make it work, define ``postmark_server_token`` option:
     )
 
 And run your app! That's it.
+All possible options have the same name as in ``PostmarkClient`` prefixed with ``postmark_``:
+
+- ``postmark_server_token``
+- ``postmark_account_token``
+- ``postmark_verbosity``
+- ``postmark_max_retries``
+- ``postmark_timeout``
