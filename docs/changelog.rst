@@ -6,6 +6,9 @@ Changelog
 `Unreleased`_
 -------------
 
+`0.11.0`_ - 2017-05-02
+----------------------
+
 Added
 ~~~~~
 
@@ -260,7 +263,8 @@ Fixed
 
 - Initial release.
 
-.. _Unreleased: https://github.com/Stranger6667/postmarker/compare/0.10.1...HEAD
+.. _Unreleased: https://github.com/Stranger6667/postmarker/compare/0.11.0...HEAD
+.. _0.11.0: https://github.com/Stranger6667/postmarker/compare/0.10.1...0.11.0
 .. _0.10.1: https://github.com/Stranger6667/postmarker/compare/0.10.0...0.10.1
 .. _0.10.0: https://github.com/Stranger6667/postmarker/compare/0.9.2...0.10.0
 .. _0.9.2: https://github.com/Stranger6667/postmarker/compare/0.9.1...0.9.2
