@@ -83,6 +83,7 @@ There are a lot of features available. Check it out in our documentation! Here's
 - Support for sending Python email instances.
 - Bounces, Domains, Messages, Templates, Sender signatures, Status, Stats & Server API.
 - Django email backend.
+- Tornado helper.
 - Spam check API.
 - Wrappers for Bounce, Inbound, Open and Delivery webhooks.
 
