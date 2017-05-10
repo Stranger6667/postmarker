@@ -20,7 +20,7 @@ class TestClient:
     def test_no_token(self):
         with pytest.raises(AssertionError) as exc:
             PostmarkClient(None)
-        assert exc.match('You have to provide token to use Postmark API')
+        assert str(exc.value).startswith('You have to provide token to use Postmark API')
 
     def test_repr(self, postmark, server_token):
         assert repr(postmark) == '<PostmarkClient: %s>' % server_token

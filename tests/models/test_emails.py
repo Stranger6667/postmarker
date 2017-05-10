@@ -134,7 +134,7 @@ class TestSimpleSend:
     def test_message_and_kwargs(self, postmark, email):
         with pytest.raises(AssertionError) as exc:
             postmark.emails.send(message=email, From='test@test.com')
-        assert exc.match('You should specify either message or From and To parameters')
+        assert str(exc.value).startswith('You should specify either message or From and To parameters')
 
     def test_send_email(self, postmark, email, postmark_request):
         postmark.emails.send(message=email)
@@ -254,7 +254,7 @@ class TestEmail:
     def test_body(self):
         with pytest.raises(AssertionError) as exc:
             Email(From='sender@example.com', To='receiver@example.com', Subject='Postmark test')
-        assert exc.match('Provide either email TextBody or HtmlBody or both')
+        assert str(exc.value).startswith('Provide either email TextBody or HtmlBody or both')
 
     @pytest.mark.parametrize('attachment', SUPPORTED_ATTACHMENTS)
     def test_attach(self, email, postmark_request, attachment):
