@@ -338,9 +338,10 @@ class TestSignals:
     def test_post_send(self, catch_signal, postmark_request):
         postmark_request.return_value = Response()
         postmark_request.return_value.status_code = 200
-        postmark_request.return_value._content = b'[{"ErrorCode": 0, "To": "receiver@example.com", "SubmittedAt": ' \
-                                                b'"2016-10-06T10:05:30.570118-04:00", "Message": "Test job accepted",' \
-                                                b' "MessageID": "96a981da-9b7c-4aa9-bda2-84ab99097686"}]'
+        postmark_request.return_value._content = b'[{"ErrorCode": 0, "To": "receiver@example.com", ' \
+                                                 b'"SubmittedAt": "2016-10-06T10:05:30.570118-04:00", ' \
+                                                 b'"Message": "Test job accepted", ' \
+                                                 b'"MessageID": "96a981da-9b7c-4aa9-bda2-84ab99097686"}]'
         with catch_signal(post_send) as handler:
             send_mail(**SEND_KWARGS)
         assert handler.called
