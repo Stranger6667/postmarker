@@ -3,13 +3,13 @@ import os
 from contextlib import contextmanager
 
 import pytest
-
 from betamax import Betamax
 from betamax_serializers import pretty_json
+
 from postmarker.core import PostmarkClient
 from postmarker.models.emails import Delivery
 
-from ._compat import Mock, patch
+from ._compat import Mock
 from .helpers import replace_real_credentials
 
 
@@ -54,15 +54,6 @@ def betamax_recorder(request, postmark):
     )
     with vcr.use_cassette(cassette_name):
         yield
-
-
-@pytest.yield_fixture
-def patched_request():
-    """
-    Mocks network requests.
-    """
-    with patch('postmarker.core.requests.Session.request') as patched:
-        yield patched
 
 
 @pytest.fixture(scope='session')

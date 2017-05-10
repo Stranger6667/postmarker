@@ -8,9 +8,9 @@ from postmarker.models.triggers import TriggersManager
 
 class TestClient:
 
-    def test_server_client(self, postmark, server_token, patched_request):
+    def test_server_client(self, postmark, server_token, postmark_request):
         postmark.call('GET', 'endpoint')
-        patched_request.assert_called_with(
+        postmark_request.assert_called_with(
             'GET',
             'https://api.postmarkapp.com/endpoint',
             headers={'X-Postmark-Server-Token': server_token, 'Accept': 'application/json', 'User-Agent': USER_AGENT},
@@ -20,7 +20,7 @@ class TestClient:
     def test_no_token(self):
         with pytest.raises(AssertionError) as exc:
             PostmarkClient(None)
-        assert str(exc.value) == 'You have to provide token to use Postmark API'
+        assert str(exc.value).startswith('You have to provide token to use Postmark API')
 
     def test_repr(self, postmark, server_token):
         assert repr(postmark) == '<PostmarkClient: %s>' % server_token

@@ -16,7 +16,6 @@ from postmarker.django.signals import on_exception, post_send, pre_send
 from postmarker.exceptions import PostmarkerException
 from postmarker.models.emails import Email
 
-
 from .._compat import patch
 
 
@@ -38,9 +37,9 @@ def send_with_connection(connection):
     ).send()
 
 
-def test_send_mail(patched_request, settings):
+def test_send_mail(postmark_request, settings):
     send_mail(**SEND_KWARGS)
-    assert patched_request.call_args[1]['json'] == ({
+    assert postmark_request.call_args[1]['json'] == ({
         'ReplyTo': None,
         'Subject': 'Subject here',
         'To': 'receiver@example.com',
@@ -54,7 +53,7 @@ def test_send_mail(patched_request, settings):
         'TrackOpens': False,
         'From': 'sender@example.com'
     }, )
-    assert patched_request.call_args[1]['headers']['X-Postmark-Server-Token'] == settings.POSTMARK['TOKEN']
+    assert postmark_request.call_args[1]['headers']['X-Postmark-Server-Token'] == settings.POSTMARK['TOKEN']
 
 
 @pytest.mark.parametrize('kwarg, key', (
@@ -64,13 +63,13 @@ def test_send_mail(patched_request, settings):
         ('reply_to', 'ReplyTo')
     ),
 ))
-def test_reply_to_cc_bcc(patched_request, kwarg, key):
+def test_reply_to_cc_bcc(postmark_request, kwarg, key):
     message = mail.EmailMessage(
         'Subject', 'Body', 'sender@example.com', ['receiver@example.com'],
         **{kwarg: ['r1@example.com', 'r2@example.com']}
     )
     message.send()
-    assert patched_request.call_args[1]['json'][0][key] == 'r1@example.com, r2@example.com'
+    assert postmark_request.call_args[1]['json'][0][key] == 'r1@example.com, r2@example.com'
 
 
 EXAMPLE_BATCH_RESPONSE = [
@@ -129,7 +128,7 @@ class TestMassSend:
             assert str(exc.value) == '[[406] Bla bla, inactive recipient, [406] Bla bla, inactive recipient]'
 
 
-def test_send_mail_with_attachment(patched_request):
+def test_send_mail_with_attachment(postmark_request):
     """
     Test sending email with attachment
 
@@ -145,7 +144,7 @@ def test_send_mail_with_attachment(patched_request):
         to=['receiver@example.com'])
     msg.attach('hello.txt', 'Hello World', 'text/plain')
     msg.send()
-    assert patched_request.call_args[1]['json'][0] == {
+    assert postmark_request.call_args[1]['json'][0] == {
         'TextBody': 'text_content',
         'Attachments': [
             {
@@ -167,7 +166,7 @@ def test_send_mail_with_attachment(patched_request):
     }
 
 
-def test_headers_encoding(patched_request):
+def test_headers_encoding(postmark_request):
     kwargs = {
         'subject': 'Тест',
         'message': 'Here is the message.',
@@ -175,7 +174,7 @@ def test_headers_encoding(patched_request):
         'recipient_list': ['Тест <receiver@example.com>', 'Тест2 <receiver@example.com>']
     }
     send_mail(**kwargs)
-    request = patched_request.call_args[1]['json'][0]
+    request = postmark_request.call_args[1]['json'][0]
     assert request['Subject'] == kwargs['subject']
     assert request['From'] == kwargs['from_email']
     assert request['To'] == ', '.join(kwargs['recipient_list'])
@@ -196,9 +195,9 @@ def test_headers_encoding(patched_request):
        </body>
        </html>''' % ('.' * 1000)
 ))
-def test_send_mail_html_message(html_message, patched_request):
+def test_send_mail_html_message(html_message, postmark_request):
     send_mail(html_message=html_message, **SEND_KWARGS)
-    assert patched_request.call_args[1]['json'] == ({
+    assert postmark_request.call_args[1]['json'] == ({
         'ReplyTo': None,
         'Subject': 'Subject here',
         'To': 'receiver@example.com',
@@ -214,12 +213,12 @@ def test_send_mail_html_message(html_message, patched_request):
     }, )
 
 
-def test_send_long_text_line(patched_request):
+def test_send_long_text_line(postmark_request):
     kwargs = SEND_KWARGS.copy()
     message = 'A' * 1000
     kwargs['message'] = message
     send_mail(**kwargs)
-    assert patched_request.call_args[1]['json'] == ({
+    assert postmark_request.call_args[1]['json'] == ({
         'ReplyTo': None,
         'Subject': 'Subject here',
         'To': 'receiver@example.com',
@@ -242,16 +241,16 @@ def test_missing_api_key(settings):
     assert str(exc.value) == 'You should specify TOKEN to use Postmark email backend'
 
 
-def test_test_mode(settings, patched_request):
+def test_test_mode(settings, postmark_request):
     settings.POSTMARK = {'TEST_MODE': True}
     send_mail(**SEND_KWARGS)
-    assert patched_request.call_args[1]['headers']['X-Postmark-Server-Token'] == TEST_TOKEN
+    assert postmark_request.call_args[1]['headers']['X-Postmark-Server-Token'] == TEST_TOKEN
 
 
-def test_extra_options(settings, patched_request):
+def test_extra_options(settings, postmark_request):
     settings.POSTMARK['TRACK_OPENS'] = True
     send_mail(**SEND_KWARGS)
-    assert patched_request.call_args[1]['json'] == ({
+    assert postmark_request.call_args[1]['json'] == ({
         'ReplyTo': None,
         'Subject': 'Subject here',
         'To': 'receiver@example.com',
@@ -268,10 +267,10 @@ def test_extra_options(settings, patched_request):
 
 
 @pytest.mark.skipif(VERSION[:2] < (1, 8), reason='Context manager protocol was added in Django 1.8')
-def test_context_manager(patched_request):
+def test_context_manager(postmark_request):
     with mail.get_connection() as connection:
         send_with_connection(connection)
-    assert patched_request.call_args[1]['json'] == ({
+    assert postmark_request.call_args[1]['json'] == ({
         'ReplyTo': None,
         'Subject': 'Subject',
         'To': 'receiver@example.com',
@@ -291,8 +290,8 @@ def test_context_manager(patched_request):
 class TestExceptions:
 
     @pytest.fixture(autouse=True)
-    def setup(self, patched_request):
-        patched_request().json.side_effect = ValueError
+    def setup(self, postmark_request):
+        postmark_request().json.side_effect = ValueError
 
     def test_silent_exception(self):
         with mail.get_connection(fail_silently=True) as connection:
@@ -310,7 +309,7 @@ def test_close_closed_connection():
         connection.close()
 
 
-@pytest.mark.usefixtures('patched_request')
+@pytest.mark.usefixtures('postmark_request')
 class TestSignals:
 
     def test_pre_send(self, catch_signal):
@@ -336,12 +335,13 @@ class TestSignals:
             'To': 'receiver@example.com'
         }
 
-    def test_post_send(self, catch_signal, patched_request):
-        patched_request.return_value = Response()
-        patched_request.return_value.status_code = 200
-        patched_request.return_value._content = b'[{"ErrorCode": 0, "To": "receiver@example.com", "SubmittedAt": ' \
-                                                b'"2016-10-06T10:05:30.570118-04:00", "Message": "Test job accepted",' \
-                                                b' "MessageID": "96a981da-9b7c-4aa9-bda2-84ab99097686"}]'
+    def test_post_send(self, catch_signal, postmark_request):
+        postmark_request.return_value = Response()
+        postmark_request.return_value.status_code = 200
+        postmark_request.return_value._content = b'[{"ErrorCode": 0, "To": "receiver@example.com", ' \
+                                                 b'"SubmittedAt": "2016-10-06T10:05:30.570118-04:00", ' \
+                                                 b'"Message": "Test job accepted", ' \
+                                                 b'"MessageID": "96a981da-9b7c-4aa9-bda2-84ab99097686"}]'
         with catch_signal(post_send) as handler:
             send_mail(**SEND_KWARGS)
         assert handler.called

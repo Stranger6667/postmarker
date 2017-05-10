@@ -6,6 +6,11 @@ Changelog
 `Unreleased`_
 -------------
 
+Added
+~~~~~
+
+- Test helpers. `#112`_
+
 `0.11.0`_ - 2017-05-02
 ----------------------
 
@@ -297,6 +302,7 @@ Fixed
 .. _#122: https://github.com/Stranger6667/postmarker/issues/122
 .. _#119: https://github.com/Stranger6667/postmarker/issues/119
 .. _#116: https://github.com/Stranger6667/postmarker/issues/116
+.. _#112: https://github.com/Stranger6667/postmarker/issues/112
 .. _#107: https://github.com/Stranger6667/postmarker/issues/107
 .. _#106: https://github.com/Stranger6667/postmarker/issues/106
 .. _#102: https://github.com/Stranger6667/postmarker/issues/102

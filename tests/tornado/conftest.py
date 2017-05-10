@@ -71,10 +71,10 @@ def app():
 
 
 @pytest.fixture
-def patched_request(patched_request):
-    patched_request.return_value = Response()
-    patched_request.return_value.status_code = 200
-    return patched_request
+def postmark_request(postmark_request):
+    postmark_request.return_value = Response()
+    postmark_request.return_value.status_code = 200
+    return postmark_request
 
 
 @pytest.fixture
