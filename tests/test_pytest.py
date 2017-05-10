@@ -2,10 +2,6 @@
 from postmarker.core import PostmarkClient
 
 
-def test_postmark_client():
-    from postmarker.pytest import postmark
-
-    mock = object()
-    instance = next(postmark(mock))
-    assert isinstance(instance, PostmarkClient)
-    assert instance.mock is mock
+def test_postmark_client(postmark_client, postmark_request):
+    assert isinstance(postmark_client, PostmarkClient)
+    assert postmark_client.mock is postmark_request

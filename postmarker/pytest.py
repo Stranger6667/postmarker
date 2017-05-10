@@ -4,6 +4,7 @@ from __future__ import absolute_import
 import pytest
 
 from ._compat import patch
+from .core import PostmarkClient
 
 
 @pytest.yield_fixture
@@ -16,9 +17,7 @@ def postmark_request():
 
 
 @pytest.yield_fixture
-def postmark(patched_request):
-    from postmarker.core import PostmarkClient
-
+def postmark_client(postmark_request):
     client = PostmarkClient(server_token='SERVER_TOKEN', account_token='ACCOUNT_TOKEN')
-    client.mock = patched_request
+    client.mock = postmark_request
     yield client
