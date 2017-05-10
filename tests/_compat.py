@@ -3,5 +3,5 @@
 
 try:
     from unittest.mock import patch, Mock
-except ImportError:  # Python 2.7
+except ImportError:  # Python < 3.3
     from mock import patch, Mock  # noqa

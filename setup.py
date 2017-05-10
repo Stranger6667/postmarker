@@ -52,4 +52,9 @@ setup(
     ],
     include_package_data=True,
     install_requires=install_requires,
+    entry_points={
+        'pytest11': [
+            'postmark = postmarker.pytest',
+        ],
+    },
 )

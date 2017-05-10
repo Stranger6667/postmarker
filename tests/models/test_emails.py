@@ -134,11 +134,11 @@ class TestSimpleSend:
     def test_message_and_kwargs(self, postmark, email):
         with pytest.raises(AssertionError) as exc:
             postmark.emails.send(message=email, From='test@test.com')
-        assert str(exc.value) == 'You should specify either message or From and To parameters'
+        assert exc.match('You should specify either message or From and To parameters')
 
-    def test_send_email(self, postmark, email, patched_request):
+    def test_send_email(self, postmark, email, postmark_request):
         postmark.emails.send(message=email)
-        assert patched_request.call_args[1]['json'] == email.as_dict()
+        assert postmark_request.call_args[1]['json'] == email.as_dict()
 
     @pytest.mark.parametrize('field', ('To', 'Cc', 'Bcc'))
     @pytest.mark.parametrize(
@@ -148,25 +148,25 @@ class TestSimpleSend:
             ['first@example.com', 'second@example.com']
         )
     )
-    def test_multiple_addresses(self, postmark, minimal_data, patched_request, field, value):
+    def test_multiple_addresses(self, postmark, minimal_data, postmark_request, field, value):
         minimal_data[field] = value
         postmark.emails.send(**minimal_data)
-        assert patched_request.call_args[1]['json'][field] == 'first@example.com,second@example.com'
+        assert postmark_request.call_args[1]['json'][field] == 'first@example.com,second@example.com'
 
-    def test_headers(self, postmark, minimal_data, patched_request):
+    def test_headers(self, postmark, minimal_data, postmark_request):
         minimal_data['Headers'] = {'Test': 1}
         postmark.emails.send(**minimal_data)
-        assert patched_request.call_args[1]['json']['Headers'] == [{'Name': 'Test', 'Value': 1}]
+        assert postmark_request.call_args[1]['json']['Headers'] == [{'Name': 'Test', 'Value': 1}]
 
     @pytest.mark.parametrize('attachment', SUPPORTED_ATTACHMENTS)
-    def test_attachments(self, postmark, minimal_data, patched_request, attachment):
+    def test_attachments(self, postmark, minimal_data, postmark_request, attachment):
         minimal_data['Attachments'] = [attachment]
         postmark.emails.send(**minimal_data)
-        assert patched_request.call_args[1]['json']['Attachments'] == [ATTACHMENT]
+        assert postmark_request.call_args[1]['json']['Attachments'] == [ATTACHMENT]
 
-    def test_mime_multipart(self, postmark, patched_request):
+    def test_mime_multipart(self, postmark, postmark_request):
         postmark.emails.send(MIME_ALTERNATIVE)
-        assert patched_request.call_args[1]['json'] == {
+        assert postmark_request.call_args[1]['json'] == {
             'Attachments': [
                 {'Content': ENCODED_CONTENT, 'ContentType': 'application/octet-stream', 'Name': 'report.pdf'}
             ],
@@ -197,11 +197,11 @@ class TestSimpleSend:
 
 class TestBatchSend:
 
-    def test_email_instance(self, postmark, email, patched_request):
+    def test_email_instance(self, postmark, email, postmark_request):
         postmark.emails.send_batch(email)
-        assert patched_request.call_args[1]['json'] == (email.as_dict(), )
+        assert postmark_request.call_args[1]['json'] == (email.as_dict(), )
 
-    def test_dict(self, postmark, email, patched_request):
+    def test_dict(self, postmark, email, postmark_request):
         email_dict = {
             'From': email.From,
             'To': email.To,
@@ -215,16 +215,16 @@ class TestBatchSend:
             'Attachments': [],
         }
         postmark.emails.send_batch(email_dict)
-        assert patched_request.call_args[1]['json'] == (expected, )
+        assert postmark_request.call_args[1]['json'] == (expected, )
 
-    def test_multiple(self, postmark, email, patched_request):
+    def test_multiple(self, postmark, email, postmark_request):
         postmark.emails.send_batch(email, email)
-        assert patched_request.call_args[1]['json'] == (email.as_dict(), email.as_dict())
+        assert postmark_request.call_args[1]['json'] == (email.as_dict(), email.as_dict())
 
-    def test_mime(self, postmark, patched_request):
+    def test_mime(self, postmark, postmark_request):
         postmark.emails.send_batch(MIME_MESSAGE)
         email = Email.from_mime(MIME_MESSAGE, postmark)
-        assert patched_request.call_args[1]['json'] == (email.as_dict(), )
+        assert postmark_request.call_args[1]['json'] == (email.as_dict(), )
 
     def test_invalid(self, postmark):
         with pytest.raises(ValueError):
@@ -254,23 +254,23 @@ class TestEmail:
     def test_body(self):
         with pytest.raises(AssertionError) as exc:
             Email(From='sender@example.com', To='receiver@example.com', Subject='Postmark test')
-        assert str(exc.value) == 'Provide either email TextBody or HtmlBody or both'
+        assert exc.match('Provide either email TextBody or HtmlBody or both')
 
     @pytest.mark.parametrize('attachment', SUPPORTED_ATTACHMENTS)
-    def test_attach(self, email, patched_request, attachment):
+    def test_attach(self, email, postmark_request, attachment):
         email.attach(attachment)
         email.send()
-        assert patched_request.call_args[1]['json']['Attachments'] == [ATTACHMENT]
+        assert postmark_request.call_args[1]['json']['Attachments'] == [ATTACHMENT]
 
-    def test_attach_multiple(self, email, patched_request):
+    def test_attach_multiple(self, email, postmark_request):
         email.attach(ATTACHMENT, TUPLE_ATTACHMENT, MIME_ATTACHMENT)
         email.send()
-        assert patched_request.call_args[1]['json']['Attachments'] == [ATTACHMENT, ATTACHMENT, ATTACHMENT]
+        assert postmark_request.call_args[1]['json']['Attachments'] == [ATTACHMENT, ATTACHMENT, ATTACHMENT]
 
-    def test_attach_unknown_content_type(self, email, patched_request):
+    def test_attach_unknown_content_type(self, email, postmark_request):
         email.attach(UNKNOWN_TYPE_ATTACHMENT)
         email.send()
-        assert patched_request.call_args[1]['json']['Attachments'] == [
+        assert postmark_request.call_args[1]['json']['Attachments'] == [
             {
                 'Name': 'report.blabla',
                 'Content': 'dGVzdCBjb250ZW50',
@@ -278,10 +278,10 @@ class TestEmail:
             }
         ]
 
-    def test_attach_binary(self, email, patched_request):
+    def test_attach_binary(self, email, postmark_request):
         email.attach_binary(b'test content', 'readme.txt')
         email.send()
-        assert patched_request.call_args[1]['json']['Attachments'] == [ATTACHMENT]
+        assert postmark_request.call_args[1]['json']['Attachments'] == [ATTACHMENT]
 
     def test_from_mime(self, postmark):
         email = Email.from_mime(MIME_MESSAGE, postmark)
@@ -331,10 +331,10 @@ class TestEmail:
             }
         ),
     ))
-    def test_inline_image(self, email, patched_request, image, expected):
+    def test_inline_image(self, email, postmark_request, image, expected):
         email.attach(image)
         email.send()
-        assert patched_request.call_args[1]['json']['Attachments'] == [expected]
+        assert postmark_request.call_args[1]['json']['Attachments'] == [expected]
 
 
 class TestDelivery:

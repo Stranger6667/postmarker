@@ -14,10 +14,10 @@ MOCK_SEND_RESPONSE = b'{"ErrorCode": 0, "To": "receiver@example.com", "Submitted
 class TestPostmarkMixin:
 
     @pytest.fixture(autouse=True)
-    def setup(self, http_client, base_url, patched_request):
+    def setup(self, http_client, base_url, postmark_request):
         self.http_client = http_client
         self.base_url = base_url
-        self.patched_request = patched_request
+        self.postmark_request = postmark_request
 
     def assert_response(self, url, body):
         response = self.http_client.fetch(url)
@@ -25,7 +25,7 @@ class TestPostmarkMixin:
         assert response.body == body
 
     def set_postmark_response(self, content):
-        self.patched_request.return_value._content = content
+        self.postmark_request.return_value._content = content
 
     @pytest.mark.parametrize('url, response, expected', (
         ('', b'', b'Test token'),

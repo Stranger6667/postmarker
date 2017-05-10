@@ -6,6 +6,13 @@ try:
 except ImportError:  # Python 2.7
     from urlparse import urljoin  # noqa
 
+
+try:
+    from unittest.mock import patch
+except ImportError:  # Python < 3.3
+    from mock import patch  # noqa
+
+
 try:
     from inspect import signature
 
