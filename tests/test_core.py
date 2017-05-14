@@ -25,6 +25,16 @@ class TestClient:
     def test_repr(self, postmark, server_token):
         assert repr(postmark) == '<PostmarkClient: %s>' % server_token
 
+    @pytest.mark.parametrize('config, kwargs', (
+        ({'POSTMARK_SERVER_TOKEN': 'foo', 'POSTMARK_TIMEOUT': 1}, {'is_uppercase': True}),
+        ({'postmark_server_token': 'foo', 'postmark_timeout': 1}, {'is_uppercase': False}),
+    ))
+    def test_from_config(self, config, kwargs):
+        instance = PostmarkClient.from_config(config, **kwargs)
+        assert instance.server_token == 'foo'
+        assert instance.timeout == 1
+        assert instance.account_token is None
+
 
 @pytest.mark.parametrize('klass', (PostmarkClient, OutboundMessageManager, MessageManager, TriggersManager))
 class TestManagersSetup:
