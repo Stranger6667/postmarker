@@ -2,7 +2,7 @@
 import requests
 
 from . import __version__
-from ._compat import urljoin
+from ._compat import get_args, urljoin
 from .exceptions import ClientError, SpamAssassinError
 from .logging import get_logger
 from .models.bounces import BounceManager
@@ -49,6 +49,22 @@ class PostmarkClient(object):
         self.timeout = timeout
         self.logger = get_logger('Postmarker', verbosity)
         self._setup_managers()
+
+    @classmethod
+    def from_config(cls, config, prefix='postmark_', is_uppercase=False):
+        """
+        Helper method for instantiating PostmarkClient from dict-like objects.
+        """
+        kwargs = {}
+        for arg in get_args(cls):
+            key = prefix + arg
+            if is_uppercase:
+                key = key.upper()
+            else:
+                key = key.lower()
+            if key in config:
+                kwargs[arg] = config[key]
+        return cls(**kwargs)
 
     def __repr__(self):
         return '<%s: %s>' % (self.__class__.__name__, self.server_token)

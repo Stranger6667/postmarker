@@ -6,6 +6,12 @@ Changelog
 `Unreleased`_
 -------------
 
+Added
+~~~~~
+
+- Alternative instantiation method - ``from_config``.
+
+
 `0.11.1`_ - 2017-05-10
 ----------------------
 
