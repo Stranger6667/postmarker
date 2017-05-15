@@ -6,6 +6,11 @@ Changelog
 `Unreleased`_
 -------------
 
+Added
+~~~~~
+
+- Ability to convert inbound messages to MIME instances. `#90`_
+
 `0.11.2`_ - 2017-05-14
 ----------------------
 
@@ -13,7 +18,6 @@ Added
 ~~~~~
 
 - Alternative instantiation method - ``from_config``.
-
 
 `0.11.1`_ - 2017-05-10
 ----------------------
@@ -325,6 +329,7 @@ Fixed
 .. _#96: https://github.com/Stranger6667/postmarker/issues/96
 .. _#95: https://github.com/Stranger6667/postmarker/issues/95
 .. _#92: https://github.com/Stranger6667/postmarker/issues/92
+.. _#90: https://github.com/Stranger6667/postmarker/issues/90
 .. _#87: https://github.com/Stranger6667/postmarker/issues/87
 .. _#85: https://github.com/Stranger6667/postmarker/issues/85
 .. _#83: https://github.com/Stranger6667/postmarker/issues/83

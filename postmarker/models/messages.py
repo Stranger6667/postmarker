@@ -1,6 +1,8 @@
 # coding: utf-8
 from base64 import b64decode
 from email.mime.base import MIMEBase
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 from os.path import join
 
 from .base import MessageModel, Model, ModelManager, SubModelManager
@@ -111,6 +113,22 @@ class InboundMessage(BaseMessage):
 
     def retry(self):
         return self._manager.retry(self.MessageID)
+
+    def as_mime(self):
+        message = MIMEMultipart('alternative')
+        message.attach(MIMEText(self.TextBody, 'plain'))
+        message.attach(MIMEText(self.HtmlBody, 'html'))
+        for header in self._data['Headers']:
+            message.add_header(header['Name'], header['Value'])
+
+        for key in ('Subject', 'From', 'To', 'Date', 'MessageID', 'Cc', 'Bcc'):
+            value = getattr(self, key, None)
+            if value:
+                message[key] = value
+        message['Reply-To'] = self.ReplyTo
+        for attachment in self.Attachments:
+            message.attach(attachment.as_mime())
+        return message
 
 
 class Attachment(Model):
