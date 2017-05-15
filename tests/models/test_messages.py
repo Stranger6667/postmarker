@@ -1,11 +1,13 @@
 # coding: utf-8
 from contextlib import contextmanager
 from email.mime.base import MIMEBase
+from email.mime.multipart import MIMEMultipart
 
 import pytest
 
 from postmarker.exceptions import ClientError
 from postmarker.models.base import ModelManager
+from postmarker.models.emails import deconstruct_multipart
 from postmarker.models.messages import Attachment, InboundMessage, Open, OutboundMessage
 
 from .._compat import patch
@@ -84,6 +86,41 @@ class TestInboundMessages:
     def test_not_existing_header(self, inbound_webhook):
         with pytest.raises(KeyError):
             assert inbound_webhook['Unknown']
+
+
+class TestInboundAsMIME:
+
+    @pytest.fixture(autouse=True)
+    def setup(self, inbound_webhook):
+        del inbound_webhook._data['MessageID']
+        del inbound_webhook.__dict__['MessageID']
+        self.mime = inbound_webhook.as_mime()
+        self.text, self.html, self.attachments = deconstruct_multipart(self.mime)
+
+    def test_type(self):
+        assert isinstance(self.mime, MIMEMultipart)
+
+    def test_headers(self):
+        assert self.mime['X-Spam-Status'] == 'No'
+        assert self.mime['Subject'] == 'Test subject'
+        assert self.mime['From'] == 'support@postmarkapp.com'
+        assert self.mime['To'] == '"Firstname Lastname" <yourhash+SampleHash@inbound.postmarkapp.com>'
+        assert 'MessageID' not in self.mime
+
+    def test_text_content(self):
+        assert self.text == 'This is a test text body.'
+
+    def test_html_content(self):
+        assert self.html == '<html><body><p>This is a test html body.<\/p><\/body><\/html>'
+
+    def test_attachment(self):
+        assert len(self.attachments) == 1
+        attachment = self.attachments[0]
+        assert isinstance(attachment, MIMEBase)
+        assert attachment['Content-Type'] == 'text/plain'
+        assert attachment['Content-Transfer-Encoding'] == 'base64'
+        assert attachment['Content-Disposition'] == 'attachment; filename="test.txt"'
+        assert attachment.get_payload(decode=True) == b'This is attachment contents, base-64 encoded.'
 
 
 class TestAttachment:

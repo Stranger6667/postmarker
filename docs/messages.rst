@@ -18,6 +18,13 @@ There is a simple way to access the headers in the ``InboundMessage`` instance:
     >>> inbound['X-Spam-Status']
     No
 
+Also, you can convert inbound message to MIME instance:
+
+.. code-block:: python
+
+    >>> inbound.as_mime()
+    <email.mime.multipart.MIMEMultipart object at 0x10a232c88>
+
 Attachments
 ~~~~~~~~~~~
 
