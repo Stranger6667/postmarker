@@ -28,7 +28,7 @@ Postmarker can be obtained with ``pip``::
 
     $ pip install postmarker
 
-Example usage
+Usage example
 =============
 
 Send single email:
