@@ -28,6 +28,9 @@ matrix:
     - python: pypy
       env:
       - TOX_ENV=pypy
+    - python: pypy3.5-5.8.0
+      env:
+      - TOX_ENV=pypy3
     - python: 3.5
       env:
       - TOX_ENV=jython
