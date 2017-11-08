@@ -12,6 +12,10 @@ else:
     install_requires = ['requests']
 
 
+if sys.version_info[:2] <= (3, 2):
+    install_requires.append('mock')
+
+
 with open('README.rst') as file:
     long_description = file.read()
 
