@@ -6,10 +6,18 @@ Changelog
 `Unreleased`_
 -------------
 
+`0.11.3`_ - 2017-11-08
+----------------------
+
 Added
 ~~~~~
 
 - Ability to convert inbound messages to MIME instances. `#90`_
+
+Fixed
+~~~~~
+
+- Fix missed `mock` dependency for Python 2. `#145`_
 
 `0.11.2`_ - 2017-05-14
 ----------------------
@@ -284,7 +292,8 @@ Fixed
 
 - Initial release.
 
-.. _Unreleased: https://github.com/Stranger6667/postmarker/compare/0.11.2...HEAD
+.. _Unreleased: https://github.com/Stranger6667/postmarker/compare/0.11.3...HEAD
+.. _0.11.3: https://github.com/Stranger6667/postmarker/compare/0.11.2...0.11.3
 .. _0.11.2: https://github.com/Stranger6667/postmarker/compare/0.11.1...0.11.2
 .. _0.11.1: https://github.com/Stranger6667/postmarker/compare/0.11.0...0.11.1
 .. _0.11.0: https://github.com/Stranger6667/postmarker/compare/0.10.1...0.11.0
@@ -311,6 +320,7 @@ Fixed
 .. _0.2.0: https://github.com/Stranger6667/postmarker/compare/0.1.1...0.2.0
 .. _0.1.1: https://github.com/Stranger6667/postmarker/compare/0.1.0...0.1.1
 
+.. _#145: https://github.com/Stranger6667/postmarker/issues/145
 .. _#135: https://github.com/Stranger6667/postmarker/issues/135
 .. _#130: https://github.com/Stranger6667/postmarker/issues/130
 .. _#128: https://github.com/Stranger6667/postmarker/issues/128
