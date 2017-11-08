@@ -3,9 +3,9 @@ import os
 from contextlib import contextmanager
 
 import pytest
+
 from betamax import Betamax
 from betamax_serializers import pretty_json
-
 from postmarker.core import PostmarkClient
 from postmarker.models.emails import Delivery
 
