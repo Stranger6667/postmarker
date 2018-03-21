@@ -3,7 +3,7 @@
 Tornado helper
 ==============
 
-There is a mixin for `Tornado <http://www.tornadoweb.org/>` support. You could implement request handler like this:
+There is a mixin for `Tornado <http://www.tornadoweb.org/>`_ support. You could implement request handler like this:
 
 .. code-block:: python
 
