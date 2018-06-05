@@ -4,7 +4,7 @@ from __future__ import absolute_import
 import pytest
 
 from ._compat import patch
-from .core import PostmarkClient
+from .core import PostmarkClient, requests
 
 
 @pytest.yield_fixture
@@ -12,8 +12,9 @@ def postmark_request():
     """
     Mocks network requests to Postmark API.
     """
-    with patch('postmarker.core.requests.Session.request') as patched:
-        yield patched
+    with patch('postmarker.core.requests.Session.request', wraps=requests.Session().request) as patched:
+        with patch('postmarker.core.requests.Session.send'):
+            yield patched
 
 
 @pytest.yield_fixture
