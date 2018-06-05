@@ -77,19 +77,30 @@ def prepare_attachments(attachment):
     return result
 
 
-def deconstruct_multipart(message):
-    text, html, attachments = None, None, []
-    for part in message.walk():
-        if part is message:
-            continue
-        content_type = part.get_content_type()
-        if content_type == 'text/plain' and text is None:
-            text = part.get_payload(decode=True).decode('utf8')
-        elif content_type == 'text/html' and html is None:
-            html = part.get_payload(decode=True).decode('utf8')
+def deconstruct_multipart_recursive(seen, text, html, attachments, message):
+    if message in seen:
+        return
+    seen.add(message)
+    if isinstance(message, MIMEMultipart):
+        for part in message.walk():
+            deconstruct_multipart_recursive(seen, text, html, attachments, part)
+    else:
+        content_type = message.get_content_type()
+        if content_type == 'text/plain' and not text:
+            text.append(message.get_payload(decode=True).decode('utf8'))
+        elif content_type == 'text/html' and not html:
+            html.append(message.get_payload(decode=True).decode('utf8'))
         else:
-            attachments.append(part)
-    return text, html, attachments
+            attachments.append(message)
+
+
+def deconstruct_multipart(message):
+    seen = set()
+    text = []
+    html = []
+    attachments = []
+    deconstruct_multipart_recursive(seen, text, html, attachments, message)
+    return (text and text[0]) or None, (html and html[0]) or None, attachments
 
 
 class BaseEmail(Model):
@@ -178,10 +189,7 @@ class Email(BaseEmail):
         :param manager: :py:class:`EmailManager` instance.
         :return: :py:class:`Email`
         """
-        if isinstance(message, MIMEMultipart):
-            text, html, attachments = deconstruct_multipart(message)
-        else:
-            text, html, attachments = message.get_payload(decode=True).decode('utf8'), None, []
+        text, html, attachments = deconstruct_multipart(message)
         subject = prepare_header(message['Subject'])
         sender = prepare_header(message['From'])
         to = prepare_header(message['To'])
