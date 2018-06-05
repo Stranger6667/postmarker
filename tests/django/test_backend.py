@@ -1,6 +1,7 @@
 # coding: utf-8
 from __future__ import unicode_literals
 
+import sys
 from contextlib import contextmanager
 
 import pytest
@@ -128,7 +129,15 @@ class TestMassSend:
             assert str(exc.value) == '[[406] Bla bla, inactive recipient, [406] Bla bla, inactive recipient]'
 
 
-def test_send_mail_with_attachment(postmark_request):
+@pytest.fixture
+def message():
+    return EmailMultiAlternatives(
+        subject='subject', body='text_content', from_email='sender@example.com',
+        to=['receiver@example.com']
+    )
+
+
+def test_send_mail_with_attachment(postmark_request, message):
     """
     Test sending email with attachment
 
@@ -139,11 +148,8 @@ def test_send_mail_with_attachment(postmark_request):
     constructing the same underlying datastructures that the backend would
     construct.
     """
-    msg = EmailMultiAlternatives(
-        subject='subject', body='text_content', from_email='sender@example.com',
-        to=['receiver@example.com'])
-    msg.attach('hello.txt', 'Hello World', 'text/plain')
-    msg.send()
+    message.attach('hello.txt', 'Hello World', 'text/plain')
+    message.send()
     assert postmark_request.call_args[1]['json'][0] == {
         'TextBody': 'text_content',
         'Attachments': [
@@ -163,6 +169,43 @@ def test_send_mail_with_attachment(postmark_request):
         'Cc': None,
         'Bcc': None,
         'Tag': None
+    }
+
+
+def test_text_html_alternative_and_pdf_attachment_failure(postmark_request, message):
+    """
+    Send a text body, HTML alternative, and PDF attachment.
+    """
+    message.attach_alternative('<html></html>', 'text/html')
+    if sys.version_info[:2] == (3, 2):
+        content = b'PDF-File-Contents'
+    else:
+        content = 'PDF-File-Contents'
+    message.attach('hello.pdf', content, 'application/pdf')
+    message.send(fail_silently=False)
+    if sys.version_info[0] < 3:
+        encoded_content = 'UERGLUZpbGUtQ29udGVudHM='
+    else:
+        encoded_content = 'UERGLUZpbGUtQ29udGVudHM=\n'
+    assert postmark_request.call_args[1]['json'][0] == {
+        'Attachments': [
+            {
+                'Content': encoded_content,
+                'ContentType': 'application/pdf',
+                'Name': 'hello.pdf'
+            }
+        ],
+        'Bcc': None,
+        'Cc': None,
+        'From': 'sender@example.com',
+        'Headers': [],
+        'HtmlBody': '<html></html>',
+        'ReplyTo': None,
+        'Subject': 'subject',
+        'Tag': None,
+        'TextBody': 'text_content',
+        'To': 'receiver@example.com',
+        'TrackOpens': False,
     }
 
 
@@ -291,7 +334,7 @@ class TestExceptions:
 
     @pytest.fixture(autouse=True)
     def setup(self, postmark_request):
-        postmark_request().json.side_effect = ValueError
+        postmark_request.return_value.json.side_effect = ValueError
 
     def test_silent_exception(self):
         with mail.get_connection(fail_silently=True) as connection:
