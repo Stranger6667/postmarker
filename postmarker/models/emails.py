@@ -76,8 +76,9 @@ def prepare_attachments(attachment):
         result = attachment
     return result
 
+
 def deconstruct_multipart_recursive(seen, text, html, attachments, message):
-    if (message in seen):
+    if message in seen:
         return
     seen.add(message)
     if isinstance(message, MIMEMultipart):
@@ -92,13 +93,15 @@ def deconstruct_multipart_recursive(seen, text, html, attachments, message):
         else:
             attachments.append(message)
 
+
 def deconstruct_multipart(message):
     seen = set()
     text = []
     html = []
     attachments = []
     deconstruct_multipart_recursive(seen, text, html, attachments, message)
-    return ((text and text[0]) or None, (html and html[0]) or None, attachments)
+    return (text and text[0]) or None, (html and html[0]) or None, attachments
+
 
 class BaseEmail(Model):
 
