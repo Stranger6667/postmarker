@@ -178,10 +178,10 @@ def test_text_html_alternative_and_pdf_attachment_failure(postmark_request, mess
     """
     message.attach_alternative('<html></html>', 'text/html')
     if sys.version_info[:2] == (3, 2):
-        pdf_content = b'PDF-File-Contents'
+        content = b'PDF-File-Contents'
     else:
-        pdf_content = 'PDF-File-Contents'
-    message.attach('hello.pdf', pdf_content, 'application/pdf')
+        content = 'PDF-File-Contents'
+    message.attach('hello.pdf', content, 'application/pdf')
     message.send(fail_silently=False)
     if sys.version_info[0] < 3:
         encoded_content = 'UERGLUZpbGUtQ29udGVudHM='
@@ -221,7 +221,7 @@ def test_message_rfc822(postmark_request, message):
             {
                 'Name': 'attachment.txt',
                 'Content': 'RmFrZSBtZXNzYWdl',
-                'ContentType': 'text/plain'
+                'ContentType': 'message/rfc822',
             },
         ],
         'Bcc': None,

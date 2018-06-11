@@ -52,7 +52,7 @@ def prepare_attachments(attachment):
             result['ContentID'] = attachment[3]
     elif isinstance(attachment, MIMEBase):
         result = {
-            'Name': attachment.get_filename(),
+            'Name': attachment.get_filename() or 'attachment.txt',
             'Content': attachment.get_payload(),
             'ContentType': attachment.get_content_type(),
         }
@@ -101,7 +101,7 @@ def deconstruct_multipart_recursive(seen, text, html, attachments, message):
             text.append(message.get_payload(decode=True).decode('utf8'))
         elif content_type == 'text/html' and not html:
             html.append(message.get_payload(decode=True).decode('utf8'))
-        elif content_type != 'message/rfc822':
+        else:
             attachments.append(message)
 
 
