@@ -7,6 +7,7 @@ import os
 import sys
 from base64 import b64encode
 from email.header import decode_header
+from email.message import Message
 from email.mime.base import MIMEBase
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
@@ -62,6 +63,16 @@ def prepare_attachments(attachment):
             if (attachment.get('Content-Disposition') or '').startswith('inline'):
                 content_id = 'cid:%s' % content_id
             result['ContentID'] = content_id
+    elif isinstance(attachment, Message):
+        # Special case for message/rfc822
+        # Even if RFC implies such attachments being not base64-encoded,
+        # Postmark requires all attachments to be encoded in this way
+        payload = b64encode(attachment.get_payload(decode=True)).decode()
+        result = {
+            'Name': attachment.get_filename() or 'attachment.txt',  # Empty name is not allowed
+            'Content': payload,
+            'ContentType': attachment.get_content_type(),
+        }
     elif isinstance(attachment, str):
         content_type = guess_content_type(attachment)
         filename = os.path.basename(attachment)
@@ -90,6 +101,12 @@ def deconstruct_multipart_recursive(seen, text, html, attachments, message):
             text.append(message.get_payload(decode=True).decode('utf8'))
         elif content_type == 'text/html' and not html:
             html.append(message.get_payload(decode=True).decode('utf8'))
+        elif content_type == 'message/rfc822':
+            # for part in message.get_payload():
+            #     payload = b64encode(part.get_payload(decode=True))
+            #     attachments.append(payload)
+            print('XXX', )
+            # html.append()
         else:
             attachments.append(message)
 
@@ -129,7 +146,9 @@ class BaseEmail(Model):
         for field in ('To', 'Cc', 'Bcc'):
             if field in data:
                 data[field] = list_to_csv(data[field])
+        print(data['Attachments'])
         data['Attachments'] = [prepare_attachments(attachment) for attachment in data['Attachments']]
+        print(data['Attachments'])
         return data
 
     def attach(self, *payloads):
@@ -189,7 +208,9 @@ class Email(BaseEmail):
         :param manager: :py:class:`EmailManager` instance.
         :return: :py:class:`Email`
         """
+        print('ZZZ')
         text, html, attachments = deconstruct_multipart(message)
+        print(text, html, attachments)
         subject = prepare_header(message['Subject'])
         sender = prepare_header(message['From'])
         to = prepare_header(message['To'])

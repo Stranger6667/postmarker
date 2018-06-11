@@ -177,6 +177,7 @@ def test_text_html_alternative_and_pdf_attachment_failure(postmark_request, mess
     Send a text body, HTML alternative, and PDF attachment.
     """
     message.attach_alternative('<html></html>', 'text/html')
+    message.attach_alternative('Fake message', 'message/rfc822')
     if sys.version_info[:2] == (3, 2):
         content = b'PDF-File-Contents'
     else:
@@ -189,6 +190,11 @@ def test_text_html_alternative_and_pdf_attachment_failure(postmark_request, mess
         encoded_content = 'UERGLUZpbGUtQ29udGVudHM=\n'
     assert postmark_request.call_args[1]['json'][0] == {
         'Attachments': [
+            {
+                'Name': 'attachment.txt',
+                'Content': 'RmFrZSBtZXNzYWdl',
+                'ContentType': 'text/plain'
+            },
             {
                 'Content': encoded_content,
                 'ContentType': 'application/pdf',
