@@ -177,12 +177,11 @@ def test_text_html_alternative_and_pdf_attachment_failure(postmark_request, mess
     Send a text body, HTML alternative, and PDF attachment.
     """
     message.attach_alternative('<html></html>', 'text/html')
-    message.attach_alternative('Fake message', 'message/rfc822')
     if sys.version_info[:2] == (3, 2):
-        content = b'PDF-File-Contents'
+        pdf_content = b'PDF-File-Contents'
     else:
-        content = 'PDF-File-Contents'
-    message.attach('hello.pdf', content, 'application/pdf')
+        pdf_content = 'PDF-File-Contents'
+    message.attach('hello.pdf', pdf_content, 'application/pdf')
     message.send(fail_silently=False)
     if sys.version_info[0] < 3:
         encoded_content = 'UERGLUZpbGUtQ29udGVudHM='
@@ -190,11 +189,6 @@ def test_text_html_alternative_and_pdf_attachment_failure(postmark_request, mess
         encoded_content = 'UERGLUZpbGUtQ29udGVudHM=\n'
     assert postmark_request.call_args[1]['json'][0] == {
         'Attachments': [
-            {
-                'Name': 'attachment.txt',
-                'Content': 'RmFrZSBtZXNzYWdl',
-                'ContentType': 'text/plain'
-            },
             {
                 'Content': encoded_content,
                 'ContentType': 'application/pdf',
@@ -206,6 +200,35 @@ def test_text_html_alternative_and_pdf_attachment_failure(postmark_request, mess
         'From': 'sender@example.com',
         'Headers': [],
         'HtmlBody': '<html></html>',
+        'ReplyTo': None,
+        'Subject': 'subject',
+        'Tag': None,
+        'TextBody': 'text_content',
+        'To': 'receiver@example.com',
+        'TrackOpens': False,
+    }
+
+
+def test_message_rfc822(postmark_request, message):
+    if sys.version_info[:2] == (3, 2):
+        message_content = b'Fake message'
+    else:
+        message_content = 'Fake message'
+    message.attach_alternative(message_content, 'message/rfc822')
+    message.send(fail_silently=False)
+    assert postmark_request.call_args[1]['json'][0] == {
+        'Attachments': [
+            {
+                'Name': 'attachment.txt',
+                'Content': 'RmFrZSBtZXNzYWdl',
+                'ContentType': 'text/plain'
+            },
+        ],
+        'Bcc': None,
+        'Cc': None,
+        'From': 'sender@example.com',
+        'Headers': [],
+        'HtmlBody': None,
         'ReplyTo': None,
         'Subject': 'subject',
         'Tag': None,

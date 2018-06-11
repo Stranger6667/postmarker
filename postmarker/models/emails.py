@@ -101,13 +101,7 @@ def deconstruct_multipart_recursive(seen, text, html, attachments, message):
             text.append(message.get_payload(decode=True).decode('utf8'))
         elif content_type == 'text/html' and not html:
             html.append(message.get_payload(decode=True).decode('utf8'))
-        elif content_type == 'message/rfc822':
-            # for part in message.get_payload():
-            #     payload = b64encode(part.get_payload(decode=True))
-            #     attachments.append(payload)
-            print('XXX', )
-            # html.append()
-        else:
+        elif content_type != 'message/rfc822':
             attachments.append(message)
 
 
@@ -146,9 +140,7 @@ class BaseEmail(Model):
         for field in ('To', 'Cc', 'Bcc'):
             if field in data:
                 data[field] = list_to_csv(data[field])
-        print(data['Attachments'])
         data['Attachments'] = [prepare_attachments(attachment) for attachment in data['Attachments']]
-        print(data['Attachments'])
         return data
 
     def attach(self, *payloads):
@@ -208,9 +200,7 @@ class Email(BaseEmail):
         :param manager: :py:class:`EmailManager` instance.
         :return: :py:class:`Email`
         """
-        print('ZZZ')
         text, html, attachments = deconstruct_multipart(message)
-        print(text, html, attachments)
         subject = prepare_header(message['Subject'])
         sender = prepare_header(message['From'])
         to = prepare_header(message['To'])
