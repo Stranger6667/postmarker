@@ -10,6 +10,7 @@ Fixed
 ~~~~~
 
 - Processing of alternatives together with attachments. `#148`_
+- Processing of `message/rfc822` attachments.
 
 `0.11.3`_ - 2017-11-08
 ----------------------
