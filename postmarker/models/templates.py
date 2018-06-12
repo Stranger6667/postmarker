@@ -29,7 +29,7 @@ class TemplateManager(ModelManager):
         response = self.call('GET', '/templates/%s' % id)
         return self._init_instance(response)
 
-    def create(self, Name, Subject, HtmlBody=None, TextBody=None):
+    def create(self, Name, Subject, HtmlBody=None, TextBody=None, Alias=None):
         """
         Creates a template.
 
@@ -45,15 +45,17 @@ class TemplateManager(ModelManager):
             'Subject': Subject,
             'HtmlBody': HtmlBody,
             'TextBody': TextBody,
+            'Alias': Alias,
         }
         return self._init_instance(self.call('POST', '/templates', data=data))
 
-    def edit(self, id, Name=None, Subject=None, HtmlBody=None, TextBody=None):
+    def edit(self, id, Name=None, Subject=None, HtmlBody=None, TextBody=None, Alias=None):
         data = {
             'Name': Name,
             'Subject': Subject,
             'HtmlBody': HtmlBody,
             'TextBody': TextBody,
+            'Alias': Alias,
         }
         return self.call('PUT', '/templates/%s' % id, data=data)
 

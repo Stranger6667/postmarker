@@ -6,6 +6,11 @@ Changelog
 `Unreleased`_
 -------------
 
+Added
+~~~~~
+
+- Support for `TemplateAlias`. `#150`_
+
 Fixed
 ~~~~~
 
@@ -326,6 +331,7 @@ Fixed
 .. _0.2.0: https://github.com/Stranger6667/postmarker/compare/0.1.1...0.2.0
 .. _0.1.1: https://github.com/Stranger6667/postmarker/compare/0.1.0...0.1.1
 
+.. _#150: https://github.com/Stranger6667/postmarker/issues/150
 .. _#148: https://github.com/Stranger6667/postmarker/issues/148
 .. _#145: https://github.com/Stranger6667/postmarker/issues/145
 .. _#135: https://github.com/Stranger6667/postmarker/issues/135
