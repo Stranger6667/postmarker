@@ -142,7 +142,6 @@ class BaseEmail(Model):
             if field in data:
                 data[field] = list_to_csv(data[field])
         data['Attachments'] = [prepare_attachments(attachment) for attachment in data['Attachments']]
-        print(data['Attachments'])
         return data
 
     def attach(self, *payloads):
