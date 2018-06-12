@@ -51,10 +51,17 @@ def prepare_attachments(attachment):
         if len(attachment) == 4:
             result['ContentID'] = attachment[3]
     elif isinstance(attachment, MIMEBase):
+        payload = attachment.get_payload()
+        content_type = attachment.get_content_type()
+        # Special case for message/rfc822
+        # Even if RFC implies such attachments being not base64-encoded,
+        # Postmark requires all attachments to be encoded in this way
+        if content_type == 'message/rfc822' and not isinstance(payload, str):
+            payload = b64encode(payload[0].get_payload(decode=True)).decode()
         result = {
             'Name': attachment.get_filename() or 'attachment.txt',
-            'Content': attachment.get_payload(),
-            'ContentType': attachment.get_content_type(),
+            'Content': payload,
+            'ContentType': content_type,
         }
         content_id = attachment.get('Content-ID')
         if content_id:
@@ -63,16 +70,6 @@ def prepare_attachments(attachment):
             if (attachment.get('Content-Disposition') or '').startswith('inline'):
                 content_id = 'cid:%s' % content_id
             result['ContentID'] = content_id
-    elif isinstance(attachment, Message):
-        # Special case for message/rfc822
-        # Even if RFC implies such attachments being not base64-encoded,
-        # Postmark requires all attachments to be encoded in this way
-        payload = b64encode(attachment.get_payload(decode=True)).decode()
-        result = {
-            'Name': attachment.get_filename() or 'attachment.txt',  # Empty name is not allowed
-            'Content': payload,
-            'ContentType': attachment.get_content_type(),
-        }
     elif isinstance(attachment, str):
         content_type = guess_content_type(attachment)
         filename = os.path.basename(attachment)
@@ -102,6 +99,11 @@ def deconstruct_multipart_recursive(seen, text, html, attachments, message):
         elif content_type == 'text/html' and not html:
             html.append(message.get_payload(decode=True).decode('utf8'))
         else:
+            # Ignore underlying messages inside `message/rfc822` payload, because the message itself will be passed
+            # as an attachment
+            if content_type == 'message/rfc822' and sys.version_info[:2] not in ((2, 6), (3, 2)):
+                for part in message.get_payload():
+                    seen.add(part)
             attachments.append(message)
 
 
@@ -141,6 +143,7 @@ class BaseEmail(Model):
             if field in data:
                 data[field] = list_to_csv(data[field])
         data['Attachments'] = [prepare_attachments(attachment) for attachment in data['Attachments']]
+        print(data['Attachments'])
         return data
 
     def attach(self, *payloads):
