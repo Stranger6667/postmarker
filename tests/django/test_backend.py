@@ -212,15 +212,17 @@ def test_text_html_alternative_and_pdf_attachment_failure(postmark_request, mess
 def test_message_rfc822(postmark_request, message):
     if sys.version_info[:2] == (3, 2):
         message_content = b'Fake message'
+        expected_content = 'RmFrZSBtZXNzYWdl\n'
     else:
         message_content = 'Fake message'
+        expected_content = 'RmFrZSBtZXNzYWdl'
     message.attach_alternative(message_content, 'message/rfc822')
     message.send(fail_silently=False)
     assert postmark_request.call_args[1]['json'][0] == {
         'Attachments': [
             {
                 'Name': 'attachment.txt',
-                'Content': 'RmFrZSBtZXNzYWdl',
+                'Content': expected_content,
                 'ContentType': 'message/rfc822',
             },
         ],

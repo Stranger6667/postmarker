@@ -7,7 +7,6 @@ import os
 import sys
 from base64 import b64encode
 from email.header import decode_header
-from email.message import Message
 from email.mime.base import MIMEBase
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
