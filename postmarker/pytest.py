@@ -3,7 +3,7 @@ from __future__ import absolute_import
 
 import pytest
 
-from ._compat import patch
+from ._compat_tests import patch
 from .core import PostmarkClient, requests
 
 
