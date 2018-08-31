@@ -8,12 +8,6 @@ except ImportError:  # Python 2.7
 
 
 try:
-    from unittest.mock import patch
-except ImportError:  # Python < 3.3
-    from mock import patch  # noqa
-
-
-try:
     from inspect import signature
 
     def get_args(cls):
