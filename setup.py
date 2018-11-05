@@ -12,8 +12,9 @@ else:
     install_requires = ['requests']
 
 
+extras_require = {}
 if sys.version_info[:2] <= (3, 2):
-    install_requires.append('mock')
+    extras_require["tests"] = 'mock'
 
 
 with open('README.rst') as file:
@@ -56,6 +57,7 @@ setup(
     ],
     include_package_data=True,
     install_requires=install_requires,
+    extras_require=extras_require,
     entry_points={
         'pytest11': [
             'postmark = postmarker.pytest',

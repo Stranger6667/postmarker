@@ -6,6 +6,11 @@ Changelog
 `Unreleased`_
 -------------
 
+Changed
+~~~~~~~
+
+- Make `mock` package optional on Python 2. `#158`_, `#162`_
+
 `0.12.1`_ - 2018-11-05
 ----------------------
 
@@ -345,6 +350,8 @@ Fixed
 .. _0.1.1: https://github.com/Stranger6667/postmarker/compare/0.1.0...0.1.1
 
 .. _#163: https://github.com/Stranger6667/postmarker/issues/163
+.. _#162: https://github.com/Stranger6667/postmarker/issues/162
+.. _#158: https://github.com/Stranger6667/postmarker/issues/158
 .. _#150: https://github.com/Stranger6667/postmarker/issues/150
 .. _#148: https://github.com/Stranger6667/postmarker/issues/148
 .. _#145: https://github.com/Stranger6667/postmarker/issues/145

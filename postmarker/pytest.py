@@ -12,6 +12,8 @@ def postmark_request():
     """
     Mocks network requests to Postmark API.
     """
+    if patch is None:
+        raise AssertionError('To use pytest fixtures on Python 2, please, install postmarker["tests"]')
     with patch('postmarker.core.requests.Session.request', wraps=requests.Session().request) as patched:
         with patch('postmarker.core.requests.Session.send'):
             yield patched
