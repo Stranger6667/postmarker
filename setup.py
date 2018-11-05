@@ -6,14 +6,11 @@ from setuptools import setup
 import postmarker
 
 
-if sys.version_info[:2] == (3, 2):
-    install_requires = ['requests<2.11.0']
-else:
-    install_requires = ['requests']
+install_requires = ['requests>=2.20.0']
 
 
 extras_require = {}
-if sys.version_info[:2] <= (3, 2):
+if sys.version_info[0] == 2:
     extras_require["tests"] = 'mock'
 
 
@@ -42,11 +39,8 @@ setup(
         'License :: OSI Approved :: MIT License',
         'Programming Language :: Python',
         'Programming Language :: Python :: 2',
-        'Programming Language :: Python :: 2.6',
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.2',
-        'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
