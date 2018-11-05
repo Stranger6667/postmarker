@@ -6,6 +6,9 @@ Changelog
 `Unreleased`_
 -------------
 
+`0.12.2`_ - 2018-11-05
+----------------------
+
 Changed
 ~~~~~~~
 
@@ -319,7 +322,8 @@ Fixed
 
 - Initial release.
 
-.. _Unreleased: https://github.com/Stranger6667/postmarker/compare/0.12.1...HEAD
+.. _Unreleased: https://github.com/Stranger6667/postmarker/compare/0.12.2...HEAD
+.. _0.12.2: https://github.com/Stranger6667/postmarker/compare/0.12.1...0.12.2
 .. _0.12.1: https://github.com/Stranger6667/postmarker/compare/0.12.0...0.12.1
 .. _0.12.0: https://github.com/Stranger6667/postmarker/compare/0.11.3...0.12.0
 .. _0.11.3: https://github.com/Stranger6667/postmarker/compare/0.11.2...0.11.3
