@@ -111,7 +111,7 @@ class TestInboundAsMIME:
         assert self.text == 'This is a test text body.'
 
     def test_html_content(self):
-        assert self.html == '<html><body><p>This is a test html body.<\/p><\/body><\/html>'
+        assert self.html == r'<html><body><p>This is a test html body.<\/p><\/body><\/html>'
 
     def test_attachment(self):
         assert len(self.attachments) == 1

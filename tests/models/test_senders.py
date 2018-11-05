@@ -56,9 +56,7 @@ def test_all_methods(postmark):
         'SafeToRemoveRevokedKeyFromDNS': False,
         'WeakDKIM': False
     }
-    # Nested because of Python 2.6 support
-    with pytest.deprecated_call():
-        with pytest.raises(ClientError) as exc:
-            new_signature.requestnewdkim()
+    with pytest.deprecated_call(), pytest.raises(ClientError) as exc:
+        new_signature.requestnewdkim()
     assert str(exc.value) == '[505] This DKIM is already being renewed.'
     assert new_signature.delete() == 'Signature exampleX@blablaz.com removed.'

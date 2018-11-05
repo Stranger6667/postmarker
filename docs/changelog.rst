@@ -6,6 +6,11 @@ Changelog
 `Unreleased`_
 -------------
 
+Removed
+~~~~~~~
+
+- Support for Python 2.6, 3.2 and 3.3.
+
 `0.12.2`_ - 2018-11-05
 ----------------------
 
