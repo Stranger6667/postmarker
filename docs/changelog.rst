@@ -6,6 +6,11 @@ Changelog
 `Unreleased`_
 -------------
 
+Changed
+~~~~~~~
+
+- Better handling of exceptions that happen during response parsing. `#163`_
+
 `0.12.0`_ - 2018-06-12
 ----------------------
 
@@ -306,7 +311,8 @@ Fixed
 
 - Initial release.
 
-.. _Unreleased: https://github.com/Stranger6667/postmarker/compare/0.11.3...HEAD
+.. _Unreleased: https://github.com/Stranger6667/postmarker/compare/0.12.0...HEAD
+.. _0.12.0: https://github.com/Stranger6667/postmarker/compare/0.11.3...0.12.0
 .. _0.11.3: https://github.com/Stranger6667/postmarker/compare/0.11.2...0.11.3
 .. _0.11.2: https://github.com/Stranger6667/postmarker/compare/0.11.1...0.11.2
 .. _0.11.1: https://github.com/Stranger6667/postmarker/compare/0.11.0...0.11.1
@@ -334,6 +340,7 @@ Fixed
 .. _0.2.0: https://github.com/Stranger6667/postmarker/compare/0.1.1...0.2.0
 .. _0.1.1: https://github.com/Stranger6667/postmarker/compare/0.1.0...0.1.1
 
+.. _#163: https://github.com/Stranger6667/postmarker/issues/163
 .. _#150: https://github.com/Stranger6667/postmarker/issues/150
 .. _#148: https://github.com/Stranger6667/postmarker/issues/148
 .. _#145: https://github.com/Stranger6667/postmarker/issues/145
