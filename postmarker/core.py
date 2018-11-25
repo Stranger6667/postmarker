@@ -1,4 +1,6 @@
 # coding: utf-8
+import sys
+
 import requests
 
 from . import __version__
@@ -41,13 +43,15 @@ class PostmarkClient(object):
         TriggersManager,
     )
 
-    def __init__(self, server_token=None, account_token=None, verbosity=0, max_retries=0, timeout=None):
+    def __init__(
+            self, server_token=None, account_token=None, verbosity=0, max_retries=0, timeout=None,
+            logs_stream=sys.stdout):
         assert server_token, 'You have to provide token to use Postmark API'
         self.server_token = server_token
         self.account_token = account_token
         self.max_retries = max_retries
         self.timeout = timeout
-        self.logger = get_logger('Postmarker', verbosity)
+        self.logger = get_logger('Postmarker', verbosity, logs_stream)
         self._setup_managers()
 
     @classmethod

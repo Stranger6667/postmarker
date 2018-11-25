@@ -8,7 +8,7 @@ DEFAULT_LOGGING_LEVEL = logging.CRITICAL
 LOG_FORMAT = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 
 
-def get_logger(name, verbosity):
+def get_logger(name, verbosity, stream):
     """
     Returns simple console logger.
     """
@@ -19,7 +19,7 @@ def get_logger(name, verbosity):
         2: logging.DEBUG
     }.get(min(2, verbosity), DEFAULT_LOGGING_LEVEL))
     logger.handlers = []
-    handler = logging.StreamHandler()
+    handler = logging.StreamHandler(stream)
     handler.setLevel(logging.DEBUG)
     handler.setFormatter(logging.Formatter(LOG_FORMAT))
     logger.addHandler(handler)

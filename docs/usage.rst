@@ -22,6 +22,9 @@ By default, logging is configured to be silent. To enable it, pass ``verbosity``
 
 With ``verbosity=3`` every request and response will be logged to the console.
 
+By default logs are streamed to ``sys.stdout`` to be in line with the Twelve-Factor App. To change it you could use
+``logs_stream`` parameter in ``PostmarkClient``.
+
 For timeouts and max_retries handling there are two parameters - ``max_retries`` and ``timeout``.
 The ``timeout`` value is passed to `requests.Session.request <http://docs.python-requests.org/en/master/api/#requests.Session.request>`_.
 ``max_retries`` is passed to `requests.adapters.HTTPAdapter <http://docs.python-requests.org/en/master/api/#requests.adapters.HTTPAdapter>`_.
