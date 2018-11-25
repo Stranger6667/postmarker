@@ -6,7 +6,7 @@ def chunks(container, n):
     Split a container into n-sized chunks.
     """
     for i in range(0, len(container), n):
-        yield container[i: i + n]
+        yield container[i : i + n]
 
 
 def sizes(count, offset=0, max_chunk=500):

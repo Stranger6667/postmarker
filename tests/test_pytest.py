@@ -18,5 +18,6 @@ def test_mock_not_installed():
     del sys.modules["postmarker.pytest"]
 
     from postmarker.pytest import postmark_request
+
     with pytest.raises(AssertionError, matches="To use pytest fixtures on Python 2.*"):
         list(postmark_request())

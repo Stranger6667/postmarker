@@ -5,10 +5,10 @@ from postmarker.models.base import ModelManager
 from postmarker.models.triggers import InboundRule, Tag
 
 
-CASSETTE_NAME = 'triggers'
+CASSETTE_NAME = "triggers"
 
 
-@pytest.mark.parametrize('name', ('inboundrules', 'tags'))
+@pytest.mark.parametrize("name", ("inboundrules", "tags"))
 def test_triggers_manager(postmark, name):
     manager = getattr(postmark.triggers, name)
     assert isinstance(manager, ModelManager)
@@ -16,11 +16,10 @@ def test_triggers_manager(postmark, name):
 
 
 class TestInboundRulesTriggers:
-
     def test_create(self, postmark):
-        rule = postmark.triggers.inboundrules.create('someone@example.com')
+        rule = postmark.triggers.inboundrules.create("someone@example.com")
         assert isinstance(rule, InboundRule)
-        assert str(rule) == 'InboundRule: 962286'
+        assert str(rule) == "InboundRule: 962286"
 
     def test_all(self, postmark):
         rules = postmark.triggers.inboundrules.all()
@@ -29,15 +28,14 @@ class TestInboundRulesTriggers:
 
     def test_delete(self, postmark):
         rule = postmark.triggers.inboundrules.all()[0]
-        assert rule.delete() == 'Rule someone@example.com removed.'
+        assert rule.delete() == "Rule someone@example.com removed."
 
 
 class TestTagsTriggers:
-
     def test_create(self, postmark):
-        tag = postmark.triggers.tags.create('welcome')
+        tag = postmark.triggers.tags.create("welcome")
         assert isinstance(tag, Tag)
-        assert str(tag) == 'welcome'
+        assert str(tag) == "welcome"
 
     def test_all(self, postmark):
         tags = postmark.triggers.tags.all()
@@ -49,10 +47,10 @@ class TestTagsTriggers:
         assert isinstance(tag.get(), Tag)
 
     def test_edit(self, postmark):
-        tag = postmark.triggers.tags.create('welcome2')
-        tag.edit(MatchName='blabla')
-        assert tag.MatchName == 'blabla'
+        tag = postmark.triggers.tags.create("welcome2")
+        tag.edit(MatchName="blabla")
+        assert tag.MatchName == "blabla"
 
     def test_delete(self, postmark):
         tag = postmark.triggers.tags.all()[0]
-        assert tag.delete() == 'Tag 1616731 removed.'
+        assert tag.delete() == "Tag 1616731 removed."

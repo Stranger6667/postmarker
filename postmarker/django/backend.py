@@ -13,11 +13,7 @@ from ..exceptions import PostmarkerException
 from .signals import on_exception, post_send, pre_send
 
 
-DEFAULT_CONFIG = {
-    'TEST_MODE': False,
-    'TRACK_OPENS': False,
-    'VERBOSITY': 0,
-}
+DEFAULT_CONFIG = {"TEST_MODE": False, "TRACK_OPENS": False, "VERBOSITY": 0}
 
 
 class EmailBackend(BaseEmailBackend):
@@ -28,23 +24,23 @@ class EmailBackend(BaseEmailBackend):
     def __init__(self, token=None, fail_silently=False, **kwargs):
         super(EmailBackend, self).__init__(fail_silently=fail_silently)
         self.client = None
-        if self.get_option('TEST_MODE'):
+        if self.get_option("TEST_MODE"):
             self.server_token = TEST_TOKEN
         else:
-            self.server_token = token or self.get_option('TOKEN')
+            self.server_token = token or self.get_option("TOKEN")
             if self.server_token is None:
-                raise ImproperlyConfigured('You should specify TOKEN to use Postmark email backend')
+                raise ImproperlyConfigured("You should specify TOKEN to use Postmark email backend")
 
     @property
     def config(self):
-        return getattr(settings, 'POSTMARK', DEFAULT_CONFIG)
+        return getattr(settings, "POSTMARK", DEFAULT_CONFIG)
 
     def get_option(self, key):
         return self.config.get(key, DEFAULT_CONFIG.get(key))
 
     def open(self):
         if self.client is None:
-            self.client = PostmarkClient(server_token=self.server_token, verbosity=self.get_option('VERBOSITY'))
+            self.client = PostmarkClient(server_token=self.server_token, verbosity=self.get_option("VERBOSITY"))
             return True
         return False
 
@@ -63,9 +59,9 @@ class EmailBackend(BaseEmailBackend):
             client_created = self.open()
             prepared_messages = [self.prepare_message(message) for message in email_messages]
             pre_send.send_robust(self.__class__, messages=prepared_messages)
-            responses = self.client.emails.send_batch(*prepared_messages, TrackOpens=self.get_option('TRACK_OPENS'))
+            responses = self.client.emails.send_batch(*prepared_messages, TrackOpens=self.get_option("TRACK_OPENS"))
             post_send.send_robust(self.__class__, messages=prepared_messages, response=responses)
-            sent, not_sent = partition(lambda x: x['ErrorCode'] != 0, responses)
+            sent, not_sent = partition(lambda x: x["ErrorCode"] != 0, responses)
             msg_count = len(sent)
             if not_sent:
                 self.raise_for_response(not_sent)
@@ -85,14 +81,14 @@ class EmailBackend(BaseEmailBackend):
         if len(exception_messages) == 1:
             message = exception_messages[0]
         else:
-            message = '[%s]' % ', '.join(exception_messages)
+            message = "[%s]" % ", ".join(exception_messages)
         raise PostmarkerException(message)
 
     def prepare_message(self, message):
         instance = message.message()
-        instance.tag = getattr(message, 'tag', None)
+        instance.tag = getattr(message, "tag", None)
         if message.bcc:
-            instance['Bcc'] = ', '.join(map(force_text, message.bcc))
+            instance["Bcc"] = ", ".join(map(force_text, message.bcc))
         return instance
 
 
@@ -102,7 +98,7 @@ class PostmarkEmailMixin(object):
     """
 
     def __init__(self, *args, **kwargs):
-        self.tag = kwargs.pop('tag', None)
+        self.tag = kwargs.pop("tag", None)
         super(PostmarkEmailMixin, self).__init__(*args, **kwargs)
 
 

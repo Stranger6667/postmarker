@@ -13,7 +13,7 @@ class ClientError(PostmarkerException):
     """
 
     def __init__(self, *args, **kwargs):
-        self.error_code = kwargs.pop('error_code')
+        self.error_code = kwargs.pop("error_code")
         super(ClientError, self).__init__(*args, **kwargs)
 
 

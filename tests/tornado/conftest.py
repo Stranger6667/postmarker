@@ -9,49 +9,43 @@ from tornado.web import Application, RequestHandler
 
 
 class BaseHandler(PostmarkMixin, RequestHandler):
-
     def get(self):
         self.write(str(self.get_value()))
 
 
 class Handler(BaseHandler):
-
     def get_value(self):
         return self.postmark_client.server_token
 
 
 class MaxRetriesHandler(BaseHandler):
-
     def get_value(self):
         return self.postmark_client.max_retries
 
 
 class SendHandler(BaseHandler):
-
     def get_value(self):
         return self.send(
-            From='sender@example.com',
-            To='receiver@example.com',
-            Subject='Postmark test',
-            HtmlBody='<html><body><strong>Hello</strong> dear Postmark user.</body></html>'
-        )['Message']
+            From="sender@example.com",
+            To="receiver@example.com",
+            Subject="Postmark test",
+            HtmlBody="<html><body><strong>Hello</strong> dear Postmark user.</body></html>",
+        )["Message"]
 
 
 class SendBatchHandler(BaseHandler):
-
     def get_value(self):
         return self.send_batch(
             {
-                'From': 'sender@example.com',
-                'To': 'receiver@example.com',
-                'Subject': 'Postmark test',
-                'HtmlBody': '<html><body><strong>Hello</strong> dear Postmark user.</body></html>'
+                "From": "sender@example.com",
+                "To": "receiver@example.com",
+                "Subject": "Postmark test",
+                "HtmlBody": "<html><body><strong>Hello</strong> dear Postmark user.</body></html>",
             }
-        )[0]['Message']
+        )[0]["Message"]
 
 
 class ReuseHandler(BaseHandler):
-
     def get_value(self):
         return self.postmark_client is self.postmark_client
 
@@ -60,13 +54,13 @@ class ReuseHandler(BaseHandler):
 def app():
     return Application(
         [
-            (r'/', Handler),
-            (r'/send/', SendHandler),
-            (r'/send_batch/', SendBatchHandler),
-            (r'/reuse/', ReuseHandler),
-            (r'/max_retries/', MaxRetriesHandler),
+            (r"/", Handler),
+            (r"/send/", SendHandler),
+            (r"/send_batch/", SendBatchHandler),
+            (r"/reuse/", ReuseHandler),
+            (r"/max_retries/", MaxRetriesHandler),
         ],
-        postmark_server_token='Test token'
+        postmark_server_token="Test token",
     )
 
 
