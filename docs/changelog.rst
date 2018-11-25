@@ -10,6 +10,7 @@ Added
 ~~~~~
 
 - Support for Python 3.7. `#170`_
+- Support for `Metadata` option. `#168`_
 
 Changed
 ~~~~~~~
@@ -369,6 +370,7 @@ Fixed
 .. _0.1.1: https://github.com/Stranger6667/postmarker/compare/0.1.0...0.1.1
 
 .. _#170: https://github.com/Stranger6667/postmarker/issues/170
+.. _#168: https://github.com/Stranger6667/postmarker/issues/168
 .. _#163: https://github.com/Stranger6667/postmarker/issues/163
 .. _#162: https://github.com/Stranger6667/postmarker/issues/162
 .. _#159: https://github.com/Stranger6667/postmarker/issues/159
