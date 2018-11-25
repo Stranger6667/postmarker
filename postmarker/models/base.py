@@ -8,6 +8,7 @@ class Model(object):
     """
     Abstract data model for Postmark entities.
     """
+
     _data = None
 
     def __init__(self, manager=None, **kwargs):
@@ -15,10 +16,10 @@ class Model(object):
         self._update(kwargs)
 
     def __str__(self):
-        return '%s: %s' % (self.__class__.__name__, self._data.get('ID'))
+        return "%s: %s" % (self.__class__.__name__, self._data.get("ID"))
 
     def __repr__(self):
-        return '<%s>' % self
+        return "<%s>" % self
 
     def __unicode__(self):
         return self.__str__()
@@ -43,11 +44,12 @@ class ModelManager(object):
     """
     Proxies calls to main API client. Encapsulates logic of certain part of API - bounces, emails, etc.
     """
+
     name = None
     model = None
-    token_type = 'server'
-    count_key = 'count'
-    offset_key = 'offset'
+    token_type = "server"
+    count_key = "count"
+    offset_key = "offset"
     max_chunk_size = 500
 
     def __init__(self, client):
@@ -57,7 +59,7 @@ class ModelManager(object):
         return self.__class__.__name__
 
     def __repr__(self):
-        return '<%s>' % self
+        return "<%s>" % self
 
     __unicode__ = __str__
 
@@ -68,7 +70,7 @@ class ModelManager(object):
         return [self._init_instance(part) for part in data]
 
     def call(self, *args, **kwargs):
-        kwargs['token_type'] = self.token_type
+        kwargs["token_type"] = self.token_type
         return self.client.call(*args, **kwargs)
 
     def call_many(self, *args, **kwargs):
@@ -85,13 +87,11 @@ class ModelManager(object):
             # We expect, that we will load `TotalCount` - offset items.
             # This number will be less or equal to number of already loaded items.
             # It could be less in case if latest response contains less items than provided `count` value.
-            if response['TotalCount'] - offset <= loaded_items_count:
+            if response["TotalCount"] - offset <= loaded_items_count:
                 break
 
     def expand_responses(self, responses, key):
-        items = [
-            self._init_many(response[key]) for response in responses
-        ]
+        items = [self._init_many(response[key]) for response in responses]
         return sum(items, [])
 
     def update_kwargs(self, kwargs, count, offset):
@@ -110,6 +110,7 @@ class SubModelManager(ModelManager):
     >>> postmark.messages.outbound.all()
     []
     """
+
     _managers = ()
 
     def __init__(self, *args, **kwargs):
@@ -123,7 +124,6 @@ class SubModelManager(ModelManager):
 
 
 class MessageModel(Model):
-
     @property
     def message(self):
         return self._manager.client.messages.outbound.get(self.MessageID)

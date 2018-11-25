@@ -3,9 +3,8 @@ from .base import Model, ModelManager
 
 
 class Domain(Model):
-
     def __str__(self):
-        return '%s: %s (%s)' % (self.__class__.__name__, self._data.get('Name'), self._data.get('ID'))
+        return "%s: %s (%s)" % (self.__class__.__name__, self._data.get("Name"), self._data.get("ID"))
 
     def get(self):
         new_instance = self._manager.get(self.ID)
@@ -27,34 +26,31 @@ class Domain(Model):
 
 
 class DomainsManager(ModelManager):
-    name = 'domains'
+    name = "domains"
     model = Domain
-    token_type = 'account'
+    token_type = "account"
 
     def get(self, id):
-        response = self.call('GET', '/domains/%s' % id)
+        response = self.call("GET", "/domains/%s" % id)
         return self._init_instance(response)
 
     def create(self, Name, ReturnPathDomain=None):
-        data = {
-            'Name': Name,
-            'ReturnPathDomain': ReturnPathDomain
-        }
-        return self._init_instance(self.call('POST', '/domains', data=data))
+        data = {"Name": Name, "ReturnPathDomain": ReturnPathDomain}
+        return self._init_instance(self.call("POST", "/domains", data=data))
 
     def edit(self, id, ReturnPathDomain):
-        data = {'ReturnPathDomain': ReturnPathDomain}
-        return self.call('PUT', '/domains/%s' % id, data=data)
+        data = {"ReturnPathDomain": ReturnPathDomain}
+        return self.call("PUT", "/domains/%s" % id, data=data)
 
     def all(self, count=500, offset=0):
-        responses = self.call_many('GET', '/domains', count=count, offset=offset)
-        return self.expand_responses(responses, 'Domains')
+        responses = self.call_many("GET", "/domains", count=count, offset=offset)
+        return self.expand_responses(responses, "Domains")
 
     def delete(self, id):
-        return self.call('DELETE', '/domains/%s' % id)['Message']
+        return self.call("DELETE", "/domains/%s" % id)["Message"]
 
     def verifyspf(self, id):
-        return self.call('POST', '/domains/%s/verifyspf' % id)
+        return self.call("POST", "/domains/%s/verifyspf" % id)
 
     def rotatedkim(self, id):
-        return self.call('POST', '/domains/%s/rotatedkim' % id)
+        return self.call("POST", "/domains/%s/rotatedkim" % id)

@@ -1,7 +1,7 @@
 language: python
 matrix:
   include:
-    - python: 3.5
+    - python: 3.6
       env:
       - TOX_ENV=lint
     - python: 3.5

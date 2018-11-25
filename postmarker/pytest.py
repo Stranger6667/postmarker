@@ -14,13 +14,13 @@ def postmark_request():
     """
     if patch is None:
         raise AssertionError('To use pytest fixtures on Python 2, please, install postmarker["tests"]')
-    with patch('postmarker.core.requests.Session.request', wraps=requests.Session().request) as patched:
-        with patch('postmarker.core.requests.Session.send'):
+    with patch("postmarker.core.requests.Session.request", wraps=requests.Session().request) as patched:
+        with patch("postmarker.core.requests.Session.send"):
             yield patched
 
 
 @pytest.yield_fixture
 def postmark_client(postmark_request):
-    client = PostmarkClient(server_token='SERVER_TOKEN', account_token='ACCOUNT_TOKEN')
+    client = PostmarkClient(server_token="SERVER_TOKEN", account_token="ACCOUNT_TOKEN")
     client.mock = postmark_request
     yield client

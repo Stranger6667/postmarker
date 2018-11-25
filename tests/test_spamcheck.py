@@ -4,10 +4,10 @@ import pytest
 from postmarker.exceptions import SpamAssassinError
 
 
-CASSETTE_NAME = 'spamcheck'
+CASSETTE_NAME = "spamcheck"
 
 
-EMAIL_DUMP = '''Delivered-To: receiver@gmail.com
+EMAIL_DUMP = """Delivered-To: receiver@gmail.com
 Received: by 10.194.205.41 with SMTP id ld9csp1978927wjc;
         Tue, 4 Oct 2016 01:34:04 -0700 (PDT)
 X-Received: by 10.28.39.134 with SMTP id n128mr14037354wmn.60.1475570044702;
@@ -36,23 +36,26 @@ Date: Tue, 04 Oct 2016 08:34:04 -0000
 Message-ID: <20161004083404.363.8793@0fdec0828b3b>
 
 Bla bla bla,
-'''
+"""
 
 
 def test_spamcheck_valid(postmark):
     response = postmark.spamcheck(EMAIL_DUMP)
-    assert response['success']
-    assert response['report'] == ''' pts rule name               description
+    assert response["success"]
+    assert (
+        response["report"]
+        == """ pts rule name               description
 ---- ---------------------- --------------------------------------------------
  1.3 RDNS_NONE              Delivered to internal network by a host with no rDNS
  1.0 BODY_URI_ONLY          Message body is only a URI in one line of text or for
                             an image
  2.0 URI_ONLY_MSGID_MALF    URI only + malformed message ID
 
-'''
+"""
+    )
 
 
 def test_spamcheck_invalid(postmark):
     with pytest.raises(SpamAssassinError) as exc:
-        postmark.spamcheck('')
-    assert str(exc.value) == 'SpamAssassin error occured'
+        postmark.spamcheck("")
+    assert str(exc.value) == "SpamAssassin error occured"

@@ -1,7 +1,7 @@
 # coding: utf-8
 
 
-CASSETTE_NAME = 'server'
+CASSETTE_NAME = "server"
 
 
 def test_edit(server):
@@ -11,4 +11,4 @@ def test_edit(server):
 
 
 def test_str(server):
-    assert ('%s' % server) == 'Server: example.com (1)'
+    assert ("%s" % server) == "Server: example.com (1)"

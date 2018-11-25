@@ -4,7 +4,7 @@ import pytest
 from postmarker.exceptions import ClientError
 
 
-CASSETTE_NAME = 'exceptions'
+CASSETTE_NAME = "exceptions"
 
 
 def test_raise(postmark):
