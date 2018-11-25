@@ -11,6 +11,11 @@ Added
 
 - Support for Python 3.7. `#170`_
 
+Changed
+~~~~~~~
+
+- Stream logs to `sys.stdout` by default. `#159`_
+
 Removed
 ~~~~~~~
 
@@ -366,6 +371,7 @@ Fixed
 .. _#170: https://github.com/Stranger6667/postmarker/issues/170
 .. _#163: https://github.com/Stranger6667/postmarker/issues/163
 .. _#162: https://github.com/Stranger6667/postmarker/issues/162
+.. _#159: https://github.com/Stranger6667/postmarker/issues/159
 .. _#158: https://github.com/Stranger6667/postmarker/issues/158
 .. _#150: https://github.com/Stranger6667/postmarker/issues/150
 .. _#148: https://github.com/Stranger6667/postmarker/issues/148
