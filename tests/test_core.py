@@ -1,5 +1,6 @@
 # coding: utf-8
 import pytest
+from requests import HTTPError, Response
 
 from postmarker.core import USER_AGENT, PostmarkClient
 from postmarker.models.messages import MessageManager, OutboundMessageManager
@@ -46,3 +47,11 @@ class TestManagersSetup:
     def test_names_overriding(self, klass):
         assert not any(manager.name in dir(klass) for manager in klass._managers), \
             "Defined managers names override client's members"
+
+
+def test_malformed_request(postmark, postmark_request):
+    postmark_request.return_value = Response()
+    postmark_request.return_value.status_code = 500
+    postmark_request.return_value._content = b"Server Error"
+    with pytest.raises(HTTPError, matches="Server Error"):
+        postmark.call('GET', 'endpoint')
