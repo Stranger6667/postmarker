@@ -19,8 +19,6 @@ Postmarker
 
 Python client library for `Postmark API <http://developer.postmarkapp.com/developer-api-overview.html>`_.
 
-This library is in active development now. Contributions are very welcome!
-
 Installation
 ============
 
@@ -30,6 +28,11 @@ Postmarker can be obtained with ``pip``::
 
 Usage example
 =============
+
+**NOTE**:
+
+The attributes of all classes are provided **as is**, without transformation to snake case.
+We don't want to introduce new names for existing entities.
 
 Send single email:
 
