@@ -23,7 +23,8 @@ try:
         return list(signature(cls).parameters)
 
 except ImportError:
-    from inspect import getargspec
 
     def get_args(cls):
+        from inspect import getargspec
+
         return getargspec(cls.__init__).args[1:]
