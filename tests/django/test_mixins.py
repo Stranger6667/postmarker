@@ -37,8 +37,7 @@ class EmailWithMetadata(PostmarkEmailMixin, EmailMultiAlternatives):
 
 def test_metadata(postmark_request):
     EmailWithMetadata(
-        "Subject", "Body", "sender@example.com", ["receiver@example.com"],
-        metadata={"key1": "value1", "key2": "value2"}
+        "Subject", "Body", "sender@example.com", ["receiver@example.com"], metadata={"key1": "value1", "key2": "value2"}
     ).send()
     assert postmark_request.call_args[1]["json"][0] == {
         "ReplyTo": None,
@@ -52,9 +51,6 @@ def test_metadata(postmark_request):
         "HtmlBody": None,
         "TrackOpens": True,
         "Tag": None,
-        "Metadata": {
-            "key1": "value1",
-            "key2": "value2",
-        },
+        "Metadata": {"key1": "value1", "key2": "value2"},
         "From": "sender@example.com",
     }
