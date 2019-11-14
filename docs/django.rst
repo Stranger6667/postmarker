@@ -45,7 +45,7 @@ To globally turn on ``TrackOpens`` feature, set ``TRACK_OPENS`` to ``True``.
 Messages
 ========
 
-To mark messages with tags you could use ``postmarker.django.PostmarkEmailMessage`` /  ``postmarker.django.PostmarkEmailMultiAlternatives``
+To mark messages with tags and / or add metadata, you could use ``postmarker.django.PostmarkEmailMessage`` /  ``postmarker.django.PostmarkEmailMultiAlternatives``
 instead of ``EmailMessage`` / ``EmailMultiAlternatives`` from Django.
 Example:
 
@@ -54,7 +54,11 @@ Example:
     >>> from postmarker.django import PostmarkEmailMessage
     >>> PostmarkEmailMessage(
         'Subject', 'Body', 'sender@example.com', ['receiver@example.com'],
-        tag='Test tag'
+        tag='Test tag',
+        metadata={
+            "color":"blue",
+            "client-id":"12345",
+        },
     ).send()
 
 You can get the same feature for your own classes with ``PostmarkEmailMixin``.
