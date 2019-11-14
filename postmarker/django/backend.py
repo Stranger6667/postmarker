@@ -87,6 +87,7 @@ class EmailBackend(BaseEmailBackend):
     def prepare_message(self, message):
         instance = message.message()
         instance.tag = getattr(message, "tag", None)
+        instance.metadata = getattr(message, "metadata", None)
         if message.bcc:
             instance["Bcc"] = ", ".join(map(force_text, message.bcc))
         return instance
@@ -99,6 +100,7 @@ class PostmarkEmailMixin(object):
 
     def __init__(self, *args, **kwargs):
         self.tag = kwargs.pop("tag", None)
+        self.metadata = kwargs.pop("metadata", None)
         super(PostmarkEmailMixin, self).__init__(*args, **kwargs)
 
 

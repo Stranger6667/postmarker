@@ -170,6 +170,7 @@ class TestSimpleSend:
             "Subject": "Test subject",
             "TextBody": "Text",
             "Tag": None,
+            "Metadata": None,
             "To": "receiver@example.com",
         }
 

@@ -195,6 +195,7 @@ class Email(BaseEmail):
         bcc = prepare_header(message["Bcc"])
         reply_to = prepare_header(message["Reply-To"])
         tag = getattr(message, "tag", None)
+        metadata = getattr(message, "metadata", None)
         return cls(
             manager=manager,
             From=sender,
@@ -207,6 +208,7 @@ class Email(BaseEmail):
             ReplyTo=reply_to,
             Attachments=attachments,
             Tag=tag,
+            Metadata=metadata,
         )
 
     def send(self):
