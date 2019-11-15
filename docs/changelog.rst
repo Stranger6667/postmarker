@@ -6,6 +6,14 @@ Changelog
 `Unreleased`_
 -------------
 
+`0.13.1`_ - 2019-11-15
+----------------------
+
+Added
+~~~~~
+
+- Support for metadata in Django email backend. `#181`_
+
 `0.13.0`_ - 2018-11-25
 ----------------------
 
@@ -372,6 +380,7 @@ Fixed
 .. _0.2.0: https://github.com/Stranger6667/postmarker/compare/0.1.1...0.2.0
 .. _0.1.1: https://github.com/Stranger6667/postmarker/compare/0.1.0...0.1.1
 
+.. _#181: https://github.com/Stranger6667/postmarker/pull/181
 .. _#170: https://github.com/Stranger6667/postmarker/issues/170
 .. _#168: https://github.com/Stranger6667/postmarker/issues/168
 .. _#163: https://github.com/Stranger6667/postmarker/issues/163
