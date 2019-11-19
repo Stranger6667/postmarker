@@ -1,6 +1,5 @@
 {
-  "http_interactions": [
-    {
+  "http_interactions": [{
       "recorded_at": "2016-12-04T20:21:59",
       "request": {
         "body": {
@@ -354,7 +353,7 @@
       },
       "response": {
         "body": {
-          "base64_string": "H4sIAAAAAAAEAB3KuwrDMAxG4Vcxmoshq6Fr6FhoyC7q32CQlRDZaaC0z57L+p3zpdezH7HklBEpJBbD7bTHZJUCKT7WZixxKpzVKxfQ1QdsdWRpOKb1bnPqHLuyuaxvaRHhEF8q2+oV1f1ZhH47a719C20AAAA=",
+          "base64_string": "H4sIALcQ1F0C/x3KwQqDMBBF0V8Js5ZAtwG3pctCi/vBPCGQjJJMVBD77Y1uz70Hfd7PATlMAZ6c5oruotdclBwJtlIXZD8nDmKFE+juX+w6cKxo09qXZXoYNmk3QcZYPVwTm5TLagVqfhwjnX/4K8htbAAAAA==",
           "encoding": "utf-8"
         },
         "headers": {
@@ -385,6 +384,136 @@
           "message": "OK"
         },
         "url": "https://api.postmarkapp.com/domains/386143/verifyspf"
+      }
+    },
+    {
+      "recorded_at": "2016-12-05T08:18:51",
+      "request": {
+        "body": {
+          "base64_string": "",
+          "encoding": "utf-8"
+        },
+        "headers": {
+          "Accept": [
+            "application/json"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "Content-Length": [
+            "0"
+          ],
+          "User-Agent": [
+            "Postmarker/0.6.0.dev"
+          ],
+          "X-Postmark-Account-Token": [
+            "ACCOUNT_TOKEN"
+          ]
+        },
+        "method": "PUT",
+        "uri": "https://api.postmarkapp.com/domains/386143/verifyDkim"
+      },
+      "response": {
+        "body": {
+          "base64_string": "H4sIABET1F0C/31SyXKbMBh+FcbXdhwWm5B0fMCAMcMSFi91Lh0RhCEgAUIQQ6d99prEzjhum6M+fcu//Rw5AMHRPTPC8KVuSkiiAoEUj/EAf2VGgbvYQJLGKYyOLEoa+AYui5p+LlvBA92AvHl1b2d1GXMMYNCBSfFT3kTw/oiMEQV1O8aQMr9Bng9K1TTsi8QY5PUQuYUgG74uoOF5LuOs/BB6Bl2IoxTvz1ye5USOZ6fcdMrzUonGP96Kz2A3/k87Fy4fErIZqcG3cmYbemzLrK4ElR4YoaB62lz21rI80R1ZVeapZ873ntKFfSCSbRXfLVd73EWmYn15ecjQzk7rsPWMtWXvtI3oV7TnaHHL+QuNNHwkRK7BsoK+mFgxARKXhDIl+/LuMePa2zkIe5SYhqysUuwQywGaKWgPPecXgtLTmypgrSRoUlOKkq0robSfPD7dbLq+wlmyXYbfpV1z0LZxq1vas9uKHX3O+alnqLInz8+9+7AtMhhdT/sE/zX0AMRwVfgQFS08cUzYLUiBVCe42uC6jACFAQW0qQf9acyDjQ9pQ7ALaKK+ruOTe7um/uOCrimKI9vae9nHM3i/xcHQUI+oIIncRPj1B+pGeXQlAwAA",
+          "encoding": "utf-8"
+        },
+        "headers": {
+          "Cache-Control": [
+            "private"
+          ],
+          "Content-Encoding": [
+            "gzip"
+          ],
+          "Content-Length": [
+            "119"
+          ],
+          "Content-Type": [
+            "application/json; charset=utf-8"
+          ],
+          "Date": [
+            "Mon, 05 Dec 2016 08:18:51 GMT"
+          ],
+          "Server": [
+            "unicorns-double-rainbow"
+          ],
+          "X-Powered-By": [
+            "ASP.NET"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": "OK"
+        },
+        "url": "https://api.postmarkapp.com/domains/386143/verifyDkim"
+      }
+    },
+    {
+      "recorded_at": "2016-12-05T08:18:51",
+      "request": {
+        "body": {
+          "base64_string": "",
+          "encoding": "utf-8"
+        },
+        "headers": {
+          "Accept": [
+            "application/json"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "Content-Length": [
+            "0"
+          ],
+          "User-Agent": [
+            "Postmarker/0.6.0.dev"
+          ],
+          "X-Postmark-Account-Token": [
+            "ACCOUNT_TOKEN"
+          ]
+        },
+        "method": "PUT",
+        "uri": "https://api.postmarkapp.com/domains/386143/verifyReturnPath"
+      },
+      "response": {
+        "body": {
+          "base64_string": "H4sIABET1F0C/31SyXKbMBh+FcbXdhwWm5B0fMCAMcMSFi91Lh0RhCEgAUIQQ6d99prEzjhum6M+fcu//Rw5AMHRPTPC8KVuSkiiAoEUj/EAf2VGgbvYQJLGKYyOLEoa+AYui5p+LlvBA92AvHl1b2d1GXMMYNCBSfFT3kTw/oiMEQV1O8aQMr9Bng9K1TTsi8QY5PUQuYUgG74uoOF5LuOs/BB6Bl2IoxTvz1ye5USOZ6fcdMrzUonGP96Kz2A3/k87Fy4fErIZqcG3cmYbemzLrK4ElR4YoaB62lz21rI80R1ZVeapZ873ntKFfSCSbRXfLVd73EWmYn15ecjQzk7rsPWMtWXvtI3oV7TnaHHL+QuNNHwkRK7BsoK+mFgxARKXhDIl+/LuMePa2zkIe5SYhqysUuwQywGaKWgPPecXgtLTmypgrSRoUlOKkq0robSfPD7dbLq+wlmyXYbfpV1z0LZxq1vas9uKHX3O+alnqLInz8+9+7AtMhhdT/sE/zX0AMRwVfgQFS08cUzYLUiBVCe42uC6jACFAQW0qQf9acyDjQ9pQ7ALaKK+ruOTe7um/uOCrimKI9vae9nHM3i/xcHQUI+oIIncRPj1B+pGeXQlAwAA",
+          "encoding": "utf-8"
+        },
+        "headers": {
+          "Cache-Control": [
+            "private"
+          ],
+          "Content-Encoding": [
+            "gzip"
+          ],
+          "Content-Length": [
+            "119"
+          ],
+          "Content-Type": [
+            "application/json; charset=utf-8"
+          ],
+          "Date": [
+            "Mon, 05 Dec 2016 08:18:51 GMT"
+          ],
+          "Server": [
+            "unicorns-double-rainbow"
+          ],
+          "X-Powered-By": [
+            "ASP.NET"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": "OK"
+        },
+        "url": "https://api.postmarkapp.com/domains/386143/verifyReturnPath"
       }
     },
     {

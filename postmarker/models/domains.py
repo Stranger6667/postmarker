@@ -21,6 +21,12 @@ class Domain(Model):
     def verifyspf(self):
         return self._manager.verifyspf(self.ID)
 
+    def verifydkim(self):
+        return self._manager.verifydkim(self.ID)
+
+    def verifyreturnpath(self):
+        return self._manager.verifyreturnpath(self.ID)
+
     def rotatedkim(self):
         return self._manager.rotatedkim(self.ID)
 
@@ -51,6 +57,12 @@ class DomainsManager(ModelManager):
 
     def verifyspf(self, id):
         return self.call("POST", "/domains/%s/verifyspf" % id)
+
+    def verifydkim(self, id):
+        return self.call("PUT", "/domains/%s/verifyDkim" % id)
+
+    def verifyreturnpath(self, id):
+        return self.call("PUT", "/domains/%s/verifyReturnPath" % id)
 
     def rotatedkim(self, id):
         return self.call("POST", "/domains/%s/rotatedkim" % id)
