@@ -6,6 +6,11 @@ Changelog
 `Unreleased`_
 -------------
 
+Added
+~~~~~
+
+- ``verifydkim`` and ``verifyreturnpath`` for domains API. `#183`_
+
 `0.13.1`_ - 2019-11-15
 ----------------------
 
@@ -380,6 +385,7 @@ Fixed
 .. _0.2.0: https://github.com/Stranger6667/postmarker/compare/0.1.1...0.2.0
 .. _0.1.1: https://github.com/Stranger6667/postmarker/compare/0.1.0...0.1.1
 
+.. _#183: https://github.com/Stranger6667/postmarker/pull/183
 .. _#181: https://github.com/Stranger6667/postmarker/pull/181
 .. _#170: https://github.com/Stranger6667/postmarker/issues/170
 .. _#168: https://github.com/Stranger6667/postmarker/issues/168
