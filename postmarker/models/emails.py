@@ -398,7 +398,7 @@ class EmailManager(ModelManager):
             TrackLinks=TrackLinks,
             Attachments=Attachments,
             InlineCss=InlineCss,
-            Metadata=Metadata
+            Metadata=Metadata,
         ).send()
 
     def send_batch(self, *emails, **extra):
