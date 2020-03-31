@@ -6,6 +6,11 @@ Changelog
 `Unreleased`_
 -------------
 
+Added
+~~~~~
+
+- Support for ``Metadata`` option in ``EmailTemplate``. `#184`_
+
 `0.14.0`_ - 2020-02-10
 ----------------------
 
@@ -357,7 +362,10 @@ Fixed
 
 - Initial release.
 
-.. _Unreleased: https://github.com/Stranger6667/postmarker/compare/0.12.2...HEAD
+.. _Unreleased: https://github.com/Stranger6667/postmarker/compare/0.14.0...HEAD
+.. _0.14.0: https://github.com/Stranger6667/postmarker/compare/0.13.1...0.14.0
+.. _0.13.1: https://github.com/Stranger6667/postmarker/compare/0.13.0...0.13.1
+.. _0.13.0: https://github.com/Stranger6667/postmarker/compare/0.12.2...0.13.0
 .. _0.12.2: https://github.com/Stranger6667/postmarker/compare/0.12.1...0.12.2
 .. _0.12.1: https://github.com/Stranger6667/postmarker/compare/0.12.0...0.12.1
 .. _0.12.0: https://github.com/Stranger6667/postmarker/compare/0.11.3...0.12.0
@@ -388,6 +396,7 @@ Fixed
 .. _0.2.0: https://github.com/Stranger6667/postmarker/compare/0.1.1...0.2.0
 .. _0.1.1: https://github.com/Stranger6667/postmarker/compare/0.1.0...0.1.1
 
+.. _#184: https://github.com/Stranger6667/postmarker/pull/184
 .. _#183: https://github.com/Stranger6667/postmarker/pull/183
 .. _#181: https://github.com/Stranger6667/postmarker/pull/181
 .. _#170: https://github.com/Stranger6667/postmarker/issues/170
