@@ -380,6 +380,7 @@ class EmailManager(ModelManager):
         TrackLinks="None",
         Attachments=None,
         InlineCss=True,
+        Metadata=None,
     ):
         return self.EmailTemplate(
             TemplateId=TemplateId,
@@ -397,6 +398,7 @@ class EmailManager(ModelManager):
             TrackLinks=TrackLinks,
             Attachments=Attachments,
             InlineCss=InlineCss,
+            Metadata=Metadata,
         ).send()
 
     def send_batch(self, *emails, **extra):
@@ -467,6 +469,7 @@ class EmailManager(ModelManager):
         TrackLinks="None",
         Attachments=None,
         InlineCss=True,
+        Metadata=None,
     ):
         """
         Constructs :py:class:`EmailTemplate` instance.
@@ -490,6 +493,7 @@ class EmailManager(ModelManager):
             TrackLinks=TrackLinks,
             Attachments=Attachments,
             InlineCss=InlineCss,
+            Metadata=Metadata,
         )
 
     def EmailBatch(self, *emails):
