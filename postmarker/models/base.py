@@ -18,9 +18,6 @@ class Model:
     def __repr__(self):
         return "<%s>" % self
 
-    def __unicode__(self):
-        return self.__str__()
-
     def _update(self, kwargs):
         if self._data:
             self._data.update(kwargs)
@@ -55,8 +52,6 @@ class ModelManager:
 
     def __repr__(self):
         return "<%s>" % self
-
-    __unicode__ = __str__
 
     def _init_instance(self, data):
         return self.model(manager=self, **data)  # pylint: disable=not-callable
