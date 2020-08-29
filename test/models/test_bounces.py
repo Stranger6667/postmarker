@@ -1,10 +1,10 @@
-# coding: utf-8
+from unittest.mock import patch
+
 import pytest
 
 from postmarker.models.bounces import Bounce
 from postmarker.models.messages import OutboundMessage
 
-from .._compat import patch
 from ..conftest import BOUNCE_WEBHOOK
 
 CASSETTE_NAME = "bounces"

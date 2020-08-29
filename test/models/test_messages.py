@@ -1,7 +1,7 @@
-# coding: utf-8
 from contextlib import contextmanager
 from email.mime.base import MIMEBase
 from email.mime.multipart import MIMEMultipart
+from unittest.mock import patch
 
 import pytest
 
@@ -9,8 +9,6 @@ from postmarker.exceptions import ClientError
 from postmarker.models.base import ModelManager
 from postmarker.models.emails import deconstruct_multipart
 from postmarker.models.messages import Attachment, InboundMessage, Open, OutboundMessage
-
-from .._compat import patch
 
 CASSETTE_NAME = "messages"
 

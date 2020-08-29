@@ -1,5 +1,3 @@
-# coding: utf-8
-
 SECRET_KEY = "foo"
 
 EMAIL_BACKEND = "postmarker.django.EmailBackend"

@@ -1,4 +1,4 @@
-# coding: utf-8
+from inspect import signature
 
 
 def chunks(container, n):
@@ -20,3 +20,7 @@ def sizes(count, offset=0, max_chunk=500):
             count = max(0, count - max_chunk)
             yield chunk, offset
             offset += chunk
+
+
+def get_args(cls):
+    return list(signature(cls).parameters)

@@ -1,4 +1,3 @@
-# coding: utf-8
 """Basic ways to send emails."""
 import mimetypes
 import os
@@ -117,7 +116,7 @@ class BaseEmail(Model):
             kwargs["Headers"] = {}
         if not kwargs.get("Attachments"):
             kwargs["Attachments"] = []
-        super(BaseEmail, self).__init__(**kwargs)
+        super().__init__(**kwargs)
 
     def __setitem__(self, key, value):
         self.Headers[key] = value
@@ -130,7 +129,7 @@ class BaseEmail(Model):
 
         :return:
         """
-        data = super(BaseEmail, self).as_dict()
+        data = super().as_dict()
         data["Headers"] = [{"Name": name, "Value": value} for name, value in data["Headers"].items()]
         for field in ("To", "Cc", "Bcc"):
             if field in data:
@@ -181,7 +180,7 @@ def prepare_header(value):
 class Email(BaseEmail):
     def __init__(self, **kwargs):
         assert kwargs.get("TextBody") or kwargs.get("HtmlBody"), "Provide either email TextBody or HtmlBody or both"
-        super(Email, self).__init__(**kwargs)
+        super().__init__(**kwargs)
 
     @classmethod
     def from_mime(cls, message, manager):
@@ -231,7 +230,7 @@ class EmailBatch(Model):
 
     def __init__(self, *emails, **kwargs):
         self.emails = emails
-        super(EmailBatch, self).__init__(**kwargs)
+        super().__init__(**kwargs)
 
     def __len__(self):
         return len(self.emails)

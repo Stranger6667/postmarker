@@ -1,4 +1,3 @@
-# coding: utf-8
 from base64 import b64decode
 from email.mime.base import MIMEBase
 from email.mime.multipart import MIMEMultipart
@@ -69,7 +68,7 @@ class BaseMessage(Model):
 class OutboundMessage(BaseMessage):
     def __str__(self):
         recipients = ", ".join(self._data.get("Recipients"))
-        return "%s message to %s" % (self._data.get("Status"), recipients)
+        return "{} message to {}".format(self._data.get("Status"), recipients)
 
     def get_dump(self):
         return self._manager.get_dump(self.MessageID)
@@ -134,7 +133,7 @@ class OutboundMessageManager(SubModelManager):
 
 class InboundMessage(BaseMessage):
     def __str__(self):
-        return "%s message from %s" % (self._data.get("Status"), self._data.get("From"))
+        return "{} message from {}".format(self._data.get("Status"), self._data.get("From"))
 
     def __getitem__(self, item):
         for header in self._data["Headers"]:
@@ -175,7 +174,7 @@ class Attachment(Model):
         return self.Name
 
     def __repr__(self):
-        return "<%s: %s>" % (self.__class__.__name__, self)
+        return "<{}: {}>".format(self.__class__.__name__, self)
 
     def __len__(self):
         return self.ContentLength

@@ -1,10 +1,9 @@
-# coding: utf-8
 from json import loads
 
 from ..utils import sizes
 
 
-class Model(object):
+class Model:
     """Abstract data model for Postmark entities."""
 
     _data = None
@@ -14,7 +13,7 @@ class Model(object):
         self._update(kwargs)
 
     def __str__(self):
-        return "%s: %s" % (self.__class__.__name__, self._data.get("ID"))
+        return "{}: {}".format(self.__class__.__name__, self._data.get("ID"))
 
     def __repr__(self):
         return "<%s>" % self
@@ -38,7 +37,7 @@ class Model(object):
         return self._data.copy()
 
 
-class ModelManager(object):
+class ModelManager:
     """Proxies calls to main API client. Encapsulates logic of certain part of API - bounces, emails, etc."""
 
     name = None
@@ -109,7 +108,7 @@ class SubModelManager(ModelManager):
     _managers = ()
 
     def __init__(self, *args, **kwargs):
-        super(SubModelManager, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self._setup_managers()
 
     def _setup_managers(self):

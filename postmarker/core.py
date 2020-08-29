@@ -1,10 +1,9 @@
-# coding: utf-8
 import sys
+from urllib.parse import urljoin
 
 import requests
 
 from . import __version__
-from ._compat import get_args, urljoin
 from .exceptions import ClientError, SpamAssassinError
 from .logging import get_logger
 from .models.bounces import BounceManager
@@ -17,6 +16,7 @@ from .models.stats import StatsManager
 from .models.status import StatusManager
 from .models.templates import TemplateManager
 from .models.triggers import TriggersManager
+from .utils import get_args
 
 DEFAULT_API = "https://api.postmarkapp.com/"
 STATUS_API = "https://status.postmarkapp.com/api/1.0/"
@@ -25,7 +25,7 @@ USER_AGENT = "Postmarker/%s" % __version__
 TEST_TOKEN = "POSTMARK_API_TEST"
 
 
-class PostmarkClient(object):
+class PostmarkClient:
     """Basic class for API clients. Provides basic functionality to make requests."""
 
     _managers = (
@@ -73,7 +73,7 @@ class PostmarkClient(object):
         return cls(**kwargs)
 
     def __repr__(self):
-        return "<%s: %s>" % (self.__class__.__name__, self.server_token)
+        return "<{}: {}>".format(self.__class__.__name__, self.server_token)
 
     def _setup_managers(self):
         """Allows to access manager by model name.
@@ -144,4 +144,4 @@ class PostmarkClient(object):
             raise ClientError(message, error_code=data["ErrorCode"])
 
     def format_exception_message(self, data):
-        return "[%s] %s" % (data["ErrorCode"], data["Message"])
+        return "[{}] {}".format(data["ErrorCode"], data["Message"])

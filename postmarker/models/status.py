@@ -1,10 +1,9 @@
-# coding: utf-8
 from .base import Model, ModelManager
 
 
 class Incident(Model):
     def __str__(self):
-        return "%s: %s" % (self.__class__.__name__, self._data.get("id"))
+        return "{}: {}".format(self.__class__.__name__, self._data.get("id"))
 
 
 class IncidentsManager(ModelManager):
@@ -31,7 +30,7 @@ class StatusManager(ModelManager):
     name = "status"
 
     def __init__(self, *args, **kwargs):
-        super(StatusManager, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.incidents = IncidentsManager(self.client)
 
     def call(self, *args, **kwargs):

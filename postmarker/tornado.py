@@ -1,10 +1,9 @@
-# coding: utf-8
 from .core import PostmarkClient
 
 POSTMARK_SERVER_TOKEN = "postmark_server_token"
 
 
-class PostmarkMixin(object):
+class PostmarkMixin:
     @property
     def postmark_client(self):
         self.require_setting(POSTMARK_SERVER_TOKEN, "Postmark client")

@@ -1,8 +1,6 @@
-# coding: utf-8
-from __future__ import unicode_literals
-
 import sys
 from contextlib import contextmanager
+from unittest.mock import patch
 
 import pytest
 from django import VERSION
@@ -16,8 +14,6 @@ from postmarker.django import EmailBackend
 from postmarker.django.signals import on_exception, post_send, pre_send
 from postmarker.exceptions import PostmarkerException
 from postmarker.models.emails import Email
-
-from .._compat import patch
 
 pytestmark = pytest.mark.usefixtures("outbox")
 

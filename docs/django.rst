@@ -18,7 +18,7 @@ For convenience, Postmarker provides a Django email backend. To use it you have 
 That's it!
 For every supported Python version, the backend is tested on the latest Django release that supports given the Python version:
 
- - Python 2.7, 3.4, 3.5, 3.6, PyPy - Django 1.10
+ - Python 3.5, 3.6 - Django 1.10
 
 
 Example:

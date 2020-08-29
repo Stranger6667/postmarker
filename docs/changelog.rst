@@ -6,6 +6,11 @@ Changelog
 `Unreleased`_
 -------------
 
+Removed
+~~~~~~~
+
+- Support for Python 2.7, 3.3, 3.4, PyPy2 and Jython.
+
 `0.14.1`_ - 2020-03-31
 ----------------------
 

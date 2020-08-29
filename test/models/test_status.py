@@ -1,4 +1,3 @@
-# coding: utf-8
 from postmarker.models.status import Incident
 
 CASSETTE_NAME = "status"

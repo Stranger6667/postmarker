@@ -1,10 +1,9 @@
-# coding: utf-8
 from .base import Model, ModelManager
 
 
 class Server(Model):
     def __str__(self):
-        return "%s: %s (%s)" % (
+        return "{}: {} ({})".format(
             self.__class__.__name__,
             self.Name,
             self._data.get("ID"),
