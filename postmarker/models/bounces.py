@@ -1,4 +1,3 @@
-# coding: utf-8
 """Bounces.
 
 Information about bounces is available via the :py:class:`~postmarker.models.bounces.BounceManager`,

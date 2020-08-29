@@ -1,4 +1,3 @@
-# coding: utf-8
 import pytest
 
 MOCK_SEND_BATCH_RESPONSE = (

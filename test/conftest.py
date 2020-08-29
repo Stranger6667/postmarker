@@ -1,6 +1,6 @@
-# coding: utf-8
 import os
 from contextlib import contextmanager
+from unittest.mock import Mock
 
 import pytest
 from betamax import Betamax
@@ -9,7 +9,6 @@ from betamax_serializers import pretty_json
 from postmarker.core import PostmarkClient
 from postmarker.models.emails import Delivery
 
-from ._compat import Mock
 from .helpers import replace_real_credentials
 
 Betamax.register_serializer(pretty_json.PrettyJSONSerializer)

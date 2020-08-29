@@ -1,6 +1,3 @@
-# coding: utf-8
-from __future__ import absolute_import
-
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 from django.core.mail import EmailMessage, EmailMultiAlternatives
@@ -19,7 +16,7 @@ class EmailBackend(BaseEmailBackend):
     """A wrapper that manages sending emails via Postmark API."""
 
     def __init__(self, token=None, fail_silently=False, **kwargs):
-        super(EmailBackend, self).__init__(fail_silently=fail_silently)
+        super().__init__(fail_silently=fail_silently)
         self.client = None
         if self.get_option("TEST_MODE"):
             self.server_token = TEST_TOKEN
@@ -88,13 +85,13 @@ class EmailBackend(BaseEmailBackend):
         return instance
 
 
-class PostmarkEmailMixin(object):
+class PostmarkEmailMixin:
     """Provides an ability to set tags on Django email instances."""
 
     def __init__(self, *args, **kwargs):
         self.tag = kwargs.pop("tag", None)
         self.metadata = kwargs.pop("metadata", None)
-        super(PostmarkEmailMixin, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
 
 class PostmarkEmailMessage(PostmarkEmailMixin, EmailMessage):

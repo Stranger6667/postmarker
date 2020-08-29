@@ -1,4 +1,3 @@
-# coding: utf-8
 from postmarker.models.templates import Template
 
 CASSETTE_NAME = "templates"

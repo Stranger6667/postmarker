@@ -1,4 +1,3 @@
-# coding: utf-8
 import pytest
 from django.core.mail import EmailMultiAlternatives
 

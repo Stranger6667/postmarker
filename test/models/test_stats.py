@@ -1,4 +1,3 @@
-# coding: utf-8
 import pytest
 
 CASSETTE_NAME = "stats"
