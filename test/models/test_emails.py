@@ -1,4 +1,6 @@
+import base64
 import os
+import platform
 from email import encoders
 from email.mime.base import MIMEBase
 from email.mime.image import MIMEImage
@@ -16,14 +18,21 @@ def get_attachment_path(filename):
     return os.path.abspath(os.path.join(os.path.dirname(__file__), "attachments/%s" % filename))
 
 
+if platform.system() == "Linux":
+    RAW_CONTENT = b"test content\n"
+else:
+    RAW_CONTENT = b"test content\r\n"
+CONTENT = base64.b64encode(RAW_CONTENT).decode()
+
+
 ATTACHMENT = {
     "Name": "readme.txt",
-    "Content": "dGVzdCBjb250ZW50Cg==",
+    "Content": CONTENT,
     "ContentType": "text/plain",
 }
 TUPLE_ATTACHMENT = ATTACHMENT["Name"], ATTACHMENT["Content"], ATTACHMENT["ContentType"]
 MIME_ATTACHMENT = MIMEBase("text", "plain")
-MIME_ATTACHMENT.set_payload("dGVzdCBjb250ZW50Cg==")
+MIME_ATTACHMENT.set_payload(CONTENT)
 MIME_ATTACHMENT.add_header("Content-Disposition", "attachment", filename="readme.txt")
 PATH_ATTACHMENT = get_attachment_path("readme.txt")
 
@@ -274,13 +283,13 @@ class TestEmail:
         assert postmark_request.call_args[1]["json"]["Attachments"] == [
             {
                 "Name": "report.blabla",
-                "Content": "dGVzdCBjb250ZW50Cg==",
+                "Content": CONTENT,
                 "ContentType": "application/octet-stream",
             }
         ]
 
     def test_attach_binary(self, email, postmark_request):
-        email.attach_binary(b"test content\n", "readme.txt")
+        email.attach_binary(RAW_CONTENT, "readme.txt")
         email.send()
         assert postmark_request.call_args[1]["json"]["Attachments"] == [ATTACHMENT]
 

@@ -1,4 +1,4 @@
-name: Build jobs
+name: build
 
 on:
   pull_request:
@@ -48,3 +48,44 @@ jobs:
 
       - run: pip install pre-commit
       - run: pre-commit run pylint --all-files
+
+  tests:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        python: [3.5, 3.6, 3.7, 3.8, 3.9.0-rc.1, pypy3]
+        exclude:
+          # pytest bug on PyPy3
+          # https://github.com/Stranger6667/postmarker/pull/187/checks?check_run_id=1046220597
+          - os: windows-latest
+            python: pypy3
+
+    name: ${{ matrix.os }}/tests_${{ matrix.python }}
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 1
+
+      - uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python }}
+
+      - run: pip install tox coverage
+
+      - name: Run ${{ matrix.python }} tox job
+        run: tox -e py
+        env:
+          TOX_JOB: ${{ matrix.python }}
+
+      - run: coverage combine
+      - run: coverage report
+      - run: coverage xml -i
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v1.0.7
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: ./coverage.xml
+          flags: unittests
+          name: codecov-py${{ matrix.python }}
