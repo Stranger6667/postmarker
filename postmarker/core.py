@@ -138,10 +138,10 @@ class PostmarkClient:
         except requests.HTTPError as http_error:
             try:
                 data = response.json()
-            except ValueError:
-                raise http_error
+            except ValueError as exc:
+                raise http_error from exc
             message = self.format_exception_message(data)
-            raise ClientError(message, error_code=data["ErrorCode"])
+            raise ClientError(message, error_code=data["ErrorCode"]) from http_error
 
     def format_exception_message(self, data):
         return "[{}] {}".format(data["ErrorCode"], data["Message"])
