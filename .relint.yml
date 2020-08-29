@@ -1,0 +1,11 @@
+- name: Fix it now
+  pattern: "[fF][iI][xX][mM][eE]"
+  filePattern: ".*.py$"
+
+- name: IPython debug leftover
+  pattern: "IPython\\.embed()"
+  filePattern: ".*.py$"
+
+- name: Leftover print
+  pattern: "print\\("
+  filePattern: ^(?!.*conftest).*\.py$

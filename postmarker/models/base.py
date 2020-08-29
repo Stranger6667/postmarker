@@ -5,9 +5,7 @@ from ..utils import sizes
 
 
 class Model(object):
-    """
-    Abstract data model for Postmark entities.
-    """
+    """Abstract data model for Postmark entities."""
 
     _data = None
 
@@ -41,9 +39,7 @@ class Model(object):
 
 
 class ModelManager(object):
-    """
-    Proxies calls to main API client. Encapsulates logic of certain part of API - bounces, emails, etc.
-    """
+    """Proxies calls to main API client. Encapsulates logic of certain part of API - bounces, emails, etc."""
 
     name = None
     model = None
@@ -95,20 +91,19 @@ class ModelManager(object):
         return sum(items, [])
 
     def update_kwargs(self, kwargs, count, offset):
-        """
-        Helper to support handy dictionaries merging on all Python versions.
-        """
+        """Helper to support handy dictionaries merging on all Python versions."""
         kwargs.update({self.count_key: count, self.offset_key: offset})
         return kwargs
 
 
 class SubModelManager(ModelManager):
-    """
-    Works with multiple model managers. Example:
+    """Works with multiple model managers.
 
-    >>> postmark = PostmarkClient(server_token='TEST')
-    >>> postmark.messages.outbound.all()
-    []
+    Example:
+        >>> postmark = PostmarkClient(server_token='TEST')
+        >>> postmark.messages.outbound.all()
+        []
+
     """
 
     _managers = ()

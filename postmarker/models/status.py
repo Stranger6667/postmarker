@@ -26,9 +26,7 @@ class IncidentsManager(ModelManager):
 
 
 class StatusManager(ModelManager):
-    """
-    Gathers logic about Postmark systems status.
-    """
+    """Gathers logic about Postmark systems status."""
 
     name = "status"
 

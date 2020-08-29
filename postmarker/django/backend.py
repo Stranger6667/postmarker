@@ -12,14 +12,11 @@ from ..core import TEST_TOKEN, PostmarkClient
 from ..exceptions import PostmarkerException
 from .signals import on_exception, post_send, pre_send
 
-
 DEFAULT_CONFIG = {"TEST_MODE": False, "TRACK_OPENS": False, "VERBOSITY": 0}
 
 
 class EmailBackend(BaseEmailBackend):
-    """
-    A wrapper that manages sending emails via Postmark API.
-    """
+    """A wrapper that manages sending emails via Postmark API."""
 
     def __init__(self, token=None, fail_silently=False, **kwargs):
         super(EmailBackend, self).__init__(fail_silently=fail_silently)
@@ -74,9 +71,7 @@ class EmailBackend(BaseEmailBackend):
         return msg_count
 
     def raise_for_response(self, responses):
-        """
-        Constructs appropriate exception from list of responses and raises it.
-        """
+        """Constructs appropriate exception from list of responses and raises it."""
         exception_messages = [self.client.format_exception_message(response) for response in responses]
         if len(exception_messages) == 1:
             message = exception_messages[0]
@@ -94,9 +89,7 @@ class EmailBackend(BaseEmailBackend):
 
 
 class PostmarkEmailMixin(object):
-    """
-    Provides an ability to set tags on Django email instances.
-    """
+    """Provides an ability to set tags on Django email instances."""
 
     def __init__(self, *args, **kwargs):
         self.tag = kwargs.pop("tag", None)

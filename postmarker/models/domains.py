@@ -4,7 +4,11 @@ from .base import Model, ModelManager
 
 class Domain(Model):
     def __str__(self):
-        return "%s: %s (%s)" % (self.__class__.__name__, self._data.get("Name"), self._data.get("ID"))
+        return "%s: %s (%s)" % (
+            self.__class__.__name__,
+            self._data.get("Name"),
+            self._data.get("ID"),
+        )
 
     def get(self):
         new_instance = self._manager.get(self.ID)

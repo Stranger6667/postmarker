@@ -2,17 +2,13 @@
 
 
 def chunks(container, n):
-    """
-    Split a container into n-sized chunks.
-    """
+    """Split a container into n-sized chunks."""
     for i in range(0, len(container), n):
         yield container[i : i + n]
 
 
 def sizes(count, offset=0, max_chunk=500):
-    """
-    Helper to iterate over remote data via count & offset pagination.
-    """
+    """Helper to iterate over remote data via count & offset pagination."""
     if count is None:
         chunk = max_chunk
         while True:

@@ -1,0 +1,35 @@
+name: Build jobs
+
+on:
+  pull_request:
+    paths:
+      - '**.py'
+      - '.github/workflows/*.yml'
+      - '.pylintrc'
+      - '.pre-commit-config.yaml'
+      - '.pydocstyle'
+      - '.relint.yml'
+      - '.yamllint'
+      - 'poetry.lock'
+      - 'pyproject.toml'
+      - 'tox.ini'
+      - 'mypy.ini'
+  push:
+    branches:
+      - master
+
+jobs:
+  pre-commit:
+    name: Generic pre-commit checks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+        with:
+          fetch-depth: 1
+
+      - uses: actions/setup-python@v1
+        with:
+          python-version: 3.7
+
+      - run: pip install pre-commit
+      - run: SKIP=pylint,mypy pre-commit run --all-files
