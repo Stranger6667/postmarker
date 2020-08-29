@@ -19,6 +19,9 @@ disable =
   abstract-method,
   no-self-use,
   fixme,
+  redefined-builtin,
+  too-many-arguments,
+  too-many-locals,
   too-few-public-methods,
   bad-continuation,
   inconsistent-return-statements

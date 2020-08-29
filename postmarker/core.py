@@ -89,7 +89,7 @@ class PostmarkClient:
     @property
     def session(self):
         if not hasattr(self, "_session"):
-            self._session = requests.Session()
+            self._session = requests.Session()  # pylint: disable=attribute-defined-outside-init
             adapter = requests.adapters.HTTPAdapter(max_retries=self.max_retries)
             self._session.mount("http://", adapter)
             self._session.mount("https://", adapter)

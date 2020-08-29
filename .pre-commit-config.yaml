@@ -50,3 +50,12 @@ repos:
     hooks:
       - id: isort
         additional_dependencies: ["isort[pyproject]"]
+
+  - repo: https://github.com/pre-commit/mirrors-pylint
+    rev: v2.6.0
+    hooks:
+      - id: pylint
+        additional_dependencies: ["isort[pyproject]"]
+        exclude: ^(docs/|test/).*$
+        # disabled import-error as may be run out of environment with deps
+        args: ["--disable=import-error"]

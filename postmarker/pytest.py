@@ -16,7 +16,7 @@ def postmark_request():
 
 
 @pytest.yield_fixture
-def postmark_client(postmark_request):
+def postmark_client(postmark_request):  # pylint: disable=redefined-outer-name
     client = PostmarkClient(server_token="SERVER_TOKEN", account_token="ACCOUNT_TOKEN")
     client.mock = postmark_request
     yield client
