@@ -1,7 +1,5 @@
 # coding: utf-8
-from setuptools import setup
-
-import postmarker
+from setuptools import find_packages, setup
 
 install_requires = ["requests>=2.20.0"]
 
@@ -13,8 +11,7 @@ with open("README.rst") as file:
 setup(
     name="postmarker",
     url="https://github.com/Stranger6667/postmarker",
-    version=postmarker.__version__,
-    packages=["postmarker", "postmarker.models", "postmarker.django"],
+    version="0.14.1",
     license="MIT",
     author="Dmitry Dygalo",
     author_email="dadygalo@gmail.com",
@@ -23,6 +20,9 @@ setup(
     keywords=["postmark", "api", "client", "email"],
     description="Python client library for Postmark API",
     long_description=long_description,
+    long_description_content_type="text/x-rst",
+    packages=find_packages(where="src"),
+    package_dir={"": "src"},
     classifiers=[
         "Development Status :: 4 - Beta",
         "Environment :: Console",

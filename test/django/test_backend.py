@@ -1,4 +1,3 @@
-import sys
 from contextlib import contextmanager
 from unittest.mock import patch
 
@@ -177,16 +176,10 @@ def test_send_mail_with_attachment(postmark_request, message):
 def test_text_html_alternative_and_pdf_attachment_failure(postmark_request, message):
     """Send a text body, HTML alternative, and PDF attachment."""
     message.attach_alternative("<html></html>", "text/html")
-    if sys.version_info[:2] == (3, 2):
-        content = b"PDF-File-Contents"
-    else:
-        content = "PDF-File-Contents"
+    content = "PDF-File-Contents"
     message.attach("hello.pdf", content, "application/pdf")
     message.send(fail_silently=False)
-    if sys.version_info[0] < 3:
-        encoded_content = "UERGLUZpbGUtQ29udGVudHM="
-    else:
-        encoded_content = "UERGLUZpbGUtQ29udGVudHM=\n"
+    encoded_content = "UERGLUZpbGUtQ29udGVudHM=\n"
     assert postmark_request.call_args[1]["json"][0] == {
         "Attachments": [
             {
@@ -211,12 +204,8 @@ def test_text_html_alternative_and_pdf_attachment_failure(postmark_request, mess
 
 
 def test_message_rfc822(postmark_request, message):
-    if sys.version_info[:2] == (3, 2):
-        message_content = b"Fake message"
-        expected_content = "RmFrZSBtZXNzYWdl\n"
-    else:
-        message_content = "Fake message"
-        expected_content = "RmFrZSBtZXNzYWdl"
+    message_content = "Fake message"
+    expected_content = "RmFrZSBtZXNzYWdl"
     message.attach_alternative(message_content, "message/rfc822")
     message.send(fail_silently=False)
     assert postmark_request.call_args[1]["json"][0] == {

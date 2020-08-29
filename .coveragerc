@@ -1,5 +1,12 @@
 [run]
 branch = true
+parallel = true
+source = postmarker
+
+[paths]
+source =
+   src/postmarker
+   .tox/*/lib/python*/site-packages/postmarker
 
 [report]
 show_missing = true
