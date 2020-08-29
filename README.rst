@@ -1,21 +1,7 @@
 Postmarker
 ==========
 
-.. image:: https://travis-ci.org/Stranger6667/postmarker.svg?branch=master
-   :target: https://travis-ci.org/Stranger6667/postmarker
-   :alt: Build Status
-
-.. image:: https://codecov.io/github/Stranger6667/postmarker/coverage.svg?branch=master
-   :target: https://codecov.io/github/Stranger6667/postmarker?branch=master
-   :alt: Coverage Status
-
-.. image:: https://readthedocs.org/projects/postmarker/badge/?version=stable
-   :target: http://postmarker.readthedocs.io/en/stable/?badge=stable
-   :alt: Documentation Status
-
-.. image:: https://img.shields.io/pypi/v/postmarker.svg
-    :target: https://pypi.python.org/pypi/postmarker
-    :alt: Latest PyPI version
+|Build| |Coverage| |Version| |Python versions| |Docs| |License|
 
 Python client library for `Postmark API <http://developer.postmarkapp.com/developer-api-overview.html>`_.
 
@@ -102,9 +88,23 @@ Or you can look at the docs/ directory in the repository.
 Python support
 ==============
 
-Postmarker supports Python 3.5, 3.6, 3.7 and PyPy3.
+Postmarker supports Python 3.5 - 3.9 and PyPy3.
 
 Thanks
 ======
 
 Many thanks to `Shmele <https://github.com/butorov>`_ and `lobziik <https://github.com/lobziik>`_ for their reviews and advices :)
+
+.. |Build| image:: https://github.com/Stranger6667/postmarker/workflows/build/badge.svg
+   :target: https://github.com/Stranger6667/postmarker/actions
+.. |Coverage| image:: https://codecov.io/github/Stranger6667/postmarker/coverage.svg?branch=master
+    :target: https://codecov.io/github/Stranger6667/postmarker?branch=master
+.. |Version| image:: https://img.shields.io/pypi/v/postmarker.svg
+   :target: https://pypi.org/project/postmarker/
+.. |Python versions| image:: https://img.shields.io/pypi/pyversions/postmarker.svg
+   :target: https://pypi.org/project/postmarker/
+.. |Docs| image:: https://readthedocs.org/projects/postmarker/badge/?version=stable
+   :target: https://postmarker.readthedocs.io/en/stable/
+   :alt: Documentation Status
+.. |License| image:: https://img.shields.io/pypi/l/postmarker.svg
+   :target: https://opensource.org/licenses/MIT
