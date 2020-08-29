@@ -15,7 +15,7 @@ Betamax.register_serializer(pretty_json.PrettyJSONSerializer)
 
 DEFAULT_SERVER_TOKEN = "SERVER_TOKEN"
 DEFAULT_ACCOUNT_TOKEN = "ACCOUNT_TOKEN"
-CASSETTE_DIR = "tests/cassettes/"
+CASSETTE_DIR = "test/cassettes/"
 SERVER_TOKEN = os.environ.get("SERVER_TOKEN", DEFAULT_SERVER_TOKEN)
 ACCOUNT_TOKEN = os.environ.get("ACCOUNT_TOKEN", DEFAULT_ACCOUNT_TOKEN)
 

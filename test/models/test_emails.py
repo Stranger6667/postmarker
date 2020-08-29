@@ -1,5 +1,4 @@
 import os
-import sys
 from email import encoders
 from email.mime.base import MIMEBase
 from email.mime.image import MIMEImage
@@ -19,12 +18,12 @@ def get_attachment_path(filename):
 
 ATTACHMENT = {
     "Name": "readme.txt",
-    "Content": "dGVzdCBjb250ZW50",
+    "Content": "dGVzdCBjb250ZW50Cg==",
     "ContentType": "text/plain",
 }
 TUPLE_ATTACHMENT = ATTACHMENT["Name"], ATTACHMENT["Content"], ATTACHMENT["ContentType"]
 MIME_ATTACHMENT = MIMEBase("text", "plain")
-MIME_ATTACHMENT.set_payload("dGVzdCBjb250ZW50")
+MIME_ATTACHMENT.set_payload("dGVzdCBjb250ZW50Cg==")
 MIME_ATTACHMENT.add_header("Content-Disposition", "attachment", filename="readme.txt")
 PATH_ATTACHMENT = get_attachment_path("readme.txt")
 
@@ -63,12 +62,7 @@ def get_mime_message(text, html_text=None, **kwargs):
 
 MIME_MESSAGE = get_mime_message("Text", **DEFAULT_HEADERS)
 MIME_ALTERNATIVE = get_mime_message("Text", "HTML content", **DEFAULT_HEADERS)
-
-if sys.version_info[0] < 3:
-    ENCODED_CONTENT = "dGVzdCBjb250ZW50"
-else:
-    ENCODED_CONTENT = "dGVzdCBjb250ZW50\n"
-
+ENCODED_CONTENT = "dGVzdCBjb250ZW50\n"
 
 IMAGE = MIMEImage(b"test content", "png", name="image1.png")
 IMAGE.add_header("Content-ID", "<image1@example.com>")
@@ -280,13 +274,13 @@ class TestEmail:
         assert postmark_request.call_args[1]["json"]["Attachments"] == [
             {
                 "Name": "report.blabla",
-                "Content": "dGVzdCBjb250ZW50",
+                "Content": "dGVzdCBjb250ZW50Cg==",
                 "ContentType": "application/octet-stream",
             }
         ]
 
     def test_attach_binary(self, email, postmark_request):
-        email.attach_binary(b"test content", "readme.txt")
+        email.attach_binary(b"test content\n", "readme.txt")
         email.send()
         assert postmark_request.call_args[1]["json"]["Attachments"] == [ATTACHMENT]
 

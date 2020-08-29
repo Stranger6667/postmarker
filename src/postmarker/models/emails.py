@@ -1,7 +1,6 @@
 """Basic ways to send emails."""
 import mimetypes
 import os
-import sys
 from base64 import b64encode
 from email.header import decode_header
 from email.mime.base import MIMEBase
@@ -11,10 +10,7 @@ from email.mime.text import MIMEText
 from ..utils import chunks
 from .base import MessageModel, Model, ModelManager
 
-if sys.version_info[:2] <= (3, 2):
-    SEPARATOR = " "
-else:
-    SEPARATOR = ""
+SEPARATOR = ""
 
 
 def list_to_csv(value):
@@ -92,10 +88,7 @@ def deconstruct_multipart_recursive(seen, text, html, attachments, message):
         else:
             # Ignore underlying messages inside `message/rfc822` payload, because the message itself will be passed
             # as an attachment
-            if content_type == "message/rfc822" and sys.version_info[:2] not in (
-                (2, 6),
-                (3, 2),
-            ):
+            if content_type == "message/rfc822":
                 for part in message.get_payload():
                     seen.add(part)
             attachments.append(message)
