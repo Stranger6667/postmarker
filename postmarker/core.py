@@ -18,7 +18,6 @@ from .models.status import StatusManager
 from .models.templates import TemplateManager
 from .models.triggers import TriggersManager
 
-
 DEFAULT_API = "https://api.postmarkapp.com/"
 STATUS_API = "https://status.postmarkapp.com/api/1.0/"
 SPAMCHECK_API = "http://spamcheck.postmarkapp.com/filter/"
@@ -27,9 +26,7 @@ TEST_TOKEN = "POSTMARK_API_TEST"
 
 
 class PostmarkClient(object):
-    """
-    Basic class for API clients. Provides basic functionality to make requests.
-    """
+    """Basic class for API clients. Provides basic functionality to make requests."""
 
     _managers = (
         BounceManager,
@@ -45,7 +42,13 @@ class PostmarkClient(object):
     )
 
     def __init__(
-        self, server_token=None, account_token=None, verbosity=0, max_retries=0, timeout=None, logs_stream=sys.stdout
+        self,
+        server_token=None,
+        account_token=None,
+        verbosity=0,
+        max_retries=0,
+        timeout=None,
+        logs_stream=sys.stdout,
     ):
         assert server_token, "You have to provide token to use Postmark API"
         self.server_token = server_token
@@ -57,9 +60,7 @@ class PostmarkClient(object):
 
     @classmethod
     def from_config(cls, config, prefix="postmark_", is_uppercase=False):
-        """
-        Helper method for instantiating PostmarkClient from dict-like objects.
-        """
+        """Helper method for instantiating PostmarkClient from dict-like objects."""
         kwargs = {}
         for arg in get_args(cls):
             key = prefix + arg
@@ -75,8 +76,7 @@ class PostmarkClient(object):
         return "<%s: %s>" % (self.__class__.__name__, self.server_token)
 
     def _setup_managers(self):
-        """
-        Allows to access manager by model name.
+        """Allows to access manager by model name.
 
         >>> postmark = PostmarkClient(server_token='TEST')
         >>> postmark.bounces
@@ -121,7 +121,12 @@ class PostmarkClient(object):
         url = urljoin(root, endpoint)
         self.logger.debug("Request: %s %s, Data: %s", method, url, data)
         response = self.session.request(
-            method, url, json=data, params=kwargs, headers=default_headers, timeout=self.timeout
+            method,
+            url,
+            json=data,
+            params=kwargs,
+            headers=default_headers,
+            timeout=self.timeout,
         )
         self.logger.debug("Response: %s", response.text)
         self.check_response(response)

@@ -5,7 +5,6 @@ from setuptools import setup
 
 import postmarker
 
-
 install_requires = ["requests>=2.20.0"]
 
 

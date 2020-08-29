@@ -84,9 +84,18 @@ class OutboundMessageManager(SubModelManager):
     _managers = (OpensManager,)
 
     def all(
-        self, count=500, offset=0, recipient=None, fromemail=None, tag=None, status=None, todate=None, fromdate=None
+        self,
+        count=500,
+        offset=0,
+        recipient=None,
+        fromemail=None,
+        tag=None,
+        status=None,
+        todate=None,
+        fromdate=None,
     ):
-        """
+        """All outbound messages.
+
         Lets you get all the details about any outbound or inbound message that you sent or received
         through a specific server. Messages expire after 45 days.
 
@@ -207,7 +216,7 @@ class InboundMessageManager(ModelManager):
         todate=None,
         fromdate=None,
     ):
-        """
+        """All inbound messages.
 
         :param count: Number of messages to return per request.
         :param offset: Number of messages to skip.

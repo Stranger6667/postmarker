@@ -1,7 +1,6 @@
 # coding: utf-8
 from .core import PostmarkClient
 
-
 POSTMARK_SERVER_TOKEN = "postmark_server_token"
 
 

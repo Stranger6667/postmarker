@@ -33,16 +33,12 @@ class SenderSignaturesManager(ModelManager):
     token_type = "account"
 
     def all(self, count=500, offset=0):
-        """
-        Gets a list of sender signatures containing brief details associated with your account.
-        """
+        """Gets a list of sender signatures containing brief details associated with your account."""
         responses = self.call_many("GET", "/senders/", count=count, offset=offset)
         return self.expand_responses(responses, "SenderSignatures")
 
     def get(self, id):
-        """
-        Gets all the details for a specific sender signature.
-        """
+        """Gets all the details for a specific sender signature."""
         response = self.call("GET", "/senders/%s" % id)
         return self._init_instance(response)
 
@@ -56,7 +52,11 @@ class SenderSignaturesManager(ModelManager):
         return self._init_instance(self.call("POST", "/senders/", data=data))
 
     def edit(self, id, Name, ReplyToEmail=None, ReturnPathDomain=None):
-        data = {"Name": Name, "ReplyToEmail": ReplyToEmail, "ReturnPathDomain": ReturnPathDomain}
+        data = {
+            "Name": Name,
+            "ReplyToEmail": ReplyToEmail,
+            "ReturnPathDomain": ReturnPathDomain,
+        }
         return self.call("PUT", "/senders/%s" % id, data=data)
 
     def delete(self, id):
@@ -69,9 +69,10 @@ class SenderSignaturesManager(ModelManager):
         return self.call("POST", "/senders/%s/verifyspf" % id)
 
     def requestnewdkim(self, id):
-        """
-        Will query DNS for your domain and attempt to verify the SPF record
-        contains the information for Postmark's servers.
+        """Request new DKIM.
+
+        Will query DNS for your domain and attempt to verify the SPF record contains the information for
+        Postmark's servers.
         """
         warnings.warn(
             "This method has been deprecated. "

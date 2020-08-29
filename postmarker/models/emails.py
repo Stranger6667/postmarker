@@ -1,7 +1,5 @@
 # coding: utf-8
-"""
-This module provides basic ways to send emails.
-"""
+"""Basic ways to send emails."""
 import mimetypes
 import os
 import sys
@@ -14,7 +12,6 @@ from email.mime.text import MIMEText
 from ..utils import chunks
 from .base import MessageModel, Model, ModelManager
 
-
 if sys.version_info[:2] <= (3, 2):
     SEPARATOR = " "
 else:
@@ -22,9 +19,7 @@ else:
 
 
 def list_to_csv(value):
-    """
-    Converts list to string with comma separated values. For string is no-op.
-    """
+    """Converts list to string with comma separated values. For string is no-op."""
     if isinstance(value, (list, tuple, set)):
         value = ",".join(value)
     return value
@@ -38,11 +33,13 @@ def guess_content_type(filename):
 
 
 def prepare_attachments(attachment):
-    """
-    Converts incoming attachment into dictionary.
-    """
+    """Converts incoming attachment into dictionary."""
     if isinstance(attachment, tuple):
-        result = {"Name": attachment[0], "Content": attachment[1], "ContentType": attachment[2]}
+        result = {
+            "Name": attachment[0],
+            "Content": attachment[1],
+            "ContentType": attachment[2],
+        }
         if len(attachment) == 4:
             result["ContentID"] = attachment[3]
     elif isinstance(attachment, MIMEBase):
@@ -70,7 +67,11 @@ def prepare_attachments(attachment):
         filename = os.path.basename(attachment)
         with open(attachment, "rb") as fd:
             data = fd.read()
-        result = {"Name": filename, "Content": b64encode(data).decode("utf-8"), "ContentType": content_type}
+        result = {
+            "Name": filename,
+            "Content": b64encode(data).decode("utf-8"),
+            "ContentType": content_type,
+        }
     else:
         result = attachment
     return result
@@ -92,7 +93,10 @@ def deconstruct_multipart_recursive(seen, text, html, attachments, message):
         else:
             # Ignore underlying messages inside `message/rfc822` payload, because the message itself will be passed
             # as an attachment
-            if content_type == "message/rfc822" and sys.version_info[:2] not in ((2, 6), (3, 2)):
+            if content_type == "message/rfc822" and sys.version_info[:2] not in (
+                (2, 6),
+                (3, 2),
+            ):
                 for part in message.get_payload():
                     seen.add(part)
             attachments.append(message)
@@ -122,8 +126,7 @@ class BaseEmail(Model):
         del self.Headers[key]
 
     def as_dict(self):
-        """
-        Additionally encodes headers.
+        """Additionally encodes headers.
 
         :return:
         """
@@ -136,8 +139,7 @@ class BaseEmail(Model):
         return data
 
     def attach(self, *payloads):
-        """
-        Appends given payloads to the current payload.
+        """Appends given payloads to the current payload.
 
         :param payloads:
         :type payloads: `dict`, `tuple`, `list`, `MIMEBase`
@@ -146,15 +148,18 @@ class BaseEmail(Model):
         self.Attachments.extend(payloads)
 
     def attach_binary(self, content, filename):
-        """
-        Attaches given binary data.
+        """Attaches given binary data.
 
         :param bytes content: Binary data to be attached.
         :param str filename:
         :return: None.
         """
         content_type = guess_content_type(filename)
-        payload = {"Name": filename, "Content": b64encode(content).decode("utf-8"), "ContentType": content_type}
+        payload = {
+            "Name": filename,
+            "Content": b64encode(content).decode("utf-8"),
+            "ContentType": content_type,
+        }
         self.attach(payload)
 
 
@@ -180,8 +185,7 @@ class Email(BaseEmail):
 
     @classmethod
     def from_mime(cls, message, manager):
-        """
-        Instantiates ``Email`` instance from ``MIMEText`` instance.
+        """Instantiates ``Email`` instance from ``MIMEText`` instance.
 
         :param message: ``email.mime.text.MIMEText`` instance.
         :param manager: :py:class:`EmailManager` instance.
@@ -221,9 +225,7 @@ class EmailTemplate(BaseEmail):
 
 
 class EmailBatch(Model):
-    """
-    Gathers multiple emails in a single batch.
-    """
+    """Gathers multiple emails in a single batch."""
 
     MAX_SIZE = 500
 
@@ -235,17 +237,14 @@ class EmailBatch(Model):
         return len(self.emails)
 
     def as_dict(self, **extra):
-        """
-        Converts all available emails to dictionaries.
+        """Converts all available emails to dictionaries.
 
         :return: List of dictionaries.
         """
         return [self._construct_email(email, **extra) for email in self.emails]
 
     def _construct_email(self, email, **extra):
-        """
-        Converts incoming data to properly structured dictionary.
-        """
+        """Converts incoming data to properly structured dictionary."""
         if isinstance(email, dict):
             email = Email(manager=self._manager, **email)
         elif isinstance(email, (MIMEText, MIMEMultipart)):
@@ -256,8 +255,7 @@ class EmailBatch(Model):
         return email.as_dict()
 
     def send(self, **extra):
-        """
-        Sends email batch.
+        """Sends email batch.
 
         :return: Information about sent emails.
         :rtype: `list`
@@ -273,25 +271,19 @@ class Delivery(MessageModel):
 
 
 class EmailManager(ModelManager):
-    """
-    Sends emails via Postmark REST API.
-    """
+    """Sends emails via Postmark REST API."""
 
     name = "emails"
 
     def _send(self, **kwargs):
-        """
-        Low-level send call. Does not apply any transformation to given data.
-        """
+        """Low-level send call. Does not apply any transformation to given data."""
         return self.call("POST", "/email", data=kwargs)
 
     def _send_with_template(self, **kwargs):
         return self.call("POST", "/email/withTemplate/", data=kwargs)
 
     def _send_batch(self, *emails):
-        """
-        Low-level batch send call.
-        """
+        """Low-level batch send call."""
         return self.call("POST", "/email/batch", data=emails)
 
     def send(
@@ -312,8 +304,7 @@ class EmailManager(ModelManager):
         TrackLinks="None",
         Attachments=None,
     ):
-        """
-        Sends a single email.
+        """Sends a single email.
 
         :param message: :py:class:`Email` or ``email.mime.text.MIMEText`` instance.
         :param str From: The sender email address.
@@ -402,8 +393,7 @@ class EmailManager(ModelManager):
         ).send()
 
     def send_batch(self, *emails, **extra):
-        """
-        Sends an email batch.
+        """Sends an email batch.
 
         :param emails: :py:class:`Email` instances or dictionaries
         :param extra: dictionary with extra arguments for every message in the batch.
@@ -429,8 +419,7 @@ class EmailManager(ModelManager):
         TrackLinks="None",
         Attachments=None,
     ):
-        """
-        Constructs :py:class:`Email` instance.
+        """Constructs :py:class:`Email` instance.
 
         :return: :py:class:`Email`
         """
@@ -471,8 +460,7 @@ class EmailManager(ModelManager):
         InlineCss=True,
         Metadata=None,
     ):
-        """
-        Constructs :py:class:`EmailTemplate` instance.
+        """Constructs :py:class:`EmailTemplate` instance.
 
         :return: :py:class:`EmailTemplate`
         """
@@ -497,8 +485,7 @@ class EmailManager(ModelManager):
         )
 
     def EmailBatch(self, *emails):
-        """
-        Constructs :py:class:`EmailBatch` instance.
+        """Constructs :py:class:`EmailBatch` instance.
 
         :return: :py:class:`EmailBatch`
         """
