@@ -1,3 +1,4 @@
+# pylint: disable=redefined-builtin
 from .base import Model, ModelManager, SubModelManager
 
 

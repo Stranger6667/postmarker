@@ -33,3 +33,18 @@ jobs:
 
       - run: pip install pre-commit
       - run: SKIP=pylint,mypy pre-commit run --all-files
+
+  pylint:
+    name: Pylint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 1
+
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 3.7
+
+      - run: pip install pre-commit
+      - run: pre-commit run pylint --all-files

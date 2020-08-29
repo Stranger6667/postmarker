@@ -59,7 +59,7 @@ class ModelManager:
     __unicode__ = __str__
 
     def _init_instance(self, data):
-        return self.model(manager=self, **data)
+        return self.model(manager=self, **data)  # pylint: disable=not-callable
 
     def _init_many(self, data):
         return [self._init_instance(part) for part in data]
