@@ -1,7 +1,7 @@
 Postmarker
 ==========
 
-|Build| |Coverage| |Version| |Python versions| |Docs| |License|
+|Build| |Coverage| |Version| |Python versions| |Docs| |Chat| |License|
 
 Python client library for `Postmark API <http://developer.postmarkapp.com/developer-api-overview.html>`_.
 
@@ -106,5 +106,8 @@ Many thanks to `Shmele <https://github.com/butorov>`_ and `lobziik <https://gith
 .. |Docs| image:: https://readthedocs.org/projects/postmarker/badge/?version=stable
    :target: https://postmarker.readthedocs.io/en/stable/
    :alt: Documentation Status
+.. |Chat| image:: https://img.shields.io/gitter/room/Stranger6667/postmarker.svg
+   :target: https://gitter.im/Stranger6667/postmarker
+   :alt: Gitter
 .. |License| image:: https://img.shields.io/pypi/l/postmarker.svg
    :target: https://opensource.org/licenses/MIT
