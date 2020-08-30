@@ -5,6 +5,8 @@ Postmarker
 
 Python client library for `Postmark API <http://developer.postmarkapp.com/developer-api-overview.html>`_.
 
+**Gitter**: https://gitter.im/Stranger6667/postmarker
+
 Installation
 ============
 
