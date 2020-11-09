@@ -18,7 +18,7 @@ def get_attachment_path(filename):
     return os.path.abspath(os.path.join(os.path.dirname(__file__), "attachments/%s" % filename))
 
 
-if platform.system() == "Linux":
+if platform.system() in {"Linux", "Darwin"}:
     RAW_CONTENT = b"test content\n"
 else:
     RAW_CONTENT = b"test content\r\n"
@@ -156,6 +156,11 @@ class TestSimpleSend:
         postmark.emails.send(**minimal_data)
         assert postmark_request.call_args[1]["json"]["Headers"] == [{"Name": "Test", "Value": 1}]
 
+    def test_message_stream(self, postmark, minimal_data, postmark_request):
+        minimal_data["MessageStream"] = "example-message-stream"
+        postmark.emails.send(**minimal_data)
+        assert postmark_request.call_args[1]["json"]["MessageStream"] == "example-message-stream"
+
     @pytest.mark.parametrize("attachment", SUPPORTED_ATTACHMENTS)
     def test_attachments(self, postmark, minimal_data, postmark_request, attachment):
         minimal_data["Attachments"] = [attachment]
@@ -182,6 +187,7 @@ class TestSimpleSend:
             "TextBody": "Text",
             "Tag": None,
             "Metadata": None,
+            "MessageStream": None,
             "To": "receiver@example.com",
         }
 

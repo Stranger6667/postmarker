@@ -50,6 +50,7 @@ def test_send_mail(postmark_request, settings):
             "HtmlBody": None,
             "Tag": None,
             "Metadata": None,
+            "MessageStream": None,
             "TrackOpens": False,
             "From": "sender@example.com",
         },
@@ -170,6 +171,7 @@ def test_send_mail_with_attachment(postmark_request, message):
         "Bcc": None,
         "Tag": None,
         "Metadata": None,
+        "MessageStream": None,
     }
 
 
@@ -197,6 +199,7 @@ def test_text_html_alternative_and_pdf_attachment_failure(postmark_request, mess
         "Subject": "subject",
         "Tag": None,
         "Metadata": None,
+        "MessageStream": None,
         "TextBody": "text_content",
         "To": "receiver@example.com",
         "TrackOpens": False,
@@ -225,6 +228,7 @@ def test_message_rfc822(postmark_request, message):
         "Subject": "subject",
         "Tag": None,
         "Metadata": None,
+        "MessageStream": None,
         "TextBody": "text_content",
         "To": "receiver@example.com",
         "TrackOpens": False,
@@ -283,6 +287,7 @@ def test_send_mail_html_message(html_message, postmark_request):
             "TrackOpens": False,
             "Tag": None,
             "Metadata": None,
+            "MessageStream": None,
             "From": "sender@example.com",
         },
     )
@@ -307,6 +312,7 @@ def test_send_long_text_line(postmark_request):
             "TrackOpens": False,
             "Tag": None,
             "Metadata": None,
+            "MessageStream": None,
             "From": "sender@example.com",
         },
     )
@@ -341,6 +347,7 @@ def test_extra_options(settings, postmark_request):
             "HtmlBody": None,
             "Tag": None,
             "Metadata": None,
+            "MessageStream": None,
             "TrackOpens": True,
             "From": "sender@example.com",
         },
@@ -364,6 +371,7 @@ def test_context_manager(postmark_request):
             "HtmlBody": None,
             "Tag": None,
             "Metadata": None,
+            "MessageStream": None,
             "TrackOpens": True,
             "From": "sender@example.com",
         },
@@ -414,6 +422,7 @@ class TestSignals:
             "Subject": "Subject here",
             "Tag": None,
             "Metadata": None,
+            "MessageStream": None,
             "TextBody": "Here is the message.",
             "To": "receiver@example.com",
         }
