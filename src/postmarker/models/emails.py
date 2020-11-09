@@ -192,6 +192,7 @@ class Email(BaseEmail):
         reply_to = prepare_header(message["Reply-To"])
         tag = getattr(message, "tag", None)
         metadata = getattr(message, "metadata", None)
+        message_stream = getattr(message, "message_stream", None)
         return cls(
             manager=manager,
             From=sender,
@@ -205,6 +206,7 @@ class Email(BaseEmail):
             Attachments=attachments,
             Tag=tag,
             Metadata=metadata,
+            MessageStream=message_stream,
         )
 
     def send(self):
@@ -295,6 +297,7 @@ class EmailManager(ModelManager):
         TrackOpens=None,
         TrackLinks="None",
         Attachments=None,
+        MessageStream=None,
     ):
         """Sends a single email.
 
@@ -339,6 +342,7 @@ class EmailManager(ModelManager):
                 TrackOpens=TrackOpens,
                 TrackLinks=TrackLinks,
                 Attachments=Attachments,
+                MessageStream=MessageStream,
             )
         elif isinstance(message, (MIMEText, MIMEMultipart)):
             message = Email.from_mime(message, self)
@@ -364,6 +368,7 @@ class EmailManager(ModelManager):
         Attachments=None,
         InlineCss=True,
         Metadata=None,
+        MessageStream=None,
     ):
         return self.EmailTemplate(
             TemplateId=TemplateId,
@@ -382,6 +387,7 @@ class EmailManager(ModelManager):
             Attachments=Attachments,
             InlineCss=InlineCss,
             Metadata=Metadata,
+            MessageStream=MessageStream,
         ).send()
 
     def send_batch(self, *emails, **extra):
@@ -410,6 +416,7 @@ class EmailManager(ModelManager):
         TrackOpens=None,
         TrackLinks="None",
         Attachments=None,
+        MessageStream=None,
     ):
         """Constructs :py:class:`Email` instance.
 
@@ -431,6 +438,7 @@ class EmailManager(ModelManager):
             TrackOpens=TrackOpens,
             TrackLinks=TrackLinks,
             Attachments=Attachments,
+            MessageStream=MessageStream,
         )
 
     def EmailTemplate(
@@ -451,6 +459,7 @@ class EmailManager(ModelManager):
         Attachments=None,
         InlineCss=True,
         Metadata=None,
+        MessageStream=None,
     ):
         """Constructs :py:class:`EmailTemplate` instance.
 
@@ -474,6 +483,7 @@ class EmailManager(ModelManager):
             Attachments=Attachments,
             InlineCss=InlineCss,
             Metadata=Metadata,
+            MessageStream=MessageStream,
         )
 
     def EmailBatch(self, *emails):
