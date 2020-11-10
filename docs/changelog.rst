@@ -6,6 +6,11 @@ Changelog
 `Unreleased`_
 -------------
 
+Added
+~~~~~
+
+- ``MessageStream`` support when sending emails. `#190`_
+
 `0.15.0`_ - 2020-08-30
 ----------------------
 
@@ -373,7 +378,8 @@ Fixed
 
 - Initial release.
 
-.. _Unreleased: https://github.com/Stranger6667/postmarker/compare/0.14.1...HEAD
+.. _Unreleased: https://github.com/Stranger6667/postmarker/compare/0.15.0...HEAD
+.. _0.15.0: https://github.com/Stranger6667/postmarker/compare/0.14.1...0.15.0
 .. _0.14.1: https://github.com/Stranger6667/postmarker/compare/0.14.0...0.14.1
 .. _0.14.0: https://github.com/Stranger6667/postmarker/compare/0.13.1...0.14.0
 .. _0.13.1: https://github.com/Stranger6667/postmarker/compare/0.13.0...0.13.1
@@ -408,6 +414,7 @@ Fixed
 .. _0.2.0: https://github.com/Stranger6667/postmarker/compare/0.1.1...0.2.0
 .. _0.1.1: https://github.com/Stranger6667/postmarker/compare/0.1.0...0.1.1
 
+.. _#190: https://github.com/Stranger6667/postmarker/pull/190
 .. _#184: https://github.com/Stranger6667/postmarker/pull/184
 .. _#183: https://github.com/Stranger6667/postmarker/pull/183
 .. _#181: https://github.com/Stranger6667/postmarker/pull/181
