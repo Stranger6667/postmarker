@@ -6,6 +6,11 @@ Changelog
 `Unreleased`_
 -------------
 
+Fixed
+~~~~~
+
+- Make ``TemplateID`` not required if ``TemplateAlias`` is specified. `#179`_
+
 `0.16.0`_ - 2020-11-10
 ----------------------
 
@@ -422,6 +427,7 @@ Fixed
 .. _#184: https://github.com/Stranger6667/postmarker/pull/184
 .. _#183: https://github.com/Stranger6667/postmarker/pull/183
 .. _#181: https://github.com/Stranger6667/postmarker/pull/181
+.. _#179: https://github.com/Stranger6667/postmarker/issues/179
 .. _#170: https://github.com/Stranger6667/postmarker/issues/170
 .. _#168: https://github.com/Stranger6667/postmarker/issues/168
 .. _#163: https://github.com/Stranger6667/postmarker/issues/163

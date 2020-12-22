@@ -214,6 +214,11 @@ class Email(BaseEmail):
 
 
 class EmailTemplate(BaseEmail):
+    def __init__(self, **kwargs):
+        if kwargs.get("TemplateId") is None and kwargs.get("TemplateAlias") is None:
+            raise ValueError("You need to specify either TemplateId or TemplateAlias")
+        super().__init__(**kwargs)
+
     def send(self):
         return self._manager._send_with_template(**self.as_dict())
 
@@ -352,7 +357,8 @@ class EmailManager(ModelManager):
 
     def send_with_template(
         self,
-        TemplateId,
+        *,
+        TemplateId=None,
         TemplateModel,
         From,
         To,
@@ -443,7 +449,8 @@ class EmailManager(ModelManager):
 
     def EmailTemplate(
         self,
-        TemplateId,
+        *,
+        TemplateId=None,
         TemplateModel,
         From,
         To,
