@@ -6,6 +6,9 @@ Changelog
 `Unreleased`_
 -------------
 
+`0.17.0`_ - 2020-12-22
+----------------------
+
 Fixed
 ~~~~~
 
@@ -391,7 +394,8 @@ Fixed
 
 - Initial release.
 
-.. _Unreleased: https://github.com/Stranger6667/postmarker/compare/0.16.0...HEAD
+.. _Unreleased: https://github.com/Stranger6667/postmarker/compare/0.17.0...HEAD
+.. _0.17.0: https://github.com/Stranger6667/postmarker/compare/0.16.0...0.17.0
 .. _0.16.0: https://github.com/Stranger6667/postmarker/compare/0.15.0...0.16.0
 .. _0.15.0: https://github.com/Stranger6667/postmarker/compare/0.14.1...0.15.0
 .. _0.14.1: https://github.com/Stranger6667/postmarker/compare/0.14.0...0.14.1
