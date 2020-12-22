@@ -206,6 +206,24 @@ class TestSimpleSend:
             "To": "receiver@example.com",
         }
 
+    def test_template_with_alias_only(self, postmark):
+        # It should be possible to specify `TemplateAlias` and not `TemplateId`
+        postmark.emails.EmailTemplate(
+            TemplateAlias="foo",
+            TemplateModel={},
+            From="sender@example.com",
+            To="receiver@example.com",
+        )
+
+    def test_send_with_template_without_alias_and_id(self, postmark):
+        # If there is no `TemplateAlias` and `TemplateId` then it is an error
+        with pytest.raises(ValueError):
+            postmark.emails.send_with_template(
+                TemplateModel={},
+                From="sender@example.com",
+                To="receiver@example.com",
+            )
+
 
 class TestBatchSend:
     def test_email_instance(self, postmark, email, postmark_request):
