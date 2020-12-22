@@ -11,6 +11,11 @@ Fixed
 
 - Make ``TemplateID`` not required if ``TemplateAlias`` is specified. `#179`_
 
+Removed
+~~~~~~~
+
+- Support for Python 3.5.
+
 `0.16.0`_ - 2020-11-10
 ----------------------
 

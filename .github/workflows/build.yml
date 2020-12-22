@@ -53,7 +53,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest]
-        python: [3.5, 3.6, 3.7, 3.8, 3.9.0-rc.1, pypy3]
+        python: [3.6, 3.7, 3.8, 3.9.0-rc.1, pypy3]
         exclude:
           # pytest bug on PyPy3
           # https://github.com/Stranger6667/postmarker/pull/187/checks?check_run_id=1046220597
