@@ -49,6 +49,7 @@ class PostmarkClient:
         max_retries=0,
         timeout=None,
         logs_stream=sys.stdout,
+        root_api_url=DEFAULT_API,
     ):
         assert server_token, "You have to provide token to use Postmark API"
         self.server_token = server_token
@@ -56,6 +57,7 @@ class PostmarkClient:
         self.max_retries = max_retries
         self.timeout = timeout
         self.logger = get_logger("Postmarker", verbosity, logs_stream)
+        self.root_api_url = root_api_url
         self._setup_managers()
 
     @classmethod
@@ -102,7 +104,7 @@ class PostmarkClient:
         else:
             header = "X-Postmark-Server-Token"
             token = self.server_token
-        return self._call(method, DEFAULT_API, endpoint, data, {header: token}, **kwargs)
+        return self._call(method, self.root_api_url, endpoint, data, {header: token}, **kwargs)
 
     def call_status(self, endpoint):
         return self._call("GET", STATUS_API, endpoint)

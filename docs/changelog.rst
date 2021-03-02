@@ -6,6 +6,25 @@ Changelog
 `Unreleased`_
 -------------
 
+Added
+~~~~~
+
+- ``root_api_url`` argument for ``PostmarkClient``. It allows you to change the address used by ``postmarker`` for sending API calls.
+
+.. important::
+
+  Use ``https://api-ssl-temp.postmarkapp.com/`` if you'd like to test your application against the upcoming TLSv1 deprecation by Postmark.
+  Example:
+
+  .. code-block:: python
+
+      postmark = PostmarkClient(
+          server_token="SERVER_TOKEN",
+          account_token="ACCOUNT_TOKEN",
+          root_api_url="https://api-ssl-temp.postmarkapp.com/"
+      )
+      # Use the client as usual
+
 `0.17.0`_ - 2020-12-22
 ----------------------
 
