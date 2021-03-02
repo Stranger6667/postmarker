@@ -3,8 +3,6 @@
 Webhooks
 ========
 
-.. automodule:: postmarker.webhooks
-
 Inbound
 -------
 
