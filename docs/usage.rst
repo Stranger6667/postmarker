@@ -46,3 +46,13 @@ To use different prefix, just pass ``prefix='my_prefix_'`` to ``PostmarkClient.f
 
     >>> config = {'my_prefix_server_token': 'foo', 'my_prefix_timeout': 1}
     >>> postmark = PostmarkClient.from_config(config, prefix='my_prefix_')
+
+If you want ``postmarker`` to send requests to a non-standard API url, use the ``root_api_url`` keyword argument to ``PostmarkClient``.
+
+.. code-block:: python
+
+    PostmarkClient(
+        server_token='SERVER_TOKEN',
+        account_token='ACCOUNT_TOKEN',
+        root_api_url='https://api-ssl-temp.postmarkapp.com/'
+    )
