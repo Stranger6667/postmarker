@@ -202,3 +202,12 @@ Batches are available via the :py:meth:`~postmarker.models.emails.EmailManager.E
 
 For now, batches expose a very limited interface - only :py:meth:`~postmarker.models.emails.EmailBatch.send` method and
 length information via the ``len`` function.
+
+Template batches are available via the :py:meth:`~postmarker.models.emails.EmailManager.EmailTemplateBatch` constructor.
+
+.. code-block:: python
+
+    >>> batch = postmark.emails.EmailTemplateBatch(template)
+    >>> len(batch)
+    1
+    >>> batch.send()
