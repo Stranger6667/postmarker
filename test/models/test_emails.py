@@ -377,3 +377,45 @@ class TestEmail:
 class TestDelivery:
     def test_str(self, delivery_webhook):
         assert str(delivery_webhook) == "Delivery to john@example.com"
+
+
+class TestTemplateBatchSend:
+    def test_template_email_instance(self, postmark, email_template, postmark_request):
+        postmark.emails.send_template_batch(email_template)
+        assert postmark_request.call_args[1]["json"] == {"Messages": (email_template.as_dict(),)}
+
+    def test_dict(self, postmark, postmark_request):
+        template_dict = {
+            "TemplateId": 983381,
+            "TemplateModel": {},
+            "From": "sender@example.com",
+            "To": "receiver@example.com",
+        }
+        expected = {
+            "TemplateId": 983381,
+            "TemplateModel": {},
+            "From": "sender@example.com",
+            "To": "receiver@example.com",
+            "Headers": [],
+            "Attachments": [],
+        }
+        postmark.emails.send_template_batch(template_dict)
+        assert postmark_request.call_args[1]["json"] == {"Messages": (expected,)}
+
+    def test_multiple(self, postmark, email_template, postmark_request):
+        postmark.emails.send_template_batch(email_template, email_template)
+        assert postmark_request.call_args[1]["json"] == {
+            "Messages": (
+                email_template.as_dict(),
+                email_template.as_dict(),
+            )
+        }
+
+    def test_invalid(self, postmark):
+        with pytest.raises(ValueError):
+            postmark.emails.send_template_batch(object())
+
+
+class TestEmailTemplateBatch:
+    def test_len(self, email_template_batch):
+        assert len(email_template_batch) == 1

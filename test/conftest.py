@@ -87,9 +87,21 @@ def email(postmark):
     return postmark.emails.Email(From="sender@example.com", To="receiver@example.com", TextBody="text")
 
 
+@pytest.fixture()
+def email_template(postmark):
+    return postmark.emails.EmailTemplate(
+        From="sender@example.com", To="receiver@example.com", TemplateId=983381, TemplateModel={}
+    )
+
+
 @pytest.fixture
 def email_batch(postmark, email):
     return postmark.emails.EmailBatch(email)
+
+
+@pytest.fixture
+def email_template_batch(postmark, email):
+    return postmark.emails.EmailTemplateBatch(email)
 
 
 @pytest.fixture(scope="session")
