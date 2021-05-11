@@ -11,7 +11,7 @@ with open("README.rst") as file:
 setup(
     name="postmarker",
     url="https://github.com/Stranger6667/postmarker",
-    version="0.17.1",
+    version="0.18.0",
     license="MIT",
     author="Dmitry Dygalo",
     author_email="dadygalo@gmail.com",

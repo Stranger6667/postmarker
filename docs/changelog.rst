@@ -6,6 +6,9 @@ Changelog
 `Unreleased`_
 -------------
 
+`0.18.0`_ - 2021-05-11
+----------------------
+
 Added
 ~~~~~
 
@@ -421,7 +424,8 @@ Fixed
 
 - Initial release.
 
-.. _Unreleased: https://github.com/Stranger6667/postmarker/compare/0.17.1...HEAD
+.. _Unreleased: https://github.com/Stranger6667/postmarker/compare/0.18.0...HEAD
+.. _0.18.0: https://github.com/Stranger6667/postmarker/compare/0.17.1...0.18.0
 .. _0.17.1: https://github.com/Stranger6667/postmarker/compare/0.17.0...0.17.1
 .. _0.17.0: https://github.com/Stranger6667/postmarker/compare/0.16.0...0.17.0
 .. _0.16.0: https://github.com/Stranger6667/postmarker/compare/0.15.0...0.16.0
