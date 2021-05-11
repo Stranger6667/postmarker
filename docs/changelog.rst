@@ -6,6 +6,11 @@ Changelog
 `Unreleased`_
 -------------
 
+Added
+~~~~~
+
+- Support for ``batchWithTemplates``.
+
 `0.17.1`_ - 2021-03-02
 ----------------------
 
