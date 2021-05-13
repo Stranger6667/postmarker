@@ -6,6 +6,14 @@ Changelog
 `Unreleased`_
 -------------
 
+`0.18.1`_ - 2021-05-13
+----------------------
+
+Fixed
+~~~~~
+
+- Fix documentation config to update docs on ReadTheDocs. `#195`_
+
 `0.18.0`_ - 2021-05-11
 ----------------------
 
@@ -464,6 +472,7 @@ Fixed
 .. _0.2.0: https://github.com/Stranger6667/postmarker/compare/0.1.1...0.2.0
 .. _0.1.1: https://github.com/Stranger6667/postmarker/compare/0.1.0...0.1.1
 
+.. _#195: https://github.com/Stranger6667/postmarker/issues/195
 .. _#190: https://github.com/Stranger6667/postmarker/pull/190
 .. _#184: https://github.com/Stranger6667/postmarker/pull/184
 .. _#183: https://github.com/Stranger6667/postmarker/pull/183
