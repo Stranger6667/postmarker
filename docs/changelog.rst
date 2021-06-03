@@ -6,6 +6,14 @@ Changelog
 `Unreleased`_
 -------------
 
+`0.18.2`_ - 2021-06-03
+----------------------
+
+Added
+~~~~~
+
+- Support subject search on outbound messages.
+
 `0.18.1`_ - 2021-05-13
 ----------------------
 
@@ -432,7 +440,8 @@ Fixed
 
 - Initial release.
 
-.. _Unreleased: https://github.com/Stranger6667/postmarker/compare/0.18.1...HEAD
+.. _Unreleased: https://github.com/Stranger6667/postmarker/compare/0.18.2...HEAD
+.. _0.18.2: https://github.com/Stranger6667/postmarker/compare/0.18.1...0.18.2
 .. _0.18.1: https://github.com/Stranger6667/postmarker/compare/0.18.0...0.18.1
 .. _0.18.0: https://github.com/Stranger6667/postmarker/compare/0.17.1...0.18.0
 .. _0.17.1: https://github.com/Stranger6667/postmarker/compare/0.17.0...0.17.1
