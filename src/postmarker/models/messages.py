@@ -92,6 +92,7 @@ class OutboundMessageManager(SubModelManager):
         status=None,
         todate=None,
         fromdate=None,
+        subject=None,
     ):
         """All outbound messages.
 
@@ -106,6 +107,7 @@ class OutboundMessageManager(SubModelManager):
         :param str status: Filter by status (queued or sent).
         :param date todate: Filter messages up to the date specified (inclusive).
         :param date fromdate: Filter messages starting from the date specified (inclusive).
+        :param subject: Filter by email subject.
         :return: A list of :py:class:`OutboundMessage` instances.
         :rtype: `list`
         """
@@ -120,6 +122,7 @@ class OutboundMessageManager(SubModelManager):
             status=status,
             todate=todate,
             fromdate=fromdate,
+            subject=subject,
         )
         return self.expand_responses(responses, "Messages")
 
