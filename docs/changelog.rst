@@ -10,7 +10,7 @@ Added
 ~~~~~
 
 - Python 3.10 support.
-- Django 4.0 support.
+- Django 4.0 support. `#200`_
 
 Removed
 ~~~~~~~
@@ -493,6 +493,7 @@ Fixed
 .. _0.2.0: https://github.com/Stranger6667/postmarker/compare/0.1.1...0.2.0
 .. _0.1.1: https://github.com/Stranger6667/postmarker/compare/0.1.0...0.1.1
 
+.. _#200: https://github.com/Stranger6667/postmarker/issues/200
 .. _#195: https://github.com/Stranger6667/postmarker/issues/195
 .. _#190: https://github.com/Stranger6667/postmarker/pull/190
 .. _#184: https://github.com/Stranger6667/postmarker/pull/184
