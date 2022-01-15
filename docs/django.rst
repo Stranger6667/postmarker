@@ -30,8 +30,9 @@ Example:
         html_message='<html></html>'
     )
 
-Note! The ``html_message`` argument is available only on Django 1.7+.
-To use HTML content in Django < 1.7 you should use the ``django.core.mail.messages.EmailMultiAlternatives`` class directly.
+.. important
+
+    Postmarker supports Django 2.2, 3.2, and 4.0
 
 For testing purposes, there is the ``TEST_MODE`` option.
 When it is set to ``True`` all interactions will be conducted with a special testing API token - ``POSTMARK_API_TEST``.

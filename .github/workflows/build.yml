@@ -54,7 +54,7 @@ jobs:
         os: [ubuntu-20.04, windows-latest]
         python: ["3.6", "3.7", "3.8", "3.9", "3.10", "pypy-3.7", "pypy-3.8"]
 
-    name: ${{ matrix.os }}/tests_${{ matrix.python }}
+    name: ${{ matrix.python }} on ${{ matrix.os }} tests
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v2
@@ -67,10 +67,8 @@ jobs:
 
       - run: pip install tox coverage
 
-      - name: Run ${{ matrix.python }} tox job
-        run: tox -e py
-        env:
-          TOX_JOB: ${{ matrix.python }}
+      - name: Run Python ${{ matrix.python }} tox job
+        run: tox -e py-django32
 
       - run: coverage combine
       - run: coverage report
@@ -81,3 +79,36 @@ jobs:
         with:
           file: ./coverage.xml
           name: codecov-py${{ matrix.python }}
+
+  tests-django:
+    strategy:
+      matrix:
+        django_version: ["22", "32", "40"]
+
+    name: Django ${{ matrix.django_version }} tests
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 1
+
+      - uses: actions/setup-python@v2
+        with:
+          python-version: "3.9"
+
+      - run: pip install tox coverage
+
+      - name: Run Django ${{ matrix.django_version }} tox job
+        run: tox -e ${TOX_JOB//.}
+        env:
+          TOX_JOB: py39-django${{ matrix.django_version }}
+
+      - run: coverage combine
+      - run: coverage report
+      - run: coverage xml -i
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v2.1.0
+        with:
+          file: ./coverage.xml
+          name: codecov-py39-django${{ matrix.django_version }}
