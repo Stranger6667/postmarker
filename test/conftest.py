@@ -72,22 +72,22 @@ def postmark(server_token, account_token):
     return PostmarkClient(server_token=server_token, account_token=account_token)
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture(scope="module")
 def bounce(postmark):
     return postmark.bounces.get(723626745)
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture(scope="module")
 def server(postmark):
     return postmark.server.get()
 
 
-@pytest.fixture()
+@pytest.fixture
 def email(postmark):
     return postmark.emails.Email(From="sender@example.com", To="receiver@example.com", TextBody="text")
 
 
-@pytest.fixture()
+@pytest.fixture
 def email_template(postmark):
     return postmark.emails.EmailTemplate(
         From="sender@example.com", To="receiver@example.com", TemplateId=983381, TemplateModel={}
@@ -104,17 +104,17 @@ def email_template_batch(postmark, email):
     return postmark.emails.EmailTemplateBatch(email)
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture(scope="module")
 def template(postmark):
     return postmark.templates.get(983381)
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture(scope="module")
 def domain(postmark):
     return postmark.domains.get(64054)
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture(scope="module")
 def outbound_message(postmark):
     return postmark.messages.outbound.all(count=1)[0]
 

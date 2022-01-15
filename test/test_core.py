@@ -66,5 +66,5 @@ def test_malformed_request(postmark, postmark_request):
     postmark_request.return_value = Response()
     postmark_request.return_value.status_code = 500
     postmark_request.return_value._content = b"Server Error"
-    with pytest.raises(HTTPError, matches="Server Error"):
+    with pytest.raises(HTTPError, match="Server Error"):
         postmark.call("GET", "endpoint")

@@ -63,9 +63,7 @@ def test_send_mail(postmark_request, settings):
     (
         ("bcc", "Bcc"),
         ("cc", "Cc"),
-        pytest.mark.skipif(VERSION[:2] < (1, 7), reason="Django < 1.7 doesn't support `reply_to`")(
-            ("reply_to", "ReplyTo")
-        ),
+        ("reply_to", "ReplyTo"),
     ),
 )
 def test_reply_to_cc_bcc(postmark_request, kwarg, key):
@@ -252,10 +250,6 @@ def test_headers_encoding(postmark_request):
     assert request["To"] == ", ".join(kwargs["recipient_list"])
 
 
-@pytest.mark.skipif(
-    VERSION[:2] < (1, 7),
-    reason="Django < 1.7 does not support `html_message` argument in `send_mail` function.",
-)
 @pytest.mark.parametrize(
     "html_message",
     (
@@ -354,7 +348,6 @@ def test_extra_options(settings, postmark_request):
     )
 
 
-@pytest.mark.skipif(VERSION[:2] < (1, 8), reason="Context manager protocol was added in Django 1.8")
 def test_context_manager(postmark_request):
     with mail.get_connection() as connection:
         send_with_connection(connection)
@@ -378,7 +371,6 @@ def test_context_manager(postmark_request):
     )
 
 
-@pytest.mark.skipif(VERSION[:2] < (1, 8), reason="Context manager protocol was added in Django 1.8")
 class TestExceptions:
     @pytest.fixture(autouse=True)
     def setup(self, postmark_request):
@@ -394,7 +386,6 @@ class TestExceptions:
                 send_with_connection(connection)
 
 
-@pytest.mark.skipif(VERSION[:2] < (1, 8), reason="Context manager protocol was added in Django 1.8")
 def test_close_closed_connection():
     with mail.get_connection() as connection:
         connection.close()
