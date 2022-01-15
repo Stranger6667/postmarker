@@ -6,6 +6,11 @@ Changelog
 `Unreleased`_
 -------------
 
+Removed
+~~~~~~~
+
+- Deprecated ``yield_fixture`` usage in postmarker's pytest plugin.
+
 `0.18.2`_ - 2021-06-03
 ----------------------
 
