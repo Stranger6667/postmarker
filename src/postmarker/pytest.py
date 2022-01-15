@@ -5,7 +5,7 @@ import pytest
 from .core import PostmarkClient, requests
 
 
-@pytest.yield_fixture
+@pytest.fixture
 def postmark_request():
     """Mocks network requests to Postmark API."""
     with patch("postmarker.core.requests.Session.request", wraps=requests.Session().request) as patched:
@@ -13,7 +13,7 @@ def postmark_request():
             yield patched
 
 
-@pytest.yield_fixture
+@pytest.fixture
 def postmark_client(postmark_request):  # pylint: disable=redefined-outer-name
     client = PostmarkClient(server_token="SERVER_TOKEN", account_token="ACCOUNT_TOKEN")
     client.mock = postmark_request
