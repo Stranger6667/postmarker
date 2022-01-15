@@ -20,7 +20,7 @@ on:
 jobs:
   pre-commit:
     name: Generic pre-commit checks
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
         with:
@@ -35,7 +35,7 @@ jobs:
 
   pylint:
     name: Pylint
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
         with:
@@ -51,13 +51,8 @@ jobs:
   tests:
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest]
-        python: ["3.6", "3.7", "3.8", "3.9", "pypy3"]
-        exclude:
-          # pytest bug on PyPy3
-          # https://github.com/Stranger6667/postmarker/pull/187/checks?check_run_id=1046220597
-          - os: windows-latest
-            python: pypy3
+        os: [ubuntu-20.04, windows-latest]
+        python: ["3.6", "3.7", "3.8", "3.9", "pypy-3.7", "pypy-3.8"]
 
     name: ${{ matrix.os }}/tests_${{ matrix.python }}
     runs-on: ${{ matrix.os }}
