@@ -6,6 +6,11 @@ Changelog
 `Unreleased`_
 -------------
 
+Added
+~~~~~
+
+- Python 3.10 support
+
 Removed
 ~~~~~~~
 
