@@ -41,10 +41,10 @@ class TestPostmarkMixin:
         self.assert_response(url, expected)
 
     def test_reuse_client(self):
-        self.set_postmark_response("")
+        self.set_postmark_response(b"")
         self.assert_response("/reuse/", b"True")
 
     def test_default_options(self):
         """Check if default values were used to initialize postmark client."""
-        self.set_postmark_response("")
+        self.set_postmark_response(b"")
         self.assert_response("/max_retries/", b"0")
