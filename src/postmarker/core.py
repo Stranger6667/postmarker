@@ -75,7 +75,7 @@ class PostmarkClient:
         return cls(**kwargs)
 
     def __repr__(self):
-        return "<{}: {}>".format(self.__class__.__name__, self.server_token)
+        return f"<{self.__class__.__name__}: {self.server_token}>"
 
     def _setup_managers(self):
         """Allows to access manager by model name.
