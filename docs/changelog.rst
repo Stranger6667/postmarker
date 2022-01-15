@@ -9,7 +9,8 @@ Changelog
 Added
 ~~~~~
 
-- Python 3.10 support
+- Python 3.10 support.
+- Django 4.0 support.
 
 Removed
 ~~~~~~~
