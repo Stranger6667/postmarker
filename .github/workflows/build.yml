@@ -13,7 +13,6 @@ on:
       - 'poetry.lock'
       - 'pyproject.toml'
       - 'tox.ini'
-      - 'mypy.ini'
   push:
     branches:
       - master
@@ -23,16 +22,16 @@ jobs:
     name: Generic pre-commit checks
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
         with:
           fetch-depth: 1
 
-      - uses: actions/setup-python@v1
+      - uses: actions/setup-python@v2
         with:
-          python-version: 3.7
+          python-version: 3.9
 
       - run: pip install pre-commit
-      - run: SKIP=pylint,mypy pre-commit run --all-files
+      - run: SKIP=pylint pre-commit run --all-files
 
   pylint:
     name: Pylint
@@ -44,7 +43,7 @@ jobs:
 
       - uses: actions/setup-python@v2
         with:
-          python-version: 3.7
+          python-version: 3.9
 
       - run: pip install pre-commit
       - run: pre-commit run pylint --all-files
@@ -53,7 +52,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest]
-        python: [3.6, 3.7, 3.8, 3.9.0-rc.1, pypy3]
+        python: ["3.6", "3.7", "3.8", "3.9", "pypy3"]
         exclude:
           # pytest bug on PyPy3
           # https://github.com/Stranger6667/postmarker/pull/187/checks?check_run_id=1046220597
@@ -83,9 +82,7 @@ jobs:
       - run: coverage xml -i
 
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v1.0.7
+        uses: codecov/codecov-action@v2.1.0
         with:
-          token: ${{ secrets.CODECOV_TOKEN }}
           file: ./coverage.xml
-          flags: unittests
           name: codecov-py${{ matrix.python }}
