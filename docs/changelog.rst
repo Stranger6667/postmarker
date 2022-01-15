@@ -6,6 +6,9 @@ Changelog
 `Unreleased`_
 -------------
 
+`1.0`_ - 2022-01-15
+-------------------
+
 Added
 ~~~~~
 
@@ -451,7 +454,8 @@ Fixed
 
 - Initial release.
 
-.. _Unreleased: https://github.com/Stranger6667/postmarker/compare/0.18.2...HEAD
+.. _Unreleased: https://github.com/Stranger6667/postmarker/compare/1.0...HEAD
+.. _1.0: https://github.com/Stranger6667/postmarker/compare/0.18.2...1.0
 .. _0.18.2: https://github.com/Stranger6667/postmarker/compare/0.18.1...0.18.2
 .. _0.18.1: https://github.com/Stranger6667/postmarker/compare/0.18.0...0.18.1
 .. _0.18.0: https://github.com/Stranger6667/postmarker/compare/0.17.1...0.18.0
