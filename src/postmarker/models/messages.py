@@ -177,7 +177,7 @@ class Attachment(Model):
         return self.Name
 
     def __repr__(self):
-        return "<{}: {}>".format(self.__class__.__name__, self)
+        return f"<{self.__class__.__name__}: {self}>"
 
     def __len__(self):
         return self.ContentLength
