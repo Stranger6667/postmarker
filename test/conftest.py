@@ -35,7 +35,7 @@ def pytest_unconfigure(config):
         )
 
 
-@pytest.yield_fixture(autouse=True, scope="module")
+@pytest.fixture(autouse=True, scope="module")
 def betamax_recorder(request, postmark):
     """Module level Betamax recorder."""
     if request.config.getoption("--record"):
