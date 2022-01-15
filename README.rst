@@ -90,12 +90,12 @@ Or you can look at the docs/ directory in the repository.
 Python support
 ==============
 
-Postmarker supports Python 3.6 - 3.9 and PyPy3.
+Postmarker supports CPython 3.6 - 3.10 and PyPy 3.7 & 3.8.
 
 Thanks
 ======
 
-Many thanks to `Shmele <https://github.com/butorov>`_ and `lobziik <https://github.com/lobziik>`_ for their reviews and advices :)
+Many thanks to `Shmele <https://github.com/butorov>`_ and `lobziik <https://github.com/lobziik>`_ for their reviews and advice :)
 
 .. |Build| image:: https://github.com/Stranger6667/postmarker/workflows/build/badge.svg
    :target: https://github.com/Stranger6667/postmarker/actions
