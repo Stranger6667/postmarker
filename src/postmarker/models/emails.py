@@ -449,7 +449,7 @@ class EmailManager(ModelManager):
     def send_template_batch(self, *emails, **extra):
         """Sends an email batch.
 
-        :param emails: :py:class:`TemplateEmail` instances or dictionaries
+        :param emails: :py:class:`EmailTemplate` instances or dictionaries
         :param extra: dictionary with extra arguments for every message in the batch.
         """
         return self.EmailTemplateBatch(*emails).send(**extra)
