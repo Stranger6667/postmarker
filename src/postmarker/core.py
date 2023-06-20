@@ -116,6 +116,31 @@ class PostmarkClient:
             raise SpamAssassinError(response["message"])
         return response
 
+    def get_suppressions(self, stream_id, **kwargs):
+        url = DEFAULT_API + f"/message-streams/{stream_id}/suppressions/dump"
+        response = self._call("GET", url, **kwargs)
+        return response
+
+    def add_suppression(self, stream_id, emails):
+        url = DEFAULT_API + f"/message-streams/{stream_id}/suppressions"
+        if type(emails) != list:
+            raise ValueError("emails must be of type list")
+        data = {'Suppressions': []}
+        for email in emails:
+            data['Suppressions'].append({'EmailAddress': email})
+        response = self._call("POST", url, "", data)
+        return response
+
+    def delete_suppression(self, stream_id, emails):
+        url = DEFAULT_API + f"/message-streams/{stream_id}/suppressions/delete"
+        if type(emails) != list:
+            raise ValueError("emails must be of type list")
+        data = {'Suppressions': []}
+        for email in emails:
+            data['Suppressions'].append({'EmailAddress': email})
+        response = self._call("POST", url, "", data)
+        return response
+
     def _call(self, method, root, endpoint, data=None, headers=None, **kwargs):
         default_headers = {"Accept": "application/json", "User-Agent": USER_AGENT}
         if headers:
