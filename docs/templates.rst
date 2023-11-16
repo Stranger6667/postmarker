@@ -14,6 +14,19 @@ The Templates API is available via the ``templates`` manager:
     >>> postmark.templates.all()
     [<Template: Test1 (983381)>, <Template: TestX (1003801)>]
 
+To send an email based on the template, use send_with_template:
+
+.. code-block:: python
+
+    postmark.emails.send_with_template(
+        TemplateId=123456,
+        TemplateModel={
+            "foo": "bar"
+        },
+        From="sender@example.com",
+        To="johndoe@example.com",
+    )
+
 Template validation:
 
 .. code-block:: python
