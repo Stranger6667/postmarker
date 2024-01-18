@@ -14,7 +14,7 @@ from .models.senders import SenderSignaturesManager
 from .models.server import ServerManager
 from .models.stats import StatsManager
 from .models.status import StatusManager
-from .models.suppressions import Suppression, SuppressionResponse
+from .models.suppressions import SuppressionManager
 from .models.templates import TemplateManager
 from .models.triggers import TriggersManager
 from .utils import get_args
@@ -38,6 +38,7 @@ class PostmarkClient:
         ServerManager,
         StatsManager,
         StatusManager,
+        SuppressionManager,
         TemplateManager,
         TriggersManager,
     )
@@ -89,20 +90,6 @@ class PostmarkClient:
             instance = manager_class(self)
             setattr(self, instance.name, instance)
 
-    def _manage_suppression(self, endpoint, emails):
-        if type(emails) != list:
-            emails = [emails]
-        data = {'Suppressions': [{'EmailAddress': email} for email in emails]}
-        response = self._call("POST", self.root_api_url, endpoint, data)
-        suppression_response_list = []
-        for suppression in response['Suppressions']:
-            suppression_response_list.append(SuppressionResponse(
-                email_address=suppression['EmailAddress'],
-                status=suppression['Status'],
-                message=suppression['Message']
-            ))
-        return suppression_response_list
-
     @property
     def session(self):
         if not hasattr(self, "_session"):
@@ -130,27 +117,6 @@ class PostmarkClient:
         if not response["success"]:
             raise SpamAssassinError(response["message"])
         return response
-
-    def get_suppressions(self, stream_id, **kwargs):
-        endpoint = f"/message-streams/{stream_id}/suppressions"
-        response = self._call("GET", self.root_api_url, endpoint, **kwargs)
-        suppression_list = []
-        for suppression in response['Suppressions']:
-            suppression_list.append(Suppression(
-                email_address=suppression['EmailAddress'],
-                suppression_reason=suppression['SuppressionReason'],
-                origin=suppression['Origin'],
-                created_at=suppression['CreatedAt']
-            ))
-        return suppression_list
-
-    def add_suppression(self, stream_id, emails):
-        endpoint = f"/message-streams/{stream_id}/suppressions"
-        return self._manage_suppression(endpoint, emails)
-
-    def delete_suppression(self, stream_id, emails):
-        endpoint = f"/message-streams/{stream_id}/suppressions/delete"
-        return self._manage_suppression(endpoint, emails)
 
     def _call(self, method, root, endpoint, data=None, headers=None, **kwargs):
         default_headers = {"Accept": "application/json", "User-Agent": USER_AGENT}

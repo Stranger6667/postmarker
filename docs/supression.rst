@@ -8,7 +8,7 @@ You can manage Postmark's Suppression lists with a few simple calls:
 To view the current suppression list:
 .. code-block:: python
 
-    >>> response = postmark.get_suppressions(stream_id="test")
+    >>> response = postmark.suppressions.get_suppression(stream_id="test")
     >>> suppressions = (response['Suppressions'])
     >>> for suppression in suppressions:
     >>>    print(suppression.email_address])
@@ -27,21 +27,21 @@ To view the current suppression list:
         SpamComplaint
         Recipient
         2019-12-17T08:58:33-05:00
-You can search for a particular suppression with  "emmails", "Origin", "todate", "fromdate", and "EmailAddress" lile:
+You can search for a particular suppression with  "SuppressionReason", "Origin", "todate", "fromdate", and "EmailAddress" like:
 .. code-block:: python
 
-    >>> response = postmark.get_suppressions(stream_id="test", EmailAddress="address@wildbit.com")
+    >>> response = postmark.suppressions.get_suppression(stream_id="test", EmailAddress="address@wildbit.com")
     >>> print(response[0].email_address + " " + response[0].suppression_reason)
     address@wildbit.com ManualSuppression
 You can add a new suppression with:
 .. code-block:: python
 
-    >>> response = postmark.add_suppressions(stream_id="test", emails=["address@wildbit.com"])
+    >>> response = postmark.suppressions.add(stream_id="test", emails=["address@wildbit.com"])
     >>> print(response[0].email_address + " " + response[0].status)
     good.address@wildbit.com Suppressed
 You can delete a suppression with:
 .. code-block:: python
 
-    >>> response = postmark.delete_suppressions(stream_id="test", emails=["address@wildbit.com"])
+    >>> response = postmark.suppressions.delete(stream_id="test", emails=["address@wildbit.com"])
     >>> print(response[0].email_address + " " + response[0].status)
     address@wildbit.com Deleted
