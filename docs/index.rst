@@ -28,6 +28,7 @@ Contents:
    django
    tornado
    spamcheck
+   suppression
    webhooks
    testing
    reference
