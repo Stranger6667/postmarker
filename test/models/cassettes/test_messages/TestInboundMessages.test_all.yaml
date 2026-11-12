@@ -1,0 +1,36 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - Postmarker/0.7.0.dev0
+      X-Postmark-Server-Token:
+      - SERVER_TOKEN
+    method: GET
+    uri: https://api.postmarkapp.com/messages/inbound?count=500&offset=0
+  response:
+    body:
+      string: '{"InboundMessages":[],"TotalCount":0}'
+    headers:
+      Cache-Control:
+      - private
+      Content-Length:
+      - '37'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Sun, 26 Feb 2017 11:45:55 GMT
+      Server:
+      - unicorns-double-rainbow
+      X-Powered-By:
+      - ASP.NET
+    status:
+      code: 200
+      message: OK
+version: 1

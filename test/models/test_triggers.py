@@ -3,7 +3,7 @@ import pytest
 from postmarker.models.base import ModelManager
 from postmarker.models.triggers import InboundRule, Tag
 
-CASSETTE_NAME = "triggers"
+pytestmark = pytest.mark.vcr
 
 
 @pytest.mark.parametrize("name", ("inboundrules", "tags"))

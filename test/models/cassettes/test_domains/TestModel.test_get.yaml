@@ -1,0 +1,74 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - Postmarker/0.6.0.dev
+      X-Postmark-Account-Token:
+      - ACCOUNT_TOKEN
+    method: GET
+    uri: https://api.postmarkapp.com/domains/64054
+  response:
+    body:
+      string: '{"SPFHost":"example.com","ReturnPathDomainCNAMEValue":"pm.example.com","DKIMUpdateStatus":"Verified","DKIMHost":"20150316104110.pm._domainkey.example.com","SPFVerified":true,"DKIMVerified":true,"DKIMRevokedHost":"","SPFTextValue":"v=spf1
+        a mx include:spf.mtasv.net ~all","Name":"example.com","WeakDKIM":false,"ReturnPathDomainVerified":false,"DKIMTextValue":"example
+        value","ID":64054,"ReturnPathDomain":"","DKIMPendingHost":"","SafeToRemoveRevokedKeyFromDNS":false,"DKIMRevokedTextValue":"","DKIMPendingTextValue":""}'
+    headers:
+      Cache-Control:
+      - private
+      Content-Length:
+      - '518'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Sun, 04 Dec 2016 20:21:57 GMT
+      Server:
+      - unicorns-double-rainbow
+      X-Powered-By:
+      - ASP.NET
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - Postmarker/0.6.0.dev
+      X-Postmark-Account-Token:
+      - ACCOUNT_TOKEN
+    method: GET
+    uri: https://api.postmarkapp.com/domains/64054
+  response:
+    body:
+      string: '{"SPFHost":"example.com","ReturnPathDomainCNAMEValue":"pm.example.com","DKIMUpdateStatus":"Verified","DKIMHost":"20150316104110.pm._domainkey.example.com","SPFVerified":true,"DKIMVerified":true,"DKIMRevokedHost":"","SPFTextValue":"v=spf1
+        a mx include:spf.mtasv.net ~all","Name":"example.com","WeakDKIM":false,"ReturnPathDomainVerified":false,"DKIMTextValue":"example
+        value","ID":64054,"ReturnPathDomain":"","DKIMPendingHost":"","SafeToRemoveRevokedKeyFromDNS":false,"DKIMRevokedTextValue":"","DKIMPendingTextValue":""}'
+    headers:
+      Cache-Control:
+      - private
+      Content-Length:
+      - '518'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Sun, 04 Dec 2016 20:21:58 GMT
+      Server:
+      - unicorns-double-rainbow
+      X-Powered-By:
+      - ASP.NET
+    status:
+      code: 200
+      message: OK
+version: 1

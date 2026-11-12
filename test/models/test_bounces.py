@@ -7,7 +7,7 @@ from postmarker.models.messages import OutboundMessage
 
 from ..conftest import BOUNCE_WEBHOOK
 
-CASSETTE_NAME = "bounces"
+pytestmark = pytest.mark.vcr
 
 
 class TestModel:

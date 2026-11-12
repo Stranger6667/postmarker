@@ -1,0 +1,75 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - Postmarker/0.7.0.dev0
+      X-Postmark-Server-Token:
+      - SERVER_TOKEN
+    method: GET
+    uri: https://api.postmarkapp.com/messages/outbound?count=1&offset=0
+  response:
+    body:
+      string: '{"Messages":[{"TrackLinks":"None","Bcc":[],"Subject":"Test subject","Recipients":["test@example.com"],"TrackOpens":true,"From":"Test
+        <test@test.com>","ReceivedAt":"2017-02-25T13:59:44.0453616-05:00","Attachments":[],"Cc":[],"Status":"Sent","MessageID":"21895802-5d50-442b-b039-27cf5b462c54","To":[{"Email":"test@example.com","Name":""}]}],"TotalCount":1893}'
+    headers:
+      Cache-Control:
+      - private
+      Content-Length:
+      - '357'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Sat, 25 Feb 2017 19:24:58 GMT
+      Server:
+      - unicorns-double-rainbow
+      X-Powered-By:
+      - ASP.NET
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - Postmarker/0.7.0.dev0
+      X-Postmark-Server-Token:
+      - SERVER_TOKEN
+    method: GET
+    uri: https://api.postmarkapp.com/messages/outbound/21895802-5d50-442b-b039-27cf5b462c54/details
+  response:
+    body:
+      string: '{"TrackLinks":"None","Bcc":[],"Subject":"Test subject","Recipients":["test@example.com"],"MessageEvents":[{"ReceivedAt":"2017-02-25T13:59:44.0000000-05:00","Details":{"DeliveryMessage":"smtp;250
+        2.0.0 OK 1488049184 u12si5307395ite.25 - gsmtp","DestinationIP":"127.0.0.1","DestinationServer":"ASPMX.L.GOOGLE.com
+        (127.0.0.1)"},"Type":"Delivered","Recipient":"test@example.com"}],"TrackOpens":true,"From":"Test
+        <test@test.com>","ReceivedAt":"2017-02-25T13:59:44.0453616-05:00","Body":"Body
+        example","Attachments":[],"HtmlBody":"Bla bla","Cc":[],"Status":"Sent","MessageID":"21895802-5d50-442b-b039-27cf5b462c54","To":[{"Email":"test@example.com","Name":""}]}'
+    headers:
+      Cache-Control:
+      - private
+      Content-Length:
+      - '655'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Sat, 25 Feb 2017 19:24:59 GMT
+      Server:
+      - unicorns-double-rainbow
+      X-Powered-By:
+      - ASP.NET
+    status:
+      code: 200
+      message: OK
+version: 1

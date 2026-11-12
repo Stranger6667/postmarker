@@ -1,0 +1,36 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - Postmarker/0.7.0.dev0
+      X-Postmark-Server-Token:
+      - SERVER_TOKEN
+    method: GET
+    uri: https://api.postmarkapp.com/stats/outbound/opens?fromdate=2017-01-30
+  response:
+    body:
+      string: '{"Days":[{"Date":"2017-01-30","Opens":6,"Unique":3},{"Date":"2017-01-31","Opens":39,"Unique":13},{"Date":"2017-02-01","Opens":5,"Unique":3}],"Opens":50,"Unique":19}'
+    headers:
+      Cache-Control:
+      - private
+      Content-Length:
+      - '164'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Wed, 01 Feb 2017 08:29:23 GMT
+      Server:
+      - unicorns-double-rainbow
+      X-Powered-By:
+      - ASP.NET
+    status:
+      code: 200
+      message: OK
+version: 1

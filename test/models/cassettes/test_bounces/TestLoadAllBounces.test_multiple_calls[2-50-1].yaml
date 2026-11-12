@@ -1,0 +1,42 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.11.1
+      X-Postmark-Server-Token:
+      - API_TOKEN
+    method: GET
+    uri: https://api.postmarkapp.com/bounces/?count=2&offset=0
+  response:
+    body:
+      string: '{"TotalCount":2,"Bounces":[{"Name":"Hard bounce","Details":"action:
+        failed\r\n","BouncedAt":"2016-09-19T16:34:09.1336752-04:00","Description":"The
+        server was unable to deliver your message (ex: unknown user, mailbox not found).","ID":943247350,"Type":"HardBounce","CanActivate":true,"MessageID":"b1d5dfa8-2d7c-4176-a24e-8a47ff860615","Inactive":true,"TypeCode":1,"DumpAvailable":true,"Email":"example@example.com","Subject":"Test
+        subject"},{"Name":"Soft bounce","Details":"X-Postfix; Mailbox is full","BouncedAt":"2016-08-02T07:02:38.9778826-04:00","Description":"Unable
+        to temporarily deliver message (i.e. mailbox full, account disabled, exceeds
+        quota, out of disk space).","ID":924829573,"Type":"SoftBounce","CanActivate":true,"MessageID":"aa9fa9ca-6c99-4970-ac17-2e63f9515e8d","Inactive":false,"TypeCode":4096,"DumpAvailable":false,"Email":"example@example.com","Subject":"Test
+        subject"}]}'
+    headers:
+      Cache-Control:
+      - private
+      Content-Length:
+      - '893'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Tue, 04 Oct 2016 15:04:22 GMT
+      Server:
+      - unicorns-double-rainbow
+      X-Powered-By:
+      - ASP.NET
+    status:
+      code: 200
+      message: OK
+version: 1

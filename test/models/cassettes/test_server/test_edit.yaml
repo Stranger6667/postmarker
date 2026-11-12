@@ -1,0 +1,74 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.11.1
+      X-Postmark-Server-Token:
+      - API_TOKEN
+    method: GET
+    uri: https://api.postmarkapp.com/server
+  response:
+    body:
+      string: '{"ServerLink":"https://www.postmarkapp.com/servers/1/overview","ApiTokens":["2bcc50cb-72c6-4ae5-954a-dffc01667789"],"Color":"red","InboundHash":"a79c8b455ba4f8b52fab85773b70f224","InboundDomain":"","InboundHookUrl":"","PostFirstOpenOnly":false,"ID":1,"SmtpApiActivated":true,"BounceHookUrl":"","TrackOpens":false,"OpenHookUrl":"","InboundAddress":"a79c8b455ba4f8b52fab85773b70f224@inbound.postmarkapp.com","Name":"example.com","InboundSpamThreshold":0,"RawEmailEnabled":false}'
+    headers:
+      Cache-Control:
+      - private
+      Content-Length:
+      - '476'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Fri, 07 Oct 2016 12:39:05 GMT
+      Server:
+      - unicorns-double-rainbow
+      X-Powered-By:
+      - ASP.NET
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"TrackOpens": true}'
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '20'
+      Content-Type:
+      - application/json
+      User-Agent:
+      - python-requests/2.11.1
+      X-Postmark-Server-Token:
+      - API_TOKEN
+    method: PUT
+    uri: https://api.postmarkapp.com/server
+  response:
+    body:
+      string: '{"ServerLink":"https://www.postmarkapp.com/servers/1/overview","ApiTokens":["2bcc50cb-72c6-4ae5-954a-dffc01667789"],"Color":"red","InboundHash":"a79c8b455ba4f8b52fab85773b70f224","InboundDomain":"","InboundHookUrl":"","PostFirstOpenOnly":false,"ID":1,"SmtpApiActivated":true,"BounceHookUrl":"","TrackOpens":true,"OpenHookUrl":"","InboundAddress":"a79c8b455ba4f8b52fab85773b70f224@inbound.postmarkapp.com","Name":"example.com","InboundSpamThreshold":0,"RawEmailEnabled":false}'
+    headers:
+      Cache-Control:
+      - private
+      Content-Length:
+      - '475'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Fri, 07 Oct 2016 12:39:06 GMT
+      Server:
+      - unicorns-double-rainbow
+      X-Powered-By:
+      - ASP.NET
+    status:
+      code: 200
+      message: OK
+version: 1

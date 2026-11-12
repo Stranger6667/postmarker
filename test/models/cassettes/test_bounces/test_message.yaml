@@ -1,0 +1,78 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.11.1
+      X-Postmark-Server-Token:
+      - API_TOKEN
+    method: GET
+    uri: https://api.postmarkapp.com/bounces/723626745
+  response:
+    body:
+      string: '{"ID":723626745,"Subject":"Test subject","Name":"Hard bounce","Type":"HardBounce","DumpAvailable":false,"Inactive":true,"CanActivate":true,"TypeCode":1,"BouncedAt":"2014-05-13T19:56:14.4218626-04:00","Description":"The
+        server was unable to deliver your message (ex: unknown user, mailbox not found).","Details":"smtp;550
+        5.1.1 The email account that you tried to reach does not exist. Please try
+        double-checking the recipient''s email address for typos or unnecessary spaces.
+        Learn more at http://support.google.com/mail/bin/answer.py?answer=6596 m5si18637995igr.52
+        - gsmtp","MessageID":"086415ac-9326-4ddb-9d95-c0d8db13532b","Email":"example@example.com"}'
+    headers:
+      Cache-Control:
+      - private
+      Content-Length:
+      - '655'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Tue, 04 Oct 2016 13:39:26 GMT
+      Server:
+      - unicorns-double-rainbow
+      X-Powered-By:
+      - ASP.NET
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - Postmarker/0.10.1
+      X-Postmark-Server-Token:
+      - 80c543fe-56ec-45b9-bc0a-cb0538a086a5
+    method: GET
+    uri: https://api.postmarkapp.com/messages/outbound/086415ac-9326-4ddb-9d95-c0d8db13532b/details
+  response:
+    body:
+      string: '{"TrackOpens":true,"ReceivedAt":"2017-04-17T14:23:33.3640046-04:00","Subject":"Test
+        subject","HtmlBody":"HTML body","Bcc":[],"MessageEvents":[{"ReceivedAt":"2017-04-17T14:23:56.6799482-04:00","Details":{"BounceID":"1033567275","Summary":"action:
+        failed\r\n"},"Type":"Bounced","Recipient":"test@example.com"}],"From":"\"Test\"
+        <test2@example.com>","Body":"Body content","Status":"Sent","MessageID":"ccf148f9-a81b-4c9c-a763-3912fe21197b","To":[{"Email":"test@example.com","Name":""}],"TrackLinks":"HtmlAndText","Recipients":["test@example.com"],"Cc":[],"Attachments":[]}'
+    headers:
+      Cache-Control:
+      - private
+      Content-Length:
+      - '568'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 01 May 2017 10:04:35 GMT
+      Server:
+      - unicorns-double-rainbow
+      X-Powered-By:
+      - ASP.NET
+    status:
+      code: 200
+      message: OK
+version: 1

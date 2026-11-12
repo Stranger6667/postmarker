@@ -36,7 +36,7 @@ classifiers = [
 dependencies = ["requests>=2.20.0"]
 
 [project.optional-dependencies]
-tests = ["betamax", "betamax-serializers", "coverage[toml]>=7", "pytest>=8", "pytest-django", "tornado"]
+tests = ["coverage[toml]>=7", "pytest>=8", "pytest-django", "pytest-recording>=0.14", "tornado"]
 
 [project.entry-points.pytest11]
 postmark = "postmarker.pytest"
@@ -55,7 +55,7 @@ path = "src/postmarker/__init__.py"
 include = ["/src", "/test"]
 
 [tool.pytest.ini_options]
-addopts = ["-ra", "--strict-markers", "--strict-config"]
+addopts = ["-ra", "--strict-markers", "--strict-config", "--block-network", "--allowed-hosts=127.0.0.1,localhost"]
 xfail_strict = true
 testpaths = ["test"]
 pythonpath = ["."]

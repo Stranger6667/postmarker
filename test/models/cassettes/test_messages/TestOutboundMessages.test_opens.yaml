@@ -1,0 +1,71 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - Postmarker/0.7.0.dev0
+      X-Postmark-Server-Token:
+      - SERVER_TOKEN
+    method: GET
+    uri: https://api.postmarkapp.com/messages/outbound?count=1&offset=0
+  response:
+    body:
+      string: '{"Messages":[{"TrackLinks":"None","Bcc":[],"Subject":"Test subject","Recipients":["test@example.com"],"TrackOpens":true,"From":"Test
+        <test@test.com>","ReceivedAt":"2017-02-25T13:59:44.0453616-05:00","Attachments":[],"Cc":[],"Status":"Sent","MessageID":"21895802-5d50-442b-b039-27cf5b462c54","To":[{"Email":"test@example.com","Name":""}]}],"TotalCount":1893}'
+    headers:
+      Cache-Control:
+      - private
+      Content-Length:
+      - '357'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Sat, 25 Feb 2017 19:24:58 GMT
+      Server:
+      - unicorns-double-rainbow
+      X-Powered-By:
+      - ASP.NET
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - Postmarker/0.7.0.dev0
+      X-Postmark-Server-Token:
+      - SERVER_TOKEN
+    method: GET
+    uri: https://api.postmarkapp.com/messages/outbound/opens/21895802-5d50-442b-b039-27cf5b462c54?count=500&offset=0
+  response:
+    body:
+      string: '{"ErrorCode":701,"Message":"This message was not found."}'
+    headers:
+      Cache-Control:
+      - private
+      Content-Length:
+      - '57'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Sat, 25 Feb 2017 19:24:59 GMT
+      Server:
+      - unicorns-double-rainbow
+      X-Powered-By:
+      - ASP.NET
+    status:
+      code: 422
+      message: Unprocessable Entity
+version: 1

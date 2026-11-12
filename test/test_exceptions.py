@@ -2,7 +2,7 @@ import pytest
 
 from postmarker.exceptions import ClientError
 
-CASSETTE_NAME = "exceptions"
+pytestmark = pytest.mark.vcr
 
 
 def test_raise(postmark):

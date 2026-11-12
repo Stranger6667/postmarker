@@ -1,0 +1,60 @@
+interactions:
+- request:
+    body: '{"options": "long", "email": "Delivered-To: receiver@gmail.com\nReceived:
+      by 10.194.205.41 with SMTP id ld9csp1978927wjc;\n        Tue, 4 Oct 2016 01:34:04
+      -0700 (PDT)\nX-Received: by 10.28.39.134 with SMTP id n128mr14037354wmn.60.1475570044702;\n        Tue,
+      04 Oct 2016 01:34:04 -0700 (PDT)\nReturn-Path: <info@example.eu>\nReceived:
+      from cloud1.example.io ([2a01:4f8:212:46::2])\n        by mx.google.com with
+      ESMTPS id da3si3018187wjc.119.2016.10.04.01.34.04\n        for <receiver@gmail.com>\n        (version=TLS1_2
+      cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);\n        Tue, 04 Oct 2016
+      01:34:04 -0700 (PDT)\nReceived-SPF: pass (google.com: domain of info@example.eu
+      designates 2a01:4f8:212:46::2 as permitted sender) client-ip=2a01:4f8:212:46::2;\nAuthentication-Results:
+      mx.google.com;\n       spf=pass (google.com: domain of info@example.eu designates
+      2a01:4f8:212:46::2 as permitted sender) smtp.mailfrom=info@example.eu\nReceived:
+      from 0fdec0828b6b (unknown [172.17.2.33]) by cloud1.example.io (Postfix) with
+      ESMTP id 645481AE0A73 for <receiver@gmail.com>; Tue,\n  4 Oct 2016 10:34:04
+      +0200 (CEST)\nContent-Type: text/plain; charset=\"utf-8\"\nMIME-Version: 1.0\nContent-Transfer-Encoding:
+      8bit\nSubject: Recruiting Message from example.com\nFrom: info@example.com\nTo:
+      receiver@gmail.com\nDate: Tue, 04 Oct 2016 08:34:04 -0000\nMessage-ID: <20161004083404.363.8793@0fdec0828b3b>\n\nBla
+      bla bla,\n"}'
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '1415'
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Postmarker/0.6.0.dev
+    method: POST
+    uri: http://spamcheck.postmarkapp.com/filter/
+  response:
+    body:
+      string: '{"success":true,"report":" pts rule name               description\n----
+        ---------------------- --------------------------------------------------\n
+        1.3 RDNS_NONE              Delivered to internal network by a host with no
+        rDNS\n 1.0 BODY_URI_ONLY          Message body is only a URI in one line of
+        text or for\n                            an image\n 2.0 URI_ONLY_MSGID_MALF    URI
+        only + malformed message ID\n\n","score":"4.2"}'
+    headers:
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '430'
+      Content-Type:
+      - application/json; charset=utf-8
+      Set-Cookie:
+      - connect.sid=iKlo87YhyikywoP5FUi3qyna.qrp%2BfYHjsRwNBy%2FE45jDb0Lm10A8tX2jiwPnKk%2FlgIU;
+        path=/; expires=Fri, 28 Oct 2016 16:21:55 GMT; httpOnly
+      X-Powered-By:
+      - Express
+      p3p:
+      - CP=COM NOI NOR
+    status:
+      code: 200
+      message: OK
+version: 1

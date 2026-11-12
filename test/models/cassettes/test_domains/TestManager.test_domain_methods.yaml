@@ -1,0 +1,279 @@
+interactions:
+- request:
+    body: '{"Name": "newsuperdomain.name", "ReturnPathDomain": null}'
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '57'
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Postmarker/0.6.0.dev
+      X-Postmark-Account-Token:
+      - ACCOUNT_TOKEN
+    method: POST
+    uri: https://api.postmarkapp.com/domains
+  response:
+    body:
+      string: '{"ID":386143,"Name":"newsuperdomain.name","SPFVerified":false,"SPFHost":"newsuperdomain.name","SPFTextValue":"v=spf1
+        a mx include:spf.mtasv.net ~all","DKIMVerified":false,"WeakDKIM":false,"DKIMHost":"","DKIMTextValue":"","DKIMPendingHost":"20161205081851pm._domainkey.newsuperdomain.name","DKIMPendingTextValue":"k=rsa;
+        p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDDD6Gf54qYMgX4pbP+0dkE3pGRAV7/vWJOIgrgiccC/mgSolCQQxZb7u6JnpljEVRVch9Nr9J+QPYEowQ7qqGeiDSqs280cb87rruf2bzgo57uPiAskGAIvQSWYqVz4iCERKlRGERi5Ww2crnBE4ghT+Sfu3yGyu/mCjqN1ERKOQIDAQAB","DKIMRevokedHost":"","DKIMRevokedTextValue":"","SafeToRemoveRevokedKeyFromDNS":false,"DKIMUpdateStatus":"Pending","ReturnPathDomain":"","ReturnPathDomainVerified":false,"ReturnPathDomainCNAMEValue":"pm.mtasv.net"}'
+    headers:
+      Cache-Control:
+      - private
+      Content-Length:
+      - '753'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 05 Dec 2016 08:18:50 GMT
+      Server:
+      - unicorns-double-rainbow
+      X-Powered-By:
+      - ASP.NET
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"ReturnPathDomain": "pm.newsuperdomain.name"}'
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '46'
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Postmarker/0.6.0.dev
+      X-Postmark-Account-Token:
+      - ACCOUNT_TOKEN
+    method: PUT
+    uri: https://api.postmarkapp.com/domains/386143
+  response:
+    body:
+      string: '{"ID":386143,"Name":"newsuperdomain.name","SPFVerified":false,"SPFHost":"newsuperdomain.name","SPFTextValue":"v=spf1
+        a mx include:spf.mtasv.net ~all","DKIMVerified":false,"WeakDKIM":false,"DKIMHost":"","DKIMTextValue":"","DKIMPendingHost":"20161205081851pm._domainkey.newsuperdomain.name","DKIMPendingTextValue":"k=rsa;
+        p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDDD6Gf54qYMgX4pbP+0dkE3pGRAV7/vWJOIgrgiccC/mgSolCQQxZb7u6JnpljEVRVch9Nr9J+QPYEowQ7qqGeiDSqs280cb87rruf2bzgo57uPiAskGAIvQSWYqVz4iCERKlRGERi5Ww2crnBE4ghT+Sfu3yGyu/mCjqN1ERKOQIDAQAB","DKIMRevokedHost":"","DKIMRevokedTextValue":"","SafeToRemoveRevokedKeyFromDNS":false,"DKIMUpdateStatus":"Pending","ReturnPathDomain":"pm.newsuperdomain.name","ReturnPathDomainVerified":false,"ReturnPathDomainCNAMEValue":"pm.mtasv.net"}'
+    headers:
+      Cache-Control:
+      - private
+      Content-Length:
+      - '775'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 05 Dec 2016 08:18:50 GMT
+      Server:
+      - unicorns-double-rainbow
+      X-Powered-By:
+      - ASP.NET
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '0'
+      User-Agent:
+      - Postmarker/0.6.0.dev
+      X-Postmark-Account-Token:
+      - ACCOUNT_TOKEN
+    method: POST
+    uri: https://api.postmarkapp.com/domains/386143/verifyspf
+  response:
+    body:
+      string: '{"SPFVerified":true,"SPFHost":"newsuperdomain.name","SPFTextValue":"v=spf1
+        a mx include:spf.mtasv.net ~all"}'
+    headers:
+      Cache-Control:
+      - private
+      Content-Length:
+      - '108'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 05 Dec 2016 08:18:51 GMT
+      Server:
+      - unicorns-double-rainbow
+      X-Powered-By:
+      - ASP.NET
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '0'
+      User-Agent:
+      - Postmarker/0.6.0.dev
+      X-Postmark-Account-Token:
+      - ACCOUNT_TOKEN
+    method: PUT
+    uri: https://api.postmarkapp.com/domains/386143/verifyDkim
+  response:
+    body:
+      string: '{"Name": "newsuperdomain.name", "SPFVerified": true, "SPFHost": "newsuperdomain.name",
+        "SPFTextValue": "v=spf1 a mx include:spf.mtasv.net ~all", "DKIMVerified":
+        false, "WeakDKIM": false, "DKIMHost": "", "DKIMTextValue": "", "DKIMPendingHost":
+        "20161205155228pm._domainkey.newsuperdomain.name", "DKIMPendingTextValue":
+        "k=rsa;p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCybzS6rWqf9HTgnydKCL+wOkmYMisbvQIULMYEV6Rqtz1to71RFEru2d3dPI003GF4Lfra81hbAtrgp9Zk1v7BabzmhKIACTinNrLNaEK3EOz1Ro3Czt/qS0LhSuiK8dhWP8miz4Zc/VyzqnkhWHbX8YuxEWfvGLEjPv6ytjl25QIDAQAB",
+        "DKIMRevokedHost": "", "DKIMRevokedTextValue": "", "SafeToRemoveRevokedKeyFromDNS":
+        false, "DKIMUpdateStatus": "Pending", "ReturnPathDomain": "newsuperdomain.name",
+        "ReturnPathDomainVerified": false, "ReturnPathDomainCNAMEValue": "pm.mtasv.net",
+        "ID": 386143}'
+    headers:
+      Cache-Control:
+      - private
+      Content-Length:
+      - '805'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 05 Dec 2016 08:18:51 GMT
+      Server:
+      - unicorns-double-rainbow
+      X-Powered-By:
+      - ASP.NET
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '0'
+      User-Agent:
+      - Postmarker/0.6.0.dev
+      X-Postmark-Account-Token:
+      - ACCOUNT_TOKEN
+    method: PUT
+    uri: https://api.postmarkapp.com/domains/386143/verifyReturnPath
+  response:
+    body:
+      string: '{"Name": "newsuperdomain.name", "SPFVerified": true, "SPFHost": "newsuperdomain.name",
+        "SPFTextValue": "v=spf1 a mx include:spf.mtasv.net ~all", "DKIMVerified":
+        false, "WeakDKIM": false, "DKIMHost": "", "DKIMTextValue": "", "DKIMPendingHost":
+        "20161205155228pm._domainkey.newsuperdomain.name", "DKIMPendingTextValue":
+        "k=rsa;p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCybzS6rWqf9HTgnydKCL+wOkmYMisbvQIULMYEV6Rqtz1to71RFEru2d3dPI003GF4Lfra81hbAtrgp9Zk1v7BabzmhKIACTinNrLNaEK3EOz1Ro3Czt/qS0LhSuiK8dhWP8miz4Zc/VyzqnkhWHbX8YuxEWfvGLEjPv6ytjl25QIDAQAB",
+        "DKIMRevokedHost": "", "DKIMRevokedTextValue": "", "SafeToRemoveRevokedKeyFromDNS":
+        false, "DKIMUpdateStatus": "Pending", "ReturnPathDomain": "newsuperdomain.name",
+        "ReturnPathDomainVerified": false, "ReturnPathDomainCNAMEValue": "pm.mtasv.net",
+        "ID": 386143}'
+    headers:
+      Cache-Control:
+      - private
+      Content-Length:
+      - '805'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 05 Dec 2016 08:18:51 GMT
+      Server:
+      - unicorns-double-rainbow
+      X-Powered-By:
+      - ASP.NET
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '0'
+      User-Agent:
+      - Postmarker/0.6.0.dev
+      X-Postmark-Account-Token:
+      - ACCOUNT_TOKEN
+    method: POST
+    uri: https://api.postmarkapp.com/domains/386143/rotatedkim
+  response:
+    body:
+      string: '{"ErrorCode":505,"Message":"This DKIM is already being renewed."}'
+    headers:
+      Cache-Control:
+      - private
+      Content-Length:
+      - '65'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 05 Dec 2016 08:18:51 GMT
+      Server:
+      - unicorns-double-rainbow
+      X-Powered-By:
+      - ASP.NET
+    status:
+      code: 422
+      message: Unprocessable Entity
+- request:
+    body: null
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '0'
+      User-Agent:
+      - Postmarker/0.6.0.dev
+      X-Postmark-Account-Token:
+      - ACCOUNT_TOKEN
+    method: DELETE
+    uri: https://api.postmarkapp.com/domains/386143
+  response:
+    body:
+      string: '{"ErrorCode":0,"Message":"Domain newsuperdomain.name removed."}'
+    headers:
+      Cache-Control:
+      - private
+      Content-Length:
+      - '63'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 05 Dec 2016 08:18:51 GMT
+      Server:
+      - unicorns-double-rainbow
+      X-Powered-By:
+      - ASP.NET
+    status:
+      code: 200
+      message: OK
+version: 1

@@ -1,0 +1,36 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - Postmarker/0.7.0.dev0
+      X-Postmark-Server-Token:
+      - SERVER_TOKEN
+    method: GET
+    uri: https://api.postmarkapp.com/stats/outbound/opens/emailclients?fromdate=2017-01-30
+  response:
+    body:
+      string: '{"Days":[{"Date":"2017-01-30","Gmail":1,"Thunderbird":1},{"Date":"2017-01-31","Gmail":6,"Thunderbird":2},{"Date":"2017-02-01","Gmail":3}],"Gmail":10,"Thunderbird":3}'
+    headers:
+      Cache-Control:
+      - private
+      Content-Length:
+      - '165'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Wed, 01 Feb 2017 08:29:24 GMT
+      Server:
+      - unicorns-double-rainbow
+      X-Powered-By:
+      - ASP.NET
+    status:
+      code: 200
+      message: OK
+version: 1

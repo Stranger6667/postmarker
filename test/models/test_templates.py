@@ -1,6 +1,8 @@
+import pytest
+
 from postmarker.models.templates import Template
 
-CASSETTE_NAME = "templates"
+pytestmark = pytest.mark.vcr
 
 
 class TestModel:
