@@ -9,6 +9,7 @@ nav:
   - templates.md
   - bounces.md
   - messages.md
+  - message_streams.md
   - sender_signatures.md
   - server.md
   - status.md

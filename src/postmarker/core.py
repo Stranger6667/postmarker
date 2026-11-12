@@ -14,6 +14,7 @@ from .models.base import ModelManager
 from .models.bounces import BounceManager
 from .models.domains import DomainsManager
 from .models.emails import EmailManager
+from .models.message_streams import MessageStreamsManager
 from .models.messages import MessageManager
 from .models.senders import SenderSignaturesManager
 from .models.server import ServerManager
@@ -37,6 +38,7 @@ class PostmarkClient:
     domains: DomainsManager
     emails: EmailManager
     messages: MessageManager
+    message_streams: MessageStreamsManager
     senders: SenderSignaturesManager
     server: ServerManager
     stats: StatsManager
@@ -50,6 +52,7 @@ class PostmarkClient:
         DomainsManager,
         EmailManager,
         MessageManager,
+        MessageStreamsManager,
         SenderSignaturesManager,
         ServerManager,
         StatsManager,
