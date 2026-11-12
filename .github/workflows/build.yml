@@ -1,114 +1,62 @@
 name: build
 
 on:
-  pull_request:
-    paths:
-      - '**.py'
-      - '.github/workflows/*.yml'
-      - '.pylintrc'
-      - '.pre-commit-config.yaml'
-      - '.pydocstyle'
-      - '.relint.yml'
-      - '.yamllint'
-      - 'poetry.lock'
-      - 'pyproject.toml'
-      - 'tox.ini'
+  pull_request: ~
   push:
     branches:
       - master
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+defaults:
+  run:
+    shell: bash
 
 jobs:
-  pre-commit:
-    name: Generic pre-commit checks
-    runs-on: ubuntu-20.04
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 1
-
-      - uses: actions/setup-python@v2
-        with:
-          python-version: 3.9
-
-      - run: pip install pre-commit
-      - run: SKIP=pylint pre-commit run --all-files
-
-  pylint:
-    name: Pylint
-    runs-on: ubuntu-20.04
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 1
-
-      - uses: actions/setup-python@v2
-        with:
-          python-version: 3.9
-
-      - run: pip install pre-commit
-      - run: pre-commit run pylint --all-files
-
   tests:
     strategy:
+      fail-fast: false
       matrix:
-        os: [ubuntu-20.04, windows-latest]
-        python: ["3.6", "3.7", "3.8", "3.9", "3.10", "pypy-3.7", "pypy-3.8"]
+        include:
+          - { os: ubuntu-24.04, python: "3.10", tox-env: py310-django52 }
+          - { os: ubuntu-24.04, python: "3.11", tox-env: py311-django52 }
+          - { os: ubuntu-24.04, python: "3.12", tox-env: py312-django61 }
+          - { os: ubuntu-24.04, python: "3.13", tox-env: py313-django61 }
+          - { os: ubuntu-24.04, python: "3.14", tox-env: py314-django61 }
+          - { os: ubuntu-24.04, python: "3.15", tox-env: py315-django61 }
+          - { os: ubuntu-24.04, python: "pypy3.11", tox-env: pypy311-django52 }
+          - { os: windows-latest, python: "3.14", tox-env: py314-django61 }
+          - { os: ubuntu-24.04, python: "3.14", tox-env: py314-django52 }
+          - { os: ubuntu-24.04, python: "3.14", tox-env: py314-django60 }
 
-    name: ${{ matrix.python }} on ${{ matrix.os }} tests
+    name: ${{ matrix.tox-env }} on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          persist-credentials: false
           fetch-depth: 1
 
-      - uses: actions/setup-python@v2
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
         with:
           python-version: ${{ matrix.python }}
+          allow-prereleases: true
 
-      - run: pip install tox coverage
+      - uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2 # v10.3.3
 
-      - name: Run Python ${{ matrix.python }} tox job
-        run: tox -e py-django32
-
-      - run: coverage combine
-      - run: coverage report
-      - run: coverage xml -i
-
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v2.1.0
-        with:
-          file: ./coverage.xml
-          name: codecov-py${{ matrix.python }}
-
-  tests-django:
-    strategy:
-      matrix:
-        django_version: ["22", "32", "40"]
-
-    name: Django ${{ matrix.django_version }} tests
-    runs-on: ubuntu-20.04
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 1
-
-      - uses: actions/setup-python@v2
-        with:
-          python-version: "3.9"
-
-      - run: pip install tox coverage
-
-      - name: Run Django ${{ matrix.django_version }} tox job
-        run: tox -e ${TOX_JOB//.}
+      - run: uvx --from tox --with tox-uv tox -e "$TOX_ENV"
         env:
-          TOX_JOB: py39-django${{ matrix.django_version }}
+          TOX_ENV: ${{ matrix.tox-env }}
 
-      - run: coverage combine
-      - run: coverage report
-      - run: coverage xml -i
-
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v2.1.0
+      - uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7.1.1
         with:
-          file: ./coverage.xml
-          name: codecov-py39-django${{ matrix.django_version }}
+          files: coverage.xml
+          name: ${{ matrix.tox-env }}-${{ matrix.os }}
+          token: ${{ secrets.CODECOV_TOKEN }}
