@@ -1,6 +1,73 @@
 [build-system]
-requires = ["setuptools >= 40.6.0", "wheel"]
-build-backend = "setuptools.build_meta"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "postmarker"
+dynamic = ["version"]
+description = "Python client library for Postmark API"
+keywords = ["postmark", "api", "client", "email"]
+authors = [{ name = "Dmitry Dygalo", email = "dmitry@dygalo.dev" }]
+maintainers = [{ name = "Dmitry Dygalo", email = "dmitry@dygalo.dev" }]
+readme = "README.rst"
+license = "MIT"
+requires-python = ">=3.10"
+classifiers = [
+  "Development Status :: 5 - Production/Stable",
+  "Environment :: Console",
+  "Framework :: Django",
+  "Framework :: Pytest",
+  "Intended Audience :: Developers",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
+  "Programming Language :: Python :: 3.15",
+  "Programming Language :: Python :: Implementation :: CPython",
+  "Programming Language :: Python :: Implementation :: PyPy",
+  "Topic :: Communications :: Email",
+]
+dependencies = ["requests>=2.20.0"]
+
+[project.optional-dependencies]
+tests = ["betamax", "betamax-serializers", "coverage[toml]>=7", "pytest>=8", "pytest-django", "tornado"]
+
+[project.entry-points.pytest11]
+postmark = "postmarker.pytest"
+
+[project.urls]
+Documentation = "https://postmarker.readthedocs.io/en/stable/"
+Changelog = "https://postmarker.readthedocs.io/en/stable/changelog.html"
+"Bug Tracker" = "https://github.com/Stranger6667/postmarker"
+Funding = "https://github.com/sponsors/Stranger6667"
+"Source Code" = "https://github.com/Stranger6667/postmarker"
+
+[tool.hatch.version]
+path = "src/postmarker/__init__.py"
+
+[tool.hatch.build.targets.sdist]
+include = ["/src", "/test"]
+
+[tool.pytest.ini_options]
+testpaths = ["test"]
+pythonpath = ["."]
+DJANGO_SETTINGS_MODULE = "test.django.settings"
+
+[tool.coverage.run]
+parallel = true
+branch = true
+source_pkgs = ["postmarker"]
+
+[tool.coverage.paths]
+source = ["src", ".tox/*/site-packages", ".tox/*/lib/*/site-packages", ".tox/*/Lib/site-packages"]
+
+[tool.coverage.report]
+show_missing = true
+precision = 2
+exclude_lines = ["raise NotImplementedError"]
 
 [tool.black]
 line-length = 120
@@ -13,4 +80,4 @@ multi_line_output = 3
 default_section = "THIRDPARTY"
 include_trailing_comma = true
 known_first_party = "postmarker"
-known_third_party = ["betamax", "betamax_serializers", "django", "postmarker", "pytest", "requests", "setuptools", "sphinx_rtd_theme", "tornado"]
+known_third_party = ["betamax", "betamax_serializers", "django", "postmarker", "pytest", "requests", "sphinx_rtd_theme", "tornado"]
