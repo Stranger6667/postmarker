@@ -16,6 +16,11 @@ Removed
 
 - Support for Python 3.6–3.9.
 
+Fixed
+~~~~~
+
+- ``postmark_request.return_value`` incorrectly being an internal sentinel on Python 3.11+ (it should be a configurable mock).
+
 `1.0`_ - 2022-01-15
 -------------------
 
