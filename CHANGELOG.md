@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased](https://github.com/Stranger6667/postmarker/compare/1.0...HEAD)
+## [Unreleased](https://github.com/Stranger6667/postmarker/compare/v1.0...HEAD)
 
 ### Added
 
@@ -28,7 +28,7 @@
 
 - Spam check requests incorrectly sending email content over plain HTTP (they should use HTTPS).
 
-## [1.0](https://github.com/Stranger6667/postmarker/compare/0.18.2...1.0) - 2022-01-15
+## [1.0](https://github.com/Stranger6667/postmarker/compare/v0.18.2...v1.0) - 2022-01-15
 
 ### Added
 
@@ -39,25 +39,25 @@
 
 - Deprecated `yield_fixture` usage in postmarker's pytest plugin.
 
-## [0.18.2](https://github.com/Stranger6667/postmarker/compare/0.18.1...0.18.2) - 2021-06-03
+## [0.18.2](https://github.com/Stranger6667/postmarker/compare/v0.18.1...v0.18.2) - 2021-06-03
 
 ### Added
 
 - Support subject search on outbound messages.
 
-## [0.18.1](https://github.com/Stranger6667/postmarker/compare/0.18.0...0.18.1) - 2021-05-13
+## [0.18.1](https://github.com/Stranger6667/postmarker/compare/v0.18.0...v0.18.1) - 2021-05-13
 
 ### Fixed
 
 - Fix documentation config to update docs on ReadTheDocs. [#195](https://github.com/Stranger6667/postmarker/issues/195)
 
-## [0.18.0](https://github.com/Stranger6667/postmarker/compare/0.17.1...0.18.0) - 2021-05-11
+## [0.18.0](https://github.com/Stranger6667/postmarker/compare/v0.17.1...v0.18.0) - 2021-05-11
 
 ### Added
 
 - Support for `batchWithTemplates`.
 
-## [0.17.1](https://github.com/Stranger6667/postmarker/compare/0.17.0...0.17.1) - 2021-03-02
+## [0.17.1](https://github.com/Stranger6667/postmarker/compare/v0.17.0...v0.17.1) - 2021-03-02
 
 ### Added
 
@@ -74,7 +74,7 @@
 > # Use the client as usual
 > ```
 
-## [0.17.0](https://github.com/Stranger6667/postmarker/compare/0.16.0...0.17.0) - 2020-12-22
+## [0.17.0](https://github.com/Stranger6667/postmarker/compare/v0.16.0...v0.17.0) - 2020-12-22
 
 ### Fixed
 
@@ -84,31 +84,31 @@
 
 - Support for Python 3.5.
 
-## [0.16.0](https://github.com/Stranger6667/postmarker/compare/0.15.0...0.16.0) - 2020-11-10
+## [0.16.0](https://github.com/Stranger6667/postmarker/compare/v0.15.0...v0.16.0) - 2020-11-10
 
 ### Added
 
 - `MessageStream` support when sending emails. [#190](https://github.com/Stranger6667/postmarker/pull/190)
 
-## [0.15.0](https://github.com/Stranger6667/postmarker/compare/0.14.1...0.15.0) - 2020-08-30
+## [0.15.0](https://github.com/Stranger6667/postmarker/compare/v0.14.1...v0.15.0) - 2020-08-30
 
 ### Removed
 
 - Support for Python 2.7, 3.3, 3.4, PyPy2 and Jython.
 
-## [0.14.1](https://github.com/Stranger6667/postmarker/compare/0.14.0...0.14.1) - 2020-03-31
+## [0.14.1](https://github.com/Stranger6667/postmarker/compare/v0.14.0...v0.14.1) - 2020-03-31
 
 ### Added
 
 - Support for `Metadata` option in `EmailTemplate`. [#184](https://github.com/Stranger6667/postmarker/pull/184)
 
-## [0.14.0](https://github.com/Stranger6667/postmarker/compare/0.13.1...0.14.0) - 2020-02-10
+## [0.14.0](https://github.com/Stranger6667/postmarker/compare/v0.13.1...v0.14.0) - 2020-02-10
 
 ### Added
 
 - `verifydkim` and `verifyreturnpath` for domains API. [#183](https://github.com/Stranger6667/postmarker/pull/183)
 
-## [0.13.1](https://github.com/Stranger6667/postmarker/compare/0.13.0...0.13.1) - 2019-11-15
+## [0.13.1](https://github.com/Stranger6667/postmarker/compare/0.13.0...v0.13.1) - 2019-11-15
 
 ### Added
 
