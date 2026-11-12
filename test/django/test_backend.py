@@ -372,7 +372,7 @@ def test_test_mode(settings, postmark_request):
 
 
 def test_extra_options(settings, postmark_request):
-    settings.POSTMARK["TRACK_OPENS"] = True
+    settings.POSTMARK = {**settings.POSTMARK, "TRACK_OPENS": True}
     send_mail(**SEND_KWARGS)
     assert postmark_request.call_args[1]["json"] == (
         {
@@ -411,7 +411,7 @@ def test_context_manager(postmark_request):
             "Tag": None,
             "Metadata": None,
             "MessageStream": None,
-            "TrackOpens": True,
+            "TrackOpens": False,
             "From": "sender@example.com",
         },
     )
