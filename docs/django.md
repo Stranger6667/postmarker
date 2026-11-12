@@ -64,6 +64,34 @@ To mark messages with tags, add metadata, or specify the message stream, you cou
 
 You can get the same feature for your own classes with `PostmarkEmailMixin`.
 
+## HTML messages
+
+`EmailMessage` takes no `content_type` argument. To send an HTML-only message, set `content_subtype`:
+
+```python
+>>> from postmarker.django import PostmarkEmailMessage
+>>> message = PostmarkEmailMessage(
+    'Subject', '<p>Body</p>', 'sender@example.com', ['receiver@example.com'],
+    tag='Test tag',
+)
+>>> message.content_subtype = 'html'
+>>> message.send()
+```
+
+To send both text and HTML, attach the HTML version as an alternative:
+
+```python
+>>> from postmarker.django import PostmarkEmailMultiAlternatives
+>>> message = PostmarkEmailMultiAlternatives(
+    'Subject', 'Body', 'sender@example.com', ['receiver@example.com'],
+    tag='Test tag',
+)
+>>> message.attach_alternative('<p>Body</p>', 'text/html')
+>>> message.send()
+```
+
+Both work the same with Django's own `EmailMessage` / `EmailMultiAlternatives`.
+
 ## Signals
 
 There are three signals, which are emitted:

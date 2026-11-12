@@ -1,5 +1,7 @@
 # Sender signatures
 
+Examples use the `postmark` client from [Usage](usage.md).
+
 The Sender signatures API is available via the `senders` manager:
 
 ```python

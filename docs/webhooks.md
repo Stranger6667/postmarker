@@ -1,5 +1,7 @@
 # Webhooks
 
+Examples use the `postmark` client from [Usage](usage.md).
+
 ## Inbound
 
 ### Basic

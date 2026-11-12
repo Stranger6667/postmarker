@@ -1,5 +1,7 @@
 # Status
 
+Examples use the `postmark` client from [Usage](usage.md).
+
 The Status API is available via the `status` manager:
 
 ```python

@@ -1,5 +1,7 @@
 # Emails
 
+Examples use the `postmark` client from [Usage](usage.md).
+
 ## Basic
 
 Sending emails is super easy! Here is the simplest case:

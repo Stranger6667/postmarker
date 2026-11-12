@@ -1,5 +1,7 @@
 # Stats
 
+Examples use the `postmark` client from [Usage](usage.md).
+
 The Stats API is available via the `stats` manager:
 
 ```python

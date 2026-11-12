@@ -1,5 +1,7 @@
 # Spam check API
 
+Examples use the `postmark` client from [Usage](usage.md).
+
 You can use Postmark's SpamAssassin filter API with a simple call:
 
 ```python

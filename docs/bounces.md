@@ -1,5 +1,7 @@
 # Bounces
 
+Examples use the `postmark` client from [Usage](usage.md).
+
 Information about bounces is available via the `BounceManager`, which is an attribute of `postmark` instance.
 
 ```python
