@@ -21,7 +21,7 @@ Default number of bounces, which will be returned is 500 to fit in single networ
 [<Bounce: 943247350>, <Bounce: 924829573>, ...]
 ```
 
-Here it will be 3 network requests, single one is limited by 500 items. To load all available data, pass `None` as `count` value.
+Here it will be 3 network requests, single one is limited by 500 items. To load all available data, pass `None` as `count` value. Postmark caps `count` + `offset` at 10,000 for bounces and messages, so filter larger result sets with `fromdate` and `todate`.
 
 Every bounce instance is represented by its ID. You can search be specifying the ID.
 

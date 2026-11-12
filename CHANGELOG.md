@@ -23,6 +23,7 @@
 - `postmark_request.return_value` incorrectly being an internal sentinel on Python 3.11+ (it should be a configurable mock).
 - Django email backend incorrectly failing with `ValueError` on Django 6.0+. [#221](https://github.com/Stranger6667/postmarker/issues/221)
 - Text attachments from MIME messages, including the Django backend, incorrectly sent without base64 encoding, which Postmark rejects. [#189](https://github.com/Stranger6667/postmarker/issues/189)
+- `all()` for bounces, messages and opens incorrectly requesting past Postmark's limit of 10,000 for count + offset, which Postmark rejects (it should stop at the limit). [#194](https://github.com/Stranger6667/postmarker/issues/194)
 - Django email backend incorrectly emitting `RemovedInDjango2028Warning` for `fail_silently` on Django 6.1+.
 - Django email backend incorrectly dropping the `MAILERS` alias on Django 6.1+, which hid unknown `OPTIONS`.
 

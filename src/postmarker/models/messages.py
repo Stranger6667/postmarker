@@ -18,6 +18,7 @@ class Open(MessageModel):
 class OpensManager(ModelManager[Open]):
     name = "opens"
     model = Open
+    pagination_limit = 10000
 
     def all(
         self,
@@ -84,6 +85,7 @@ class OutboundMessageManager(SubModelManager[OutboundMessage]):
     name = "outbound"
     opens: OpensManager
     model = OutboundMessage
+    pagination_limit = 10000
     _managers = (OpensManager,)
 
     def all(
@@ -208,6 +210,7 @@ class Attachment(Model):
 class InboundMessageManager(ModelManager[InboundMessage]):
     name = "inbound"
     model = InboundMessage
+    pagination_limit = 10000
 
     def all(
         self,
