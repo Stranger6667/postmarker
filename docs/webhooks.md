@@ -61,3 +61,33 @@ Another way to parse a bounce - use `Bounce.from_json` method:
 ```
 
 But in this case, there is no possibility to work with the bounce - only parsed data will be available.
+
+## Spam complaint
+
+For spam complaint webhook there is `SpamComplaint` constructor in `bounces` manager. A spam complaint is a `Bounce` that can't be activated, so `message` and `dump` work as for a bounce:
+
+```python
+>>> with open('/path/to/raw_content.json') as fd:
+        data = fd.read()
+>>> complaint = postmark.bounces.SpamComplaint(data)
+>>> complaint
+<Spam complaint from john@example.com>
+>>> complaint.Description
+'The subscriber explicitly marked this message as spam.'
+```
+
+## Subscription change
+
+Subscription changes could be processed by `postmark.suppressions.SubscriptionChange`. `SuppressSending` is `True` when an address is suppressed and `False` when it is reactivated:
+
+```python
+>>> with open('/path/to/raw_content.json') as fd:
+        data = fd.read()
+>>> change = postmark.suppressions.SubscriptionChange(data)
+>>> change
+<Subscription change for john@example.com>
+>>> change.SuppressSending, change.SuppressionReason
+(True, 'HardBounce')
+```
+
+`change.message` fetches the related message. `MessageID` is `None` for reactivations and for manual suppressions with `Origin` of `Customer` or `Admin`, so there is no message to fetch.

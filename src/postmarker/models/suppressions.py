@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from .base import Model, ModelManager
+from .base import MessageModel, Model, ModelManager
 
 DEFAULT_STREAM_ID = "outbound"
 
@@ -18,6 +18,13 @@ class Suppression(Model):
 
     def __str__(self) -> str:
         return f"{self.__class__.__name__}: {self.EmailAddress}"
+
+
+class SubscriptionChange(MessageModel):
+    """Subscription change webhook model: an address added to or removed from a suppression list."""
+
+    def __str__(self) -> str:
+        return "Subscription change for {}".format(self._data.get("Recipient"))
 
 
 class SuppressionsManager(ModelManager[Suppression]):
@@ -73,6 +80,14 @@ class SuppressionsManager(ModelManager[Suppression]):
         :return: `EmailAddress`, `Status` (`Deleted` or `Failed`) and `Message` per address.
         """
         return self._change(f"/message-streams/{stream_id}/suppressions/delete", emails)
+
+    def SubscriptionChange(self, json: str | bytes) -> SubscriptionChange:
+        """Constructs a :py:class:`SubscriptionChange` from the subscription change webhook payload.
+
+        :param json: `str`
+        :rtype: :py:class:`SubscriptionChange`
+        """
+        return SubscriptionChange.from_json(json, manager=self)
 
     def _change(self, endpoint: str, emails: list[str]) -> list[dict[str, Any]]:
         data = {"Suppressions": [{"EmailAddress": email} for email in emails]}

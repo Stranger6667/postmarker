@@ -34,6 +34,13 @@ class Bounce(MessageModel):
         return response["Message"]
 
 
+class SpamComplaint(Bounce):
+    """Spam complaint webhook model. Postmark records spam complaints as bounces that can't be activated."""
+
+    def __str__(self) -> str:
+        return "Spam complaint from {}".format(self._data.get("Email"))
+
+
 class BounceManager(ModelManager[Bounce]):
     """Encapsulates logic about bounces."""
 
@@ -132,3 +139,11 @@ class BounceManager(ModelManager[Bounce]):
         :return: :py:class:`Bounce`
         """
         return self.model.from_json(json, manager=self)
+
+    def SpamComplaint(self, json: str | bytes) -> SpamComplaint:
+        """Constructs a :py:class:`SpamComplaint` from the spam complaint webhook payload.
+
+        :param json: `str`
+        :rtype: :py:class:`SpamComplaint`
+        """
+        return SpamComplaint.from_json(json, manager=self)
