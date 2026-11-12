@@ -13,6 +13,7 @@
 ### Changed
 
 - Attachment content from MIME parts sent as single-line base64, without MIME line breaks.
+- Django email backend raising `ClientError` with Postmark's `error_code` (the first failure's for batches) instead of a plain `PostmarkerException`. [#177](https://github.com/Stranger6667/postmarker/issues/177)
 
 ### Removed
 
