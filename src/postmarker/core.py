@@ -18,6 +18,7 @@ from .models.message_streams import MessageStreamsManager
 from .models.messages import MessageManager
 from .models.senders import SenderSignaturesManager
 from .models.server import ServerManager
+from .models.servers import ServersManager
 from .models.stats import StatsManager
 from .models.status import StatusManager
 from .models.suppressions import SuppressionsManager
@@ -42,6 +43,7 @@ class PostmarkClient:
     message_streams: MessageStreamsManager
     senders: SenderSignaturesManager
     server: ServerManager
+    servers: ServersManager
     stats: StatsManager
     status: StatusManager
     suppressions: SuppressionsManager
@@ -57,6 +59,7 @@ class PostmarkClient:
         MessageStreamsManager,
         SenderSignaturesManager,
         ServerManager,
+        ServersManager,
         StatsManager,
         StatusManager,
         SuppressionsManager,
@@ -74,7 +77,7 @@ class PostmarkClient:
         logs_stream: TextIO = sys.stdout,
         root_api_url: str = DEFAULT_API,
     ) -> None:
-        assert server_token, "You have to provide token to use Postmark API"
+        assert server_token or account_token, "You have to provide server_token or account_token to use Postmark API"
         self.server_token = server_token
         self.account_token = account_token
         self.max_retries = max_retries

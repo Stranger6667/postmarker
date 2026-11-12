@@ -46,3 +46,9 @@ PostmarkClient(
     root_api_url="https://api-ssl-temp.postmarkapp.com/",
 )
 ```
+
+For account APIs only, like domains, sender signatures and servers, the account token alone is enough:
+
+```python
+>>> postmark = PostmarkClient(account_token='ACCOUNT_TOKEN')
+```

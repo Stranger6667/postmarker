@@ -1,3 +1,5 @@
+from unittest.mock import patch
+
 import pytest
 from requests import HTTPError, Response
 
@@ -22,10 +24,36 @@ class TestClient:
             timeout=None,
         )
 
-    def test_no_token(self):
+    def test_account_client(self, postmark_request):
+        postmark = PostmarkClient(account_token="ACCOUNT_TOKEN")
+        postmark.call("GET", "endpoint", token_type="account")
+        postmark_request.assert_called_with(
+            "GET",
+            "https://api.postmarkapp.com/endpoint",
+            headers={
+                "X-Postmark-Account-Token": "ACCOUNT_TOKEN",
+                "Accept": "application/json",
+                "User-Agent": USER_AGENT,
+            },
+            params={},
+            json=None,
+            timeout=None,
+        )
+
+    def test_account_client_server_call(self):
+        # Without a server token, server calls go without any token header and Postmark rejects them
+        postmark = PostmarkClient(account_token="ACCOUNT_TOKEN")
+        with patch("postmarker.core.requests.Session.send") as send:
+            postmark.call("GET", "endpoint")
+        prepared = send.call_args[0][0]
+        assert {name: value for name, value in prepared.headers.items() if name.startswith("X-Postmark")} == {}
+
+    @pytest.mark.parametrize("kwargs", ({}, {"server_token": None, "account_token": None}))
+    def test_no_token(self, kwargs):
         with pytest.raises(AssertionError) as exc:
-            PostmarkClient(None)
-        assert str(exc.value).startswith("You have to provide token to use Postmark API")
+            PostmarkClient(**kwargs)
+        # Pytest rewrites asserts in its plugins' packages, postmarker included, and appends the explanation
+        assert str(exc.value).splitlines()[0] == "You have to provide server_token or account_token to use Postmark API"
 
     def test_repr(self, postmark, server_token):
         assert repr(postmark) == f"<PostmarkClient: {server_token}>"

@@ -12,6 +12,7 @@ nav:
   - message_streams.md
   - sender_signatures.md
   - server.md
+  - servers.md
   - status.md
   - stats.md
   - triggers.md
