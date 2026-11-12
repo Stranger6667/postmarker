@@ -243,6 +243,13 @@ class EmailTemplate(BaseEmail):
         return self._manager._send_with_template(**self.as_dict())
 
 
+def invalid_batch_email(email: object, expected: str, method: str) -> ValueError:
+    message = f"Expected {expected}, got {type(email).__name__}"
+    if isinstance(email, (list, tuple)):
+        message += f"; pass emails as separate arguments, e.g. {method}(*emails)"
+    return ValueError(message)
+
+
 class EmailTemplateBatch(Model):
     """Gathers multiple email templates in a single batch."""
 
@@ -268,7 +275,7 @@ class EmailTemplateBatch(Model):
         if isinstance(email, dict):
             email = EmailTemplate(manager=self._manager, **email)
         elif not isinstance(email, EmailTemplate):
-            raise ValueError
+            raise invalid_batch_email(email, "EmailTemplate or dict", "send_template_batch")
         email._update(extra)
         return email.as_dict()
 
@@ -310,7 +317,7 @@ class EmailBatch(Model):
         elif isinstance(email, Message):
             email = Email.from_mime(email, self._manager)
         elif not isinstance(email, Email):
-            raise ValueError
+            raise invalid_batch_email(email, "Email, email.message.Message or dict", "send_batch")
         email._update(extra)
         return email.as_dict()
 
@@ -472,7 +479,8 @@ class EmailManager(ModelManager[Model]):
     def send_batch(self, *emails: Email | Message | dict[str, Any], **extra: Any) -> list[Any]:
         """Sends an email batch.
 
-        :param emails: :py:class:`Email` instances or dictionaries
+        :param emails: :py:class:`Email` instances, :py:class:`email.message.Message` instances or dictionaries,
+            passed as separate arguments.
         :param extra: dictionary with extra arguments for every message in the batch.
         """
         return self.EmailBatch(*emails).send(**extra)
@@ -480,7 +488,7 @@ class EmailManager(ModelManager[Model]):
     def send_template_batch(self, *emails: EmailTemplate | dict[str, Any], **extra: Any) -> list[Any]:
         """Sends an email batch.
 
-        :param emails: :py:class:`EmailTemplate` instances or dictionaries
+        :param emails: :py:class:`EmailTemplate` instances or dictionaries, passed as separate arguments.
         :param extra: dictionary with extra arguments for every message in the batch.
         """
         return self.EmailTemplateBatch(*emails).send(**extra)

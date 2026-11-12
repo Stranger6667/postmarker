@@ -21,6 +21,7 @@
 ### Fixed
 
 - `postmark_request.return_value` incorrectly being an internal sentinel on Python 3.11+ (it should be a configurable mock).
+- `send_batch` and `send_template_batch` incorrectly raising an empty `ValueError` for a list of emails (it should explain to pass them as separate arguments). [#212](https://github.com/Stranger6667/postmarker/issues/212)
 - Django email backend incorrectly failing with `ValueError` on Django 6.0+. [#221](https://github.com/Stranger6667/postmarker/issues/221)
 - Text attachments from MIME messages, including the Django backend, incorrectly sent without base64 encoding, which Postmark rejects. [#189](https://github.com/Stranger6667/postmarker/issues/189)
 - Django email backend incorrectly emitting `RemovedInDjango2028Warning` for `fail_silently` on Django 6.1+.
