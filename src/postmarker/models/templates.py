@@ -147,8 +147,7 @@ class TemplateManager(ModelManager[Template]):
             "DestinationServerID": DestinationServerID,
             "PerformChanges": PerformChanges,
         }
-        # Not `self.call`: it always uses the manager's server token
-        return self.client.call("PUT", "/templates/push", token_type="account", data=data)
+        return self.call("PUT", "/templates/push", token_type="account", data=data)
 
 
 def _present(data: dict[str, Any]) -> dict[str, Any]:

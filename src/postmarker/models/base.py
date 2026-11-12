@@ -74,7 +74,7 @@ class ModelManager(Generic[ModelT]):
         return [self._init_instance(part) for part in data]
 
     def call(self, *args: Any, **kwargs: Any) -> Any:
-        kwargs["token_type"] = self.token_type
+        kwargs.setdefault("token_type", self.token_type)
         return self.client.call(*args, **kwargs)
 
     def call_many(self, *args: Any, **kwargs: Any) -> list[Any]:
