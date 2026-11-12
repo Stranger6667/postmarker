@@ -20,7 +20,7 @@ from .utils import get_args
 
 DEFAULT_API = "https://api.postmarkapp.com/"
 STATUS_API = "https://status.postmarkapp.com/api/1.0/"
-SPAMCHECK_API = "http://spamcheck.postmarkapp.com/filter/"
+SPAMCHECK_API = "https://spamcheck.postmarkapp.com/filter/"
 USER_AGENT = f"Postmarker/{__version__}"
 TEST_TOKEN = "POSTMARK_API_TEST"
 

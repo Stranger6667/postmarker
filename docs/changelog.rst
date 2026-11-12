@@ -32,6 +32,11 @@ Fixed
 - Django email backend incorrectly emitting ``RemovedInDjango2028Warning`` for ``fail_silently`` on Django 6.1+.
 - Django email backend incorrectly dropping the ``MAILERS`` alias on Django 6.1+, which hid unknown ``OPTIONS``.
 
+Security
+~~~~~~~~
+
+- Spam check requests incorrectly sending email content over plain HTTP (they should use HTTPS).
+
 `1.0`_ - 2022-01-15
 -------------------
 
