@@ -1,5 +1,7 @@
 # Triggers
 
+Examples use the `postmark` client from [Usage](usage.md).
+
 ## Inbound rules triggers
 
 The Inbound rules triggers API is available via the `triggers.inboundrules` manager.

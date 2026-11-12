@@ -1,5 +1,12 @@
 # Templates
 
+Create the client first ([Usage](usage.md) lists all its options):
+
+```python
+>>> from postmarker.core import PostmarkClient
+>>> postmark = PostmarkClient(server_token='SERVER_TOKEN')
+```
+
 The Templates API is available via the `templates` manager:
 
 ```python

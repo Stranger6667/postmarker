@@ -308,6 +308,36 @@ def test_send_mail_html_message(html_message, postmark_request):
     )
 
 
+def test_send_html_only_message(postmark_request):
+    # GH-219: `content_subtype = "html"` is the documented way to send HTML-only email
+    message = mail.EmailMessage(
+        "Subject here",
+        "<html>Here is the message.</html>",
+        "sender@example.com",
+        ["receiver@example.com"],
+    )
+    message.content_subtype = "html"
+    message.send()
+    assert postmark_request.call_args[1]["json"] == (
+        {
+            "ReplyTo": None,
+            "Subject": "Subject here",
+            "To": "receiver@example.com",
+            "Bcc": None,
+            "Headers": [],
+            "Cc": None,
+            "Attachments": [],
+            "TextBody": None,
+            "HtmlBody": "<html>Here is the message.</html>",
+            "TrackOpens": False,
+            "Tag": None,
+            "Metadata": None,
+            "MessageStream": None,
+            "From": "sender@example.com",
+        },
+    )
+
+
 def test_send_long_text_line(postmark_request):
     kwargs = SEND_KWARGS.copy()
     message = "A" * 1000

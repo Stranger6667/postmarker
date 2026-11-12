@@ -1,5 +1,7 @@
 # Messages
 
+Examples use the `postmark` client from [Usage](usage.md).
+
 ## Inbound messages
 
 The inbound messages API is available via the `messages.inbound` manager:
