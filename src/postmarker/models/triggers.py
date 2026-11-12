@@ -1,4 +1,3 @@
-# pylint: disable=redefined-builtin
 from .base import Model, ModelManager, SubModelManager
 
 
@@ -19,7 +18,7 @@ class InboundRulesManager(ModelManager):
         return self._init_instance(self.call("POST", "/triggers/inboundrules", data={"Rule": Rule}))
 
     def delete(self, id):
-        return self.call("DELETE", "/triggers/inboundrules/%s" % id)["Message"]
+        return self.call("DELETE", f"/triggers/inboundrules/{id}")["Message"]
 
 
 class Tag(Model):
@@ -52,15 +51,15 @@ class TagsTriggersManager(ModelManager):
         return self._init_instance(self.call("POST", "/triggers/tags", data=data))
 
     def get(self, id):
-        response = self.call("GET", "/triggers/tags/%s" % id)
+        response = self.call("GET", f"/triggers/tags/{id}")
         return self._init_instance(response)
 
     def edit(self, id, MatchName, TrackOpens=None):
         data = {"MatchName": MatchName, "TrackOpens": TrackOpens}
-        return self.call("PUT", "/triggers/tags/%s" % id, data=data)
+        return self.call("PUT", f"/triggers/tags/{id}", data=data)
 
     def delete(self, id):
-        return self.call("DELETE", "/triggers/tags/%s" % id)["Message"]
+        return self.call("DELETE", f"/triggers/tags/{id}")["Message"]
 
 
 class TriggersManager(SubModelManager):

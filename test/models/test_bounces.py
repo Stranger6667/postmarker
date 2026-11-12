@@ -60,12 +60,14 @@ class TestLoadAllBounces:
         ((2, 50, 1), (2, 1, 2), (4, 1, 2), (None, 1, 2)),
     )
     def test_multiple_calls(self, postmark, count, chunk_size, call_count):
-        with patch.object(postmark.bounces, "max_chunk_size", chunk_size):
-            with patch.object(postmark.bounces, "call", wraps=postmark.bounces.call) as call:
-                bounces = postmark.bounces.all(count=count)
-                assert call.call_count == call_count
-                assert len(bounces) == 2
-                assert all(isinstance(bounce, Bounce) for bounce in bounces)
+        with (
+            patch.object(postmark.bounces, "max_chunk_size", chunk_size),
+            patch.object(postmark.bounces, "call", wraps=postmark.bounces.call) as call,
+        ):
+            bounces = postmark.bounces.all(count=count)
+            assert call.call_count == call_count
+            assert len(bounces) == 2
+            assert all(isinstance(bounce, Bounce) for bounce in bounces)
 
 
 def test_message(bounce):

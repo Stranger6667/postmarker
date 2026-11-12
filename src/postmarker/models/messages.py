@@ -9,7 +9,7 @@ from .base import MessageModel, Model, ModelManager, SubModelManager
 
 class Open(MessageModel):
     def __str__(self):
-        return "Open from %s" % self._data.get("Recipient")
+        return "Open from {}".format(self._data.get("Recipient"))
 
 
 class OpensManager(ModelManager):
@@ -54,7 +54,7 @@ class OpensManager(ModelManager):
         return self.expand_responses(responses, "Opens")
 
     def get(self, id, count=500, offset=0):
-        return self.call("GET", "/messages/outbound/opens/%s" % id, count=count, offset=offset)
+        return self.call("GET", f"/messages/outbound/opens/{id}", count=count, offset=offset)
 
     def Open(self, json):
         return self.model.from_json(json, manager=self)
@@ -127,11 +127,11 @@ class OutboundMessageManager(SubModelManager):
         return self.expand_responses(responses, "Messages")
 
     def get(self, id):
-        response = self.call("GET", "/messages/outbound/%s/details" % id)
+        response = self.call("GET", f"/messages/outbound/{id}/details")
         return self._init_instance(response)
 
     def get_dump(self, id):
-        return self.call("GET", "/messages/outbound/%s/dump" % id).get("Body")
+        return self.call("GET", f"/messages/outbound/{id}/dump").get("Body")
 
 
 class InboundMessage(BaseMessage):
@@ -250,14 +250,14 @@ class InboundMessageManager(ModelManager):
         return self.expand_responses(responses, "InboundMessages")
 
     def get(self, id):
-        response = self.call("GET", "/messages/inbound/%s/details" % id)
+        response = self.call("GET", f"/messages/inbound/{id}/details")
         return self._init_instance(response)
 
     def bypass(self, id):
-        return self.call("PUT", "/messages/inbound/%s/bypass" % id)
+        return self.call("PUT", f"/messages/inbound/{id}/bypass")
 
     def retry(self, id):
-        return self.call("PUT", "/messages/inbound/%s/retry" % id)
+        return self.call("PUT", f"/messages/inbound/{id}/retry")
 
     def InboundMessage(self, json):
         return self.model.from_json(json, manager=self)

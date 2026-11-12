@@ -1,9 +1,9 @@
 default_language_version:
-  python: python3.9
+  python: python3.10
 
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.1.0
+    rev: v6.0.0
     hooks:
       - id: check-yaml
       - id: end-of-file-fixer
@@ -15,47 +15,26 @@ repos:
       - id: check-merge-conflict
 
   - repo: https://github.com/jorisroovers/gitlint
-    rev: v0.17.0
+    rev: v0.19.1
     hooks:
       - id: gitlint
 
   - repo: https://github.com/adrienverge/yamllint
-    rev: v1.26.3
+    rev: v1.38.0
     hooks:
       - id: yamllint
 
-  - repo: https://github.com/PyCQA/pydocstyle
-    rev: 6.1.1
+  - repo: https://github.com/crate-ci/typos
+    rev: v1.52.0
     hooks:
-      - id: pydocstyle
+      - id: typos
+        # Report, don't rewrite
+        args: [--force-exclude]
+        exclude: ^test/cassettes/
 
-  - repo: https://github.com/codingjoe/relint
-    rev: 1.2.1
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.17.4
     hooks:
-      - id: relint
-
-  - repo: https://github.com/ambv/black
-    rev: 21.12b0
-    hooks:
-      - id: black
-        types: [python]
-
-  - repo: https://github.com/asottile/seed-isort-config
-    rev: v2.2.0
-    hooks:
-      - id: seed-isort-config
-
-  - repo: https://github.com/pre-commit/mirrors-isort
-    rev: v5.10.1
-    hooks:
-      - id: isort
-        additional_dependencies: ["isort[pyproject]"]
-
-  - repo: https://github.com/pre-commit/mirrors-pylint
-    rev: v3.0.0a4
-    hooks:
-      - id: pylint
-        additional_dependencies: ["isort[pyproject]"]
-        exclude: ^(docs/|test/).*$
-        # disabled import-error as may be run out of environment with deps
-        args: ["--disable=import-error"]
+      - id: ruff-format
+      - id: ruff-check
+        args: [--fix, --show-fixes]

@@ -40,7 +40,7 @@ class DomainsManager(ModelManager):
     token_type = "account"
 
     def get(self, id):
-        response = self.call("GET", "/domains/%s" % id)
+        response = self.call("GET", f"/domains/{id}")
         return self._init_instance(response)
 
     def create(self, Name, ReturnPathDomain=None):
@@ -49,23 +49,23 @@ class DomainsManager(ModelManager):
 
     def edit(self, id, ReturnPathDomain):
         data = {"ReturnPathDomain": ReturnPathDomain}
-        return self.call("PUT", "/domains/%s" % id, data=data)
+        return self.call("PUT", f"/domains/{id}", data=data)
 
     def all(self, count=500, offset=0):
         responses = self.call_many("GET", "/domains", count=count, offset=offset)
         return self.expand_responses(responses, "Domains")
 
     def delete(self, id):
-        return self.call("DELETE", "/domains/%s" % id)["Message"]
+        return self.call("DELETE", f"/domains/{id}")["Message"]
 
     def verifyspf(self, id):
-        return self.call("POST", "/domains/%s/verifyspf" % id)
+        return self.call("POST", f"/domains/{id}/verifyspf")
 
     def verifydkim(self, id):
-        return self.call("PUT", "/domains/%s/verifyDkim" % id)
+        return self.call("PUT", f"/domains/{id}/verifyDkim")
 
     def verifyreturnpath(self, id):
-        return self.call("PUT", "/domains/%s/verifyReturnPath" % id)
+        return self.call("PUT", f"/domains/{id}/verifyReturnPath")
 
     def rotatedkim(self, id):
-        return self.call("POST", "/domains/%s/rotatedkim" % id)
+        return self.call("POST", f"/domains/{id}/rotatedkim")

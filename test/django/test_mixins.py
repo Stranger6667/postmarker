@@ -70,7 +70,7 @@ class EmailWithMessageStream(PostmarkEmailMixin, EmailMultiAlternatives):
     pass
 
 
-def test_metadata(postmark_request):
+def test_message_stream(postmark_request):
     EmailWithMessageStream(
         "Subject", "Body", "sender@example.com", ["receiver@example.com"], message_stream="example-message-stream"
     ).send()

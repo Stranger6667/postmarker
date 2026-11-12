@@ -21,7 +21,7 @@ class IncidentsManager(ModelManager):
         return self._init_many(self.call("incidents"))
 
     def get(self, id):
-        return self._init_instance(self.call("incidents/%s" % id))
+        return self._init_instance(self.call(f"incidents/{id}"))
 
 
 class StatusManager(ModelManager):

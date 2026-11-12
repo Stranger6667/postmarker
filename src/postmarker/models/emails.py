@@ -1,4 +1,5 @@
 """Basic ways to send emails."""
+
 import mimetypes
 import os
 from base64 import b64encode
@@ -55,7 +56,7 @@ def prepare_attachments(attachment):
             if content_id.startswith("<") and content_id.endswith(">"):
                 content_id = content_id[1:-1]
             if (attachment.get("Content-Disposition") or "").startswith("inline"):
-                content_id = "cid:%s" % content_id
+                content_id = f"cid:{content_id}"
             result["ContentID"] = content_id
     elif isinstance(attachment, str):
         content_type = guess_content_type(attachment)
@@ -305,7 +306,7 @@ class EmailBatch(Model):
 
 class Delivery(MessageModel):
     def __str__(self):
-        return "Delivery to %s" % self._data.get("Recipient")
+        return "Delivery to {}".format(self._data.get("Recipient"))
 
 
 class EmailManager(ModelManager):

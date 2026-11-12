@@ -21,7 +21,7 @@ from .utils import get_args
 DEFAULT_API = "https://api.postmarkapp.com/"
 STATUS_API = "https://status.postmarkapp.com/api/1.0/"
 SPAMCHECK_API = "http://spamcheck.postmarkapp.com/filter/"
-USER_AGENT = "Postmarker/%s" % __version__
+USER_AGENT = f"Postmarker/{__version__}"
 TEST_TOKEN = "POSTMARK_API_TEST"
 
 
@@ -91,7 +91,7 @@ class PostmarkClient:
     @property
     def session(self):
         if not hasattr(self, "_session"):
-            self._session = requests.Session()  # pylint: disable=attribute-defined-outside-init
+            self._session = requests.Session()
             adapter = requests.adapters.HTTPAdapter(max_retries=self.max_retries)
             self._session.mount("http://", adapter)
             self._session.mount("https://", adapter)
