@@ -1,0 +1,51 @@
+site_name: Postmarker
+site_description: Python client library for Postmark API
+repo_url: https://github.com/Stranger6667/postmarker
+
+nav:
+  - Introduction: index.md
+  - usage.md
+  - emails.md
+  - templates.md
+  - bounces.md
+  - messages.md
+  - sender_signatures.md
+  - server.md
+  - status.md
+  - stats.md
+  - triggers.md
+  - domains.md
+  - django.md
+  - tornado.md
+  - spamcheck.md
+  - webhooks.md
+  - testing.md
+  - reference.md
+  - changelog.md
+
+theme:
+  name: material
+  icon:
+    repo: fontawesome/brands/github
+  features:
+    - navigation.footer
+    - content.code.copy
+
+markdown_extensions:
+  - admonition
+  - pymdownx.highlight
+  - pymdownx.inlinehilite
+  - pymdownx.snippets:
+      check_paths: true
+  - pymdownx.superfences
+
+plugins:
+  - mkdocstrings:
+      handlers:
+        python:
+          paths: [src]
+          options:
+            docstring_style: sphinx
+            heading_level: 3
+            show_source: false
+  - search

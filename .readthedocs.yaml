@@ -1,0 +1,15 @@
+version: 2
+
+build:
+  os: ubuntu-24.04
+  tools:
+    python: "3.13"
+  jobs:
+    post_install:
+      - pip install .[docs]
+    # Read the Docs has no native Zensical support, so the HTML build is run by hand
+    build:
+      html:
+        - zensical build
+        - mkdir -p $READTHEDOCS_OUTPUT/html/
+        - cp -r site/. $READTHEDOCS_OUTPUT/html/
