@@ -1,72 +1,84 @@
+from __future__ import annotations
+
+from collections.abc import Iterator
 from json import loads
+from typing import TYPE_CHECKING, Any, Generic, TypeVar
 
 from ..utils import sizes
+
+if TYPE_CHECKING:
+    from ..core import PostmarkClient
+
+ModelT = TypeVar("ModelT", bound="Model")
 
 
 class Model:
     """Abstract data model for Postmark entities."""
 
-    _data = None
+    _data: dict[str, Any]
+    _manager: Any
 
-    def __init__(self, manager=None, **kwargs):
+    def __init__(self, manager: Any = None, **kwargs: Any) -> None:
         self._manager = manager
+        self._data = {}
         self._update(kwargs)
 
-    def __str__(self):
+    if TYPE_CHECKING:
+        # Postmark fields are set as instance attributes, as is
+        def __getattr__(self, name: str) -> Any: ...
+
+    def __str__(self) -> str:
         return "{}: {}".format(self.__class__.__name__, self._data.get("ID"))
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"<{self}>"
 
-    def _update(self, kwargs):
-        if self._data:
-            self._data.update(kwargs)
-        else:
-            self._data = kwargs
+    def _update(self, kwargs: dict[str, Any]) -> None:
+        self._data.update(kwargs)
         self.__dict__.update(kwargs)
 
     @classmethod
-    def from_json(cls, json, manager=None):
+    def from_json(cls: type[ModelT], json: str | bytes, manager: Any = None) -> ModelT:
         data = loads(json)
         return cls(manager=manager, **data)
 
-    def as_dict(self):
+    def as_dict(self) -> dict[str, Any]:
         return self._data.copy()
 
 
-class ModelManager:
+class ModelManager(Generic[ModelT]):
     """Proxies calls to main API client. Encapsulates logic of certain part of API - bounces, emails, etc."""
 
-    name = None
-    model = None
+    name: str
+    model: type[ModelT]
     token_type = "server"
     count_key = "count"
     offset_key = "offset"
     max_chunk_size = 500
 
-    def __init__(self, client):
+    def __init__(self, client: PostmarkClient) -> None:
         self.client = client
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.__class__.__name__
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"<{self}>"
 
-    def _init_instance(self, data):
+    def _init_instance(self, data: dict[str, Any]) -> ModelT:
         return self.model(manager=self, **data)
 
-    def _init_many(self, data):
+    def _init_many(self, data: list[dict[str, Any]]) -> list[ModelT]:
         return [self._init_instance(part) for part in data]
 
-    def call(self, *args, **kwargs):
+    def call(self, *args: Any, **kwargs: Any) -> Any:
         kwargs["token_type"] = self.token_type
         return self.client.call(*args, **kwargs)
 
-    def call_many(self, *args, **kwargs):
+    def call_many(self, *args: Any, **kwargs: Any) -> list[Any]:
         return list(self._call_many(*args, **kwargs))
 
-    def _call_many(self, *args, **kwargs):
+    def _call_many(self, *args: Any, **kwargs: Any) -> Iterator[Any]:
         count = kwargs.pop(self.count_key)
         offset = kwargs.pop(self.offset_key)
         loaded_items_count = 0
@@ -80,17 +92,16 @@ class ModelManager:
             if response["TotalCount"] - offset <= loaded_items_count:
                 break
 
-    def expand_responses(self, responses, key):
-        items = [self._init_many(response[key]) for response in responses]
-        return sum(items, [])
+    def expand_responses(self, responses: list[Any], key: str) -> list[ModelT]:
+        return [item for response in responses for item in self._init_many(response[key])]
 
-    def update_kwargs(self, kwargs, count, offset):
+    def update_kwargs(self, kwargs: dict[str, Any], count: int, offset: int) -> dict[str, Any]:
         """Helper to support handy dictionaries merging on all Python versions."""
         kwargs.update({self.count_key: count, self.offset_key: offset})
         return kwargs
 
 
-class SubModelManager(ModelManager):
+class SubModelManager(ModelManager[ModelT]):
     """Works with multiple model managers.
 
     Example:
@@ -100,13 +111,13 @@ class SubModelManager(ModelManager):
 
     """
 
-    _managers = ()
+    _managers: tuple[type[ModelManager[Any]], ...] = ()
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    def __init__(self, client: PostmarkClient) -> None:
+        super().__init__(client)
         self._setup_managers()
 
-    def _setup_managers(self):
+    def _setup_managers(self) -> None:
         for manager_class in self._managers:
             instance = manager_class(self.client)
             setattr(self, instance.name, instance)
@@ -114,5 +125,5 @@ class SubModelManager(ModelManager):
 
 class MessageModel(Model):
     @property
-    def message(self):
+    def message(self) -> Any:
         return self._manager.client.messages.outbound.get(self.MessageID)

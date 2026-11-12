@@ -7,6 +7,7 @@
 - Support for Python 3.11–3.15.
 - Support for Django 5.2, 6.0 and 6.1.
 - Support for `email.message.EmailMessage` (the modern `email` API) wherever MIME messages are accepted.
+- Type annotations and `py.typed` marker.
 
 ### Changed
 

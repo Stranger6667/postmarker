@@ -1,10 +1,13 @@
+from __future__ import annotations
+
 import logging
+from typing import TextIO
 
 DEFAULT_LOGGING_LEVEL = logging.CRITICAL
 LOG_FORMAT = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 
 
-def get_logger(name, verbosity, stream):
+def get_logger(name: str, verbosity: int, stream: TextIO) -> logging.Logger:
     """Returns simple console logger."""
     logger = logging.getLogger(name)
     logger.setLevel(

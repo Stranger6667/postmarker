@@ -1,33 +1,42 @@
 """Basic ways to send emails."""
 
+from __future__ import annotations
+
 import mimetypes
 import os
 from base64 import b64encode
 from email.header import decode_header
 from email.message import Message, MIMEPart
+from typing import Any, cast
 
 from ..utils import chunks
 from .base import MessageModel, Model, ModelManager
 
 SEPARATOR = ""
 
+# What `list_to_csv` joins
+Recipients = str | list[str] | tuple[str, ...] | set[str]
+# What `prepare_attachments` accepts
+AttachmentData = dict[str, Any] | tuple[str, ...] | Message | str
 
-def list_to_csv(value):
+
+def list_to_csv(value: Recipients | None) -> str | None:
     """Converts list to string with comma separated values. For string is no-op."""
     if isinstance(value, (list, tuple, set)):
-        value = ",".join(value)
+        return ",".join(value)
     return value
 
 
-def guess_content_type(filename):
+def guess_content_type(filename: str) -> str:
     content_type, encoding = mimetypes.guess_type(filename)
     if content_type is None or encoding is not None:
         content_type = "application/octet-stream"
     return content_type
 
 
-def prepare_attachments(attachment):
+def prepare_attachments(attachment: AttachmentData) -> dict[str, Any]:
     """Converts incoming attachment into dictionary."""
+    result: dict[str, Any]
     if isinstance(attachment, tuple):
         result = {
             "Name": attachment[0],
@@ -37,14 +46,14 @@ def prepare_attachments(attachment):
         if len(attachment) == 4:
             result["ContentID"] = attachment[3]
     elif isinstance(attachment, Message):
-        payload = attachment.get_payload()
+        payload: Any = attachment.get_payload()
         content_type = attachment.get_content_type()
         # Postmark requires base64 content for every attachment, including `message/rfc822`.
         # A payload without `Content-Transfer-Encoding` is expected to be base64 already
         if content_type == "message/rfc822" and not isinstance(payload, str):
             payload = b64encode(payload[0].get_payload(decode=True)).decode()
         elif "Content-Transfer-Encoding" in attachment:
-            payload = b64encode(attachment.get_payload(decode=True)).decode()
+            payload = b64encode(cast(bytes, attachment.get_payload(decode=True))).decode()
         result = {
             "Name": attachment.get_filename() or "attachment.txt",
             "Content": payload,
@@ -72,15 +81,18 @@ def prepare_attachments(attachment):
     return result
 
 
-def get_body(part):
-    body = part.get_payload(decode=True).decode("utf8")
+def get_body(part: Message) -> str:
+    payload = cast(bytes, part.get_payload(decode=True))
+    body = payload.decode("utf8")
     # `set_content` (the modern email API, used by Django 6+) always appends a newline
     if isinstance(part, MIMEPart):
         body = body.removesuffix("\n")
     return body
 
 
-def deconstruct_multipart_recursive(seen, text, html, attachments, message):
+def deconstruct_multipart_recursive(
+    seen: set[Message], text: list[str], html: list[str], attachments: list[Message], message: Message
+) -> None:
     if message in seen:
         return
     seen.add(message)
@@ -97,35 +109,35 @@ def deconstruct_multipart_recursive(seen, text, html, attachments, message):
             # Ignore underlying messages inside `message/rfc822` payload, because the message itself will be passed
             # as an attachment
             if content_type == "message/rfc822":
-                for part in message.get_payload():
+                for part in cast(list[Message], message.get_payload()):
                     seen.add(part)
             attachments.append(message)
 
 
-def deconstruct_multipart(message):
-    seen = set()
-    text = []
-    html = []
-    attachments = []
+def deconstruct_multipart(message: Message) -> tuple[str | None, str | None, list[Message]]:
+    seen: set[Message] = set()
+    text: list[str] = []
+    html: list[str] = []
+    attachments: list[Message] = []
     deconstruct_multipart_recursive(seen, text, html, attachments, message)
     return (text and text[0]) or None, (html and html[0]) or None, attachments
 
 
 class BaseEmail(Model):
-    def __init__(self, **kwargs):
+    def __init__(self, **kwargs: Any) -> None:
         if not kwargs.get("Headers"):
             kwargs["Headers"] = {}
         if not kwargs.get("Attachments"):
             kwargs["Attachments"] = []
         super().__init__(**kwargs)
 
-    def __setitem__(self, key, value):
+    def __setitem__(self, key: str, value: str) -> None:
         self.Headers[key] = value
 
-    def __delitem__(self, key):
+    def __delitem__(self, key: str) -> None:
         del self.Headers[key]
 
-    def as_dict(self):
+    def as_dict(self) -> dict[str, Any]:
         """Additionally encodes headers.
 
         :return:
@@ -138,7 +150,7 @@ class BaseEmail(Model):
         data["Attachments"] = [prepare_attachments(attachment) for attachment in data["Attachments"]]
         return data
 
-    def attach(self, *payloads):
+    def attach(self, *payloads: AttachmentData) -> None:
         """Appends given payloads to the current payload.
 
         :param payloads:
@@ -147,7 +159,7 @@ class BaseEmail(Model):
         """
         self.Attachments.extend(payloads)
 
-    def attach_binary(self, content, filename):
+    def attach_binary(self, content: bytes, filename: str) -> None:
         """Attaches given binary data.
 
         :param bytes content: Binary data to be attached.
@@ -163,7 +175,7 @@ class BaseEmail(Model):
         self.attach(payload)
 
 
-def maybe_decode(value, encoding):
+def maybe_decode(value: str | bytes, encoding: str | None) -> str:
     if isinstance(value, bytes):
         if encoding is not None:
             value = value.decode(encoding)
@@ -172,19 +184,19 @@ def maybe_decode(value, encoding):
     return value
 
 
-def prepare_header(value):
+def prepare_header(value: Any) -> str | None:
     if value is None:
         return value
     return SEPARATOR.join([maybe_decode(value, encoding) for value, encoding in decode_header(value)])
 
 
 class Email(BaseEmail):
-    def __init__(self, **kwargs):
+    def __init__(self, **kwargs: Any) -> None:
         assert kwargs.get("TextBody") or kwargs.get("HtmlBody"), "Provide either email TextBody or HtmlBody or both"
         super().__init__(**kwargs)
 
     @classmethod
-    def from_mime(cls, message, manager):
+    def from_mime(cls, message: Message, manager: Any) -> Email:
         """Instantiates ``Email`` instance from ``email.message.Message`` instance.
 
         :param message: ``email.message.Message`` instance.
@@ -217,17 +229,17 @@ class Email(BaseEmail):
             MessageStream=message_stream,
         )
 
-    def send(self):
+    def send(self) -> Any:
         return self._manager._send(**self.as_dict())
 
 
 class EmailTemplate(BaseEmail):
-    def __init__(self, **kwargs):
+    def __init__(self, **kwargs: Any) -> None:
         if kwargs.get("TemplateId") is None and kwargs.get("TemplateAlias") is None:
             raise ValueError("You need to specify either TemplateId or TemplateAlias")
         super().__init__(**kwargs)
 
-    def send(self):
+    def send(self) -> Any:
         return self._manager._send_with_template(**self.as_dict())
 
 
@@ -236,21 +248,22 @@ class EmailTemplateBatch(Model):
 
     MAX_SIZE = 500
 
-    def __init__(self, *emails, **kwargs):
+    def __init__(self, *emails: EmailTemplate | dict[str, Any], **kwargs: Any) -> None:
         self.emails = emails
         super().__init__(**kwargs)
 
-    def __len__(self):
+    def __len__(self) -> int:
         return len(self.emails)
 
-    def as_dict(self, **extra):
+    # Batches serialize to a list of emails
+    def as_dict(self, **extra: Any) -> list[dict[str, Any]]:  # type: ignore[override]
         """Converts all available emails to dictionaries.
 
         :return: List of dictionaries.
         """
         return [self._construct_email(email, **extra) for email in self.emails]
 
-    def _construct_email(self, email, **extra):
+    def _construct_email(self, email: EmailTemplate | dict[str, Any], **extra: Any) -> dict[str, Any]:
         """Converts incoming data to properly structured dictionary."""
         if isinstance(email, dict):
             email = EmailTemplate(manager=self._manager, **email)
@@ -259,7 +272,7 @@ class EmailTemplateBatch(Model):
         email._update(extra)
         return email.as_dict()
 
-    def send(self, **extra):
+    def send(self, **extra: Any) -> list[Any]:
         """Sends email batch.
 
         :return: Information about sent emails.
@@ -275,21 +288,22 @@ class EmailBatch(Model):
 
     MAX_SIZE = 500
 
-    def __init__(self, *emails, **kwargs):
+    def __init__(self, *emails: Email | Message | dict[str, Any], **kwargs: Any) -> None:
         self.emails = emails
         super().__init__(**kwargs)
 
-    def __len__(self):
+    def __len__(self) -> int:
         return len(self.emails)
 
-    def as_dict(self, **extra):
+    # Batches serialize to a list of emails
+    def as_dict(self, **extra: Any) -> list[dict[str, Any]]:  # type: ignore[override]
         """Converts all available emails to dictionaries.
 
         :return: List of dictionaries.
         """
         return [self._construct_email(email, **extra) for email in self.emails]
 
-    def _construct_email(self, email, **extra):
+    def _construct_email(self, email: Email | Message | dict[str, Any], **extra: Any) -> dict[str, Any]:
         """Converts incoming data to properly structured dictionary."""
         if isinstance(email, dict):
             email = Email(manager=self._manager, **email)
@@ -300,7 +314,7 @@ class EmailBatch(Model):
         email._update(extra)
         return email.as_dict()
 
-    def send(self, **extra):
+    def send(self, **extra: Any) -> list[Any]:
         """Sends email batch.
 
         :return: Information about sent emails.
@@ -312,48 +326,53 @@ class EmailBatch(Model):
 
 
 class Delivery(MessageModel):
-    def __str__(self):
+    def __str__(self) -> str:
         return "Delivery to {}".format(self._data.get("Recipient"))
 
 
-class EmailManager(ModelManager):
+# The `EmailManager` methods of the same name shadow these classes in its body
+_Email = Email
+_EmailTemplate = EmailTemplate
+
+
+class EmailManager(ModelManager[Model]):
     """Sends emails via Postmark REST API."""
 
     name = "emails"
 
-    def _send(self, **kwargs):
+    def _send(self, **kwargs: Any) -> Any:
         """Low-level send call. Does not apply any transformation to given data."""
         return self.call("POST", "/email", data=kwargs)
 
-    def _send_with_template(self, **kwargs):
+    def _send_with_template(self, **kwargs: Any) -> Any:
         return self.call("POST", "/email/withTemplate/", data=kwargs)
 
-    def _send_batch_with_template(self, *email_templates):
+    def _send_batch_with_template(self, *email_templates: dict[str, Any]) -> Any:
         return self.call("POST", "/email/batchWithTemplates/", data={"Messages": email_templates})
 
-    def _send_batch(self, *emails):
+    def _send_batch(self, *emails: dict[str, Any]) -> Any:
         """Low-level batch send call."""
         return self.call("POST", "/email/batch", data=emails)
 
     def send(
         self,
-        message=None,
-        From=None,
-        To=None,
-        Cc=None,
-        Bcc=None,
-        Subject=None,
-        Tag=None,
-        HtmlBody=None,
-        TextBody=None,
-        Metadata=None,
-        ReplyTo=None,
-        Headers=None,
-        TrackOpens=None,
-        TrackLinks="None",
-        Attachments=None,
-        MessageStream=None,
-    ):
+        message: Email | Message | None = None,
+        From: str | None = None,
+        To: Recipients | None = None,
+        Cc: Recipients | None = None,
+        Bcc: Recipients | None = None,
+        Subject: str | None = None,
+        Tag: str | None = None,
+        HtmlBody: str | None = None,
+        TextBody: str | None = None,
+        Metadata: dict[str, Any] | None = None,
+        ReplyTo: str | None = None,
+        Headers: dict[str, str] | None = None,
+        TrackOpens: bool | None = None,
+        TrackLinks: str = "None",
+        Attachments: list[AttachmentData] | None = None,
+        MessageStream: str | None = None,
+    ) -> Any:
         """Sends a single email.
 
         :param message: :py:class:`Email` or ``email.message.Message`` instance.
@@ -381,8 +400,9 @@ class EmailManager(ModelManager):
         """
         assert not (message and (From or To)), "You should specify either message or From and To parameters"
         assert TrackLinks in ("None", "HtmlAndText", "HtmlOnly", "TextOnly")
+        email: Email
         if message is None:
-            message = self.Email(
+            email = self.Email(
                 From=From,
                 To=To,
                 Cc=Cc,
@@ -400,32 +420,35 @@ class EmailManager(ModelManager):
                 MessageStream=MessageStream,
             )
         elif isinstance(message, Message):
-            message = Email.from_mime(message, self)
-        elif not isinstance(message, Email):
+            email = Email.from_mime(message, self)
+        elif isinstance(message, Email):
+            email = message
+        else:
+            # Runtime guard for callers without type checking
             raise TypeError("message should be either Email or email.message.Message instance")
-        return message.send()
+        return email.send()
 
     def send_with_template(
         self,
         *,
-        TemplateId=None,
-        TemplateModel,
-        From,
-        To,
-        TemplateAlias=None,
-        Cc=None,
-        Bcc=None,
-        Subject=None,
-        Tag=None,
-        ReplyTo=None,
-        Headers=None,
-        TrackOpens=None,
-        TrackLinks="None",
-        Attachments=None,
-        InlineCss=True,
-        Metadata=None,
-        MessageStream=None,
-    ):
+        TemplateId: int | None = None,
+        TemplateModel: dict[str, Any],
+        From: str,
+        To: Recipients,
+        TemplateAlias: str | None = None,
+        Cc: Recipients | None = None,
+        Bcc: Recipients | None = None,
+        Subject: str | None = None,
+        Tag: str | None = None,
+        ReplyTo: str | None = None,
+        Headers: dict[str, str] | None = None,
+        TrackOpens: bool | None = None,
+        TrackLinks: str = "None",
+        Attachments: list[AttachmentData] | None = None,
+        InlineCss: bool = True,
+        Metadata: dict[str, Any] | None = None,
+        MessageStream: str | None = None,
+    ) -> Any:
         return self.EmailTemplate(
             TemplateId=TemplateId,
             TemplateAlias=TemplateAlias,
@@ -446,7 +469,7 @@ class EmailManager(ModelManager):
             MessageStream=MessageStream,
         ).send()
 
-    def send_batch(self, *emails, **extra):
+    def send_batch(self, *emails: Email | Message | dict[str, Any], **extra: Any) -> list[Any]:
         """Sends an email batch.
 
         :param emails: :py:class:`Email` instances or dictionaries
@@ -454,7 +477,7 @@ class EmailManager(ModelManager):
         """
         return self.EmailBatch(*emails).send(**extra)
 
-    def send_template_batch(self, *emails, **extra):
+    def send_template_batch(self, *emails: EmailTemplate | dict[str, Any], **extra: Any) -> list[Any]:
         """Sends an email batch.
 
         :param emails: :py:class:`EmailTemplate` instances or dictionaries
@@ -466,22 +489,22 @@ class EmailManager(ModelManager):
 
     def Email(
         self,
-        From,
-        To,
-        Cc=None,
-        Bcc=None,
-        Subject=None,
-        Tag=None,
-        HtmlBody=None,
-        TextBody=None,
-        Metadata=None,
-        ReplyTo=None,
-        Headers=None,
-        TrackOpens=None,
-        TrackLinks="None",
-        Attachments=None,
-        MessageStream=None,
-    ):
+        From: str | None,
+        To: Recipients | None,
+        Cc: Recipients | None = None,
+        Bcc: Recipients | None = None,
+        Subject: str | None = None,
+        Tag: str | None = None,
+        HtmlBody: str | None = None,
+        TextBody: str | None = None,
+        Metadata: dict[str, Any] | None = None,
+        ReplyTo: str | None = None,
+        Headers: dict[str, str] | None = None,
+        TrackOpens: bool | None = None,
+        TrackLinks: str = "None",
+        Attachments: list[AttachmentData] | None = None,
+        MessageStream: str | None = None,
+    ) -> Email:
         """Constructs :py:class:`Email` instance.
 
         :return: :py:class:`Email`
@@ -508,24 +531,24 @@ class EmailManager(ModelManager):
     def EmailTemplate(
         self,
         *,
-        TemplateId=None,
-        TemplateModel,
-        From,
-        To,
-        TemplateAlias=None,
-        Cc=None,
-        Bcc=None,
-        Subject=None,
-        Tag=None,
-        ReplyTo=None,
-        Headers=None,
-        TrackOpens=None,
-        TrackLinks="None",
-        Attachments=None,
-        InlineCss=True,
-        Metadata=None,
-        MessageStream=None,
-    ):
+        TemplateId: int | None = None,
+        TemplateModel: dict[str, Any],
+        From: str,
+        To: Recipients,
+        TemplateAlias: str | None = None,
+        Cc: Recipients | None = None,
+        Bcc: Recipients | None = None,
+        Subject: str | None = None,
+        Tag: str | None = None,
+        ReplyTo: str | None = None,
+        Headers: dict[str, str] | None = None,
+        TrackOpens: bool | None = None,
+        TrackLinks: str = "None",
+        Attachments: list[AttachmentData] | None = None,
+        InlineCss: bool = True,
+        Metadata: dict[str, Any] | None = None,
+        MessageStream: str | None = None,
+    ) -> EmailTemplate:
         """Constructs :py:class:`EmailTemplate` instance.
 
         :return: :py:class:`EmailTemplate`
@@ -551,14 +574,14 @@ class EmailManager(ModelManager):
             MessageStream=MessageStream,
         )
 
-    def EmailBatch(self, *emails):
+    def EmailBatch(self, *emails: _Email | Message | dict[str, Any]) -> EmailBatch:
         """Constructs :py:class:`EmailBatch` instance.
 
         :return: :py:class:`EmailBatch`
         """
         return EmailBatch(*emails, manager=self)
 
-    def EmailTemplateBatch(self, *emails):
+    def EmailTemplateBatch(self, *emails: _EmailTemplate | dict[str, Any]) -> EmailTemplateBatch:
         """Constructs :py:class:`EmailTemplateBatch` instance.
 
         :return: :py:class:`EmailTemplateBatch`

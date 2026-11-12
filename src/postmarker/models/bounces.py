@@ -4,6 +4,10 @@ Information about bounces is available via the :py:class:`~postmarker.models.bou
 which is an attribute of ``postmark`` instance.
 """
 
+from __future__ import annotations
+
+from typing import Any
+
 from .base import MessageModel, ModelManager
 
 
@@ -11,7 +15,7 @@ class Bounce(MessageModel):
     """Bounce model."""
 
     @property
-    def dump(self):
+    def dump(self) -> Any:
         """Gets SMTP data dump.
 
         :return: Dump of SMTP data if it is available.
@@ -19,7 +23,7 @@ class Bounce(MessageModel):
         """
         return self._manager.get_dump(self.ID)
 
-    def activate(self):
+    def activate(self) -> Any:
         """Activates the bounce instance and updates it with the latest data.
 
         :return: Activation status.
@@ -30,14 +34,14 @@ class Bounce(MessageModel):
         return response["Message"]
 
 
-class BounceManager(ModelManager):
+class BounceManager(ModelManager[Bounce]):
     """Encapsulates logic about bounces."""
 
     name = "bounces"
     model = Bounce
 
     @property
-    def deliverystats(self):
+    def deliverystats(self) -> Any:
         """Returns number of inactive emails and list of bounce types with total counts.
 
         :rtype: `dict`
@@ -45,14 +49,14 @@ class BounceManager(ModelManager):
         return self.call("GET", "/deliverystats")
 
     @property
-    def tags(self):
+    def tags(self) -> Any:
         """A list of tags that have generated bounces for a given server.
 
         :rtype: `list`
         """
         return self.call("GET", "/bounces/tags")
 
-    def get(self, id):
+    def get(self, id: int) -> Bounce:
         """Returns a single bounce.
 
         :param int id: Bounce ID.
@@ -63,16 +67,16 @@ class BounceManager(ModelManager):
 
     def all(
         self,
-        count=500,
-        offset=0,
-        type=None,
-        inactive=None,
-        emailFilter=None,
-        tag=None,
-        messageID=None,
-        fromdate=None,
-        todate=None,
-    ):
+        count: int | None = 500,
+        offset: int = 0,
+        type: str | None = None,
+        inactive: bool | None = None,
+        emailFilter: str | None = None,
+        tag: str | None = None,
+        messageID: str | None = None,
+        fromdate: Any = None,
+        todate: Any = None,
+    ) -> list[Bounce]:
         """Returns many bounces.
 
         :param int count: Number of bounces to return per request.
@@ -102,7 +106,7 @@ class BounceManager(ModelManager):
         )
         return self.expand_responses(responses, "Bounces")
 
-    def activate(self, id):
+    def activate(self, id: int) -> Any:
         """Activates a bounce.
 
         :param int id: Bounce ID.
@@ -111,7 +115,7 @@ class BounceManager(ModelManager):
         """
         return self.call("PUT", f"/bounces/{id}/activate")
 
-    def get_dump(self, id):
+    def get_dump(self, id: int) -> Any:
         """Gets an SMTP data dump.
 
         :param int id: Bounce ID.
@@ -120,7 +124,7 @@ class BounceManager(ModelManager):
         """
         return self.call("GET", f"/bounces/{id}/dump").get("Body")
 
-    def Bounce(self, json):
+    def Bounce(self, json: str | bytes) -> Bounce:
         """Constructs new Bounce instance from JSON-encoded string. Intended to use for bounce webhook processing.
 
         :param json: `str`
