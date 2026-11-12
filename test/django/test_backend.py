@@ -436,6 +436,16 @@ def test_close_closed_connection():
         connection.close()
 
 
+def test_signals_exported():
+    import postmarker.django
+
+    assert (postmarker.django.pre_send, postmarker.django.post_send, postmarker.django.on_exception) == (
+        pre_send,
+        post_send,
+        on_exception,
+    )
+
+
 @pytest.mark.usefixtures("postmark_request")
 class TestSignals:
     def test_pre_send(self, catch_signal):
