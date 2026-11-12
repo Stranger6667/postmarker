@@ -16,6 +16,7 @@ A failing test that demonstrates the problem is very welcome.
 2. Install the [prek](https://prek.j178.dev) hooks: `prek install -t pre-commit -t commit-msg`.
 3. Run the tests with tox, for example `tox -e py314-django61`.
 4. Add an entry under `Unreleased` in `CHANGELOG.md` for user-visible changes.
+5. Preview the documentation with `uvx --from zensical --with ".[docs]" zensical serve`.
 
 Commit messages follow [Conventional Commits](https://www.conventionalcommits.org/) (`fix: ...`, `feat: ...`); CI checks them.
 

@@ -27,7 +27,7 @@ Send single email:
     From='sender@example.com',
     To='receiver@example.com',
     Subject='Postmark test',
-    HtmlBody='<html><body><strong>Hello</strong> dear Postmark user.</body></html>'
+    HtmlBody='<strong>Hello</strong> dear Postmark user.'
 )
 ```
 
@@ -39,13 +39,13 @@ Send batch:
         'From': 'sender@example.com',
         'To': 'receiver@example.com',
         'Subject': 'Postmark test',
-        'HtmlBody': '<html><body><strong>Hello</strong> dear Postmark user.</body></html>',
+        'HtmlBody': '<strong>Hello</strong> dear Postmark user.',
     },
     {
         'From': 'sender2@example.com',
         'To': 'receiver2@example.com',
         'Subject': 'Postmark test 2',
-        'HtmlBody': '<html><body><strong>Hello</strong> dear Postmark user.</body></html>',
+        'HtmlBody': '<strong>Hello</strong> dear Postmark user.',
     }
 )
 ```
@@ -57,7 +57,7 @@ Setup an email:
     From='sender@example.com',
     To='receiver@example.com',
     Subject='Postmark test',
-    HtmlBody='<html><body><strong>Hello</strong> dear Postmark user.</body></html>'
+    HtmlBody='<strong>Hello</strong> dear Postmark user.'
 )
 >>> email['X-Accept-Language'] = 'en-us, en'
 >>> email.attach('/home/user/readme.txt')

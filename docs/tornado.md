@@ -16,7 +16,7 @@ class EmailHandler(PostmarkMixin, RequestHandler):
             From="sender@example.com",
             To="receiver@example.com",
             Subject="Postmark test",
-            HtmlBody="<html><body><strong>Hello</strong> dear Postmark user.</body></html>",
+            HtmlBody="<strong>Hello</strong> dear Postmark user.",
         )
         # Send batch
         self.send_batch(
@@ -24,13 +24,13 @@ class EmailHandler(PostmarkMixin, RequestHandler):
                 "From": "sender@example.com",
                 "To": "receiver@example.com",
                 "Subject": "Postmark test",
-                "HtmlBody": "<html><body><strong>Hello</strong> dear Postmark user.</body></html>",
+                "HtmlBody": "<strong>Hello</strong> dear Postmark user.",
             },
             {
                 "From": "sender2@example.com",
                 "To": "receiver2@example.com",
                 "Subject": "Postmark test 2",
-                "HtmlBody": "<html><body><strong>Hello</strong> dear Postmark user.</body></html>",
+                "HtmlBody": "<strong>Hello</strong> dear Postmark user.",
             },
         )
         # Or do whatever you want to do with postmark

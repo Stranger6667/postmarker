@@ -9,7 +9,7 @@ Sending emails is super easy! Here is the simplest case:
     From='sender@example.com',
     To='receiver@example.com',
     Subject='Postmark test',
-    HtmlBody='<html><body><strong>Hello</strong> dear Postmark user.</body></html>'
+    HtmlBody='<strong>Hello</strong> dear Postmark user.'
 )
 {'ErrorCode': 0,
  'Message': 'OK',
@@ -32,9 +32,10 @@ To specify multiple recipients (or `Cc` / `Bcc`) you could pass values as a list
 ```python
 >>> postmark.emails.send(
     From='sender@example.com',
-    To=['first@example.com', 'second@example.com'],  # The same as 'first@example.com, second@example.com'
+    # The same as To='first@example.com, second@example.com'
+    To=['first@example.com', 'second@example.com'],
     Subject='Postmark test',
-    HtmlBody='<html><body><strong>Hello</strong> dear Postmark user.</body></html>'
+    HtmlBody='<strong>Hello</strong> dear Postmark user.'
 )
 ```
 
@@ -46,7 +47,7 @@ Headers could be specified as a dict:
     To='receiver@example.com',
     Headers={'X-Accept-Language': 'en-us, en'},
     Subject='Postmark test',
-    HtmlBody='<html><body><strong>Hello</strong> dear Postmark user.</body></html>'
+    HtmlBody='<strong>Hello</strong> dear Postmark user.'
 )
 ```
 
@@ -54,7 +55,11 @@ Attachments could be specified as a list of items in the following forms:
 
 ```python
 # Dictionary
->>> msg_1 = {"Name": "readme.txt", "Content": "dGVzdCBjb250ZW50", "ContentType": "text/plain"}
+>>> msg_1 = {
+    "Name": "readme.txt",
+    "Content": "dGVzdCBjb250ZW50",
+    "ContentType": "text/plain",
+}
 # Tuple
 >>> msg_2 = ("readme.txt", "dGVzdCBjb250ZW50", "text/plain")
 # MIMEBase instance
@@ -72,7 +77,7 @@ Note! Content should be encoded as Base64 string. Then pass the attachments to `
     From='sender@example.com',
     To='receiver@example.com',
     Subject='Postmark test',
-    HtmlBody='<html><body><strong>Hello</strong> dear Postmark user.</body></html>',
+    HtmlBody='<strong>Hello</strong> dear Postmark user.',
     Attachments=[msg_1, msg_2, msg_3, msg_4]
 )
 ```
@@ -85,12 +90,14 @@ Postmarker also supports inline images. Here are the possible usage options:
 >>> mime.add_header('Content-ID', '<image1@example.com>')
 >>> mime_inline = MIMEImage('test content', 'png', name='image3.png')
 >>> mime_inline.add_header('Content-ID', '<image3@example.com>')
->>> mime_inline.add_header('Content-Disposition', 'inline', filename='image3.png')
+>>> mime_inline.add_header(
+    'Content-Disposition', 'inline', filename='image3.png'
+)
 >>> postmark.emails.send(
     From='sender@example.com',
     To='receiver@example.com',
     Subject='Postmark test',
-    HtmlBody='<html><body><strong>Hello</strong> dear Postmark user.</body></html>',
+    HtmlBody='<strong>Hello</strong> dear Postmark user.',
     Attachments=[tuple_image, mime, mime_inline]
 )
 ```
@@ -103,13 +110,13 @@ To send email in a batch there is `send_batch()` method.
         'From': 'sender@example.com',
         'To': 'receiver@example.com',
         'Subject': 'Postmark test',
-        'HtmlBody': '<html><body><strong>Hello</strong> dear Postmark user.</body></html>',
+        'HtmlBody': '<strong>Hello</strong> dear Postmark user.',
     },
     {
         'From': 'sender2@example.com',
         'To': 'receiver2@example.com',
         'Subject': 'Postmark test 2',
-        'HtmlBody': '<html><body><strong>Hello</strong> dear Postmark user.</body></html>',
+        'HtmlBody': '<strong>Hello</strong> dear Postmark user.',
     }
 )
 ```
@@ -140,7 +147,7 @@ To get more flexibility it is possible to use `Email` objects. `EmailManager` us
     From='sender@example.com',
     To='receiver@example.com',
     Subject='Postmark test',
-    HtmlBody='<html><body><strong>Hello</strong> dear Postmark user.</body></html>'
+    HtmlBody='<strong>Hello</strong> dear Postmark user.'
 )
 ```
 
