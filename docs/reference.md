@@ -51,6 +51,11 @@ Managers return models. Each Postmark field of a model is an attribute with the 
       members: [dump, activate, message]
       inherited_members: [message]
 
+::: postmarker.models.bounces.SpamComplaint
+    options:
+      members: [dump, message]
+      inherited_members: [dump, message]
+
 ## Messages
 
 `postmark.messages.outbound`, `postmark.messages.outbound.opens` and `postmark.messages.inbound`, see [Messages](messages.md).
@@ -172,6 +177,11 @@ Managers return models. Each Postmark field of a model is an attribute with the 
 `postmark.suppressions`, see [Suppressions](suppressions.md).
 
 ::: postmarker.models.suppressions.SuppressionsManager
+
+::: postmarker.models.suppressions.SubscriptionChange
+    options:
+      members: [message]
+      inherited_members: [message]
 
 ## Domains
 

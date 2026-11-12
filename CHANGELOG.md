@@ -13,6 +13,7 @@
 - Message Streams API: `message_streams.all`, `get`, `create`, `edit`, `archive` and `unarchive`.
 - Support for `email.message.EmailMessage` (the modern `email` API) wherever MIME messages are accepted.
 - Suppressions API: `suppressions.all`, `create` and `delete` per message stream. [#197](https://github.com/Stranger6667/postmarker/issues/197)
+- Spam complaint and subscription change webhook wrappers: `bounces.SpamComplaint` and `suppressions.SubscriptionChange`. [#215](https://github.com/Stranger6667/postmarker/issues/215)
 - Type annotations and `py.typed` marker.
 
 ### Changed
