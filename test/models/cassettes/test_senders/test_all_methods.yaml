@@ -1,0 +1,190 @@
+interactions:
+- request:
+    body: '{"Name": "Test", "ReplyToEmail": null, "ReturnPathDomain": null, "FromEmail":
+      "exampleX@blablaz.com"}'
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '101'
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Postmarker/0.7.0.dev0
+      X-Postmark-Account-Token:
+      - ACCOUNT_TOKEN
+    method: POST
+    uri: https://api.postmarkapp.com/senders/
+  response:
+    body:
+      string: '{"Domain":"blablaz.com","EmailAddress":"exampleX@blablaz.com","ReplyToEmailAddress":"","Name":"Test","Confirmed":false,"SPFVerified":false,"SPFHost":"blablaz.com","SPFTextValue":"v=spf1
+        a mx include:spf.mtasv.net ~all","DKIMVerified":false,"WeakDKIM":false,"DKIMHost":"","DKIMTextValue":"","DKIMPendingHost":"20170204193206pm._domainkey.blablaz.com","DKIMPendingTextValue":"k=rsa;
+        p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDXFLm6c/taesECCj3KSbNrefbtl0tJHC6W3JXysuB0CT4jOP52/398yqaNZ1KyuAodVl/wZzSD7yJrP+cHsjgpXgDzMu7ShpZTtmMpaApfAQhgLPXcLaYE0xX72/95XdaZHixIWkvv3I1U7Ls9WJEZif7ZSpl61d9jfIE77G3AhQIDAQAB","DKIMRevokedHost":"","DKIMRevokedTextValue":"","SafeToRemoveRevokedKeyFromDNS":false,"DKIMUpdateStatus":"Pending","ReturnPathDomain":"","ReturnPathDomainVerified":false,"ReturnPathDomainCNAMEValue":"pm.mtasv.net","ID":723694}'
+    headers:
+      Cache-Control:
+      - private
+      Content-Length:
+      - '826'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Sat, 04 Feb 2017 19:33:05 GMT
+      Server:
+      - unicorns-double-rainbow
+      X-Powered-By:
+      - ASP.NET
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '0'
+      User-Agent:
+      - Postmarker/0.7.0.dev0
+      X-Postmark-Account-Token:
+      - ACCOUNT_TOKEN
+    method: POST
+    uri: https://api.postmarkapp.com/senders/723694/resend
+  response:
+    body:
+      string: '{"ErrorCode":0,"Message":"Confirmation email for Sender Signature exampleX@blablaz.com
+        was re-sent."}'
+    headers:
+      Cache-Control:
+      - private
+      Content-Length:
+      - '101'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Sat, 04 Feb 2017 19:33:05 GMT
+      Server:
+      - unicorns-double-rainbow
+      X-Powered-By:
+      - ASP.NET
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '0'
+      User-Agent:
+      - Postmarker/0.7.0.dev0
+      X-Postmark-Account-Token:
+      - ACCOUNT_TOKEN
+    method: POST
+    uri: https://api.postmarkapp.com/senders/723694/verifyspf
+  response:
+    body:
+      string: '{"Domain":"blablaz.com","EmailAddress":"exampleX@blablaz.com","ReplyToEmailAddress":"","Name":"Test","Confirmed":false,"SPFVerified":false,"SPFHost":"blablaz.com","SPFTextValue":"v=spf1
+        a mx include:spf.mtasv.net ~all","DKIMVerified":false,"WeakDKIM":false,"DKIMHost":"","DKIMTextValue":"","DKIMPendingHost":"20170204193206pm._domainkey.blablaz.com","DKIMPendingTextValue":"k=rsa;
+        p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDXFLm6c/taesECCj3KSbNrefbtl0tJHC6W3JXysuB0CT4jOP52/398yqaNZ1KyuAodVl/wZzSD7yJrP+cHsjgpXgDzMu7ShpZTtmMpaApfAQhgLPXcLaYE0xX72/95XdaZHixIWkvv3I1U7Ls9WJEZif7ZSpl61d9jfIE77G3AhQIDAQAB","DKIMRevokedHost":"","DKIMRevokedTextValue":"","SafeToRemoveRevokedKeyFromDNS":false,"DKIMUpdateStatus":"Pending","ReturnPathDomain":"","ReturnPathDomainVerified":false,"ReturnPathDomainCNAMEValue":"pm.mtasv.net","ID":723694}'
+    headers:
+      Cache-Control:
+      - private
+      Content-Length:
+      - '826'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Sat, 04 Feb 2017 19:33:05 GMT
+      Server:
+      - unicorns-double-rainbow
+      X-Powered-By:
+      - ASP.NET
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '0'
+      User-Agent:
+      - Postmarker/0.7.0.dev0
+      X-Postmark-Account-Token:
+      - ACCOUNT_TOKEN
+    method: POST
+    uri: https://api.postmarkapp.com/senders/723694/requestnewdkim
+  response:
+    body:
+      string: '{"ErrorCode":505,"Message":"This DKIM is already being renewed."}'
+    headers:
+      Cache-Control:
+      - private
+      Content-Length:
+      - '65'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Sat, 04 Feb 2017 19:33:06 GMT
+      Server:
+      - unicorns-double-rainbow
+      X-Powered-By:
+      - ASP.NET
+    status:
+      code: 422
+      message: Unprocessable Entity
+- request:
+    body: null
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '0'
+      User-Agent:
+      - Postmarker/0.7.0.dev0
+      X-Postmark-Account-Token:
+      - ACCOUNT_TOKEN
+    method: DELETE
+    uri: https://api.postmarkapp.com/senders/723694
+  response:
+    body:
+      string: '{"ErrorCode":0,"Message":"Signature exampleX@blablaz.com removed."}'
+    headers:
+      Cache-Control:
+      - private
+      Content-Length:
+      - '67'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Sat, 04 Feb 2017 19:33:06 GMT
+      Server:
+      - unicorns-double-rainbow
+      X-Powered-By:
+      - ASP.NET
+    status:
+      code: 200
+      message: OK
+version: 1

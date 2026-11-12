@@ -1,0 +1,78 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - Postmarker/0.5.0.dev
+      X-Postmark-Server-Token:
+      - SERVER_TOKEN
+    method: GET
+    uri: https://api.postmarkapp.com/templates/983381
+  response:
+    body:
+      string: '{"Name":"Test","TemplateId":983381,"Subject":"Subject","HtmlBody":"\u003c!DOCTYPE
+        html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\"\u003e\n\u003chtml
+        xmlns=\"http://www.w3.org/1999/xhtml\"\u003e\n  \u003chead\u003e\n    \u003cmeta
+        name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" /\u003e\n    \u003cmeta
+        http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" /\u003e\n    \u003ctitle\u003e\u003c/title\u003e\n  \u003c/head\u003e\n  \u003cbody\u003e\n\n  \u003c/body\u003e\n\u003c/html\u003e\n","TextBody":null,"AssociatedServerId":139630,"Active":true}'
+    headers:
+      Cache-Control:
+      - private
+      Content-Length:
+      - '646'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Sat, 15 Oct 2016 19:18:12 GMT
+      Server:
+      - unicorns-double-rainbow
+      X-Powered-By:
+      - ASP.NET
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - Postmarker/0.5.0.dev
+      X-Postmark-Server-Token:
+      - SERVER_TOKEN
+    method: GET
+    uri: https://api.postmarkapp.com/templates/983381
+  response:
+    body:
+      string: '{"Name":"Test","TemplateId":983381,"Subject":"Subject","HtmlBody":"\u003c!DOCTYPE
+        html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\"\u003e\n\u003chtml
+        xmlns=\"http://www.w3.org/1999/xhtml\"\u003e\n  \u003chead\u003e\n    \u003cmeta
+        name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" /\u003e\n    \u003cmeta
+        http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" /\u003e\n    \u003ctitle\u003e\u003c/title\u003e\n  \u003c/head\u003e\n  \u003cbody\u003e\n\n  \u003c/body\u003e\n\u003c/html\u003e\n","TextBody":null,"AssociatedServerId":139630,"Active":true}'
+    headers:
+      Cache-Control:
+      - private
+      Content-Length:
+      - '646'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Sat, 15 Oct 2016 19:18:13 GMT
+      Server:
+      - unicorns-double-rainbow
+      X-Powered-By:
+      - ASP.NET
+    status:
+      code: 200
+      message: OK
+version: 1

@@ -30,7 +30,7 @@ repos:
       - id: typos
         # Report, don't rewrite
         args: [--force-exclude]
-        exclude: ^test/cassettes/
+        exclude: (^|/)cassettes/
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.17.4

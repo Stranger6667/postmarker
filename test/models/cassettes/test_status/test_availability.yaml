@@ -1,0 +1,40 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.11.1
+    method: GET
+    uri: https://status.postmarkapp.com/api/1.0/services/availability
+  response:
+    body:
+      string: '{"fromDate":"2016-07-11T11:47:10.371Z","toDate":"2016-10-09T11:47:10.372Z","secondsUp":31209723,"secondsDown":5280,"percentageUp":0.9998308505688754}'
+    headers:
+      Connection:
+      - Keep-Alive
+      Content-Length:
+      - '149'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Sun, 09 Oct 2016 11:48:48 GMT
+      ETag:
+      - W/"95-Wp5kdnTJlzpAZQWzWbI4Ag"
+      Keep-Alive:
+      - timeout=5, max=95
+      Server:
+      - Apache
+      Vary:
+      - Accept-Encoding
+      X-Powered-By:
+      - Express
+    status:
+      code: 200
+      message: OK
+version: 1

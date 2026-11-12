@@ -2,7 +2,7 @@ import pytest
 
 from postmarker.exceptions import SpamAssassinError
 
-CASSETTE_NAME = "spamcheck"
+pytestmark = pytest.mark.vcr
 
 
 EMAIL_DUMP = """Delivered-To: receiver@gmail.com

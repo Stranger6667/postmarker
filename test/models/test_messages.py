@@ -10,7 +10,7 @@ from postmarker.models.base import ModelManager
 from postmarker.models.emails import deconstruct_multipart
 from postmarker.models.messages import Attachment, InboundMessage, Open, OutboundMessage
 
-CASSETTE_NAME = "messages"
+pytestmark = pytest.mark.vcr
 
 
 def test_sub_managers(postmark):

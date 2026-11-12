@@ -1,4 +1,6 @@
-CASSETTE_NAME = "server"
+import pytest
+
+pytestmark = pytest.mark.vcr
 
 
 def test_edit(server):

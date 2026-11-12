@@ -1,0 +1,40 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.11.1
+    method: GET
+    uri: https://status.postmarkapp.com/api/1.0/delivery
+  response:
+    body:
+      string: '[{"name":"AOL","dkim":1,"inbox":1,"missing":0,"spam":0,"spf":1},{"name":"Apple","dkim":1,"inbox":1,"missing":0,"spam":0,"spf":1},{"name":"Gmail","dkim":1,"inbox":1,"missing":0,"spam":0,"spf":1},{"name":"Hotmail","dkim":1,"inbox":1,"missing":0,"spam":0,"spf":1},{"name":"Yahoo!","dkim":1,"inbox":1,"missing":0,"spam":0,"spf":1}]'
+    headers:
+      Connection:
+      - Keep-Alive
+      Content-Length:
+      - '327'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Sun, 09 Oct 2016 11:48:48 GMT
+      ETag:
+      - W/"147-KirPH/cGGHjoGYDN8HMDAA"
+      Keep-Alive:
+      - timeout=5, max=94
+      Server:
+      - Apache
+      Vary:
+      - Accept-Encoding
+      X-Powered-By:
+      - Express
+    status:
+      code: 200
+      message: OK
+version: 1

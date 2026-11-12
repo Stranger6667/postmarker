@@ -1,0 +1,43 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.11.1
+    method: GET
+    uri: https://status.postmarkapp.com/api/1.0/services
+  response:
+    body:
+      string: '[{"name":"API Response Time","status":"UP","url":"/services/api"},{"name":"SMTP
+        Response Time","status":"UP","url":"/services/smtp"},{"name":"Web Response
+        Time","status":"UP","url":"/services/web"},{"name":"Inbound SMTP Response
+        Time","status":"UP","url":"/services/inbound"}]'
+    headers:
+      Connection:
+      - Keep-Alive
+      Content-Length:
+      - '276'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Sun, 09 Oct 2016 11:48:48 GMT
+      ETag:
+      - W/"114-kO7V9l/yeC/wHw8NLMUAIw"
+      Keep-Alive:
+      - timeout=5, max=96
+      Server:
+      - Apache
+      Vary:
+      - Accept-Encoding
+      X-Powered-By:
+      - Express
+    status:
+      code: 200
+      message: OK
+version: 1

@@ -3,58 +3,25 @@ from contextlib import contextmanager
 from unittest.mock import Mock
 
 import pytest
-from betamax import Betamax
-from betamax_serializers import pretty_json
 
 from postmarker.core import PostmarkClient
 from postmarker.models.emails import Delivery
 
-from .helpers import replace_real_credentials
-
-Betamax.register_serializer(pretty_json.PrettyJSONSerializer)
-
 DEFAULT_SERVER_TOKEN = "SERVER_TOKEN"
 DEFAULT_ACCOUNT_TOKEN = "ACCOUNT_TOKEN"
-CASSETTE_DIR = "test/cassettes/"
 SERVER_TOKEN = os.environ.get("SERVER_TOKEN", DEFAULT_SERVER_TOKEN)
 ACCOUNT_TOKEN = os.environ.get("ACCOUNT_TOKEN", DEFAULT_ACCOUNT_TOKEN)
 
 
-def pytest_addoption(parser):
-    parser.addoption("--record", action="store_true", help="Runs cleanup for recording session")
-
-
-def pytest_unconfigure(config):
-    if config.getoption("--record"):
-        replace_real_credentials(CASSETTE_DIR, SERVER_TOKEN, "X-Postmark-Server-Token", DEFAULT_SERVER_TOKEN)
-        replace_real_credentials(
-            CASSETTE_DIR,
-            ACCOUNT_TOKEN,
-            "X-Postmark-Account-Token",
-            DEFAULT_ACCOUNT_TOKEN,
-        )
-
-
-@pytest.fixture(autouse=True, scope="module")
-def betamax_recorder(request, postmark):
-    """Module level Betamax recorder."""
-    if request.config.getoption("--record"):
-        record_mode = "new_episodes"
-    else:
-        record_mode = "none" if os.environ.get("CI") else "once"
-    cassette_name = getattr(request.node._obj, "CASSETTE_NAME", "default")
-    vcr = Betamax(
-        postmark.session,
-        cassette_library_dir=CASSETTE_DIR,
-        default_cassette_options={
-            "preserve_exact_body_bytes": True,
-            "serialize_with": "prettyjson",
-            "match_requests_on": ["uri", "query", "method"],
-            "record_mode": record_mode,
-        },
-    )
-    with vcr.use_cassette(cassette_name):
-        yield
+@pytest.fixture(scope="session")
+def vcr_config():
+    return {
+        "filter_headers": [
+            ("X-Postmark-Server-Token", DEFAULT_SERVER_TOKEN),
+            ("X-Postmark-Account-Token", DEFAULT_ACCOUNT_TOKEN),
+        ],
+        "decode_compressed_response": True,
+    }
 
 
 @pytest.fixture(scope="session")
@@ -72,12 +39,12 @@ def postmark(server_token, account_token):
     return PostmarkClient(server_token=server_token, account_token=account_token)
 
 
-@pytest.fixture(scope="module")
+@pytest.fixture
 def bounce(postmark):
     return postmark.bounces.get(723626745)
 
 
-@pytest.fixture(scope="module")
+@pytest.fixture
 def server(postmark):
     return postmark.server.get()
 
@@ -104,17 +71,17 @@ def email_template_batch(postmark, email):
     return postmark.emails.EmailTemplateBatch(email)
 
 
-@pytest.fixture(scope="module")
+@pytest.fixture
 def template(postmark):
     return postmark.templates.get(983381)
 
 
-@pytest.fixture(scope="module")
+@pytest.fixture
 def domain(postmark):
     return postmark.domains.get(64054)
 
 
-@pytest.fixture(scope="module")
+@pytest.fixture
 def outbound_message(postmark):
     return postmark.messages.outbound.all(count=1)[0]
 

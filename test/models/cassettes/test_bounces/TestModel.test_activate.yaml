@@ -1,0 +1,82 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.11.1
+      X-Postmark-Server-Token:
+      - API_TOKEN
+    method: GET
+    uri: https://api.postmarkapp.com/bounces/723626745
+  response:
+    body:
+      string: '{"ID":723626745,"Subject":"Test subject","Name":"Hard bounce","Type":"HardBounce","DumpAvailable":false,"Inactive":true,"CanActivate":true,"TypeCode":1,"BouncedAt":"2014-05-13T19:56:14.4218626-04:00","Description":"The
+        server was unable to deliver your message (ex: unknown user, mailbox not found).","Details":"smtp;550
+        5.1.1 The email account that you tried to reach does not exist. Please try
+        double-checking the recipient''s email address for typos or unnecessary spaces.
+        Learn more at http://support.google.com/mail/bin/answer.py?answer=6596 m5si18637995igr.52
+        - gsmtp","MessageID":"086415ac-9326-4ddb-9d95-c0d8db13532b","Email":"example@example.com"}'
+    headers:
+      Cache-Control:
+      - private
+      Content-Length:
+      - '655'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Tue, 04 Oct 2016 13:39:26 GMT
+      Server:
+      - unicorns-double-rainbow
+      X-Powered-By:
+      - ASP.NET
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '0'
+      User-Agent:
+      - python-requests/2.11.1
+      X-Postmark-Server-Token:
+      - API_TOKEN
+    method: PUT
+    uri: https://api.postmarkapp.com/bounces/723626745/activate
+  response:
+    body:
+      string: '{"Bounce":{"ID":723626745,"Subject":"Test subject","Name":"Hard bounce","Type":"HardBounce","DumpAvailable":false,"Inactive":false,"CanActivate":true,"TypeCode":1,"BouncedAt":"2014-05-13T19:56:14.4218626-04:00","Description":"The
+        server was unable to deliver your message (ex: unknown user, mailbox not found).","Details":"smtp;550
+        5.1.1 The email account that you tried to reach does not exist. Please try
+        double-checking the recipient''s email address for typos or unnecessary spaces.
+        Learn more at http://support.google.com/mail/bin/answer.py?answer=6596 m5si18637995igr.52
+        - gsmtp","MessageID":"086415ac-9326-4ddb-9d95-c0d8db13532b","Email":"example@example.com"},"Message":"OK"}'
+    headers:
+      Cache-Control:
+      - private
+      Content-Length:
+      - '682'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Tue, 04 Oct 2016 14:45:01 GMT
+      Server:
+      - unicorns-double-rainbow
+      X-Powered-By:
+      - ASP.NET
+    status:
+      code: 200
+      message: OK
+version: 1

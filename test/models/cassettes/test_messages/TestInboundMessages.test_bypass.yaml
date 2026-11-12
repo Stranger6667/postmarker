@@ -1,0 +1,39 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '0'
+      User-Agent:
+      - Postmarker/0.7.0.dev0
+      X-Postmark-Server-Token:
+      - SERVER_TOKEN
+    method: PUT
+    uri: https://api.postmarkapp.com/messages/inbound/123/bypass
+  response:
+    body:
+      string: '{"ErrorCode":701,"Message":"This message was not found or cannot be
+        bypassed."}'
+    headers:
+      Cache-Control:
+      - private
+      Content-Length:
+      - '79'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Sat, 25 Feb 2017 19:25:00 GMT
+      Server:
+      - unicorns-double-rainbow
+      X-Powered-By:
+      - ASP.NET
+    status:
+      code: 422
+      message: Unprocessable Entity
+version: 1

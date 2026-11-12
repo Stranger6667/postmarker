@@ -1,0 +1,346 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.11.1
+    method: GET
+    uri: https://status.postmarkapp.com/api/1.0/incidents
+  response:
+    body:
+      string: "[{\"id\":\"1965\",\"type\":\"DEGRADED\",\"created_at\":\"2016-10-08T02:11:00+00:00\",\"updated_at\":\"2016-10-08T02:31:00+00:00\",\"title\":\"Delaying
+        in inbound and outbound processing\",\"updates\":[{\"body\":\"We're queueing
+        up messages to be processed, affecting inbound and outbound traffic. We're
+        working to resolve ASAP.\",\"status\":\"Investigating\",\"timestamp\":\"2016-10-08T02:11:00+00:00\"},{\"body\":\"Outbound
+        and inbound messages should be back to getting processed immediately and saved
+        jobs are all processed. We're continuing to monitor the situation.\",\"status\":\"Pending\",\"timestamp\":\"2016-10-08T02:20:00+00:00\"},{\"body\":\"The
+        issue has been resolved and all queues are back to normal.\",\"status\":\"Resolved\",\"timestamp\":\"2016-10-08T02:31:00+00:00\"}],\"resolved_at\":\"2016-10-08T02:31:00+00:00\",\"body\":\"\"},{\"id\":\"1962\",\"type\":\"DEGRADED\",\"created_at\":\"2016-10-07T14:21:00+00:00\",\"updated_at\":\"2016-10-07T15:35:00+00:00\",\"title\":\"Experiencing
+        small delays in outbound sending\",\"updates\":[{\"body\":\"We're seeing some
+        small delays in emails getting sent out. We're working to get throughput back
+        up to normal.\",\"status\":\"Investigating\",\"timestamp\":\"2016-10-07T14:21:00+00:00\"},{\"body\":\"
+        The delay issue has been resolved, and all queues are back to normal. Thanks
+        for your patience.  \",\"status\":\"Resolved\",\"timestamp\":\"2016-10-07T15:35:00+00:00\"}],\"resolved_at\":\"2016-10-07T15:35:00+00:00\",\"body\":\"\"},{\"id\":\"1951\",\"type\":\"DEGRADED\",\"created_at\":\"2016-10-07T04:12:00+00:00\",\"updated_at\":\"2016-10-07T04:55:00+00:00\",\"title\":\"We
+        are currently experiencing inbound and outbound delays\",\"updates\":[{\"body\":\"Both
+        inbound and outbound messages are currently delayed. We are investigating
+        to find the cause.\",\"status\":\"Investigating\",\"timestamp\":\"2016-10-07T04:12:00+00:00\"},{\"body\":\"We've
+        identified the issue and queues are clearing out now.\",\"status\":\"Pending\",\"timestamp\":\"2016-10-07T04:49:00+00:00\"},{\"body\":\"The
+        delay issue has been resolved, and all queues are back to normal.\",\"status\":\"Resolved\",\"timestamp\":\"2016-10-07T04:55:00+00:00\"}],\"resolved_at\":\"2016-10-07T04:55:00+00:00\",\"body\":\"\"},{\"id\":\"1945\",\"type\":\"DEGRADED\",\"created_at\":\"2016-10-05T12:27:00+00:00\",\"updated_at\":\"2016-10-05T13:27:00+00:00\",\"title\":\"Delays
+        in inbound processing and sending emails by smtp\",\"updates\":[{\"body\":\"We're
+        seeing delays in outbound sending by SMTP and inbound processing. We're investigating
+        the issue.\",\"status\":\"Investigating\",\"timestamp\":\"2016-10-05T12:27:00+00:00\"},{\"body\":\"We
+        had malicious activity overwhelm our SMTP servers, we blocked the activities
+        and we\u2019re continuing to monitor the situation. Sending should be back
+        to normal.\",\"status\":\"Resolved\",\"timestamp\":\"2016-10-05T13:27:00+00:00\"}],\"resolved_at\":\"2016-10-05T13:27:00+00:00\",\"body\":\"\"},{\"id\":\"1942\",\"type\":\"DEGRADED\",\"created_at\":\"2016-10-04T14:18:00+00:00\",\"updated_at\":\"2016-10-04T14:58:00+00:00\",\"title\":\"Delays
+        in outbound sending\",\"updates\":[{\"body\":\"We're seeing small delays in
+        outbound sending and we're investigating the issue.\",\"status\":\"Investigating\",\"timestamp\":\"2016-10-04T14:18:00+00:00\"},{\"body\":\"The
+        issue with small outbound delays has been fixed, and all sending is back to
+        normal.\",\"status\":\"Resolved\",\"timestamp\":\"2016-10-04T14:58:00+00:00\"}],\"resolved_at\":\"2016-10-04T14:58:00+00:00\",\"body\":\"\"},{\"id\":\"1880\",\"type\":\"DEGRADED\",\"created_at\":\"2016-09-23T15:02:00+00:00\",\"updated_at\":\"2016-09-23T16:12:00+00:00\",\"title\":\"Inbound
+        and outbound processing delays\",\"updates\":[{\"body\":\"We are seeing some
+        delays in processing of inbound and outbound email. Our team is investigating
+        and we'll keep you posted.\",\"status\":\"Investigating\",\"timestamp\":\"2016-09-23T15:02:00+00:00\"},{\"body\":\"We
+        have identified and fixed the issue causing a delay in processing. Queues
+        are returning to normal.\",\"status\":\"Pending\",\"timestamp\":\"2016-09-23T15:53:00+00:00\"},{\"body\":\"We
+        have resolved the issue with processing delays and all queues are back to
+        normal.\",\"status\":\"Resolved\",\"timestamp\":\"2016-09-23T16:12:00+00:00\"}],\"resolved_at\":\"2016-09-23T16:12:00+00:00\",\"body\":\"\"},{\"id\":\"1875\",\"type\":\"DELAY\",\"created_at\":\"2016-09-14T07:48:00+00:00\",\"updated_at\":\"2016-09-14T08:13:00+00:00\",\"title\":\"Problems
+        with network connectivity and delays in SMTP sending\",\"updates\":[{\"body\":\"We
+        are noticing packet loss across a network transit provider. This may affect
+        connections to all endpoints depending on your location. Our data center is
+        looking into it and rerouting traffic until the problem is resolved. This
+        has also caused emails sent via SMTP to be queued on our servers to be processed
+        later. We're working on getting all queued emails sent out ASAP.\",\"status\":\"Investigating\",\"timestamp\":\"2016-09-14T07:48:00+00:00\"},{\"body\":\"Our
+        data center was able to reroute some networks to work around the connectivity
+        issues. All queued emails are sent now.\",\"status\":\"Resolved\",\"timestamp\":\"2016-09-14T08:13:00+00:00\"}],\"resolved_at\":\"2016-09-14T08:13:00+00:00\",\"body\":\"\"},{\"id\":\"1866\",\"type\":\"DEGRADED\",\"created_at\":\"2016-09-07T17:56:00+00:00\",\"updated_at\":\"2016-09-07T20:38:00+00:00\",\"title\":\"We
+        are currently seeing some delays for inbound and outbound messages\",\"updates\":[{\"body\":\"We
+        are currently seeing some delays for inbound and outbound messages. The team
+        is investigating and working on a fix right now.\",\"status\":\"Investigating\",\"timestamp\":\"2016-09-07T17:56:00+00:00\"},{\"body\":\"We
+        are still investigating the cause of inbound and outbound message delays.
+        All messages are being saved, and we'll update the status as soon as we make
+        some more progress.\",\"status\":\"Investigating\",\"timestamp\":\"2016-09-07T18:48:00+00:00\"},{\"body\":\"All
+        new messages should now be processed and sent normally. We are starting to
+        send out messages that were in queue, and will update once all the queues
+        have been cleared.\",\"status\":\"Pending\",\"timestamp\":\"2016-09-07T19:05:00+00:00\"},{\"body\":\"All
+        messages have now been processed, and sending/receiving has returned to normal.\",\"status\":\"Resolved\",\"timestamp\":\"2016-09-07T20:38:00+00:00\"}],\"resolved_at\":\"2016-09-07T20:38:00+00:00\",\"body\":\"\"},{\"id\":\"1863\",\"type\":\"DEGRADED\",\"created_at\":\"2016-08-18T12:26:00+00:00\",\"updated_at\":\"2016-08-18T13:54:00+00:00\",\"title\":\"Statistics
+        endpoints and UI for a small number of Servers are temporarily unavailable.
+        \",\"updates\":[{\"body\":\"We have identified the issue and are actively
+        resolving it\",\"status\":\"Pending\",\"timestamp\":\"2016-08-18T12:26:00+00:00\"},{\"body\":\"The
+        Stats endpoints and UI in all affected Servers are back to working normally
+        again. Thanks for your patience!\",\"status\":\"Resolved\",\"timestamp\":\"2016-08-18T13:54:00+00:00\"}],\"resolved_at\":\"2016-08-18T13:54:00+00:00\",\"body\":\"\"},{\"id\":\"1829\",\"type\":\"MAINTENANCE\",\"created_at\":\"2016-07-31T01:04:00+00:00\",\"updated_at\":\"2016-07-31T01:20:00+00:00\",\"title\":\"Database
+        maintenance - messages may be delayed shortly\",\"updates\":[{\"body\":\"Messages
+        may be queued up to 10 mins during while we perform a database update.\",\"status\":\"Pending\",\"timestamp\":\"2016-07-31T01:04:00+00:00\"},{\"body\":\"Database
+        maintenance performed, queued messages going out now.\",\"status\":\"Pending\",\"timestamp\":\"2016-07-31T01:14:00+00:00\"},{\"body\":\"All
+        queued messages should be sent out now.\",\"status\":\"Resolved\",\"timestamp\":\"2016-07-31T01:20:00+00:00\"}],\"resolved_at\":\"2016-07-31T01:20:00+00:00\",\"body\":\"\"},{\"id\":\"1826\",\"type\":\"DEGRADED\",\"created_at\":\"2016-07-29T13:39:00+00:00\",\"updated_at\":\"2016-07-29T14:17:00+00:00\",\"title\":\"We
+        are currently seeing some delays for inbound and outbound messages\",\"updates\":[{\"body\":\"We
+        are currently seeing some delays for inbound and outbound messages. The team
+        is investigating and working on a fix right now.\",\"status\":\"Investigating\",\"timestamp\":\"2016-07-29T13:39:00+00:00\"},{\"body\":\"Outbound
+        sending and Inbound processing is now back to normal and all messages previously
+        queued up have been sent out. \",\"status\":\"Resolved\",\"timestamp\":\"2016-07-29T14:17:00+00:00\"}],\"resolved_at\":\"2016-07-29T14:17:00+00:00\",\"body\":\"\"},{\"id\":\"1762\",\"type\":\"DEGRADED\",\"created_at\":\"2016-07-25T14:24:00+00:00\",\"updated_at\":\"2016-07-25T20:37:00+00:00\",\"title\":\"We
+        are currently experiencing inbound and outbound delays\",\"updates\":[{\"body\":\"We
+        are currently experiencing inbound and outbound delays. The team is on it
+        and working on a fix.\",\"status\":\"Investigating\",\"timestamp\":\"2016-07-25T14:24:00+00:00\"},{\"body\":\"We
+        are still working on identifying and fixing the cause of the current inbound
+        and outbound delays.\",\"status\":\"Investigating\",\"timestamp\":\"2016-07-25T15:06:00+00:00\"},{\"body\":\"New
+        messages are being processed and sent right away and we're starting to work
+        through the backlog in queue now. \",\"status\":\"Pending\",\"timestamp\":\"2016-07-25T16:11:00+00:00\"},{\"body\":\"We
+        are still processing the backlog of messages in queue for Inbound and Outbound
+        but things are starting to progress much faster now. \",\"status\":\"Pending\",\"timestamp\":\"2016-07-25T18:58:00+00:00\"},{\"body\":\"All
+        Inbound and Outbound queues are back to normal and everything is running smoothy
+        again. Thanks so much for your patience while we worked through this. Please
+        email support@postmarkapp.com if you are noticing any issues.  \",\"status\":\"Resolved\",\"timestamp\":\"2016-07-25T20:37:00+00:00\"}],\"resolved_at\":\"2016-07-25T20:37:00+00:00\",\"body\":\"\"},{\"id\":\"1741\",\"type\":\"DEGRADED\",\"created_at\":\"2016-07-19T11:44:00+00:00\",\"updated_at\":\"2016-07-19T12:42:00+00:00\",\"title\":\"Activity
+        pages temporary disabled\",\"updates\":[{\"body\":\"We've disabled server
+        activity pages in UI while we investigate some issues. Outbound sending and
+        Inbound processing is not affected in any way.\",\"status\":\"Investigating\",\"timestamp\":\"2016-07-19T11:44:00+00:00\"},{\"body\":\"Activity
+        pages are working now. Inbound processing is delayed a bit, we are working
+        on fixing the speed issue.\",\"status\":\"Pending\",\"timestamp\":\"2016-07-19T12:30:00+00:00\"},{\"body\":\"The
+        activity page is back up and Inbound processing times are back to normal.
+        \ \",\"status\":\"Resolved\",\"timestamp\":\"2016-07-19T12:42:00+00:00\"}],\"resolved_at\":\"2016-07-19T12:42:00+00:00\",\"body\":\"\"},{\"id\":\"1730\",\"type\":\"DEGRADED\",\"created_at\":\"2016-07-12T01:20:00+00:00\",\"updated_at\":\"2016-07-12T03:04:00+00:00\",\"title\":\"Outbound
+        and inbound messages delayed\",\"updates\":[{\"body\":\"We're currently seeing
+        some delays on outbound and inbound messages. The team is working on a fix
+        right now. \",\"status\":\"Investigating\",\"timestamp\":\"2016-07-12T01:20:00+00:00\"},{\"body\":\"We're
+        seeing message delays of about 16 minutes at the moment. The team is working
+        working on resolving the issue and we'll keep posting updates.\",\"status\":\"Investigating\",\"timestamp\":\"2016-07-12T01:59:00+00:00\"},{\"body\":\"We've
+        identified and resolved the issue with message delays. Queues are starting
+        to return to normal.\",\"status\":\"Pending\",\"timestamp\":\"2016-07-12T02:20:00+00:00\"},{\"body\":\"Message
+        queues have caught up and all sending is back to normal.\",\"status\":\"Resolved\",\"timestamp\":\"2016-07-12T03:04:00+00:00\"}],\"resolved_at\":\"2016-07-12T03:04:00+00:00\",\"body\":\"\"},{\"id\":\"1727\",\"type\":\"DELAY\",\"created_at\":\"2016-07-11T15:16:00+00:00\",\"updated_at\":\"2016-07-11T15:32:00+00:00\",\"title\":\"Outbound
+        & Inbound messages slightly delayed\",\"updates\":[{\"body\":\"We're currently
+        seeing some delays on Inbound & Outbound messages. The team is working on
+        a fix right now. \",\"status\":\"Pending\",\"timestamp\":\"2016-07-11T15:16:00+00:00\"},{\"body\":\"Outbound
+        sending & Inbound processing are back to normal speeds now and the queues
+        are empty. \",\"status\":\"Resolved\",\"timestamp\":\"2016-07-11T15:32:00+00:00\"}],\"resolved_at\":\"2016-07-11T15:32:00+00:00\",\"body\":\"\"},{\"id\":\"1724\",\"type\":\"DELAY\",\"created_at\":\"2016-07-09T12:43:00+00:00\",\"updated_at\":\"2016-07-09T12:55:00+00:00\",\"title\":\"DDOS
+        causing connection timeouts and network errors\",\"updates\":[{\"body\":\"We
+        are currently experiencing intermittent timeouts and network errors due to
+        a DDOS attack on our network. We are working with our data center to resolve
+        the issue.\",\"status\":\"Investigating\",\"timestamp\":\"2016-07-09T12:43:00+00:00\"},{\"body\":\"All
+        services are back online and we'll continue to monitor closely.\",\"status\":\"Resolved\",\"timestamp\":\"2016-07-09T12:55:00+00:00\"}],\"resolved_at\":\"2016-07-09T12:55:00+00:00\",\"body\":\"\"},{\"id\":\"1721\",\"type\":\"MAINTENANCE\",\"created_at\":\"2016-07-02T11:00:00+00:00\",\"updated_at\":\"2016-07-02T11:23:00+00:00\",\"title\":\"We're
+        performing a database maintenance\",\"updates\":[{\"body\":\"Inbound and outbound
+        will be delayed for an estimated ten minutes while we perform a database maintenance.\",\"status\":\"Pending\",\"timestamp\":\"2016-07-02T11:00:00+00:00\"},{\"body\":\"Database
+        maintenance is performed and queues are being processed.\",\"status\":\"Resolved\",\"timestamp\":\"2016-07-02T11:23:00+00:00\"}],\"resolved_at\":\"2016-07-02T11:23:00+00:00\",\"body\":\"\"},{\"id\":\"1718\",\"type\":\"DEGRADED\",\"created_at\":\"2016-06-30T13:22:00+00:00\",\"updated_at\":\"2016-06-30T13:42:00+00:00\",\"title\":\"Inbound
+        processing is slightly delayed. Outbound sending is not being affected. \",\"updates\":[{\"body\":\"We're
+        working on a fix right now. \",\"status\":\"Pending\",\"timestamp\":\"2016-06-30T13:22:00+00:00\"},{\"body\":\"Inbound
+        speeds are back to normal and the queue is being emptied out now. Thanks for
+        your patience!\",\"status\":\"Resolved\",\"timestamp\":\"2016-06-30T13:42:00+00:00\"}],\"resolved_at\":\"2016-06-30T13:42:00+00:00\",\"body\":\"\"},{\"id\":\"1714\",\"type\":\"DEGRADED\",\"created_at\":\"2016-06-27T13:50:00+00:00\",\"updated_at\":\"2016-06-27T16:04:00+00:00\",\"title\":\"Outbound
+        Activity statuses are currently delayed but sending is not affected. \",\"updates\":[{\"body\":\"New
+        messages are updating immediately & statuses for messages sent between 9:27
+        and 9:43 will update shortly. \",\"status\":\"Pending\",\"timestamp\":\"2016-06-27T13:50:00+00:00\"},{\"body\":\"All
+        Outbound activity is now up to date from today between 9:27am and 9:34am EST.
+        \ \",\"status\":\"Resolved\",\"timestamp\":\"2016-06-27T16:04:00+00:00\"}],\"resolved_at\":\"2016-06-27T16:04:00+00:00\",\"body\":\"\"},{\"id\":\"1712\",\"type\":\"DEGRADED\",\"created_at\":\"2016-06-23T12:56:00+00:00\",\"updated_at\":\"2016-06-28T13:14:00+00:00\",\"title\":\"We
+        are continuing to recover activity history from the Elastic Search issue this
+        week.\",\"updates\":[{\"body\":\"All activity from June is available & we're
+        working through dates in May now.\",\"status\":\"Pending\",\"timestamp\":\"2016-06-23T12:56:00+00:00\"},{\"body\":\"All
+        activity from May and June is now up to date except for Bounces which are
+        still getting recovered. \",\"status\":\"Resolved\",\"timestamp\":\"2016-06-28T13:14:00+00:00\"}],\"resolved_at\":\"2016-06-28T13:14:00+00:00\",\"body\":\"\"},{\"id\":\"1709\",\"type\":\"DEGRADED\",\"created_at\":\"2016-06-22T14:13:00+00:00\",\"updated_at\":\"2016-06-22T15:31:00+00:00\",\"title\":\"Activity
+        statuses are delayed (no sending/receiving delays)\",\"updates\":[{\"body\":\"Sending
+        and receiving are fine, but activity statuses are currently approximately
+        5 minutes delayed.\",\"status\":\"Investigating\",\"timestamp\":\"2016-06-22T14:13:00+00:00\"},{\"body\":\"Activity
+        statuses are now back to normal (no delays)\",\"status\":\"Resolved\",\"timestamp\":\"2016-06-22T15:31:00+00:00\"}],\"resolved_at\":\"2016-06-22T15:31:00+00:00\",\"body\":\"\"},{\"id\":\"1681\",\"type\":\"DEGRADED\",\"created_at\":\"2016-06-20T19:03:00+00:00\",\"updated_at\":\"2016-06-20T23:12:00+00:00\",\"title\":\"Inbound
+        and outbound messages delayed\",\"updates\":[{\"body\":\"We're investigating
+        the cause and working on an immediate fix. \",\"status\":\"Investigating\",\"timestamp\":\"2016-06-20T19:03:00+00:00\"},{\"body\":\"Still
+        investigating: we're seeing delays on both inbound and outbound processing
+        at the moment.\",\"status\":\"Investigating\",\"timestamp\":\"2016-06-20T22:00:00+00:00\"},{\"body\":\"Outbound
+        and inbound processing have returned to normal, but the Activity Feed is currently
+        not updating.\",\"status\":\"Investigating\",\"timestamp\":\"2016-06-20T22:41:00+00:00\"},{\"body\":\"All
+        sending and receiving back to normal. Past activity history is not currently
+        shown, and may take some time to recover fully.\",\"status\":\"Resolved\",\"timestamp\":\"2016-06-20T23:12:00+00:00\"}],\"resolved_at\":\"2016-06-20T23:12:00+00:00\",\"body\":\"<p>We
+        published an update about recent service issues here:&nbsp;<a href=\\\"https://postmarkapp.com/blog/recent-service-issues-an-update\\\">https://postmarkapp.com/blog/r...</a></p>\"},{\"id\":\"1678\",\"type\":\"DOWN\",\"created_at\":\"2016-06-16T05:17:00+00:00\",\"updated_at\":\"2016-06-16T05:20:00+00:00\",\"title\":\"Short
+        service interruption\",\"updates\":[{\"body\":\"We noticed a short service
+        interruption. Everything is up and running and we're monitoring services.
+        \",\"status\":\"Investigating\",\"timestamp\":\"2016-06-16T05:17:00+00:00\"},{\"body\":\"Services
+        are all up and running. We're watching everything to make sure the issue is
+        fully resolved. \",\"status\":\"Resolved\",\"timestamp\":\"2016-06-16T05:20:00+00:00\"}],\"resolved_at\":\"2016-06-16T05:20:00+00:00\",\"body\":\"\"},{\"id\":\"1648\",\"type\":\"DELAY\",\"created_at\":\"2016-06-08T19:04:00+00:00\",\"updated_at\":\"2016-06-09T03:13:00+00:00\",\"title\":\"There
+        are some delays in sending to domains using McAfee\",\"updates\":[{\"body\":\"We're
+        investigating and working on the issue as a priority.\",\"status\":\"Investigating\",\"timestamp\":\"2016-06-08T19:04:00+00:00\"},{\"body\":\"All
+        queues have subsided and are back to normal. Thanks for your patience!\",\"status\":\"Resolved\",\"timestamp\":\"2016-06-09T03:13:00+00:00\"}],\"resolved_at\":\"2016-06-09T03:13:00+00:00\",\"body\":\"\"},{\"id\":\"1642\",\"type\":\"DOWN\",\"created_at\":\"2016-06-01T23:23:00+00:00\",\"updated_at\":\"2016-06-01T23:55:00+00:00\",\"title\":\"Connectivitiy
+        issues\",\"updates\":[{\"body\":\"It appears we\u2019re experiencing a DDOS
+        attack on our network. Email requests are being saved while we work to resolve
+        this. We\u2019ll update here as we have more information\",\"status\":\"Investigating\",\"timestamp\":\"2016-06-01T23:23:00+00:00\"},{\"body\":\"Services
+        are back up now & we're working through the queues. A major network issue
+        was impacting our datacenter and not a DDOS attack. We are still trying to
+        discover the cause of the situation. Apologies to those customers who experienced
+        any issues.  We will continue to monitor very closely.\",\"status\":\"Resolved\",\"timestamp\":\"2016-06-01T23:55:00+00:00\"}],\"resolved_at\":\"2016-06-01T23:55:00+00:00\",\"body\":\"\"},{\"id\":\"1639\",\"type\":\"DEGRADED\",\"created_at\":\"2016-05-31T14:29:00+00:00\",\"updated_at\":\"2016-05-31T14:59:00+00:00\",\"title\":\"Messages
+        are being sent and processed immediately but message statuses are slightly
+        delayed in being updated. \",\"updates\":[{\"body\":\"We're working on an
+        immediate fix.\",\"status\":\"Investigating\",\"timestamp\":\"2016-05-31T14:29:00+00:00\"},{\"body\":\"Message
+        statuses are being updated right away and everything is back to normal now.
+        \ \",\"status\":\"Resolved\",\"timestamp\":\"2016-05-31T14:59:00+00:00\"}],\"resolved_at\":\"2016-05-31T14:59:00+00:00\",\"body\":\"\"},{\"id\":\"1633\",\"type\":\"DOWN\",\"created_at\":\"2016-05-26T10:05:00+00:00\",\"updated_at\":\"2016-05-26T14:31:00+00:00\",\"title\":\"DDOS
+        causing connection issues\",\"updates\":[{\"body\":\" It appears we\u2019re
+        experiencing a DDOS attack on our network. Email requests are being saved
+        while we work to resolve this. We\u2019ll update here as we have more information.\",\"status\":\"Investigating\",\"timestamp\":\"2016-05-26T10:05:00+00:00\"},{\"body\":\"We
+        have our data center working on mitigation of the DDOS attack. We'll keep
+        everyone posted as we have more answers.\",\"status\":\"Investigating\",\"timestamp\":\"2016-05-26T10:19:00+00:00\"},{\"body\":\"We've
+        identified the DDOS sources and have filters in place now. Connectivity is
+        coming back but we want to continue monitoring to be sure. Stand by.\",\"status\":\"Pending\",\"timestamp\":\"2016-05-26T10:38:00+00:00\"},{\"body\":\"We've
+        confirmed that all services are back to normal and the attack has been mitigated.
+        Emails queued during the outage will be retried and sent. We'll do a more
+        in depth review and post when we have more info.\",\"status\":\"Resolved\",\"timestamp\":\"2016-05-26T10:44:00+00:00\"},{\"body\":\"Overview
+        of today's DDOS attack:\",\"status\":\"Resolved\",\"timestamp\":\"2016-05-26T14:31:00+00:00\"}],\"resolved_at\":\"2016-05-26T14:31:00+00:00\",\"body\":\"<p>At
+        around 5:54am ET we were a target of a DDOS attack. This attack lasted about
+        40 minutes until we were able to block it, stopping around 6:34am ET. At that
+        time all services became available again.&nbsp;</p>\\r\\n\\r\\n\\r\\n\\r\\n\\r\\n\\r\\n<p>This
+        was a widespread outage on all services. Our API did fail over to a second
+        data center to queue messages while the primary data center was down. These
+        messages were submitted again once the application came back.</p>\\r\\n\\r\\n\\r\\n\\r\\n\\r\\n\\r\\n\\r\\n\\r\\n<p>The
+        attack was identified as an IP Fragmentation Attack (<a href=\\\"https://www.incapsula.com/ddos/attack-glossary/ip-fragmentation-attack-teardrop.html\\\">https://www.incapsula.com/ddos/attack-glossary/ip-fragmentation-attack-teardrop.html</a>)
+        which was targeted at one of our mail servers. The size of the attack managed
+        to take down our firewalls, essentially preventing any traffic to our endpoints.&nbsp;</p>\\r\\n\\r\\n\\r\\n\\r\\n\\r\\n\\r\\n\\r\\n\\r\\n<p>This
+        is not our first DDOS, so we are working hard to find a solution. Part of
+        this involves hardware devices to mitigate the attacks automatically, but
+        we also need to spend some time on our network design to prevent it further.&nbsp;</p>\\r\\n\\r\\n\\r\\n\\r\\n\\r\\n\\r\\n\\r\\n\\r\\n<p>We're
+        really sorry for the issues. We know you depend on us and no matter what the
+        cause, it is our responsibility to keep everything available. We're working
+        on ways to keep that commitment.</p>\"},{\"id\":\"1629\",\"type\":\"DELAY\",\"created_at\":\"2016-05-25T19:17:00+00:00\",\"updated_at\":\"2016-05-26T02:09:00+00:00\",\"title\":\"We're
+        seeing some delays on messages being sent to Hotmail caused by an issue on
+        their end. \",\"updates\":[{\"body\":\"We'll continue to monitor and post
+        an update when we start to see some improvements. \",\"status\":\"Investigating\",\"timestamp\":\"2016-05-25T19:17:00+00:00\"},{\"body\":\"We're
+        still seeing Hotmail having trouble accepting emails, but our mail server
+        queues to hotmail.com are starting to improve.\",\"status\":\"Pending\",\"timestamp\":\"2016-05-26T00:56:00+00:00\"},{\"body\":\"Delivery
+        times to hotmail.com are returned to normal now.\",\"status\":\"Resolved\",\"timestamp\":\"2016-05-26T02:09:00+00:00\"}],\"resolved_at\":\"2016-05-26T02:09:00+00:00\",\"body\":\"\"},{\"id\":\"1614\",\"type\":\"DEGRADED\",\"created_at\":\"2016-05-23T12:39:00+00:00\",\"updated_at\":\"2016-05-23T14:59:00+00:00\",\"title\":\"Inbound/Outbound
+        activity access disabled\",\"updates\":[{\"body\":\"Cluster showing email
+        Activity is currently under maintenance and access to Activity will be restricted
+        during times. Everything else works without any delays or issues. We will
+        post update when the maintenance is done.\",\"status\":\"Pending\",\"timestamp\":\"2016-05-23T12:39:00+00:00\"},{\"body\":\"The
+        Activity page has been enabled so you can view all sent and processed messages
+        normally again.  Thanks for your patience. \",\"status\":\"Resolved\",\"timestamp\":\"2016-05-23T14:59:00+00:00\"}],\"resolved_at\":\"2016-05-23T14:59:00+00:00\",\"body\":\"\"},{\"id\":\"1587\",\"type\":\"DEGRADED\",\"created_at\":\"2016-05-13T10:31:00+00:00\",\"updated_at\":\"2016-05-13T12:08:00+00:00\",\"title\":\"Delays
+        in outbound sending\",\"updates\":[{\"body\":\"We're currently investigating
+        some brief delays in outbound sending.\",\"status\":\"Investigating\",\"timestamp\":\"2016-05-13T10:31:00+00:00\"},{\"body\":\"Sending
+        email through API is back to normal, we are investigating sporadic delays
+        for sending by SMTP.\",\"status\":\"Investigating\",\"timestamp\":\"2016-05-13T11:33:00+00:00\"},{\"body\":\"SMTP
+        sending should be back to normal now, we are continuing to monitor the situation.\",\"status\":\"Pending\",\"timestamp\":\"2016-05-13T11:58:00+00:00\"},{\"body\":\"All
+        the emails in our SMTP queues have been sent out and new emails should be
+        sent immediately. \",\"status\":\"Resolved\",\"timestamp\":\"2016-05-13T12:08:00+00:00\"}],\"resolved_at\":\"2016-05-13T12:08:00+00:00\",\"body\":\"\"},{\"id\":\"1583\",\"type\":\"DEGRADED\",\"created_at\":\"2016-05-12T23:14:00+00:00\",\"updated_at\":\"2016-05-12T23:32:00+00:00\",\"title\":\"Delays
+        in activity UI\",\"updates\":[{\"body\":\"We've disabled activity UI while
+        we investigate some issues. Outbound sending is not affected.\",\"status\":\"Investigating\",\"timestamp\":\"2016-05-12T23:14:00+00:00\"},{\"body\":\"Activity
+        has been enabled, all previous issues have been resolved.  Thanks for your
+        patience. \",\"status\":\"Resolved\",\"timestamp\":\"2016-05-12T23:32:00+00:00\"}],\"resolved_at\":\"2016-05-12T23:32:00+00:00\",\"body\":\"\"},{\"id\":\"1581\",\"type\":\"DELAY\",\"created_at\":\"2016-05-12T16:48:00+00:00\",\"updated_at\":\"2016-05-12T23:33:00+00:00\",\"title\":\"Delays
+        and bounces to Microsoft domains\",\"updates\":[{\"body\":\"Messages being
+        sent to Microsoft domains such as hotmail, live, outlook & msn are being delayed
+        or generating soft bounces with the error Transaction Failed. This is not
+        a Postmark specific issue and is coming from Microsoft globally. \",\"status\":\"Investigating\",\"timestamp\":\"2016-05-12T16:48:00+00:00\"},{\"body\":\"We're
+        no longer seeing delays and bounces to Microsoft domains. \",\"status\":\"Resolved\",\"timestamp\":\"2016-05-12T23:33:00+00:00\"}],\"resolved_at\":\"2016-05-12T23:33:00+00:00\",\"body\":\"\"},{\"id\":\"1575\",\"type\":\"DELAY\",\"created_at\":\"2016-04-26T17:12:00+00:00\",\"updated_at\":\"2016-04-26T17:52:00+00:00\",\"title\":\"Outbound
+        sending delays\",\"updates\":[{\"body\":\"We're seeing delays on outbound
+        sending and are investigating the issue. Inbound is unaffected. We'll post
+        updates here as we learn more.\",\"status\":\"Investigating\",\"timestamp\":\"2016-04-26T17:12:00+00:00\"},{\"body\":\"Delivery
+        speeds are returning to normal. We'll continue to monitor things closely,
+        but everything is running smoothly again.\",\"status\":\"Resolved\",\"timestamp\":\"2016-04-26T17:52:00+00:00\"}],\"resolved_at\":\"2016-04-26T17:52:00+00:00\",\"body\":\"\"},{\"id\":\"1537\",\"type\":\"MAINTENANCE\",\"created_at\":\"2016-04-21T15:41:00+00:00\",\"updated_at\":\"2016-04-21T17:28:00+00:00\",\"title\":\"[Maintenance]
+        Today, April 21st, at 12pm EDT we will be performing an emergency update.\",\"updates\":[{\"body\":\"During
+        this time all emails will be safely queued for approximately 5 - 10 minutes,
+        all other API end points will be down.\",\"status\":\"Pending\",\"timestamp\":\"2016-04-21T15:41:00+00:00\"},{\"body\":\"The
+        maintenance is now complete and we are working through sending any queued
+        messages now. All API end points are now back up. \",\"status\":\"Pending\",\"timestamp\":\"2016-04-21T16:22:00+00:00\"},{\"body\":\"All
+        messages previously in queue have been sent.  Thanks for your patience today.
+        If you are noticing any issues please let us know: support@postmarkapp.com
+        \",\"status\":\"Resolved\",\"timestamp\":\"2016-04-21T17:28:00+00:00\"}],\"resolved_at\":\"2016-04-21T17:28:00+00:00\",\"body\":\"<p>We\u2019ve
+        identified a performance issue in our MySQL cluster that is causing email
+        delays. The resolution to this requires a controlled restart. In order to
+        gracefully queue emails, we will bring services down for 5 - 10 minutes while
+        we make the update. During this time any API end points other than /email
+        will not be reachable. Once finished, all queued emails will be resent and
+        we will update the status page.</p>\\r\\n\\r\\n<p>Sorry for the short notice.
+        We had to make a call and felt this was the best approach to avoid longer
+        term issues throughout the day.</p>\"},{\"id\":\"1501\",\"type\":\"DELAY\",\"created_at\":\"2016-04-20T15:32:00+00:00\",\"updated_at\":\"2016-04-20T23:22:00+00:00\",\"title\":\"Outbound
+        sending delays\",\"updates\":[{\"body\":\"We're actively working on this and
+        will post another update shortly. Inbound processing is not being affected.\",\"status\":\"Investigating\",\"timestamp\":\"2016-04-20T15:32:00+00:00\"},{\"body\":\"We
+        are still working through the queues & getting sending speeds back to normal
+        as quickly as we can. Thanks for your patience.\",\"status\":\"Investigating\",\"timestamp\":\"2016-04-20T16:39:00+00:00\"},{\"body\":\"We're
+        continuing to make progress on outbound delivery speeds and beginning to see
+        some delivery times closer to expected ranges.\",\"status\":\"Investigating\",\"timestamp\":\"2016-04-20T18:52:00+00:00\"},{\"body\":\"Sending
+        delays have been resolved and delivery times are now back to normal.\",\"status\":\"Resolved\",\"timestamp\":\"2016-04-20T23:22:00+00:00\"}],\"resolved_at\":\"2016-04-20T23:22:00+00:00\",\"body\":\"\"},{\"id\":\"1498\",\"type\":\"DEGRADED\",\"created_at\":\"2016-04-15T19:19:00+00:00\",\"updated_at\":\"2016-04-15T19:31:00+00:00\",\"title\":\"Outbound
+        sending is currently delayed\",\"updates\":[{\"body\":\"We're investigating
+        and will post another update shortly. Inbound processing is not being affected.
+        \ \",\"status\":\"Investigating\",\"timestamp\":\"2016-04-15T19:19:00+00:00\"},{\"body\":\"Sending
+        has returned to normal speeds & any messages in queue have now been sent.
+        \ We're continuing to monitor. \",\"status\":\"Resolved\",\"timestamp\":\"2016-04-15T19:31:00+00:00\"}],\"resolved_at\":\"2016-04-15T19:31:00+00:00\",\"body\":\"\"},{\"id\":\"1495\",\"type\":\"DELAY\",\"created_at\":\"2016-04-11T22:14:00+00:00\",\"updated_at\":\"2016-04-11T23:13:00+00:00\",\"title\":\"Inbound
+        processing and webhooks are currently delayed\",\"updates\":[{\"body\":\"We're
+        working on an immediate fix.  (Outbound sending is not being affected)\",\"status\":\"Investigating\",\"timestamp\":\"2016-04-11T22:14:00+00:00\"},{\"body\":\"Issues
+        with Inbound processing and webhooks have been resolved & we are back to normal
+        speeds. \",\"status\":\"Resolved\",\"timestamp\":\"2016-04-11T23:13:00+00:00\"}],\"resolved_at\":\"2016-04-11T23:13:00+00:00\",\"body\":\"\"},{\"id\":\"1492\",\"type\":\"DEGRADED\",\"created_at\":\"2016-04-09T21:31:00+00:00\",\"updated_at\":\"2016-04-09T23:46:00+00:00\",\"title\":\"Sending
+        delays to Hotmail\",\"updates\":[{\"body\":\"We are noticing connection issues
+        to Hotmail and Outlook causing delays up to one minute. These issues seem
+        to be related to capacity problems at the ISP. \",\"status\":\"Investigating\",\"timestamp\":\"2016-04-09T21:31:00+00:00\"},{\"body\":\"Delivery
+        to Hotmail and Outlook is now back to normal. \",\"status\":\"Resolved\",\"timestamp\":\"2016-04-09T23:46:00+00:00\"}],\"resolved_at\":\"2016-04-09T23:46:00+00:00\",\"body\":\"\"},{\"id\":\"1488\",\"type\":\"DEGRADED\",\"created_at\":\"2016-04-09T02:05:00+00:00\",\"updated_at\":\"2016-04-09T02:29:00+00:00\",\"title\":\"Sending
+        delays to Yahoo\",\"updates\":[{\"body\":\"We're monitoring slower delivery
+        time to Yahoo!. We'll keep monitoring and update when we have more information.
+        \",\"status\":\"Investigating\",\"timestamp\":\"2016-04-09T02:05:00+00:00\"},{\"body\":\"The
+        queues are clearing much faster, we anticipate normal speeds within a few
+        minutes.\",\"status\":\"Pending\",\"timestamp\":\"2016-04-09T02:15:00+00:00\"},{\"body\":\"Sending
+        is back to normal. \",\"status\":\"Resolved\",\"timestamp\":\"2016-04-09T02:29:00+00:00\"}],\"resolved_at\":\"2016-04-09T02:29:00+00:00\",\"body\":\"\"},{\"id\":\"1430\",\"type\":\"DELAY\",\"created_at\":\"2016-03-20T17:44:00+00:00\",\"updated_at\":\"2016-03-20T20:32:00+00:00\",\"title\":\"Connection
+        issues and errors delivering email to Yahoo\",\"updates\":[{\"body\":\"We
+        are seeing connection issues and errors delivering email to Yahoo. All emails
+        are being queued and sending slower than normal. We will keep an eye on it
+        and post with updates when we have more info.\",\"status\":\"Investigating\",\"timestamp\":\"2016-03-20T17:44:00+00:00\"},{\"body\":\"We\u2019re
+        no longer seeing connection errors when sending mail to Yahoo domains, but
+        other sources are reporting that end-user recipients may still not be seeing
+        some email: http://downdetector.com/status/yahoo-mail\",\"status\":\"Resolved\",\"timestamp\":\"2016-03-20T20:32:00+00:00\"}],\"resolved_at\":\"2016-03-20T20:32:00+00:00\",\"body\":\"\"},{\"id\":\"1448\",\"type\":\"DELAY\",\"created_at\":\"2016-03-18T10:42:00+00:00\",\"updated_at\":\"2016-03-18T10:47:00+00:00\",\"title\":\"Delays
+        on outbound sending\",\"updates\":[{\"body\":\"We\u2019re experiencing some
+        emails delays on outbound sending. The team is working to resolve the issue.\",\"status\":\"Investigating\",\"timestamp\":\"2016-03-18T10:42:00+00:00\"},{\"body\":\"Sending
+        is back to normal. We\u2019re still monitoring closely.\",\"status\":\"Resolved\",\"timestamp\":\"2016-03-18T10:47:00+00:00\"}],\"resolved_at\":\"2016-03-18T10:47:00+00:00\",\"body\":\"\"},{\"id\":\"1451\",\"type\":\"DOWN\",\"created_at\":\"2016-03-06T14:39:00+00:00\",\"updated_at\":\"2016-03-06T15:14:00+00:00\",\"title\":\"Sporadic
+        network outages\",\"updates\":[{\"body\":\"We\u2019re seeing sporadic network
+        outages. The team is inevestigating but at first glance appears to be a denial
+        of service. Please standby.\",\"status\":\"Investigating\",\"timestamp\":\"2016-03-06T14:39:00+00:00\"},{\"body\":\"We\u2019re
+        investigating network connectivity problems at our data center. You might
+        see timeouts for API or SMTP connections and we\u2019re trying to resolve
+        ASAP.\",\"status\":\"Investigating\",\"timestamp\":\"2016-03-06T14:41:00+00:00\"},{\"body\":\"Messages
+        are being saved offline while we figure out what\u2019s going on. Email sending
+        and recieving is delayed in the meantime.\",\"status\":\"Investigating\",\"timestamp\":\"2016-03-06T14:45:00+00:00\"},{\"body\":\"We
+        should be back up after mitigating the DDOS attack with our data center. Backlog
+        of emails are getting processed now.\",\"status\":\"Resolved\",\"timestamp\":\"2016-03-06T15:14:00+00:00\"}],\"resolved_at\":\"2016-03-06T15:14:00+00:00\",\"body\":\"\"},{\"id\":\"1456\",\"type\":\"DOWN\",\"created_at\":\"2016-02-10T17:03:00+00:00\",\"updated_at\":\"2016-02-10T17:22:00+00:00\",\"title\":\"System
+        downtime\",\"updates\":[{\"body\":\"We\u2019ve been alerted that all systems
+        are down right now. The team is looking at what\u2019s going on, please standby.\",\"status\":\"Investigating\",\"timestamp\":\"2016-02-10T17:03:00+00:00\"},{\"body\":\"Everything
+        is backup now and any queued emails are being processed. Thanks for your patience.\",\"status\":\"Resolved\",\"timestamp\":\"2016-02-10T17:22:00+00:00\"}],\"resolved_at\":\"2016-02-10T17:22:00+00:00\",\"body\":\"\"},{\"id\":\"1459\",\"type\":\"DEGRADED\",\"created_at\":\"2016-02-01T19:45:00+00:00\",\"updated_at\":\"2016-02-01T22:40:00+00:00\",\"title\":\"Activity
+        has been turned off temporarily\",\"updates\":[{\"body\":\"Activity has been
+        turned off temporarily while we work though an issue.  Outbound sending and
+        Inbound processing is not being affected in any way.  We\u2019ll turn activity
+        back on as soon as possible. \",\"status\":\"Investigating\",\"timestamp\":\"2016-02-01T19:45:00+00:00\"},{\"body\":\"Activity
+        has been turned back on.  Thanks for your patience while we worked through
+        this. Again, this has not affected Outbound sending or Inbound processing
+        at all. \",\"status\":\"Resolved\",\"timestamp\":\"2016-02-01T20:30:00+00:00\"},{\"body\":\"Unfortunately
+        we had to disable the Activity page again.  Once the issues have been fully
+        resolved we\u2019ll be able to turn it back on.\",\"status\":\"Pending\",\"timestamp\":\"2016-02-01T20:59:00+00:00\"},{\"body\":\"Activity
+        has been restored and we\u2019re continuing to monitor closely. \",\"status\":\"Resolved\",\"timestamp\":\"2016-02-01T22:40:00+00:00\"}],\"resolved_at\":\"2016-02-01T22:40:00+00:00\",\"body\":\"\"},{\"id\":\"1464\",\"type\":\"DELAY\",\"created_at\":\"2016-01-30T04:04:00+00:00\",\"updated_at\":\"2016-01-30T04:15:00+00:00\",\"title\":\"Sporadic
+        email delays\",\"updates\":[{\"body\":\"We are investigating sporatic email
+        delays this evening. Some messages may take up to one minute to be sent due
+        to high queues on our mail servers. We\u2019re working to resolve it now.\",\"status\":\"Investigating\",\"timestamp\":\"2016-01-30T04:04:00+00:00\"},{\"body\":\"Email
+        sending queues are back to normal and sending within an acceptable time frame.
+        We will continue to monitor queues and will post if anything occurs again.
+        Thanks for your patience!\",\"status\":\"Resolved\",\"timestamp\":\"2016-01-30T04:15:00+00:00\"}],\"resolved_at\":\"2016-01-30T04:15:00+00:00\",\"body\":\"\"},{\"id\":\"1467\",\"type\":\"DOWN\",\"created_at\":\"2016-01-24T18:42:00+00:00\",\"updated_at\":\"2016-01-24T18:46:00+00:00\",\"title\":\"System
+        downtime\",\"updates\":[{\"body\":\"We\u2019ve been alerted that all systems
+        are down right now. The team is looking at what\u2019s going on, please standby.\",\"status\":\"Investigating\",\"timestamp\":\"2016-01-24T18:42:00+00:00\"},{\"body\":\"We\u2019re
+        seeing a denial of service attack that the datacenter is working on right
+        now. Service is restored and we are monitoring closely.\",\"status\":\"Resolved\",\"timestamp\":\"2016-01-24T18:46:00+00:00\"}],\"resolved_at\":\"2016-01-24T18:46:00+00:00\",\"body\":\"\"},{\"id\":\"1470\",\"type\":\"MAINTENANCE\",\"created_at\":\"2016-01-23T03:03:00+00:00\",\"updated_at\":\"2016-01-23T03:03:00+00:00\",\"title\":\"Network
+        maintenance\",\"updates\":[{\"body\":\"Network maintenance has been completed
+        with no downtime.\",\"status\":\"Resolved\",\"timestamp\":\"2016-01-23T03:03:00+00:00\"}],\"resolved_at\":\"2016-01-23T03:03:00+00:00\",\"body\":\"\"},{\"id\":\"1472\",\"type\":\"DOWN\",\"created_at\":\"2015-12-10T21:05:00+00:00\",\"updated_at\":\"2015-12-10T21:05:00+00:00\",\"title\":\"Database
+        spike and temporary API timeouts\",\"updates\":[{\"body\":\"We had an unexpected
+        spike on our database that resulted in API timeouts for a short time. Fixed
+        now and shouldn\u2019t happen again.\",\"status\":\"Resolved\",\"timestamp\":\"2015-12-10T21:05:00+00:00\"}],\"resolved_at\":\"2015-12-10T21:05:00+00:00\",\"body\":\"\"},{\"id\":\"1474\",\"type\":\"DOWN\",\"created_at\":\"2015-12-03T12:25:00+00:00\",\"updated_at\":\"2015-12-03T12:51:00+00:00\",\"title\":\"High
+        latency and network issues\",\"updates\":[{\"body\":\"We are noticing high
+        latency and network issues at our data center. We are working with our provider
+        to resolve the problems.\",\"status\":\"Investigating\",\"timestamp\":\"2015-12-03T12:25:00+00:00\"},{\"body\":\"The
+        networking issues have subsided, but we\u2019re still investigating and monitoring
+        things closely. Messages are being sent and processed immediately. \",\"status\":\"Resolved\",\"timestamp\":\"2015-12-03T12:51:00+00:00\"}],\"resolved_at\":\"2015-12-03T12:51:00+00:00\",\"body\":\"\"}]"
+    headers:
+      Connection:
+      - Keep-Alive
+      Content-Length:
+      - '36926'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Sun, 09 Oct 2016 11:48:47 GMT
+      ETag:
+      - W/"903e-CNe6Jy97dSnr9Wf4+NYx/A"
+      Keep-Alive:
+      - timeout=5, max=98
+      Server:
+      - Apache
+      Vary:
+      - Accept-Encoding
+      X-Powered-By:
+      - Express
+    status:
+      code: 200
+      message: OK
+version: 1

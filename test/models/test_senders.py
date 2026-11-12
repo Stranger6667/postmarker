@@ -3,7 +3,7 @@ import pytest
 from postmarker.exceptions import ClientError
 from postmarker.models.senders import SenderSignature
 
-CASSETTE_NAME = "senders"
+pytestmark = pytest.mark.vcr
 
 
 def test_all(postmark):

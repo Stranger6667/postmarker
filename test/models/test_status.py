@@ -1,6 +1,8 @@
+import pytest
+
 from postmarker.models.status import Incident
 
-CASSETTE_NAME = "status"
+pytestmark = pytest.mark.vcr
 
 LAST_INCIDENT = {
     "body": "",

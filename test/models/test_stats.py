@@ -1,6 +1,6 @@
 import pytest
 
-CASSETTE_NAME = "stats"
+pytestmark = pytest.mark.vcr
 
 
 @pytest.mark.parametrize(

@@ -1,0 +1,36 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - Postmarker/0.6.0.dev
+      X-Postmark-Account-Token:
+      - ACCOUNT_TOKEN
+    method: GET
+    uri: https://api.postmarkapp.com/domains?count=2&offset=0
+  response:
+    body:
+      string: '{"Domains":[{"Name":"example.com","WeakDKIM":true,"ReturnPathDomainVerified":false,"SPFVerified":true,"DKIMVerified":true,"ID":64052},{"Name":"example.org","WeakDKIM":true,"ReturnPathDomainVerified":false,"SPFVerified":true,"DKIMVerified":true,"ID":64054}],"TotalCount":13}'
+    headers:
+      Cache-Control:
+      - private
+      Content-Length:
+      - '273'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Sun, 04 Dec 2016 20:21:58 GMT
+      Server:
+      - unicorns-double-rainbow
+      X-Powered-By:
+      - ASP.NET
+    status:
+      code: 200
+      message: OK
+version: 1

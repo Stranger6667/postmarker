@@ -1,0 +1,43 @@
+interactions:
+- request:
+    body: '{"Attachments": [], "ReplyTo": "replyto@example.com", "Subject": "Test
+      subject", "TextBody": "Text", "Headers": [], "To": "receiver@example.com", "From":
+      "sender@example.com", "Cc": "cc@example.com", "Bcc": "bcc@example.com"}'
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '225'
+      Content-Type:
+      - application/json
+      User-Agent:
+      - python-requests/2.11.1
+      X-Postmark-Server-Token:
+      - API_TOKEN
+    method: POST
+    uri: https://api.postmarkapp.com/email
+  response:
+    body:
+      string: '{"To":"receiver@example.com","SubmittedAt":"2016-10-06T10:05:30.570118-04:00","MessageID":"96a981da-9b7c-4aa9-bda2-84ab99097686","ErrorCode":0,"Message":"Test
+        job accepted"}'
+    headers:
+      Cache-Control:
+      - private
+      Content-Length:
+      - '173'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Thu, 06 Oct 2016 14:05:30 GMT
+      Server:
+      - unicorns-double-rainbow
+      X-Powered-By:
+      - ASP.NET
+    status:
+      code: 200
+      message: OK
+version: 1

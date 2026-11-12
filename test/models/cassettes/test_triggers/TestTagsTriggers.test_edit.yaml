@@ -1,0 +1,78 @@
+interactions:
+- request:
+    body: '{"MatchName": "welcome2", "TrackOpens": null}'
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '45'
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Postmarker/0.8.0dev0
+      X-Postmark-Server-Token:
+      - SERVER_TOKEN
+    method: POST
+    uri: https://api.postmarkapp.com/triggers/tags
+  response:
+    body:
+      string: '{"ID":1617831,"MatchName":"welcome2"}'
+    headers:
+      Cache-Control:
+      - private
+      Content-Length:
+      - '37'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 13 Mar 2017 06:56:21 GMT
+      Server:
+      - unicorns-double-rainbow
+      X-Powered-By:
+      - ASP.NET
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"MatchName": "blabla", "TrackOpens": null}'
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '43'
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Postmarker/0.8.0dev0
+      X-Postmark-Server-Token:
+      - SERVER_TOKEN
+    method: PUT
+    uri: https://api.postmarkapp.com/triggers/tags/1617831
+  response:
+    body:
+      string: '{"ID":1617831,"MatchName":"blabla"}'
+    headers:
+      Cache-Control:
+      - private
+      Content-Length:
+      - '35'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 13 Mar 2017 06:56:21 GMT
+      Server:
+      - unicorns-double-rainbow
+      X-Powered-By:
+      - ASP.NET
+    status:
+      code: 200
+      message: OK
+version: 1

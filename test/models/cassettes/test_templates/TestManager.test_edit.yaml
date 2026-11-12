@@ -1,0 +1,40 @@
+interactions:
+- request:
+    body: '{"Name": "Test1", "TextBody": null, "HtmlBody": null, "Subject": null}'
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '70'
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Postmarker/0.5.0.dev
+      X-Postmark-Server-Token:
+      - SERVER_TOKEN
+    method: PUT
+    uri: https://api.postmarkapp.com/templates/983381
+  response:
+    body:
+      string: '{"TemplateId":983381,"Name":"Test1","Active":true}'
+    headers:
+      Cache-Control:
+      - private
+      Content-Length:
+      - '50'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Sat, 15 Oct 2016 19:18:13 GMT
+      Server:
+      - unicorns-double-rainbow
+      X-Powered-By:
+      - ASP.NET
+    status:
+      code: 200
+      message: OK
+version: 1

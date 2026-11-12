@@ -1,0 +1,40 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.11.1
+    method: GET
+    uri: https://status.postmarkapp.com/api/1.0/status
+  response:
+    body:
+      string: '{"status":"UP","lastCheckDate":"2016-10-09T11:48:21Z"}'
+    headers:
+      Connection:
+      - Keep-Alive
+      Content-Length:
+      - '54'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Sun, 09 Oct 2016 11:48:47 GMT
+      ETag:
+      - W/"36-5N8CTENaD1N6zoXR6J7pHA"
+      Keep-Alive:
+      - timeout=5, max=100
+      Server:
+      - Apache
+      Vary:
+      - Accept-Encoding
+      X-Powered-By:
+      - Express
+    status:
+      code: 200
+      message: OK
+version: 1

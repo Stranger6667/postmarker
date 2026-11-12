@@ -11,7 +11,7 @@ import pytest
 
 from postmarker.models.emails import Email
 
-CASSETTE_NAME = "emails"
+pytestmark = pytest.mark.vcr
 
 
 def get_attachment_path(filename):

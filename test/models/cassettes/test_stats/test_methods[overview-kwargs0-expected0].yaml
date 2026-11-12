@@ -1,0 +1,36 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - Postmarker/0.7.0.dev0
+      X-Postmark-Server-Token:
+      - SERVER_TOKEN
+    method: GET
+    uri: https://api.postmarkapp.com/stats/outbound?fromdate=2017-01-30
+  response:
+    body:
+      string: '{"Sent":93,"Bounced":0,"SMTPApiErrors":0,"BounceRate":0.0,"SpamComplaints":0,"SpamComplaintsRate":0.0,"Tracked":93,"Opens":50,"UniqueOpens":19,"TotalClicks":0,"UniqueLinksClicked":0,"WithClientRecorded":13,"WithPlatformRecorded":19,"WithReadTimeRecorded":19,"WithLinkTracking":0,"WithOpenTracking":93,"TotalTrackedLinksSent":0}'
+    headers:
+      Cache-Control:
+      - private
+      Content-Length:
+      - '327'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Wed, 01 Feb 2017 08:29:22 GMT
+      Server:
+      - unicorns-double-rainbow
+      X-Powered-By:
+      - ASP.NET
+    status:
+      code: 200
+      message: OK
+version: 1

@@ -1,0 +1,40 @@
+interactions:
+- request:
+    body: '{"To":"receiver@example.com","InlineCss":true,"Attachments":[],"Bcc":null,"TemplateModel":{},"From":"sender@example.com","TrackOpens":null,"Headers":[],"Tag":null,"Subject":null,"TemplateId":983381,"Cc":null,"ReplyTo":null}'
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '244'
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Postmarker/0.5.0.dev
+      X-Postmark-Server-Token:
+      - SERVER_TOKEN
+    method: POST
+    uri: https://api.postmarkapp.com/email/withTemplate/
+  response:
+    body:
+      string: '{"To":"receiver@example.com","Message":"OK","SubmittedAt":"2016-10-15T14:42:56.1508279-04:00","MessageID":"cf639975-1685-4c70-aba1-b1115b4f6d12","ErrorCode":0}'
+    headers:
+      Cache-Control:
+      - private
+      Content-Length:
+      - '159'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Sat, 15 Oct 2016 18:42:55 GMT
+      Server:
+      - unicorns-double-rainbow
+      X-Powered-By:
+      - ASP.NET
+    status:
+      code: 200
+      message: OK
+version: 1

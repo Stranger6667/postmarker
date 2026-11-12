@@ -3,7 +3,7 @@ import pytest
 from postmarker.exceptions import ClientError
 from postmarker.models.domains import Domain
 
-CASSETTE_NAME = "domains"
+pytestmark = pytest.mark.vcr
 
 
 class TestModel:

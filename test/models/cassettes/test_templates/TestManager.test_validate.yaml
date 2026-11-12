@@ -1,0 +1,41 @@
+interactions:
+- request:
+    body: '{"HtmlBody": null, "TestRenderModel": null, "Subject": "Test", "TextBody":
+      "Test", "InlineCssForHtmlTestRender": true}'
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '118'
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Postmarker/0.5.0.dev
+      X-Postmark-Server-Token:
+      - SERVER_TOKEN
+    method: POST
+    uri: https://api.postmarkapp.com/templates/validate
+  response:
+    body:
+      string: '{"AllContentIsValid":true,"HtmlBody":null,"TextBody":{"ContentIsValid":true,"ValidationErrors":[],"RenderedContent":"Test"},"Subject":{"ContentIsValid":true,"ValidationErrors":[],"RenderedContent":"Test"},"SuggestedTemplateModel":{}}'
+    headers:
+      Cache-Control:
+      - private
+      Content-Length:
+      - '233'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Sat, 15 Oct 2016 19:52:24 GMT
+      Server:
+      - unicorns-double-rainbow
+      X-Powered-By:
+      - ASP.NET
+    status:
+      code: 200
+      message: OK
+version: 1

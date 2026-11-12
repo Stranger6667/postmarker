@@ -1,0 +1,77 @@
+interactions:
+- request:
+    body: '{"HtmlBody": null, "Name": "TestX", "Subject": "TestSubj", "TextBody":
+      "Test content"}'
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '86'
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Postmarker/0.5.0.dev
+      X-Postmark-Server-Token:
+      - SERVER_TOKEN
+    method: POST
+    uri: https://api.postmarkapp.com/templates
+  response:
+    body:
+      string: '{"TemplateId":1003802,"Name":"TestX","Active":true}'
+    headers:
+      Cache-Control:
+      - private
+      Content-Length:
+      - '51'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Sat, 15 Oct 2016 19:52:24 GMT
+      Server:
+      - unicorns-double-rainbow
+      X-Powered-By:
+      - ASP.NET
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '0'
+      User-Agent:
+      - Postmarker/0.5.0.dev
+      X-Postmark-Server-Token:
+      - SERVER_TOKEN
+    method: DELETE
+    uri: https://api.postmarkapp.com/templates/1003802
+  response:
+    body:
+      string: '{"ErrorCode":0,"Message":"Template 1003802 removed."}'
+    headers:
+      Cache-Control:
+      - private
+      Content-Length:
+      - '53'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Sat, 15 Oct 2016 19:52:24 GMT
+      Server:
+      - unicorns-double-rainbow
+      X-Powered-By:
+      - ASP.NET
+    status:
+      code: 200
+      message: OK
+version: 1
