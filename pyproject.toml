@@ -6,7 +6,7 @@ build-backend = "hatchling.build"
 name = "postmarker"
 dynamic = ["version"]
 description = "Python client library for Postmark API"
-keywords = ["postmark", "api", "client", "email"]
+keywords = ["postmark", "postmarkapp", "api", "client", "email", "transactional email", "django", "email backend"]
 authors = [{ name = "Dmitry Dygalo", email = "dmitry@dygalo.dev" }]
 maintainers = [{ name = "Dmitry Dygalo", email = "dmitry@dygalo.dev" }]
 readme = "README.md"
@@ -15,6 +15,7 @@ requires-python = ">=3.10"
 classifiers = [
   "Development Status :: 5 - Production/Stable",
   "Environment :: Console",
+  "Environment :: Web Environment",
   "Framework :: Django",
   "Framework :: Django :: 5.2",
   "Framework :: Django :: 6.0",
@@ -32,6 +33,7 @@ classifiers = [
   "Programming Language :: Python :: Implementation :: CPython",
   "Programming Language :: Python :: Implementation :: PyPy",
   "Topic :: Communications :: Email",
+  "Topic :: Software Development :: Libraries :: Python Modules",
   "Typing :: Typed",
 ]
 dependencies = ["requests>=2.20.0"]
@@ -46,7 +48,7 @@ postmark = "postmarker.pytest"
 [project.urls]
 Documentation = "https://postmarker.readthedocs.io/en/stable/"
 Changelog = "https://github.com/Stranger6667/postmarker/blob/master/CHANGELOG.md"
-"Bug Tracker" = "https://github.com/Stranger6667/postmarker"
+"Bug Tracker" = "https://github.com/Stranger6667/postmarker/issues"
 Funding = "https://github.com/sponsors/Stranger6667"
 "Source Code" = "https://github.com/Stranger6667/postmarker"
 
