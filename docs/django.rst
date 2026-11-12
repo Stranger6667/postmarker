@@ -15,6 +15,17 @@ For convenience, Postmarker provides a Django email backend. To use it you have 
         'VERBOSITY': 0,
     }
 
+On Django 6.1+ use ``MAILERS`` instead of ``EMAIL_BACKEND``. The token goes to ``OPTIONS``, the other options stay in ``POSTMARK``:
+
+.. code-block:: python
+
+    MAILERS = {
+        'default': {
+            'BACKEND': 'postmarker.django.EmailBackend',
+            'OPTIONS': {'token': '<YOUR POSTMARK SERVER TOKEN>'},
+        },
+    }
+
 That's it!
 
 Example:
@@ -32,7 +43,7 @@ Example:
 
 .. important
 
-    Postmarker supports Django 2.2, 3.2, and 4.0
+    Postmarker supports Django 5.2, 6.0, and 6.1
 
 For testing purposes, there is the ``TEST_MODE`` option.
 When it is set to ``True`` all interactions will be conducted with a special testing API token - ``POSTMARK_API_TEST``.
