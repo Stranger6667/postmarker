@@ -1,4 +1,8 @@
+from __future__ import annotations
+
 import sys
+from collections.abc import Mapping
+from typing import Any, TextIO
 from urllib.parse import urljoin
 
 import requests
@@ -6,6 +10,7 @@ import requests
 from . import __version__
 from .exceptions import ClientError, SpamAssassinError
 from .logging import get_logger
+from .models.base import ModelManager
 from .models.bounces import BounceManager
 from .models.domains import DomainsManager
 from .models.emails import EmailManager
@@ -28,7 +33,19 @@ TEST_TOKEN = "POSTMARK_API_TEST"
 class PostmarkClient:
     """Basic class for API clients. Provides basic functionality to make requests."""
 
-    _managers = (
+    bounces: BounceManager
+    domains: DomainsManager
+    emails: EmailManager
+    messages: MessageManager
+    senders: SenderSignaturesManager
+    server: ServerManager
+    stats: StatsManager
+    status: StatusManager
+    templates: TemplateManager
+    triggers: TriggersManager
+    _session: requests.Session
+
+    _managers: tuple[type[ModelManager[Any]], ...] = (
         BounceManager,
         DomainsManager,
         EmailManager,
@@ -43,14 +60,14 @@ class PostmarkClient:
 
     def __init__(
         self,
-        server_token=None,
-        account_token=None,
-        verbosity=0,
-        max_retries=0,
-        timeout=None,
-        logs_stream=sys.stdout,
-        root_api_url=DEFAULT_API,
-    ):
+        server_token: str | None = None,
+        account_token: str | None = None,
+        verbosity: int = 0,
+        max_retries: int = 0,
+        timeout: float | tuple[float, float] | None = None,
+        logs_stream: TextIO = sys.stdout,
+        root_api_url: str = DEFAULT_API,
+    ) -> None:
         assert server_token, "You have to provide token to use Postmark API"
         self.server_token = server_token
         self.account_token = account_token
@@ -61,7 +78,9 @@ class PostmarkClient:
         self._setup_managers()
 
     @classmethod
-    def from_config(cls, config, prefix="postmark_", is_uppercase=False):
+    def from_config(
+        cls, config: Mapping[str, Any], prefix: str = "postmark_", is_uppercase: bool = False
+    ) -> PostmarkClient:
         """Helper method for instantiating PostmarkClient from dict-like objects."""
         kwargs = {}
         for arg in get_args(cls):
@@ -74,10 +93,10 @@ class PostmarkClient:
                 kwargs[arg] = config[key]
         return cls(**kwargs)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"<{self.__class__.__name__}: {self.server_token}>"
 
-    def _setup_managers(self):
+    def _setup_managers(self) -> None:
         """Allows to access manager by model name.
 
         >>> postmark = PostmarkClient(server_token='TEST')
@@ -89,7 +108,7 @@ class PostmarkClient:
             setattr(self, instance.name, instance)
 
     @property
-    def session(self):
+    def session(self) -> requests.Session:
         if not hasattr(self, "_session"):
             self._session = requests.Session()
             adapter = requests.adapters.HTTPAdapter(max_retries=self.max_retries)
@@ -97,7 +116,7 @@ class PostmarkClient:
             self._session.mount("https://", adapter)
         return self._session
 
-    def call(self, method, endpoint, token_type="server", data=None, **kwargs):
+    def call(self, method: str, endpoint: str, token_type: str = "server", data: Any = None, **kwargs: Any) -> Any:
         if token_type == "account":
             header = "X-Postmark-Account-Token"
             token = self.account_token
@@ -106,18 +125,26 @@ class PostmarkClient:
             token = self.server_token
         return self._call(method, self.root_api_url, endpoint, data, {header: token}, **kwargs)
 
-    def call_status(self, endpoint):
+    def call_status(self, endpoint: str) -> Any:
         return self._call("GET", STATUS_API, endpoint)
 
-    def spamcheck(self, dump, options="long"):
+    def spamcheck(self, dump: str, options: str = "long") -> Any:
         data = {"email": dump, "options": options}
         response = self._call("POST", SPAMCHECK_API, "", data)
         if not response["success"]:
             raise SpamAssassinError(response["message"])
         return response
 
-    def _call(self, method, root, endpoint, data=None, headers=None, **kwargs):
-        default_headers = {"Accept": "application/json", "User-Agent": USER_AGENT}
+    def _call(
+        self,
+        method: str,
+        root: str,
+        endpoint: str,
+        data: Any = None,
+        headers: dict[str, str | None] | None = None,
+        **kwargs: Any,
+    ) -> Any:
+        default_headers: dict[str, str | None] = {"Accept": "application/json", "User-Agent": USER_AGENT}
         if headers:
             default_headers.update(headers)
         url = urljoin(root, endpoint)
@@ -134,7 +161,7 @@ class PostmarkClient:
         self.check_response(response)
         return response.json()
 
-    def check_response(self, response):
+    def check_response(self, response: requests.Response) -> None:
         try:
             response.raise_for_status()
         except requests.HTTPError as http_error:
@@ -145,5 +172,5 @@ class PostmarkClient:
             message = self.format_exception_message(data)
             raise ClientError(message, error_code=data["ErrorCode"]) from http_error
 
-    def format_exception_message(self, data):
+    def format_exception_message(self, data: dict[str, Any]) -> str:
         return "[{}] {}".format(data["ErrorCode"], data["Message"])

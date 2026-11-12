@@ -32,6 +32,7 @@ classifiers = [
   "Programming Language :: Python :: Implementation :: CPython",
   "Programming Language :: Python :: Implementation :: PyPy",
   "Topic :: Communications :: Email",
+  "Typing :: Typed",
 ]
 dependencies = ["requests>=2.20.0"]
 

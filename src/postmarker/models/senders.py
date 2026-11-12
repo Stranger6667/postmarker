@@ -1,47 +1,52 @@
+from __future__ import annotations
+
 import warnings
+from typing import Any
 
 from .base import Model, ModelManager
 
 
 class SenderSignature(Model):
-    def get(self):
+    def get(self) -> SenderSignature:
         new_instance = self._manager.get(self.ID)
         self._data = new_instance._data
         return self
 
-    def edit(self, **kwargs):
+    def edit(self, **kwargs: Any) -> None:
         response = self._manager.edit(self.ID, **kwargs)
         self._update(response)
 
-    def delete(self):
+    def delete(self) -> Any:
         return self._manager.delete(self.ID)
 
-    def resend(self):
+    def resend(self) -> Any:
         return self._manager.resend(self.ID)
 
-    def verifyspf(self):
+    def verifyspf(self) -> Any:
         return self._manager.verifyspf(self.ID)
 
-    def requestnewdkim(self):
+    def requestnewdkim(self) -> Any:
         return self._manager.requestnewdkim(self.ID)
 
 
-class SenderSignaturesManager(ModelManager):
+class SenderSignaturesManager(ModelManager[SenderSignature]):
     name = "senders"
     model = SenderSignature
     token_type = "account"
 
-    def all(self, count=500, offset=0):
+    def all(self, count: int | None = 500, offset: int = 0) -> list[SenderSignature]:
         """Gets a list of sender signatures containing brief details associated with your account."""
         responses = self.call_many("GET", "/senders/", count=count, offset=offset)
         return self.expand_responses(responses, "SenderSignatures")
 
-    def get(self, id):
+    def get(self, id: int) -> SenderSignature:
         """Gets all the details for a specific sender signature."""
         response = self.call("GET", f"/senders/{id}")
         return self._init_instance(response)
 
-    def create(self, FromEmail, Name, ReplyToEmail=None, ReturnPathDomain=None):
+    def create(
+        self, FromEmail: str, Name: str, ReplyToEmail: str | None = None, ReturnPathDomain: str | None = None
+    ) -> SenderSignature:
         data = {
             "FromEmail": FromEmail,
             "Name": Name,
@@ -50,7 +55,7 @@ class SenderSignaturesManager(ModelManager):
         }
         return self._init_instance(self.call("POST", "/senders/", data=data))
 
-    def edit(self, id, Name, ReplyToEmail=None, ReturnPathDomain=None):
+    def edit(self, id: int, Name: str, ReplyToEmail: str | None = None, ReturnPathDomain: str | None = None) -> Any:
         data = {
             "Name": Name,
             "ReplyToEmail": ReplyToEmail,
@@ -58,16 +63,16 @@ class SenderSignaturesManager(ModelManager):
         }
         return self.call("PUT", f"/senders/{id}", data=data)
 
-    def delete(self, id):
+    def delete(self, id: int) -> Any:
         return self.call("DELETE", f"/senders/{id}")["Message"]
 
-    def resend(self, id):
+    def resend(self, id: int) -> Any:
         return self.call("POST", f"/senders/{id}/resend")["Message"]
 
-    def verifyspf(self, id):
+    def verifyspf(self, id: int) -> Any:
         return self.call("POST", f"/senders/{id}/verifyspf")
 
-    def requestnewdkim(self, id):
+    def requestnewdkim(self, id: int) -> Any:
         """Request new DKIM.
 
         Will query DNS for your domain and attempt to verify the SPF record contains the information for

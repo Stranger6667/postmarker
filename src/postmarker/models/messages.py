@@ -1,38 +1,41 @@
+from __future__ import annotations
+
 from base64 import b64decode
 from email.mime.base import MIMEBase
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from os.path import join
+from typing import Any
 
 from .base import MessageModel, Model, ModelManager, SubModelManager
 
 
 class Open(MessageModel):
-    def __str__(self):
+    def __str__(self) -> str:
         return "Open from {}".format(self._data.get("Recipient"))
 
 
-class OpensManager(ModelManager):
+class OpensManager(ModelManager[Open]):
     name = "opens"
     model = Open
 
     def all(
         self,
-        count=500,
-        offset=0,
-        recipient=None,
-        tag=None,
-        client_name=None,
-        client_company=None,
-        client_family=None,
-        os_name=None,
-        os_family=None,
-        os_company=None,
-        platform=None,
-        country=None,
-        region=None,
-        city=None,
-    ):
+        count: int | None = 500,
+        offset: int = 0,
+        recipient: str | None = None,
+        tag: str | None = None,
+        client_name: str | None = None,
+        client_company: str | None = None,
+        client_family: str | None = None,
+        os_name: str | None = None,
+        os_family: str | None = None,
+        os_company: str | None = None,
+        platform: str | None = None,
+        country: str | None = None,
+        region: str | None = None,
+        city: str | None = None,
+    ) -> list[Open]:
         responses = self.call_many(
             "GET",
             "/messages/outbound/opens",
@@ -53,47 +56,48 @@ class OpensManager(ModelManager):
         )
         return self.expand_responses(responses, "Opens")
 
-    def get(self, id, count=500, offset=0):
+    def get(self, id: str, count: int = 500, offset: int = 0) -> Any:
         return self.call("GET", f"/messages/outbound/opens/{id}", count=count, offset=offset)
 
-    def Open(self, json):
+    def Open(self, json: str | bytes) -> Open:
         return self.model.from_json(json, manager=self)
 
 
 class BaseMessage(Model):
-    def get(self):
+    def get(self) -> Any:
         return self._manager.get(self.MessageID)
 
 
 class OutboundMessage(BaseMessage):
-    def __str__(self):
-        recipients = ", ".join(self._data.get("Recipients"))
+    def __str__(self) -> str:
+        recipients = ", ".join(self._data["Recipients"])
         return "{} message to {}".format(self._data.get("Status"), recipients)
 
-    def get_dump(self):
+    def get_dump(self) -> Any:
         return self._manager.get_dump(self.MessageID)
 
-    def opens(self, count=500, offset=0):
+    def opens(self, count: int = 500, offset: int = 0) -> Any:
         return self._manager.opens.get(self.MessageID, count=count, offset=offset)
 
 
-class OutboundMessageManager(SubModelManager):
+class OutboundMessageManager(SubModelManager[OutboundMessage]):
     name = "outbound"
+    opens: OpensManager
     model = OutboundMessage
     _managers = (OpensManager,)
 
     def all(
         self,
-        count=500,
-        offset=0,
-        recipient=None,
-        fromemail=None,
-        tag=None,
-        status=None,
-        todate=None,
-        fromdate=None,
-        subject=None,
-    ):
+        count: int | None = 500,
+        offset: int = 0,
+        recipient: str | None = None,
+        fromemail: str | None = None,
+        tag: str | None = None,
+        status: str | None = None,
+        todate: Any = None,
+        fromdate: Any = None,
+        subject: str | None = None,
+    ) -> list[OutboundMessage]:
         """All outbound messages.
 
         Lets you get all the details about any outbound or inbound message that you sent or received
@@ -126,36 +130,36 @@ class OutboundMessageManager(SubModelManager):
         )
         return self.expand_responses(responses, "Messages")
 
-    def get(self, id):
+    def get(self, id: str) -> OutboundMessage:
         response = self.call("GET", f"/messages/outbound/{id}/details")
         return self._init_instance(response)
 
-    def get_dump(self, id):
+    def get_dump(self, id: str) -> Any:
         return self.call("GET", f"/messages/outbound/{id}/dump").get("Body")
 
 
 class InboundMessage(BaseMessage):
-    def __str__(self):
+    def __str__(self) -> str:
         return "{} message from {}".format(self._data.get("Status"), self._data.get("From"))
 
-    def __getitem__(self, item):
+    def __getitem__(self, item: str) -> Any:
         for header in self._data["Headers"]:
             if header["Name"] == item:
                 return header["Value"]
         raise KeyError
 
     @property
-    def Attachments(self):
+    def Attachments(self) -> list[Attachment]:
         attachments = self._data.get("Attachments", ())
         return [Attachment(**data) for data in attachments]
 
-    def bypass(self):
+    def bypass(self) -> Any:
         return self._manager.bypass(self.MessageID)
 
-    def retry(self):
+    def retry(self) -> Any:
         return self._manager.retry(self.MessageID)
 
-    def as_mime(self):
+    def as_mime(self) -> MIMEMultipart:
         message = MIMEMultipart("alternative")
         message.attach(MIMEText(self.TextBody, "plain"))
         message.attach(MIMEText(self.HtmlBody, "html"))
@@ -173,26 +177,26 @@ class InboundMessage(BaseMessage):
 
 
 class Attachment(Model):
-    def __str__(self):
-        return self.Name
+    def __str__(self) -> str:
+        return str(self.Name)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"<{self.__class__.__name__}: {self}>"
 
-    def __len__(self):
-        return self.ContentLength
+    def __len__(self) -> int:
+        return int(self.ContentLength)
 
     @property
-    def decoded(self):
+    def decoded(self) -> bytes:
         return b64decode(self.Content.encode("ascii"))
 
-    def save(self, directory):
+    def save(self, directory: str) -> str:
         filename = join(directory, self.Name)
         with open(filename, "wb") as fd:
             fd.write(self.decoded)
         return filename
 
-    def as_mime(self):
+    def as_mime(self) -> MIMEBase:
         maintype, subtype = self.ContentType.split("/")
         message = MIMEBase(maintype, subtype)
         message.set_payload(self.Content)
@@ -201,23 +205,23 @@ class Attachment(Model):
         return message
 
 
-class InboundMessageManager(ModelManager):
+class InboundMessageManager(ModelManager[InboundMessage]):
     name = "inbound"
     model = InboundMessage
 
     def all(
         self,
-        count=500,
-        offset=0,
-        recipient=None,
-        fromemail=None,
-        tag=None,
-        subject=None,
-        mailboxhash=None,
-        status=None,
-        todate=None,
-        fromdate=None,
-    ):
+        count: int | None = 500,
+        offset: int = 0,
+        recipient: str | None = None,
+        fromemail: str | None = None,
+        tag: str | None = None,
+        subject: str | None = None,
+        mailboxhash: str | None = None,
+        status: str | None = None,
+        todate: Any = None,
+        fromdate: Any = None,
+    ) -> list[InboundMessage]:
         """All inbound messages.
 
         :param count: Number of messages to return per request.
@@ -249,20 +253,22 @@ class InboundMessageManager(ModelManager):
         )
         return self.expand_responses(responses, "InboundMessages")
 
-    def get(self, id):
+    def get(self, id: str) -> InboundMessage:
         response = self.call("GET", f"/messages/inbound/{id}/details")
         return self._init_instance(response)
 
-    def bypass(self, id):
+    def bypass(self, id: str) -> Any:
         return self.call("PUT", f"/messages/inbound/{id}/bypass")
 
-    def retry(self, id):
+    def retry(self, id: str) -> Any:
         return self.call("PUT", f"/messages/inbound/{id}/retry")
 
-    def InboundMessage(self, json):
+    def InboundMessage(self, json: str | bytes) -> InboundMessage:
         return self.model.from_json(json, manager=self)
 
 
-class MessageManager(SubModelManager):
+class MessageManager(SubModelManager[Model]):
     name = "messages"
+    outbound: OutboundMessageManager
+    inbound: InboundMessageManager
     _managers = (OutboundMessageManager, InboundMessageManager)
