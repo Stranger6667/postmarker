@@ -4,9 +4,7 @@ import mimetypes
 import os
 from base64 import b64encode
 from email.header import decode_header
-from email.mime.base import MIMEBase
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
+from email.message import Message, MIMEPart
 
 from ..utils import chunks
 from .base import MessageModel, Model, ModelManager
@@ -38,14 +36,15 @@ def prepare_attachments(attachment):
         }
         if len(attachment) == 4:
             result["ContentID"] = attachment[3]
-    elif isinstance(attachment, MIMEBase):
+    elif isinstance(attachment, Message):
         payload = attachment.get_payload()
         content_type = attachment.get_content_type()
-        # Special case for message/rfc822
-        # Even if RFC implies such attachments being not base64-encoded,
-        # Postmark requires all attachments to be encoded in this way
+        # Postmark requires base64 content for every attachment, including `message/rfc822`.
+        # A payload without `Content-Transfer-Encoding` is expected to be base64 already
         if content_type == "message/rfc822" and not isinstance(payload, str):
             payload = b64encode(payload[0].get_payload(decode=True)).decode()
+        elif "Content-Transfer-Encoding" in attachment:
+            payload = b64encode(attachment.get_payload(decode=True)).decode()
         result = {
             "Name": attachment.get_filename() or "attachment.txt",
             "Content": payload,
@@ -73,19 +72,27 @@ def prepare_attachments(attachment):
     return result
 
 
+def get_body(part):
+    body = part.get_payload(decode=True).decode("utf8")
+    # `set_content` (the modern email API, used by Django 6+) always appends a newline
+    if isinstance(part, MIMEPart):
+        body = body.removesuffix("\n")
+    return body
+
+
 def deconstruct_multipart_recursive(seen, text, html, attachments, message):
     if message in seen:
         return
     seen.add(message)
-    if isinstance(message, MIMEMultipart):
+    if message.get_content_maintype() == "multipart":
         for part in message.walk():
             deconstruct_multipart_recursive(seen, text, html, attachments, part)
     else:
         content_type = message.get_content_type()
         if content_type == "text/plain" and not text:
-            text.append(message.get_payload(decode=True).decode("utf8"))
+            text.append(get_body(message))
         elif content_type == "text/html" and not html:
-            html.append(message.get_payload(decode=True).decode("utf8"))
+            html.append(get_body(message))
         else:
             # Ignore underlying messages inside `message/rfc822` payload, because the message itself will be passed
             # as an attachment
@@ -135,7 +142,7 @@ class BaseEmail(Model):
         """Appends given payloads to the current payload.
 
         :param payloads:
-        :type payloads: `dict`, `tuple`, `list`, `MIMEBase`
+        :type payloads: `dict`, `tuple`, `list`, `email.message.Message`
         :return: None.
         """
         self.Attachments.extend(payloads)
@@ -178,9 +185,9 @@ class Email(BaseEmail):
 
     @classmethod
     def from_mime(cls, message, manager):
-        """Instantiates ``Email`` instance from ``MIMEText`` instance.
+        """Instantiates ``Email`` instance from ``email.message.Message`` instance.
 
-        :param message: ``email.mime.text.MIMEText`` instance.
+        :param message: ``email.message.Message`` instance.
         :param manager: :py:class:`EmailManager` instance.
         :return: :py:class:`Email`
         """
@@ -286,7 +293,7 @@ class EmailBatch(Model):
         """Converts incoming data to properly structured dictionary."""
         if isinstance(email, dict):
             email = Email(manager=self._manager, **email)
-        elif isinstance(email, (MIMEText, MIMEMultipart)):
+        elif isinstance(email, Message):
             email = Email.from_mime(email, self._manager)
         elif not isinstance(email, Email):
             raise ValueError
@@ -349,7 +356,7 @@ class EmailManager(ModelManager):
     ):
         """Sends a single email.
 
-        :param message: :py:class:`Email` or ``email.mime.text.MIMEText`` instance.
+        :param message: :py:class:`Email` or ``email.message.Message`` instance.
         :param str From: The sender email address.
         :param To: Recipient's email address.
                    Multiple recipients could be specified as a list or string with comma separated values.
@@ -392,10 +399,10 @@ class EmailManager(ModelManager):
                 Attachments=Attachments,
                 MessageStream=MessageStream,
             )
-        elif isinstance(message, (MIMEText, MIMEMultipart)):
+        elif isinstance(message, Message):
             message = Email.from_mime(message, self)
         elif not isinstance(message, Email):
-            raise TypeError("message should be either Email or MIMEText or MIMEMultipart instance")
+            raise TypeError("message should be either Email or email.message.Message instance")
         return message.send()
 
     def send_with_template(

@@ -10,6 +10,13 @@ Added
 ~~~~~
 
 - Support for Python 3.11–3.15.
+- Support for Django 5.2, 6.0 and 6.1.
+- Support for ``email.message.EmailMessage`` (the modern ``email`` API) wherever MIME messages are accepted.
+
+Changed
+~~~~~~~
+
+- Attachment content from MIME parts sent as single-line base64, without MIME line breaks.
 
 Removed
 ~~~~~~~
@@ -20,6 +27,8 @@ Fixed
 ~~~~~
 
 - ``postmark_request.return_value`` incorrectly being an internal sentinel on Python 3.11+ (it should be a configurable mock).
+- Django email backend incorrectly failing with ``ValueError`` on Django 6.0+. `#221`_
+- Text attachments from MIME messages, including the Django backend, incorrectly sent without base64 encoding, which Postmark rejects. `#189`_
 
 `1.0`_ - 2022-01-15
 -------------------
@@ -512,9 +521,11 @@ Fixed
 .. _0.2.0: https://github.com/Stranger6667/postmarker/compare/0.1.1...0.2.0
 .. _0.1.1: https://github.com/Stranger6667/postmarker/compare/0.1.0...0.1.1
 
+.. _#221: https://github.com/Stranger6667/postmarker/issues/221
 .. _#200: https://github.com/Stranger6667/postmarker/issues/200
 .. _#195: https://github.com/Stranger6667/postmarker/issues/195
 .. _#190: https://github.com/Stranger6667/postmarker/pull/190
+.. _#189: https://github.com/Stranger6667/postmarker/issues/189
 .. _#184: https://github.com/Stranger6667/postmarker/pull/184
 .. _#183: https://github.com/Stranger6667/postmarker/pull/183
 .. _#181: https://github.com/Stranger6667/postmarker/pull/181
