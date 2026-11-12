@@ -1,6 +1,7 @@
 import base64
 import os
 import platform
+import re
 from email import encoders
 from email.mime.base import MIMEBase
 from email.mime.image import MIMEImage
@@ -255,8 +256,18 @@ class TestBatchSend:
         assert postmark_request.call_args[1]["json"] == (email.as_dict(),)
 
     def test_invalid(self, postmark):
-        with pytest.raises(ValueError):
+        expected = "Expected Email, email.message.Message or dict, got object"
+        with pytest.raises(ValueError, match=f"^{re.escape(expected)}$"):
             postmark.emails.send_batch(object())
+
+    @pytest.mark.parametrize("container", [list, tuple])
+    def test_sequence(self, postmark, email, container):
+        expected = (
+            f"Expected Email, email.message.Message or dict, got {container.__name__}; "
+            "pass emails as separate arguments, e.g. send_batch(*emails)"
+        )
+        with pytest.raises(ValueError, match=f"^{re.escape(expected)}$"):
+            postmark.emails.send_batch(container([email, email]))
 
 
 class TestEmailBatch:
@@ -412,8 +423,18 @@ class TestTemplateBatchSend:
         }
 
     def test_invalid(self, postmark):
-        with pytest.raises(ValueError):
+        expected = "Expected EmailTemplate or dict, got object"
+        with pytest.raises(ValueError, match=f"^{re.escape(expected)}$"):
             postmark.emails.send_template_batch(object())
+
+    @pytest.mark.parametrize("container", [list, tuple])
+    def test_sequence(self, postmark, email_template, container):
+        expected = (
+            f"Expected EmailTemplate or dict, got {container.__name__}; "
+            "pass emails as separate arguments, e.g. send_template_batch(*emails)"
+        )
+        with pytest.raises(ValueError, match=f"^{re.escape(expected)}$"):
+            postmark.emails.send_template_batch(container([email_template, email_template]))
 
 
 class TestEmailTemplateBatch:

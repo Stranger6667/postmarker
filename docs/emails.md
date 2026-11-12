@@ -125,6 +125,13 @@ To send email in a batch there is `send_batch()` method.
 
 You can pass either `Email`/`MIMEText`/`MIMEMultipart` instances or dictionaries. Additionally, you may pass extra keywords to use with every email in a batch.
 
+Emails are separate arguments. To send a list, unpack it:
+
+```python
+>>> emails = [email_1, email_2]
+>>> postmark.emails.send_batch(*emails)
+```
+
 The batch size is not limited, but if the batch has more than 500 emails, then before sending, it will be split into chunks of 500 emails.
 
 Postmark provides an interface to send emails created with a template. Example of usage with Postmarker:
