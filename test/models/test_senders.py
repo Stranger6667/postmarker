@@ -1,5 +1,8 @@
+from unittest.mock import call
+
 import pytest
 
+from postmarker.core import USER_AGENT
 from postmarker.exceptions import ClientError
 from postmarker.models.senders import SenderSignature
 
@@ -58,3 +61,45 @@ def test_all_methods(postmark):
         new_signature.requestnewdkim()
     assert str(exc.value) == "[505] This DKIM is already being renewed."
     assert new_signature.delete() == "Signature exampleX@blablaz.com removed."
+
+
+ACCOUNT_HEADERS = {
+    "Accept": "application/json",
+    "User-Agent": USER_AGENT,
+    "X-Postmark-Account-Token": "ACCOUNT_TOKEN",
+}
+NOTE = "This is a note visible to the recipient to provide context of what Postmark is."
+
+
+@pytest.mark.parametrize("note", ({}, {"ConfirmationPersonalNote": NOTE}))
+def test_create_confirmation_personal_note(postmark_client, postmark_request, note):
+    postmark_request.return_value.json.return_value = {"ID": 1, "Name": "John Doe"}
+    postmark_client.senders.create("john.doe@example.com", "John Doe", **note)
+    assert postmark_request.call_args == call(
+        "POST",
+        "https://api.postmarkapp.com/senders/",
+        json={
+            "FromEmail": "john.doe@example.com",
+            "Name": "John Doe",
+            "ReplyToEmail": None,
+            "ReturnPathDomain": None,
+            **note,
+        },
+        params={},
+        headers=ACCOUNT_HEADERS,
+        timeout=None,
+    )
+
+
+@pytest.mark.parametrize("note", ({}, {"ConfirmationPersonalNote": NOTE}))
+def test_edit_confirmation_personal_note(postmark_client, postmark_request, note):
+    postmark_request.return_value.json.return_value = {"ID": 1, "Name": "John Doe"}
+    postmark_client.senders.edit(1, "John Doe", **note)
+    assert postmark_request.call_args == call(
+        "PUT",
+        "https://api.postmarkapp.com/senders/1",
+        json={"Name": "John Doe", "ReplyToEmail": None, "ReturnPathDomain": None, **note},
+        params={},
+        headers=ACCOUNT_HEADERS,
+        timeout=None,
+    )

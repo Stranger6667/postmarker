@@ -6,6 +6,8 @@
 
 - Support for Python 3.11–3.15.
 - `on_exception` signal exported from `postmarker.django`, next to `pre_send` and `post_send`. [#213](https://github.com/Stranger6667/postmarker/pull/213)
+- Servers API for the account: `servers.all`, `get`, `create`, `edit` and `delete`, and `PostmarkClient` with only an account token.
+- `ConfirmationPersonalNote` on `senders.create` and `senders.edit`.
 - Support for Django 5.2, 6.0 and 6.1.
 - Support for `email.message.EmailMessage` (the modern `email` API) wherever MIME messages are accepted.
 - Type annotations and `py.typed` marker.

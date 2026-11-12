@@ -45,22 +45,40 @@ class SenderSignaturesManager(ModelManager[SenderSignature]):
         return self._init_instance(response)
 
     def create(
-        self, FromEmail: str, Name: str, ReplyToEmail: str | None = None, ReturnPathDomain: str | None = None
+        self,
+        FromEmail: str,
+        Name: str,
+        ReplyToEmail: str | None = None,
+        ReturnPathDomain: str | None = None,
+        ConfirmationPersonalNote: str | None = None,
     ) -> SenderSignature:
+        """Creates a sender signature; `ConfirmationPersonalNote` goes to the confirmation email (max 400 chars)."""
         data = {
             "FromEmail": FromEmail,
             "Name": Name,
             "ReplyToEmail": ReplyToEmail,
             "ReturnPathDomain": ReturnPathDomain,
         }
+        # Sent only when given: Postmark doesn't document what `null` does
+        if ConfirmationPersonalNote is not None:
+            data["ConfirmationPersonalNote"] = ConfirmationPersonalNote
         return self._init_instance(self.call("POST", "/senders/", data=data))
 
-    def edit(self, id: int, Name: str, ReplyToEmail: str | None = None, ReturnPathDomain: str | None = None) -> Any:
+    def edit(
+        self,
+        id: int,
+        Name: str,
+        ReplyToEmail: str | None = None,
+        ReturnPathDomain: str | None = None,
+        ConfirmationPersonalNote: str | None = None,
+    ) -> Any:
         data = {
             "Name": Name,
             "ReplyToEmail": ReplyToEmail,
             "ReturnPathDomain": ReturnPathDomain,
         }
+        if ConfirmationPersonalNote is not None:
+            data["ConfirmationPersonalNote"] = ConfirmationPersonalNote
         return self.call("PUT", f"/senders/{id}", data=data)
 
     def delete(self, id: int) -> Any:
