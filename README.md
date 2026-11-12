@@ -2,7 +2,7 @@
 
 [![Build](https://github.com/Stranger6667/postmarker/actions/workflows/build.yml/badge.svg)](https://github.com/Stranger6667/postmarker/actions/workflows/build.yml) [![Coverage](https://codecov.io/gh/Stranger6667/postmarker/branch/master/graph/badge.svg)](https://codecov.io/gh/Stranger6667/postmarker) [![Version](https://img.shields.io/pypi/v/postmarker.svg)](https://pypi.org/project/postmarker/) [![Python versions](https://img.shields.io/pypi/pyversions/postmarker.svg)](https://pypi.org/project/postmarker/) [![Docs](https://readthedocs.org/projects/postmarker/badge/?version=stable)](https://postmarker.readthedocs.io/en/stable/) [![License](https://img.shields.io/pypi/l/postmarker.svg)](https://opensource.org/licenses/MIT)
 
-Python client library for [Postmark API](http://developer.postmarkapp.com/developer-api-overview.html).
+Python client library for [Postmark API](https://postmarkapp.com/developer).
 
 ## Installation
 
@@ -68,11 +68,15 @@ Setup an email:
 There are a lot of features available. Check it out in our documentation! Here's just a few of them:
 
 - Support for sending Python email instances.
-- Bounces, Domains, Messages, Templates, Sender signatures, Status, Stats & Server API.
+- Server APIs: Bounces, Messages, Message Streams, Suppressions, Templates with layouts, Server, Stats and Triggers.
+- Account APIs: Domains, Sender signatures, Servers and pushing templates between servers.
+- Status API.
 - Django email backend.
 - Tornado helper.
 - Spam check API.
 - Wrappers for Bounce, Inbound, Open and Delivery webhooks.
+- `pytest` fixtures to mock Postmark API in tests.
+- Type annotations, with a `py.typed` marker.
 
 ## Documentation
 
@@ -84,7 +88,7 @@ Or you can look at the `docs/` directory in the repository.
 
 ## Python support
 
-Postmarker supports CPython 3.10 - 3.15 and PyPy 3.11.
+Postmarker supports CPython 3.10 - 3.15 and PyPy 3.11. The Django email backend supports Django 5.2, 6.0 and 6.1.
 
 ## Thanks
 
