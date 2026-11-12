@@ -1,8 +1,10 @@
+import warnings
 from base64 import b64decode
 from contextlib import contextmanager
 from email.mime.image import MIMEImage
 from unittest.mock import patch
 
+import django
 import pytest
 from django.core import mail
 from django.core.exceptions import ImproperlyConfigured
@@ -329,6 +331,31 @@ def test_send_long_text_line(postmark_request):
             "From": "sender@example.com",
         },
     )
+
+
+@pytest.mark.parametrize("fail_silently", [True, False])
+def test_fail_silently_without_deprecation_warnings(fail_silently):
+    with warnings.catch_warnings():
+        warnings.simplefilter("error")
+        backend = EmailBackend(fail_silently=fail_silently)
+        assert backend.fail_silently is fail_silently
+
+
+@pytest.mark.skipif(django.VERSION < (6, 1), reason="MAILERS is new in Django 6.1")
+def test_mailers(settings):
+    settings.MAILERS = {"default": {"BACKEND": "postmarker.django.EmailBackend", "OPTIONS": {"token": "TOKEN"}}}
+    with warnings.catch_warnings():
+        warnings.simplefilter("error")
+        backend = mail.mailers["default"]
+    assert backend.alias == "default"
+    assert backend.server_token == "TOKEN"
+
+
+@pytest.mark.skipif(django.VERSION < (6, 1), reason="MAILERS is new in Django 6.1")
+def test_mailers_unknown_option(settings):
+    settings.MAILERS = {"default": {"BACKEND": "postmarker.django.EmailBackend", "OPTIONS": {"tokn": "TOKEN"}}}
+    with pytest.raises(mail.InvalidMailer, match="Unknown options 'tokn'"):
+        mail.mailers["default"]
 
 
 def test_missing_api_key(settings):

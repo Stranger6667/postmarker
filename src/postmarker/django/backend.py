@@ -16,7 +16,9 @@ class EmailBackend(BaseEmailBackend):
     """A wrapper that manages sending emails via Postmark API."""
 
     def __init__(self, token=None, fail_silently=False, **kwargs):
-        super().__init__(fail_silently=fail_silently)
+        # Django 6.1+ deprecates `fail_silently` on `BaseEmailBackend`; `kwargs` carries the `MAILERS` alias
+        super().__init__(**kwargs)
+        self.fail_silently = fail_silently
         self.client = None
         if self.get_option("TEST_MODE"):
             self.server_token = TEST_TOKEN

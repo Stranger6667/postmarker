@@ -29,6 +29,8 @@ Fixed
 - ``postmark_request.return_value`` incorrectly being an internal sentinel on Python 3.11+ (it should be a configurable mock).
 - Django email backend incorrectly failing with ``ValueError`` on Django 6.0+. `#221`_
 - Text attachments from MIME messages, including the Django backend, incorrectly sent without base64 encoding, which Postmark rejects. `#189`_
+- Django email backend incorrectly emitting ``RemovedInDjango2028Warning`` for ``fail_silently`` on Django 6.1+.
+- Django email backend incorrectly dropping the ``MAILERS`` alias on Django 6.1+, which hid unknown ``OPTIONS``.
 
 `1.0`_ - 2022-01-15
 -------------------
