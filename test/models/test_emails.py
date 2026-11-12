@@ -83,378 +83,405 @@ INLINE_IMAGE.add_header("Content-ID", "<image3@example.com>")
 INLINE_IMAGE.add_header("Content-Disposition", "inline", filename="image3.png")
 
 
-class TestSimpleSend:
-    @pytest.fixture
-    def minimal_data(self):
-        return {
-            "From": "sender@example.com",
-            "To": "receiver@example.com",
-            "Subject": "Postmark test",
-            "HtmlBody": "<html><body><strong>Hello</strong> dear Postmark user.</body></html>",
-        }
-
-    def test_default(self, postmark, minimal_data):
-        """Minimal case."""
-        response = postmark.emails.send(**minimal_data)
-        assert response == {
-            "ErrorCode": 0,
-            "Message": "Test job accepted",
-            "MessageID": "806aa9ad-689d-48d3-9887-ac0c2bc6f57d",
-            "SubmittedAt": "2016-10-06T04:24:31.2196962-04:00",
-            "To": "receiver@example.com",
-        }
-
-    def test_mime_text(self, postmark):
-        response = postmark.emails.send(message=MIME_MESSAGE)
-        assert response == {
-            "ErrorCode": 0,
-            "Message": "Test job accepted",
-            "MessageID": "96a981da-9b7c-4aa9-bda2-84ab99097686",
-            "SubmittedAt": "2016-10-06T10:05:30.570118-04:00",
-            "To": "receiver@example.com",
-        }
-
-    def test_minimum_mime(self, postmark):
-        message = get_mime_message("Text", From="sender@example.com", To="receiver@example.com")
-        response = postmark.emails.send(message=message)
-        assert response == {
-            "ErrorCode": 0,
-            "Message": "Test job accepted",
-            "MessageID": "03285bf8-2a7d-4c42-9e15-b51062e2bc9a",
-            "SubmittedAt": "2016-10-06T10:26:27.8804172-04:00",
-            "To": "receiver@example.com",
-        }
-
-    def test_invalid(self, postmark):
-        with pytest.raises(TypeError) as exc:
-            postmark.emails.send(message=object())
-        assert str(exc.value) == "message should be either Email or email.message.Message instance"
-
-    def test_message_and_kwargs(self, postmark, email):
-        with pytest.raises(AssertionError) as exc:
-            postmark.emails.send(message=email, From="test@test.com")
-        assert str(exc.value).startswith("You should specify either message or From and To parameters")
-
-    def test_send_email(self, postmark, email, postmark_request):
-        postmark.emails.send(message=email)
-        assert postmark_request.call_args[1]["json"] == email.as_dict()
-
-    @pytest.mark.parametrize("field", ("To", "Cc", "Bcc"))
-    @pytest.mark.parametrize(
-        "value",
-        (
-            "first@example.com,second@example.com",
-            ["first@example.com", "second@example.com"],
-        ),
-    )
-    def test_multiple_addresses(self, postmark, minimal_data, postmark_request, field, value):
-        minimal_data[field] = value
-        postmark.emails.send(**minimal_data)
-        assert postmark_request.call_args[1]["json"][field] == "first@example.com,second@example.com"
-
-    def test_headers(self, postmark, minimal_data, postmark_request):
-        minimal_data["Headers"] = {"Test": 1}
-        postmark.emails.send(**minimal_data)
-        assert postmark_request.call_args[1]["json"]["Headers"] == [{"Name": "Test", "Value": 1}]
-
-    def test_message_stream(self, postmark, minimal_data, postmark_request):
-        minimal_data["MessageStream"] = "example-message-stream"
-        postmark.emails.send(**minimal_data)
-        assert postmark_request.call_args[1]["json"]["MessageStream"] == "example-message-stream"
-
-    @pytest.mark.parametrize("attachment", SUPPORTED_ATTACHMENTS)
-    def test_attachments(self, postmark, minimal_data, postmark_request, attachment):
-        minimal_data["Attachments"] = [attachment]
-        postmark.emails.send(**minimal_data)
-        assert postmark_request.call_args[1]["json"]["Attachments"] == [ATTACHMENT]
-
-    def test_mime_multipart(self, postmark, postmark_request):
-        postmark.emails.send(MIME_ALTERNATIVE)
-        assert postmark_request.call_args[1]["json"] == {
-            "Attachments": [
-                {
-                    "Content": ENCODED_CONTENT,
-                    "ContentType": "application/octet-stream",
-                    "Name": "report.pdf",
-                }
-            ],
-            "Bcc": "bcc@example.com",
-            "Cc": "cc@example.com",
-            "From": "sender@example.com",
-            "Headers": [],
-            "HtmlBody": "HTML content",
-            "ReplyTo": "replyto@example.com",
-            "Subject": "Test subject",
-            "TextBody": "Text",
-            "Tag": None,
-            "Metadata": None,
-            "MessageStream": None,
-            "To": "receiver@example.com",
-        }
-
-    def test_send_with_template(self, postmark):
-        response = postmark.emails.send_with_template(
-            TemplateId=983381,
-            TemplateModel={},
-            From="sender@example.com",
-            To="receiver@example.com",
-        )
-        assert response == {
-            "ErrorCode": 0,
-            "Message": "OK",
-            "MessageID": "cf639975-1685-4c70-aba1-b1115b4f6d12",
-            "SubmittedAt": "2016-10-15T14:42:56.1508279-04:00",
-            "To": "receiver@example.com",
-        }
-
-    def test_template_with_alias_only(self, postmark):
-        # It should be possible to specify `TemplateAlias` and not `TemplateId`
-        postmark.emails.EmailTemplate(
-            TemplateAlias="foo",
-            TemplateModel={},
-            From="sender@example.com",
-            To="receiver@example.com",
-        )
-
-    def test_send_with_template_without_alias_and_id(self, postmark):
-        # If there is no `TemplateAlias` and `TemplateId` then it is an error
-        with pytest.raises(ValueError):
-            postmark.emails.send_with_template(
-                TemplateModel={},
-                From="sender@example.com",
-                To="receiver@example.com",
-            )
+@pytest.fixture
+def minimal_data():
+    return {
+        "From": "sender@example.com",
+        "To": "receiver@example.com",
+        "Subject": "Postmark test",
+        "HtmlBody": "<html><body><strong>Hello</strong> dear Postmark user.</body></html>",
+    }
 
 
-class TestBatchSend:
-    def test_email_instance(self, postmark, email, postmark_request):
-        postmark.emails.send_batch(email)
-        assert postmark_request.call_args[1]["json"] == (email.as_dict(),)
-
-    def test_dict(self, postmark, email, postmark_request):
-        email_dict = {"From": email.From, "To": email.To, "TextBody": email.TextBody}
-        expected = {
-            "From": email.From,
-            "To": email.To,
-            "TextBody": email.TextBody,
-            "Headers": [],
-            "Attachments": [],
-        }
-        postmark.emails.send_batch(email_dict)
-        assert postmark_request.call_args[1]["json"] == (expected,)
-
-    def test_multiple(self, postmark, email, postmark_request):
-        postmark.emails.send_batch(email, email)
-        assert postmark_request.call_args[1]["json"] == (
-            email.as_dict(),
-            email.as_dict(),
-        )
-
-    def test_mime(self, postmark, postmark_request):
-        postmark.emails.send_batch(MIME_MESSAGE)
-        email = Email.from_mime(MIME_MESSAGE, postmark)
-        assert postmark_request.call_args[1]["json"] == (email.as_dict(),)
-
-    def test_invalid(self, postmark):
-        expected = "Expected Email, email.message.Message or dict, got object"
-        with pytest.raises(ValueError, match=f"^{re.escape(expected)}$"):
-            postmark.emails.send_batch(object())
-
-    @pytest.mark.parametrize("container", [list, tuple])
-    def test_sequence(self, postmark, email, container):
-        expected = (
-            f"Expected Email, email.message.Message or dict, got {container.__name__}; "
-            "pass emails as separate arguments, e.g. send_batch(*emails)"
-        )
-        with pytest.raises(ValueError, match=f"^{re.escape(expected)}$"):
-            postmark.emails.send_batch(container([email, email]))
+def test_simple_send_default(postmark, minimal_data):
+    """Minimal case."""
+    response = postmark.emails.send(**minimal_data)
+    assert response == {
+        "ErrorCode": 0,
+        "Message": "Test job accepted",
+        "MessageID": "806aa9ad-689d-48d3-9887-ac0c2bc6f57d",
+        "SubmittedAt": "2016-10-06T04:24:31.2196962-04:00",
+        "To": "receiver@example.com",
+    }
 
 
-class TestEmailBatch:
-    def test_len(self, email_batch):
-        assert len(email_batch) == 1
+def test_simple_send_mime_text(postmark):
+    response = postmark.emails.send(message=MIME_MESSAGE)
+    assert response == {
+        "ErrorCode": 0,
+        "Message": "Test job accepted",
+        "MessageID": "96a981da-9b7c-4aa9-bda2-84ab99097686",
+        "SubmittedAt": "2016-10-06T10:05:30.570118-04:00",
+        "To": "receiver@example.com",
+    }
 
 
-class TestEmail:
-    def test_str(self, email):
-        assert str(email) == "Email from sender@example.com to receiver@example.com"
+def test_simple_send_minimum_mime(postmark):
+    message = get_mime_message("Text", From="sender@example.com", To="receiver@example.com")
+    response = postmark.emails.send(message=message)
+    assert response == {
+        "ErrorCode": 0,
+        "Message": "Test job accepted",
+        "MessageID": "03285bf8-2a7d-4c42-9e15-b51062e2bc9a",
+        "SubmittedAt": "2016-10-06T10:26:27.8804172-04:00",
+        "To": "receiver@example.com",
+    }
 
-    def test_repr(self, email):
-        assert repr(email) == "<Email from sender@example.com to receiver@example.com>"
 
-    def test_str_multiple_recipients(self, postmark):
-        email = postmark.emails.Email(From="sender@example.com", To=["a@example.com", "b@example.com"], TextBody="text")
-        assert str(email) == "Email from sender@example.com to a@example.com,b@example.com"
+def test_simple_send_invalid(postmark):
+    with pytest.raises(TypeError) as exc:
+        postmark.emails.send(message=object())
+    assert str(exc.value) == "message should be either Email or email.message.Message instance"
 
-    def test_set_header(self, email):
-        assert email.Headers == {}
-        email["X-Accept-Language"] = "en-us, en"
-        assert email.Headers == {"X-Accept-Language": "en-us, en"}
-        assert email.as_dict()["Headers"] == [{"Name": "X-Accept-Language", "Value": "en-us, en"}]
 
-    def test_unset_header(self, email):
-        email["X-Accept-Language"] = "en-us, en"
-        del email["X-Accept-Language"]
-        assert email.Headers == {}
-        assert email.as_dict()["Headers"] == []
+def test_simple_send_message_and_kwargs(postmark, email):
+    with pytest.raises(AssertionError) as exc:
+        postmark.emails.send(message=email, From="test@test.com")
+    assert str(exc.value).startswith("You should specify either message or From and To parameters")
 
-    def test_body(self):
-        with pytest.raises(AssertionError) as exc:
-            Email(
-                From="sender@example.com",
-                To="receiver@example.com",
-                Subject="Postmark test",
-            )
-        assert str(exc.value).startswith("Provide either email TextBody or HtmlBody or both")
 
-    @pytest.mark.parametrize("attachment", SUPPORTED_ATTACHMENTS)
-    def test_attach(self, email, postmark_request, attachment):
-        email.attach(attachment)
-        email.send()
-        assert postmark_request.call_args[1]["json"]["Attachments"] == [ATTACHMENT]
+def test_simple_send_email(postmark, email, postmark_request):
+    postmark.emails.send(message=email)
+    assert postmark_request.call_args[1]["json"] == email.as_dict()
 
-    def test_attach_multiple(self, email, postmark_request):
-        email.attach(ATTACHMENT, TUPLE_ATTACHMENT, MIME_ATTACHMENT)
-        email.send()
-        assert postmark_request.call_args[1]["json"]["Attachments"] == [
-            ATTACHMENT,
-            ATTACHMENT,
-            ATTACHMENT,
-        ]
 
-    def test_attach_unknown_content_type(self, email, postmark_request):
-        email.attach(UNKNOWN_TYPE_ATTACHMENT)
-        email.send()
-        assert postmark_request.call_args[1]["json"]["Attachments"] == [
+@pytest.mark.parametrize("field", ("To", "Cc", "Bcc"))
+@pytest.mark.parametrize(
+    "value",
+    (
+        "first@example.com,second@example.com",
+        ["first@example.com", "second@example.com"],
+    ),
+)
+def test_simple_send_multiple_addresses(postmark, minimal_data, postmark_request, field, value):
+    minimal_data[field] = value
+    postmark.emails.send(**minimal_data)
+    assert postmark_request.call_args[1]["json"][field] == "first@example.com,second@example.com"
+
+
+def test_simple_send_headers(postmark, minimal_data, postmark_request):
+    minimal_data["Headers"] = {"Test": 1}
+    postmark.emails.send(**minimal_data)
+    assert postmark_request.call_args[1]["json"]["Headers"] == [{"Name": "Test", "Value": 1}]
+
+
+def test_simple_send_message_stream(postmark, minimal_data, postmark_request):
+    minimal_data["MessageStream"] = "example-message-stream"
+    postmark.emails.send(**minimal_data)
+    assert postmark_request.call_args[1]["json"]["MessageStream"] == "example-message-stream"
+
+
+@pytest.mark.parametrize("attachment", SUPPORTED_ATTACHMENTS)
+def test_simple_send_attachments(postmark, minimal_data, postmark_request, attachment):
+    minimal_data["Attachments"] = [attachment]
+    postmark.emails.send(**minimal_data)
+    assert postmark_request.call_args[1]["json"]["Attachments"] == [ATTACHMENT]
+
+
+def test_simple_send_mime_multipart(postmark, postmark_request):
+    postmark.emails.send(MIME_ALTERNATIVE)
+    assert postmark_request.call_args[1]["json"] == {
+        "Attachments": [
             {
-                "Name": "report.blabla",
-                "Content": CONTENT,
+                "Content": ENCODED_CONTENT,
                 "ContentType": "application/octet-stream",
+                "Name": "report.pdf",
             }
-        ]
+        ],
+        "Bcc": "bcc@example.com",
+        "Cc": "cc@example.com",
+        "From": "sender@example.com",
+        "Headers": [],
+        "HtmlBody": "HTML content",
+        "ReplyTo": "replyto@example.com",
+        "Subject": "Test subject",
+        "TextBody": "Text",
+        "Tag": None,
+        "Metadata": None,
+        "MessageStream": None,
+        "To": "receiver@example.com",
+    }
 
-    def test_attach_binary(self, email, postmark_request):
-        email.attach_binary(RAW_CONTENT, "readme.txt")
-        email.send()
-        assert postmark_request.call_args[1]["json"]["Attachments"] == [ATTACHMENT]
 
-    def test_from_mime(self, postmark):
-        email = Email.from_mime(MIME_MESSAGE, postmark)
-        assert email.TextBody == "Text"
-        assert email.From == MIME_MESSAGE["From"]
-        assert email.To == MIME_MESSAGE["To"]
-        assert email.Subject == MIME_MESSAGE["Subject"]
-        assert email.Cc == MIME_MESSAGE["Cc"]
-        assert email.Bcc == MIME_MESSAGE["Bcc"]
-        assert email.ReplyTo == MIME_MESSAGE["Reply-To"]
-
-    @pytest.mark.parametrize(
-        "image, expected",
-        (
-            (
-                ("image", "content", "image/png", "cid:image@example.com"),
-                {
-                    "Name": "image",
-                    "Content": "content",
-                    "ContentType": "image/png",
-                    "ContentID": "cid:image@example.com",
-                },
-            ),
-            (
-                IMAGE,
-                {
-                    "Name": "image1.png",
-                    "Content": ENCODED_CONTENT,
-                    "ContentType": "image/png",
-                    "ContentID": "image1@example.com",
-                },
-            ),
-            (
-                IMAGE_NO_BRACKETS,
-                {
-                    "Name": "image2.png",
-                    "Content": ENCODED_CONTENT,
-                    "ContentType": "image/png",
-                    "ContentID": "image2@example.com",
-                },
-            ),
-            (
-                INLINE_IMAGE,
-                {
-                    "Name": "image3.png",
-                    "Content": ENCODED_CONTENT,
-                    "ContentType": "image/png",
-                    "ContentID": "cid:image3@example.com",
-                },
-            ),
-        ),
+def test_simple_send_with_template(postmark):
+    response = postmark.emails.send_with_template(
+        TemplateId=983381,
+        TemplateModel={},
+        From="sender@example.com",
+        To="receiver@example.com",
     )
-    def test_inline_image(self, email, postmark_request, image, expected):
-        email.attach(image)
-        email.send()
-        assert postmark_request.call_args[1]["json"]["Attachments"] == [expected]
+    assert response == {
+        "ErrorCode": 0,
+        "Message": "OK",
+        "MessageID": "cf639975-1685-4c70-aba1-b1115b4f6d12",
+        "SubmittedAt": "2016-10-15T14:42:56.1508279-04:00",
+        "To": "receiver@example.com",
+    }
 
 
-class TestDelivery:
-    def test_str(self, delivery_webhook):
-        assert str(delivery_webhook) == "Delivery to john@example.com"
+def test_simple_send_template_with_alias_only(postmark):
+    # It should be possible to specify `TemplateAlias` and not `TemplateId`
+    postmark.emails.EmailTemplate(
+        TemplateAlias="foo",
+        TemplateModel={},
+        From="sender@example.com",
+        To="receiver@example.com",
+    )
 
 
-class TestTemplateBatchSend:
-    def test_template_email_instance(self, postmark, email_template, postmark_request):
-        postmark.emails.send_template_batch(email_template)
-        assert postmark_request.call_args[1]["json"] == {"Messages": (email_template.as_dict(),)}
-
-    def test_dict(self, postmark, postmark_request):
-        template_dict = {
-            "TemplateId": 983381,
-            "TemplateModel": {},
-            "From": "sender@example.com",
-            "To": "receiver@example.com",
-        }
-        expected = {
-            "TemplateId": 983381,
-            "TemplateModel": {},
-            "From": "sender@example.com",
-            "To": "receiver@example.com",
-            "Headers": [],
-            "Attachments": [],
-        }
-        postmark.emails.send_template_batch(template_dict)
-        assert postmark_request.call_args[1]["json"] == {"Messages": (expected,)}
-
-    def test_multiple(self, postmark, email_template, postmark_request):
-        postmark.emails.send_template_batch(email_template, email_template)
-        assert postmark_request.call_args[1]["json"] == {
-            "Messages": (
-                email_template.as_dict(),
-                email_template.as_dict(),
-            )
-        }
-
-    def test_invalid(self, postmark):
-        expected = "Expected EmailTemplate or dict, got object"
-        with pytest.raises(ValueError, match=f"^{re.escape(expected)}$"):
-            postmark.emails.send_template_batch(object())
-
-    @pytest.mark.parametrize("container", [list, tuple])
-    def test_sequence(self, postmark, email_template, container):
-        expected = (
-            f"Expected EmailTemplate or dict, got {container.__name__}; "
-            "pass emails as separate arguments, e.g. send_template_batch(*emails)"
+def test_simple_send_with_template_without_alias_and_id(postmark):
+    # If there is no `TemplateAlias` and `TemplateId` then it is an error
+    with pytest.raises(ValueError):
+        postmark.emails.send_with_template(
+            TemplateModel={},
+            From="sender@example.com",
+            To="receiver@example.com",
         )
-        with pytest.raises(ValueError, match=f"^{re.escape(expected)}$"):
-            postmark.emails.send_template_batch(container([email_template, email_template]))
 
 
-class TestEmailTemplate:
-    def test_str(self, email_template):
-        assert str(email_template) == "EmailTemplate from sender@example.com to receiver@example.com"
-
-    def test_repr(self, email_template):
-        assert repr(email_template) == "<EmailTemplate from sender@example.com to receiver@example.com>"
+def test_batch_send_email_instance(postmark, email, postmark_request):
+    postmark.emails.send_batch(email)
+    assert postmark_request.call_args[1]["json"] == (email.as_dict(),)
 
 
-class TestEmailTemplateBatch:
-    def test_len(self, email_template_batch):
-        assert len(email_template_batch) == 1
+def test_batch_send_dict(postmark, email, postmark_request):
+    email_dict = {"From": email.From, "To": email.To, "TextBody": email.TextBody}
+    expected = {
+        "From": email.From,
+        "To": email.To,
+        "TextBody": email.TextBody,
+        "Headers": [],
+        "Attachments": [],
+    }
+    postmark.emails.send_batch(email_dict)
+    assert postmark_request.call_args[1]["json"] == (expected,)
+
+
+def test_batch_send_multiple(postmark, email, postmark_request):
+    postmark.emails.send_batch(email, email)
+    assert postmark_request.call_args[1]["json"] == (
+        email.as_dict(),
+        email.as_dict(),
+    )
+
+
+def test_batch_send_mime(postmark, postmark_request):
+    postmark.emails.send_batch(MIME_MESSAGE)
+    email = Email.from_mime(MIME_MESSAGE, postmark)
+    assert postmark_request.call_args[1]["json"] == (email.as_dict(),)
+
+
+def test_batch_send_invalid(postmark):
+    expected = "Expected Email, email.message.Message or dict, got object"
+    with pytest.raises(ValueError, match=f"^{re.escape(expected)}$"):
+        postmark.emails.send_batch(object())
+
+
+@pytest.mark.parametrize("container", [list, tuple])
+def test_batch_send_sequence(postmark, email, container):
+    expected = (
+        f"Expected Email, email.message.Message or dict, got {container.__name__}; "
+        "pass emails as separate arguments, e.g. send_batch(*emails)"
+    )
+    with pytest.raises(ValueError, match=f"^{re.escape(expected)}$"):
+        postmark.emails.send_batch(container([email, email]))
+
+
+def test_email_batch_len(email_batch):
+    assert len(email_batch) == 1
+
+
+def test_email_str(email):
+    assert str(email) == "Email from sender@example.com to receiver@example.com"
+
+
+def test_email_repr(email):
+    assert repr(email) == "<Email from sender@example.com to receiver@example.com>"
+
+
+def test_email_str_multiple_recipients(postmark):
+    email = postmark.emails.Email(From="sender@example.com", To=["a@example.com", "b@example.com"], TextBody="text")
+    assert str(email) == "Email from sender@example.com to a@example.com,b@example.com"
+
+
+def test_email_set_header(email):
+    assert email.Headers == {}
+    email["X-Accept-Language"] = "en-us, en"
+    assert email.Headers == {"X-Accept-Language": "en-us, en"}
+    assert email.as_dict()["Headers"] == [{"Name": "X-Accept-Language", "Value": "en-us, en"}]
+
+
+def test_email_unset_header(email):
+    email["X-Accept-Language"] = "en-us, en"
+    del email["X-Accept-Language"]
+    assert email.Headers == {}
+    assert email.as_dict()["Headers"] == []
+
+
+def test_email_body():
+    with pytest.raises(AssertionError) as exc:
+        Email(
+            From="sender@example.com",
+            To="receiver@example.com",
+            Subject="Postmark test",
+        )
+    assert str(exc.value).startswith("Provide either email TextBody or HtmlBody or both")
+
+
+@pytest.mark.parametrize("attachment", SUPPORTED_ATTACHMENTS)
+def test_email_attach(email, postmark_request, attachment):
+    email.attach(attachment)
+    email.send()
+    assert postmark_request.call_args[1]["json"]["Attachments"] == [ATTACHMENT]
+
+
+def test_email_attach_multiple(email, postmark_request):
+    email.attach(ATTACHMENT, TUPLE_ATTACHMENT, MIME_ATTACHMENT)
+    email.send()
+    assert postmark_request.call_args[1]["json"]["Attachments"] == [
+        ATTACHMENT,
+        ATTACHMENT,
+        ATTACHMENT,
+    ]
+
+
+def test_email_attach_unknown_content_type(email, postmark_request):
+    email.attach(UNKNOWN_TYPE_ATTACHMENT)
+    email.send()
+    assert postmark_request.call_args[1]["json"]["Attachments"] == [
+        {
+            "Name": "report.blabla",
+            "Content": CONTENT,
+            "ContentType": "application/octet-stream",
+        }
+    ]
+
+
+def test_email_attach_binary(email, postmark_request):
+    email.attach_binary(RAW_CONTENT, "readme.txt")
+    email.send()
+    assert postmark_request.call_args[1]["json"]["Attachments"] == [ATTACHMENT]
+
+
+def test_email_from_mime(postmark):
+    email = Email.from_mime(MIME_MESSAGE, postmark)
+    assert email.TextBody == "Text"
+    assert email.From == MIME_MESSAGE["From"]
+    assert email.To == MIME_MESSAGE["To"]
+    assert email.Subject == MIME_MESSAGE["Subject"]
+    assert email.Cc == MIME_MESSAGE["Cc"]
+    assert email.Bcc == MIME_MESSAGE["Bcc"]
+    assert email.ReplyTo == MIME_MESSAGE["Reply-To"]
+
+
+@pytest.mark.parametrize(
+    "image, expected",
+    (
+        (
+            ("image", "content", "image/png", "cid:image@example.com"),
+            {
+                "Name": "image",
+                "Content": "content",
+                "ContentType": "image/png",
+                "ContentID": "cid:image@example.com",
+            },
+        ),
+        (
+            IMAGE,
+            {
+                "Name": "image1.png",
+                "Content": ENCODED_CONTENT,
+                "ContentType": "image/png",
+                "ContentID": "image1@example.com",
+            },
+        ),
+        (
+            IMAGE_NO_BRACKETS,
+            {
+                "Name": "image2.png",
+                "Content": ENCODED_CONTENT,
+                "ContentType": "image/png",
+                "ContentID": "image2@example.com",
+            },
+        ),
+        (
+            INLINE_IMAGE,
+            {
+                "Name": "image3.png",
+                "Content": ENCODED_CONTENT,
+                "ContentType": "image/png",
+                "ContentID": "cid:image3@example.com",
+            },
+        ),
+    ),
+)
+def test_email_inline_image(email, postmark_request, image, expected):
+    email.attach(image)
+    email.send()
+    assert postmark_request.call_args[1]["json"]["Attachments"] == [expected]
+
+
+def test_delivery_str(delivery_webhook):
+    assert str(delivery_webhook) == "Delivery to john@example.com"
+
+
+def test_template_batch_send_email_template(postmark, email_template, postmark_request):
+    postmark.emails.send_template_batch(email_template)
+    assert postmark_request.call_args[1]["json"] == {"Messages": (email_template.as_dict(),)}
+
+
+def test_template_batch_send_dict(postmark, postmark_request):
+    template_dict = {
+        "TemplateId": 983381,
+        "TemplateModel": {},
+        "From": "sender@example.com",
+        "To": "receiver@example.com",
+    }
+    expected = {
+        "TemplateId": 983381,
+        "TemplateModel": {},
+        "From": "sender@example.com",
+        "To": "receiver@example.com",
+        "Headers": [],
+        "Attachments": [],
+    }
+    postmark.emails.send_template_batch(template_dict)
+    assert postmark_request.call_args[1]["json"] == {"Messages": (expected,)}
+
+
+def test_template_batch_send_multiple(postmark, email_template, postmark_request):
+    postmark.emails.send_template_batch(email_template, email_template)
+    assert postmark_request.call_args[1]["json"] == {
+        "Messages": (
+            email_template.as_dict(),
+            email_template.as_dict(),
+        )
+    }
+
+
+def test_template_batch_send_invalid(postmark):
+    expected = "Expected EmailTemplate or dict, got object"
+    with pytest.raises(ValueError, match=f"^{re.escape(expected)}$"):
+        postmark.emails.send_template_batch(object())
+
+
+@pytest.mark.parametrize("container", [list, tuple])
+def test_template_batch_send_sequence(postmark, email_template, container):
+    expected = (
+        f"Expected EmailTemplate or dict, got {container.__name__}; "
+        "pass emails as separate arguments, e.g. send_template_batch(*emails)"
+    )
+    with pytest.raises(ValueError, match=f"^{re.escape(expected)}$"):
+        postmark.emails.send_template_batch(container([email_template, email_template]))
+
+
+def test_email_template_str(email_template):
+    assert str(email_template) == "EmailTemplate from sender@example.com to receiver@example.com"
+
+
+def test_email_template_repr(email_template):
+    assert repr(email_template) == "<EmailTemplate from sender@example.com to receiver@example.com>"
+
+
+def test_email_template_batch_len(email_template_batch):
+    assert len(email_template_batch) == 1

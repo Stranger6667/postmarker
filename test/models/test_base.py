@@ -7,22 +7,22 @@ from postmarker.core import USER_AGENT
 from postmarker.models.base import Model, ModelManager
 
 
-class TestModel:
-    def test_as_dict(self):
-        instance = Model(value=1)
-        assert instance.as_dict() == {"value": 1}
-
-    def test_str(self):
-        instance = Model(ID=1)
-        assert str(instance) == "Model: 1"
+def test_model_as_dict():
+    instance = Model(value=1)
+    assert instance.as_dict() == {"value": 1}
 
 
-class TestModelManager:
-    def test_str(self):
-        assert str(ModelManager(None)) == "ModelManager"
+def test_model_str():
+    instance = Model(ID=1)
+    assert str(instance) == "Model: 1"
 
-    def test_repr(self):
-        assert repr(ModelManager(None)) == "<ModelManager>"
+
+def test_model_manager_str():
+    assert str(ModelManager(None)) == "ModelManager"
+
+
+def test_model_manager_repr():
+    assert repr(ModelManager(None)) == "<ModelManager>"
 
 
 def requested_pages(postmark, path, total, **kwargs):
