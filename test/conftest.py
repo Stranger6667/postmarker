@@ -1,4 +1,5 @@
 import os
+import unittest
 from contextlib import contextmanager
 from unittest.mock import Mock
 
@@ -11,6 +12,13 @@ DEFAULT_SERVER_TOKEN = "SERVER_TOKEN"
 DEFAULT_ACCOUNT_TOKEN = "ACCOUNT_TOKEN"
 SERVER_TOKEN = os.environ.get("SERVER_TOKEN", DEFAULT_SERVER_TOKEN)
 ACCOUNT_TOKEN = os.environ.get("ACCOUNT_TOKEN", DEFAULT_ACCOUNT_TOKEN)
+
+
+def pytest_collection_modifyitems(items):
+    # unittest classes (e.g. tornado's AsyncHTTPTestCase) are the only allowed ones
+    classes = [item.nodeid for item in items if item.cls and not issubclass(item.cls, unittest.TestCase)]
+    if classes:
+        raise pytest.UsageError("Write test functions, not test classes:\n" + "\n".join(classes))
 
 
 @pytest.fixture(scope="session")

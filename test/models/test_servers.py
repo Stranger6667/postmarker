@@ -66,86 +66,93 @@ def server(postmark_client, postmark_request):
     return instance
 
 
-class TestManager:
-    def test_all(self, postmark_client, postmark_request):
-        postmark_request.return_value.json.return_value = {"TotalCount": 2, "Servers": [STAGING, SANDBOX]}
-        servers = postmark_client.servers.all()
-        assert postmark_request.call_args_list == [
-            request("GET", "/servers", params={"count": 500, "offset": 0, "name": None})
-        ]
-        assert all(isinstance(server, AccountServer) for server in servers)
-        assert [server.as_dict() for server in servers] == [STAGING, SANDBOX]
-
-    def test_all_name(self, postmark_client, postmark_request):
-        postmark_request.return_value.json.return_value = {"TotalCount": 1, "Servers": [STAGING]}
-        servers = postmark_client.servers.all(count=10, offset=5, name="Staging")
-        assert postmark_request.call_args_list == [
-            request("GET", "/servers", params={"count": 10, "offset": 5, "name": "Staging"})
-        ]
-        assert [server.as_dict() for server in servers] == [STAGING]
-
-    def test_all_paginates(self, postmark_client, postmark_request):
-        postmark_request.return_value.json.side_effect = [
-            {"TotalCount": 600, "Servers": [STAGING]},
-            {"TotalCount": 600, "Servers": [SANDBOX]},
-        ]
-        servers = postmark_client.servers.all(count=600)
-        assert postmark_request.call_args_list == [
-            request("GET", "/servers", params={"count": 500, "offset": 0, "name": None}),
-            request("GET", "/servers", params={"count": 100, "offset": 500, "name": None}),
-        ]
-        assert [server.as_dict() for server in servers] == [STAGING, SANDBOX]
-
-    def test_get(self, postmark_client, postmark_request):
-        postmark_request.return_value.json.return_value = STAGING
-        server = postmark_client.servers.get(1)
-        assert postmark_request.call_args_list == [request("GET", "/servers/1")]
-        assert isinstance(server, AccountServer)
-        assert server.as_dict() == STAGING
-
-    def test_create(self, postmark_client, postmark_request):
-        postmark_request.return_value.json.return_value = STAGING
-        server = postmark_client.servers.create("Staging Testing", Color="Red", InboundSpamThreshold=5)
-        assert postmark_request.call_args_list == [
-            request("POST", "/servers", json={"Name": "Staging Testing", "Color": "Red", "InboundSpamThreshold": 5})
-        ]
-        assert isinstance(server, AccountServer)
-        assert server.as_dict() == STAGING
-
-    def test_edit(self, postmark_client, postmark_request):
-        postmark_request.return_value.json.return_value = PRODUCTION
-        assert postmark_client.servers.edit(1, Name="Production Testing", Color="Blue") == PRODUCTION
-        assert postmark_request.call_args_list == [
-            request("PUT", "/servers/1", json={"Name": "Production Testing", "Color": "Blue"})
-        ]
-
-    def test_delete(self, postmark_client, postmark_request):
-        postmark_request.return_value.json.return_value = DELETED
-        assert postmark_client.servers.delete(2) == "Server Production Server 2 removed."
-        assert postmark_request.call_args_list == [request("DELETE", "/servers/2")]
+def test_manager_all(postmark_client, postmark_request):
+    postmark_request.return_value.json.return_value = {"TotalCount": 2, "Servers": [STAGING, SANDBOX]}
+    servers = postmark_client.servers.all()
+    assert postmark_request.call_args_list == [
+        request("GET", "/servers", params={"count": 500, "offset": 0, "name": None})
+    ]
+    assert all(isinstance(server, AccountServer) for server in servers)
+    assert [server.as_dict() for server in servers] == [STAGING, SANDBOX]
 
 
-class TestModel:
-    def test_str(self, server):
-        assert str(server) == "AccountServer: Staging Testing (1)"
+def test_manager_all_name(postmark_client, postmark_request):
+    postmark_request.return_value.json.return_value = {"TotalCount": 1, "Servers": [STAGING]}
+    servers = postmark_client.servers.all(count=10, offset=5, name="Staging")
+    assert postmark_request.call_args_list == [
+        request("GET", "/servers", params={"count": 10, "offset": 5, "name": "Staging"})
+    ]
+    assert [server.as_dict() for server in servers] == [STAGING]
 
-    def test_get(self, server, postmark_request):
-        postmark_request.return_value.json.return_value = PRODUCTION
-        assert server.get() is server
-        assert postmark_request.call_args_list == [request("GET", "/servers/1")]
-        assert server.as_dict() == PRODUCTION
-        assert server.Name == "Production Testing"
 
-    def test_edit(self, server, postmark_request):
-        postmark_request.return_value.json.return_value = PRODUCTION
-        server.edit(Name="Production Testing", Color="Blue")
-        assert postmark_request.call_args_list == [
-            request("PUT", "/servers/1", json={"Name": "Production Testing", "Color": "Blue"})
-        ]
-        assert server.as_dict() == PRODUCTION
-        assert server.Name == "Production Testing"
+def test_manager_all_paginates(postmark_client, postmark_request):
+    postmark_request.return_value.json.side_effect = [
+        {"TotalCount": 600, "Servers": [STAGING]},
+        {"TotalCount": 600, "Servers": [SANDBOX]},
+    ]
+    servers = postmark_client.servers.all(count=600)
+    assert postmark_request.call_args_list == [
+        request("GET", "/servers", params={"count": 500, "offset": 0, "name": None}),
+        request("GET", "/servers", params={"count": 100, "offset": 500, "name": None}),
+    ]
+    assert [server.as_dict() for server in servers] == [STAGING, SANDBOX]
 
-    def test_delete(self, server, postmark_request):
-        postmark_request.return_value.json.return_value = DELETED
-        assert server.delete() == "Server Production Server 2 removed."
-        assert postmark_request.call_args_list == [request("DELETE", "/servers/1")]
+
+def test_manager_get(postmark_client, postmark_request):
+    postmark_request.return_value.json.return_value = STAGING
+    server = postmark_client.servers.get(1)
+    assert postmark_request.call_args_list == [request("GET", "/servers/1")]
+    assert isinstance(server, AccountServer)
+    assert server.as_dict() == STAGING
+
+
+def test_manager_create(postmark_client, postmark_request):
+    postmark_request.return_value.json.return_value = STAGING
+    server = postmark_client.servers.create("Staging Testing", Color="Red", InboundSpamThreshold=5)
+    assert postmark_request.call_args_list == [
+        request("POST", "/servers", json={"Name": "Staging Testing", "Color": "Red", "InboundSpamThreshold": 5})
+    ]
+    assert isinstance(server, AccountServer)
+    assert server.as_dict() == STAGING
+
+
+def test_manager_edit(postmark_client, postmark_request):
+    postmark_request.return_value.json.return_value = PRODUCTION
+    assert postmark_client.servers.edit(1, Name="Production Testing", Color="Blue") == PRODUCTION
+    assert postmark_request.call_args_list == [
+        request("PUT", "/servers/1", json={"Name": "Production Testing", "Color": "Blue"})
+    ]
+
+
+def test_manager_delete(postmark_client, postmark_request):
+    postmark_request.return_value.json.return_value = DELETED
+    assert postmark_client.servers.delete(2) == "Server Production Server 2 removed."
+    assert postmark_request.call_args_list == [request("DELETE", "/servers/2")]
+
+
+def test_model_str(server):
+    assert str(server) == "AccountServer: Staging Testing (1)"
+
+
+def test_model_get(server, postmark_request):
+    postmark_request.return_value.json.return_value = PRODUCTION
+    assert server.get() is server
+    assert postmark_request.call_args_list == [request("GET", "/servers/1")]
+    assert server.as_dict() == PRODUCTION
+    assert server.Name == "Production Testing"
+
+
+def test_model_edit(server, postmark_request):
+    postmark_request.return_value.json.return_value = PRODUCTION
+    server.edit(Name="Production Testing", Color="Blue")
+    assert postmark_request.call_args_list == [
+        request("PUT", "/servers/1", json={"Name": "Production Testing", "Color": "Blue"})
+    ]
+    assert server.as_dict() == PRODUCTION
+    assert server.Name == "Production Testing"
+
+
+def test_model_delete(server, postmark_request):
+    postmark_request.return_value.json.return_value = DELETED
+    assert server.delete() == "Server Production Server 2 removed."
+    assert postmark_request.call_args_list == [request("DELETE", "/servers/1")]

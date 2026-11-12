@@ -112,133 +112,140 @@ def stream(postmark_client):
     return MessageStream(manager=postmark_client.message_streams, **CREATED)
 
 
-class TestManager:
-    def test_registered(self, postmark_client):
-        assert isinstance(postmark_client.message_streams, MessageStreamsManager)
+def test_manager_registered(postmark_client):
+    assert isinstance(postmark_client.message_streams, MessageStreamsManager)
 
-    @pytest.mark.parametrize(
-        "kwargs, params",
+
+@pytest.mark.parametrize(
+    "kwargs, params",
+    (
+        ({}, {"MessageStreamType": None, "IncludeArchivedStreams": None}),
         (
-            ({}, {"MessageStreamType": None, "IncludeArchivedStreams": None}),
-            (
-                {"MessageStreamType": "Broadcasts", "IncludeArchivedStreams": True},
-                {"MessageStreamType": "Broadcasts", "IncludeArchivedStreams": True},
-            ),
+            {"MessageStreamType": "Broadcasts", "IncludeArchivedStreams": True},
+            {"MessageStreamType": "Broadcasts", "IncludeArchivedStreams": True},
         ),
+    ),
+)
+def test_manager_all(postmark_client, postmark_request, respond, kwargs, params):
+    respond({"MessageStreams": LISTED, "TotalCount": 2})
+    streams = postmark_client.message_streams.all(**kwargs)
+    assert_request(postmark_request, "GET", "/message-streams", params=params)
+    assert all(isinstance(stream, MessageStream) for stream in streams)
+    assert [stream.as_dict() for stream in streams] == LISTED
+    assert [stream.Name for stream in streams] == ["Broadcast Stream", "Transactional Stream"]
+
+
+def test_manager_get(postmark_client, postmark_request, respond):
+    respond(BROADCASTS)
+    stream = postmark_client.message_streams.get("broadcasts")
+    assert_request(postmark_request, "GET", "/message-streams/broadcasts")
+    assert isinstance(stream, MessageStream)
+    assert stream.as_dict() == BROADCASTS
+    assert stream.SubscriptionManagementConfiguration == {"UnsubscribeHandlingType": "Postmark"}
+    assert repr(stream) == "<MessageStream: broadcasts>"
+
+
+def test_manager_create(postmark_client, postmark_request, respond):
+    respond(CREATED)
+    stream = postmark_client.message_streams.create(
+        ID="transactional-dev",
+        Name="My Dev Transactional Stream",
+        MessageStreamType="Transactional",
+        Description="This is my second transactional stream",
+        SubscriptionManagementConfiguration={"UnsubscribeHandlingType": "None"},
     )
-    def test_all(self, postmark_client, postmark_request, respond, kwargs, params):
-        respond({"MessageStreams": LISTED, "TotalCount": 2})
-        streams = postmark_client.message_streams.all(**kwargs)
-        assert_request(postmark_request, "GET", "/message-streams", params=params)
-        assert all(isinstance(stream, MessageStream) for stream in streams)
-        assert [stream.as_dict() for stream in streams] == LISTED
-        assert [stream.Name for stream in streams] == ["Broadcast Stream", "Transactional Stream"]
-
-    def test_get(self, postmark_client, postmark_request, respond):
-        respond(BROADCASTS)
-        stream = postmark_client.message_streams.get("broadcasts")
-        assert_request(postmark_request, "GET", "/message-streams/broadcasts")
-        assert isinstance(stream, MessageStream)
-        assert stream.as_dict() == BROADCASTS
-        assert stream.SubscriptionManagementConfiguration == {"UnsubscribeHandlingType": "Postmark"}
-        assert repr(stream) == "<MessageStream: broadcasts>"
-
-    def test_create(self, postmark_client, postmark_request, respond):
-        respond(CREATED)
-        stream = postmark_client.message_streams.create(
-            ID="transactional-dev",
-            Name="My Dev Transactional Stream",
-            MessageStreamType="Transactional",
-            Description="This is my second transactional stream",
-            SubscriptionManagementConfiguration={"UnsubscribeHandlingType": "None"},
-        )
-        assert_request(
-            postmark_request,
-            "POST",
-            "/message-streams",
-            json={
-                "ID": "transactional-dev",
-                "Name": "My Dev Transactional Stream",
-                "MessageStreamType": "Transactional",
-                "Description": "This is my second transactional stream",
-                "SubscriptionManagementConfiguration": {"UnsubscribeHandlingType": "None"},
-            },
-        )
-        assert isinstance(stream, MessageStream)
-        assert stream.as_dict() == CREATED
-
-    def test_create_omits_unset_optional_fields(self, postmark_client, postmark_request, respond):
-        respond(CREATED)
-        postmark_client.message_streams.create(
-            ID="transactional-dev", Name="My Dev Transactional Stream", MessageStreamType="Transactional"
-        )
-        assert_request(
-            postmark_request,
-            "POST",
-            "/message-streams",
-            json={
-                "ID": "transactional-dev",
-                "Name": "My Dev Transactional Stream",
-                "MessageStreamType": "Transactional",
-            },
-        )
-
-    @pytest.mark.parametrize(
-        "kwargs",
-        (
-            {"Name": "Updated Dev Stream", "Description": "Updating my dev transactional stream"},
-            {"SubscriptionManagementConfiguration": {"UnsubscribeHandlingType": "Custom"}},
-        ),
+    assert_request(
+        postmark_request,
+        "POST",
+        "/message-streams",
+        json={
+            "ID": "transactional-dev",
+            "Name": "My Dev Transactional Stream",
+            "MessageStreamType": "Transactional",
+            "Description": "This is my second transactional stream",
+            "SubscriptionManagementConfiguration": {"UnsubscribeHandlingType": "None"},
+        },
     )
-    def test_edit(self, postmark_client, postmark_request, respond, kwargs):
-        respond(EDITED)
-        stream = postmark_client.message_streams.edit("transactional-dev", **kwargs)
-        assert_request(postmark_request, "PATCH", "/message-streams/transactional-dev", json=kwargs)
-        assert isinstance(stream, MessageStream)
-        assert stream.as_dict() == EDITED
-
-    def test_archive(self, postmark_client, postmark_request, respond):
-        respond(ARCHIVED)
-        assert postmark_client.message_streams.archive("transactional-dev") == ARCHIVED
-        assert_request(postmark_request, "POST", "/message-streams/transactional-dev/archive")
-
-    def test_unarchive(self, postmark_client, postmark_request, respond):
-        respond(UNARCHIVED)
-        stream = postmark_client.message_streams.unarchive("transactional-dev")
-        assert_request(postmark_request, "POST", "/message-streams/transactional-dev/unarchive")
-        assert isinstance(stream, MessageStream)
-        assert stream.as_dict() == UNARCHIVED
+    assert isinstance(stream, MessageStream)
+    assert stream.as_dict() == CREATED
 
 
-class TestModel:
-    def test_str(self, stream):
-        assert str(stream) == "MessageStream: transactional-dev"
+def test_manager_create_omits_unset_optional_fields(postmark_client, postmark_request, respond):
+    respond(CREATED)
+    postmark_client.message_streams.create(
+        ID="transactional-dev", Name="My Dev Transactional Stream", MessageStreamType="Transactional"
+    )
+    assert_request(
+        postmark_request,
+        "POST",
+        "/message-streams",
+        json={
+            "ID": "transactional-dev",
+            "Name": "My Dev Transactional Stream",
+            "MessageStreamType": "Transactional",
+        },
+    )
 
-    def test_get(self, stream, postmark_request, respond):
-        respond(EDITED)
-        assert stream.get() is stream
-        assert_request(postmark_request, "GET", "/message-streams/transactional-dev")
-        assert stream.as_dict() == EDITED
-        assert stream.Name == "Updated Dev Stream"
 
-    def test_edit(self, stream, postmark_request, respond):
-        respond(EDITED)
-        assert stream.edit(Name="Updated Dev Stream") is None
-        assert_request(
-            postmark_request, "PATCH", "/message-streams/transactional-dev", json={"Name": "Updated Dev Stream"}
-        )
-        assert stream.as_dict() == EDITED
-        assert stream.Name == "Updated Dev Stream"
-        assert stream.UpdatedAt == "2020-07-03T00:00:00-04:00"
+@pytest.mark.parametrize(
+    "kwargs",
+    (
+        {"Name": "Updated Dev Stream", "Description": "Updating my dev transactional stream"},
+        {"SubscriptionManagementConfiguration": {"UnsubscribeHandlingType": "Custom"}},
+    ),
+)
+def test_manager_edit(postmark_client, postmark_request, respond, kwargs):
+    respond(EDITED)
+    stream = postmark_client.message_streams.edit("transactional-dev", **kwargs)
+    assert_request(postmark_request, "PATCH", "/message-streams/transactional-dev", json=kwargs)
+    assert isinstance(stream, MessageStream)
+    assert stream.as_dict() == EDITED
 
-    def test_archive(self, stream, postmark_request, respond):
-        respond(ARCHIVED)
-        assert stream.archive() == ARCHIVED
-        assert_request(postmark_request, "POST", "/message-streams/transactional-dev/archive")
 
-    def test_unarchive(self, stream, postmark_request, respond):
-        respond(UNARCHIVED)
-        restored = stream.unarchive()
-        assert_request(postmark_request, "POST", "/message-streams/transactional-dev/unarchive")
-        assert isinstance(restored, MessageStream)
-        assert restored.as_dict() == UNARCHIVED
+def test_manager_archive(postmark_client, postmark_request, respond):
+    respond(ARCHIVED)
+    assert postmark_client.message_streams.archive("transactional-dev") == ARCHIVED
+    assert_request(postmark_request, "POST", "/message-streams/transactional-dev/archive")
+
+
+def test_manager_unarchive(postmark_client, postmark_request, respond):
+    respond(UNARCHIVED)
+    stream = postmark_client.message_streams.unarchive("transactional-dev")
+    assert_request(postmark_request, "POST", "/message-streams/transactional-dev/unarchive")
+    assert isinstance(stream, MessageStream)
+    assert stream.as_dict() == UNARCHIVED
+
+
+def test_model_str(stream):
+    assert str(stream) == "MessageStream: transactional-dev"
+
+
+def test_model_get(stream, postmark_request, respond):
+    respond(EDITED)
+    assert stream.get() is stream
+    assert_request(postmark_request, "GET", "/message-streams/transactional-dev")
+    assert stream.as_dict() == EDITED
+    assert stream.Name == "Updated Dev Stream"
+
+
+def test_model_edit(stream, postmark_request, respond):
+    respond(EDITED)
+    assert stream.edit(Name="Updated Dev Stream") is None
+    assert_request(postmark_request, "PATCH", "/message-streams/transactional-dev", json={"Name": "Updated Dev Stream"})
+    assert stream.as_dict() == EDITED
+    assert stream.Name == "Updated Dev Stream"
+    assert stream.UpdatedAt == "2020-07-03T00:00:00-04:00"
+
+
+def test_model_archive(stream, postmark_request, respond):
+    respond(ARCHIVED)
+    assert stream.archive() == ARCHIVED
+    assert_request(postmark_request, "POST", "/message-streams/transactional-dev/archive")
+
+
+def test_model_unarchive(stream, postmark_request, respond):
+    respond(UNARCHIVED)
+    restored = stream.unarchive()
+    assert_request(postmark_request, "POST", "/message-streams/transactional-dev/unarchive")
+    assert isinstance(restored, MessageStream)
+    assert restored.as_dict() == UNARCHIVED

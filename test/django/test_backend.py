@@ -99,45 +99,49 @@ EXAMPLE_BATCH_RESPONSE = [
 ]
 
 
-class TestMassSend:
-    messages = [
-        ("Subject", "Body", "sender@example.com", ["receiver@example.com"]),
-        ("Subject", "Body", "sender@example.com", ["invalid@example.com"]),
-    ]
+MASS_MESSAGES = [
+    ("Subject", "Body", "sender@example.com", ["receiver@example.com"]),
+    ("Subject", "Body", "sender@example.com", ["invalid@example.com"]),
+]
 
-    @pytest.fixture
-    def batch_send(self):
-        @contextmanager
-        def manager(return_value=EXAMPLE_BATCH_RESPONSE):
-            with patch("postmarker.models.emails.EmailBatch.send", return_value=return_value) as send:
-                yield send
 
-        return manager
+@pytest.fixture
+def batch_send():
+    @contextmanager
+    def manager(return_value=EXAMPLE_BATCH_RESPONSE):
+        with patch("postmarker.models.emails.EmailBatch.send", return_value=return_value) as send:
+            yield send
 
-    def test_send_mass(self, batch_send):
-        with batch_send() as send:
-            assert send_mass_mail([]) is None
-            assert not send.called
+    return manager
 
-    def test_sent_messages_count(self, batch_send):
-        with batch_send():
-            assert send_mass_mail(self.messages, fail_silently=True) == 1
 
-    def test_single_exception_propagation(self, batch_send):
-        with batch_send():
-            with pytest.raises(ClientError) as exc:
-                send_mass_mail(self.messages, fail_silently=False)
-            assert str(exc.value) == "[406] Bla bla, inactive recipient"
-            assert exc.value.error_code == 406
+def test_mass_send_empty(batch_send):
+    with batch_send() as send:
+        assert send_mass_mail([]) is None
+        assert not send.called
 
-    def test_multiple_exceptions_propagation(self, batch_send):
-        other_failure = {**EXAMPLE_BATCH_RESPONSE[1], "ErrorCode": 300, "Message": "Invalid email request"}
-        with batch_send([*EXAMPLE_BATCH_RESPONSE, EXAMPLE_BATCH_RESPONSE[0], other_failure]):
-            with pytest.raises(ClientError) as exc:
-                send_mass_mail(self.messages * 2, fail_silently=False)
-            assert str(exc.value) == "[[406] Bla bla, inactive recipient, [300] Invalid email request]"
-            # The first failure's code
-            assert exc.value.error_code == 406
+
+def test_mass_send_sent_messages_count(batch_send):
+    with batch_send():
+        assert send_mass_mail(MASS_MESSAGES, fail_silently=True) == 1
+
+
+def test_mass_send_single_exception_propagation(batch_send):
+    with batch_send():
+        with pytest.raises(ClientError) as exc:
+            send_mass_mail(MASS_MESSAGES, fail_silently=False)
+        assert str(exc.value) == "[406] Bla bla, inactive recipient"
+        assert exc.value.error_code == 406
+
+
+def test_mass_send_multiple_exceptions_propagation(batch_send):
+    other_failure = {**EXAMPLE_BATCH_RESPONSE[1], "ErrorCode": 300, "Message": "Invalid email request"}
+    with batch_send([*EXAMPLE_BATCH_RESPONSE, EXAMPLE_BATCH_RESPONSE[0], other_failure]):
+        with pytest.raises(ClientError) as exc:
+            send_mass_mail(MASS_MESSAGES * 2, fail_silently=False)
+        assert str(exc.value) == "[[406] Bla bla, inactive recipient, [300] Invalid email request]"
+        # The first failure's code
+        assert exc.value.error_code == 406
 
 
 @pytest.fixture
@@ -451,18 +455,21 @@ def test_context_manager(postmark_request):
     )
 
 
-class TestExceptions:
-    @pytest.fixture(autouse=True)
-    def setup(self, postmark_request):
-        postmark_request.return_value.json.side_effect = ValueError
+@pytest.fixture
+def invalid_json_response(postmark_request):
+    postmark_request.return_value.json.side_effect = ValueError
 
-    def test_silent_exception(self):
-        with mail.get_connection(fail_silently=True) as connection:
-            send_with_connection(connection)
 
-    def test_loud_exception(self):
-        with mail.get_connection() as connection, pytest.raises(ValueError):
-            send_with_connection(connection)
+@pytest.mark.usefixtures("invalid_json_response")
+def test_silent_exception():
+    with mail.get_connection(fail_silently=True) as connection:
+        send_with_connection(connection)
+
+
+@pytest.mark.usefixtures("invalid_json_response")
+def test_loud_exception():
+    with mail.get_connection() as connection, pytest.raises(ValueError):
+        send_with_connection(connection)
 
 
 def test_close_closed_connection():
@@ -481,63 +488,65 @@ def test_signals_exported():
 
 
 @pytest.mark.usefixtures("postmark_request")
-class TestSignals:
-    def test_pre_send(self, catch_signal):
-        with catch_signal(pre_send) as handler:
-            send_mail(**SEND_KWARGS)
-        assert handler.called
-        kwargs = handler.call_args[1]
-        assert kwargs["sender"] == EmailBackend
-        assert kwargs["signal"] == pre_send
-        assert len(kwargs["messages"]) == 1
-        message = kwargs["messages"][0]
-        assert Email.from_mime(message, None).as_dict() == {
-            "Attachments": [],
-            "Bcc": None,
-            "Cc": None,
-            "From": "sender@example.com",
-            "Headers": [],
-            "HtmlBody": None,
-            "ReplyTo": None,
-            "Subject": "Subject here",
-            "Tag": None,
-            "Metadata": None,
-            "MessageStream": None,
-            "TextBody": "Here is the message.",
+def test_signals_pre_send(catch_signal):
+    with catch_signal(pre_send) as handler:
+        send_mail(**SEND_KWARGS)
+    assert handler.called
+    kwargs = handler.call_args[1]
+    assert kwargs["sender"] == EmailBackend
+    assert kwargs["signal"] == pre_send
+    assert len(kwargs["messages"]) == 1
+    message = kwargs["messages"][0]
+    assert Email.from_mime(message, None).as_dict() == {
+        "Attachments": [],
+        "Bcc": None,
+        "Cc": None,
+        "From": "sender@example.com",
+        "Headers": [],
+        "HtmlBody": None,
+        "ReplyTo": None,
+        "Subject": "Subject here",
+        "Tag": None,
+        "Metadata": None,
+        "MessageStream": None,
+        "TextBody": "Here is the message.",
+        "To": "receiver@example.com",
+    }
+
+
+def test_signals_post_send(catch_signal, postmark_request):
+    postmark_request.return_value = Response()
+    postmark_request.return_value.status_code = 200
+    postmark_request.return_value._content = (
+        b'[{"ErrorCode": 0, "To": "receiver@example.com", '
+        b'"SubmittedAt": "2016-10-06T10:05:30.570118-04:00", '
+        b'"Message": "Test job accepted", '
+        b'"MessageID": "96a981da-9b7c-4aa9-bda2-84ab99097686"}]'
+    )
+    with catch_signal(post_send) as handler:
+        send_mail(**SEND_KWARGS)
+    assert handler.called
+    kwargs = handler.call_args[1]
+    assert kwargs["sender"] == EmailBackend
+    assert kwargs["signal"] == post_send
+    assert kwargs["response"] == [
+        {
+            "ErrorCode": 0,
+            "Message": "Test job accepted",
+            "MessageID": "96a981da-9b7c-4aa9-bda2-84ab99097686",
+            "SubmittedAt": "2016-10-06T10:05:30.570118-04:00",
             "To": "receiver@example.com",
         }
+    ]
 
-    def test_post_send(self, catch_signal, postmark_request):
-        postmark_request.return_value = Response()
-        postmark_request.return_value.status_code = 200
-        postmark_request.return_value._content = (
-            b'[{"ErrorCode": 0, "To": "receiver@example.com", '
-            b'"SubmittedAt": "2016-10-06T10:05:30.570118-04:00", '
-            b'"Message": "Test job accepted", '
-            b'"MessageID": "96a981da-9b7c-4aa9-bda2-84ab99097686"}]'
-        )
-        with catch_signal(post_send) as handler:
-            send_mail(**SEND_KWARGS)
-        assert handler.called
-        kwargs = handler.call_args[1]
-        assert kwargs["sender"] == EmailBackend
-        assert kwargs["signal"] == post_send
-        assert kwargs["response"] == [
-            {
-                "ErrorCode": 0,
-                "Message": "Test job accepted",
-                "MessageID": "96a981da-9b7c-4aa9-bda2-84ab99097686",
-                "SubmittedAt": "2016-10-06T10:05:30.570118-04:00",
-                "To": "receiver@example.com",
-            }
-        ]
 
-    def test_on_exception(self, catch_signal):
-        with patch("requests.Session.request", side_effect=ConnectTimeout), catch_signal(on_exception) as handler:
-            send_mail(fail_silently=True, **SEND_KWARGS)
-        assert handler.called
-        kwargs = handler.call_args[1]
-        assert kwargs["sender"] == EmailBackend
-        assert kwargs["signal"] == on_exception
-        assert isinstance(kwargs["exception"], ConnectTimeout)
-        assert len(kwargs["raw_messages"]) == 1
+@pytest.mark.usefixtures("postmark_request")
+def test_signals_on_exception(catch_signal):
+    with patch("requests.Session.request", side_effect=ConnectTimeout), catch_signal(on_exception) as handler:
+        send_mail(fail_silently=True, **SEND_KWARGS)
+    assert handler.called
+    kwargs = handler.call_args[1]
+    assert kwargs["sender"] == EmailBackend
+    assert kwargs["signal"] == on_exception
+    assert isinstance(kwargs["exception"], ConnectTimeout)
+    assert len(kwargs["raw_messages"]) == 1

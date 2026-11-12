@@ -8,86 +8,94 @@ from postmarker.models.messages import MessageManager, OutboundMessageManager
 from postmarker.models.triggers import TriggersManager
 
 
-class TestClient:
-    def test_server_client(self, postmark, server_token, postmark_request):
-        postmark.call("GET", "endpoint")
-        postmark_request.assert_called_with(
-            "GET",
-            "https://api.postmarkapp.com/endpoint",
-            headers={
-                "X-Postmark-Server-Token": server_token,
-                "Accept": "application/json",
-                "User-Agent": USER_AGENT,
-            },
-            params={},
-            json=None,
-            timeout=None,
-        )
-
-    def test_account_client(self, postmark_request):
-        postmark = PostmarkClient(account_token="ACCOUNT_TOKEN")
-        postmark.call("GET", "endpoint", token_type="account")
-        postmark_request.assert_called_with(
-            "GET",
-            "https://api.postmarkapp.com/endpoint",
-            headers={
-                "X-Postmark-Account-Token": "ACCOUNT_TOKEN",
-                "Accept": "application/json",
-                "User-Agent": USER_AGENT,
-            },
-            params={},
-            json=None,
-            timeout=None,
-        )
-
-    def test_account_client_server_call(self):
-        # Without a server token, server calls go without any token header and Postmark rejects them
-        postmark = PostmarkClient(account_token="ACCOUNT_TOKEN")
-        with patch("postmarker.core.requests.Session.send") as send:
-            postmark.call("GET", "endpoint")
-        prepared = send.call_args[0][0]
-        assert {name: value for name, value in prepared.headers.items() if name.startswith("X-Postmark")} == {}
-
-    @pytest.mark.parametrize("kwargs", ({}, {"server_token": None, "account_token": None}))
-    def test_no_token(self, kwargs):
-        with pytest.raises(AssertionError) as exc:
-            PostmarkClient(**kwargs)
-        # Pytest rewrites asserts in its plugins' packages, postmarker included, and appends the explanation
-        assert str(exc.value).splitlines()[0] == "You have to provide server_token or account_token to use Postmark API"
-
-    def test_repr(self, postmark, server_token):
-        assert repr(postmark) == f"<PostmarkClient: {server_token}>"
-
-    @pytest.mark.parametrize(
-        "config, kwargs",
-        (
-            (
-                {"POSTMARK_SERVER_TOKEN": "foo", "POSTMARK_TIMEOUT": 1},
-                {"is_uppercase": True},
-            ),
-            (
-                {"postmark_server_token": "foo", "postmark_timeout": 1},
-                {"is_uppercase": False},
-            ),
-        ),
+def test_server_client(postmark, server_token, postmark_request):
+    postmark.call("GET", "endpoint")
+    postmark_request.assert_called_with(
+        "GET",
+        "https://api.postmarkapp.com/endpoint",
+        headers={
+            "X-Postmark-Server-Token": server_token,
+            "Accept": "application/json",
+            "User-Agent": USER_AGENT,
+        },
+        params={},
+        json=None,
+        timeout=None,
     )
-    def test_from_config(self, config, kwargs):
-        instance = PostmarkClient.from_config(config, **kwargs)
-        assert instance.server_token == "foo"
-        assert instance.timeout == 1
-        assert instance.account_token is None
 
 
-@pytest.mark.parametrize("klass", (PostmarkClient, OutboundMessageManager, MessageManager, TriggersManager))
-class TestManagersSetup:
-    def test_duplicate_names(self, klass):
-        managers_names = [manager.name for manager in klass._managers]
-        assert len(managers_names) == len(set(managers_names)), "Defined managers names are not unique"
+def test_account_client(postmark_request):
+    postmark = PostmarkClient(account_token="ACCOUNT_TOKEN")
+    postmark.call("GET", "endpoint", token_type="account")
+    postmark_request.assert_called_with(
+        "GET",
+        "https://api.postmarkapp.com/endpoint",
+        headers={
+            "X-Postmark-Account-Token": "ACCOUNT_TOKEN",
+            "Accept": "application/json",
+            "User-Agent": USER_AGENT,
+        },
+        params={},
+        json=None,
+        timeout=None,
+    )
 
-    def test_names_overriding(self, klass):
-        assert not any(manager.name in dir(klass) for manager in klass._managers), (
-            "Defined managers names override client's members"
-        )
+
+def test_account_client_server_call():
+    # Without a server token, server calls go without any token header and Postmark rejects them
+    postmark = PostmarkClient(account_token="ACCOUNT_TOKEN")
+    with patch("postmarker.core.requests.Session.send") as send:
+        postmark.call("GET", "endpoint")
+    prepared = send.call_args[0][0]
+    assert {name: value for name, value in prepared.headers.items() if name.startswith("X-Postmark")} == {}
+
+
+@pytest.mark.parametrize("kwargs", ({}, {"server_token": None, "account_token": None}))
+def test_client_no_token(kwargs):
+    with pytest.raises(AssertionError) as exc:
+        PostmarkClient(**kwargs)
+    # Pytest rewrites asserts in its plugins' packages, postmarker included, and appends the explanation
+    assert str(exc.value).splitlines()[0] == "You have to provide server_token or account_token to use Postmark API"
+
+
+def test_client_repr(postmark, server_token):
+    assert repr(postmark) == f"<PostmarkClient: {server_token}>"
+
+
+@pytest.mark.parametrize(
+    "config, kwargs",
+    (
+        (
+            {"POSTMARK_SERVER_TOKEN": "foo", "POSTMARK_TIMEOUT": 1},
+            {"is_uppercase": True},
+        ),
+        (
+            {"postmark_server_token": "foo", "postmark_timeout": 1},
+            {"is_uppercase": False},
+        ),
+    ),
+)
+def test_client_from_config(config, kwargs):
+    instance = PostmarkClient.from_config(config, **kwargs)
+    assert instance.server_token == "foo"
+    assert instance.timeout == 1
+    assert instance.account_token is None
+
+
+WITH_MANAGERS = (PostmarkClient, OutboundMessageManager, MessageManager, TriggersManager)
+
+
+@pytest.mark.parametrize("klass", WITH_MANAGERS)
+def test_managers_duplicate_names(klass):
+    managers_names = [manager.name for manager in klass._managers]
+    assert len(managers_names) == len(set(managers_names)), "Defined managers names are not unique"
+
+
+@pytest.mark.parametrize("klass", WITH_MANAGERS)
+def test_managers_names_overriding(klass):
+    assert not any(manager.name in dir(klass) for manager in klass._managers), (
+        "Defined managers names override client's members"
+    )
 
 
 def test_malformed_request(postmark, postmark_request):
