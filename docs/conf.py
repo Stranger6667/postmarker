@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 #
 # Postmarker documentation build configuration file, created by
 # sphinx-quickstart on Tue Oct  4 10:56:21 2016.
@@ -60,7 +59,7 @@ master_doc = "index"
 
 # General information about the project.
 project = "Postmarker"
-copyright = "%s, Dmitry Dygalo" % date.today().year
+copyright = f"{date.today().year}, Dmitry Dygalo"
 author = "Dmitry Dygalo"
 
 # The version info for the project you're documenting, acts as replacement for

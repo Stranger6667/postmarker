@@ -15,7 +15,7 @@ CASSETTE_NAME = "emails"
 
 
 def get_attachment_path(filename):
-    return os.path.abspath(os.path.join(os.path.dirname(__file__), "attachments/%s" % filename))
+    return os.path.abspath(os.path.join(os.path.dirname(__file__), f"attachments/{filename}"))
 
 
 if platform.system() in {"Linux", "Darwin"}:

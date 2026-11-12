@@ -28,7 +28,7 @@ class TemplateManager(ModelManager):
     offset_key = "Offset"
 
     def get(self, id):
-        response = self.call("GET", "/templates/%s" % id)
+        response = self.call("GET", f"/templates/{id}")
         return self._init_instance(response)
 
     def create(self, Name, Subject, HtmlBody=None, TextBody=None, Alias=None):
@@ -58,14 +58,14 @@ class TemplateManager(ModelManager):
             "TextBody": TextBody,
             "Alias": Alias,
         }
-        return self.call("PUT", "/templates/%s" % id, data=data)
+        return self.call("PUT", f"/templates/{id}", data=data)
 
     def all(self, Count=100, Offset=0):
         responses = self.call_many("GET", "/templates", Count=Count, Offset=Offset)
         return self.expand_responses(responses, "Templates")
 
     def delete(self, id):
-        return self.call("DELETE", "/templates/%s" % id)["Message"]
+        return self.call("DELETE", f"/templates/{id}")["Message"]
 
     def validate(
         self,

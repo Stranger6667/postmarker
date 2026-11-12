@@ -28,7 +28,7 @@ class TestClient:
         assert str(exc.value).startswith("You have to provide token to use Postmark API")
 
     def test_repr(self, postmark, server_token):
-        assert repr(postmark) == "<PostmarkClient: %s>" % server_token
+        assert repr(postmark) == f"<PostmarkClient: {server_token}>"
 
     @pytest.mark.parametrize(
         "config, kwargs",
@@ -57,9 +57,9 @@ class TestManagersSetup:
         assert len(managers_names) == len(set(managers_names)), "Defined managers names are not unique"
 
     def test_names_overriding(self, klass):
-        assert not any(
-            manager.name in dir(klass) for manager in klass._managers
-        ), "Defined managers names override client's members"
+        assert not any(manager.name in dir(klass) for manager in klass._managers), (
+            "Defined managers names override client's members"
+        )
 
 
 def test_malformed_request(postmark, postmark_request):

@@ -3,6 +3,7 @@
 Information about bounces is available via the :py:class:`~postmarker.models.bounces.BounceManager`,
 which is an attribute of ``postmark`` instance.
 """
+
 from .base import MessageModel, ModelManager
 
 
@@ -57,7 +58,7 @@ class BounceManager(ModelManager):
         :param int id: Bounce ID.
         :rtype: :py:class:`Bounce`
         """
-        response = self.call("GET", "/bounces/%s" % id)
+        response = self.call("GET", f"/bounces/{id}")
         return self._init_instance(response)
 
     def all(
@@ -108,7 +109,7 @@ class BounceManager(ModelManager):
         :return: Activation result and bounce data.
         :rtype: `dict`
         """
-        return self.call("PUT", "/bounces/%s/activate" % id)
+        return self.call("PUT", f"/bounces/{id}/activate")
 
     def get_dump(self, id):
         """Gets an SMTP data dump.
@@ -117,7 +118,7 @@ class BounceManager(ModelManager):
         :return: A dump of SMTP data if it is available.
         :rtype: `str` or `None`
         """
-        return self.call("GET", "/bounces/%s/dump" % id).get("Body")
+        return self.call("GET", f"/bounces/{id}/dump").get("Body")
 
     def Bounce(self, json):
         """Constructs new Bounce instance from JSON-encoded string. Intended to use for bounce webhook processing.

@@ -71,15 +71,50 @@ show_missing = true
 precision = 2
 exclude_lines = ["raise NotImplementedError"]
 
-[tool.black]
+[tool.ruff]
 line-length = 120
-target_version = ["py37"]
+target-version = "py310"
 
-[tool.isort]
-# config compatible with Black
-line_length = 120
-multi_line_output = 3
-default_section = "THIRDPARTY"
-include_trailing_comma = true
-known_first_party = "postmarker"
-known_third_party = ["betamax", "betamax_serializers", "django", "postmarker", "pytest", "requests", "sphinx_rtd_theme", "tornado"]
+[tool.ruff.lint]
+select = [
+  "E",      # pycodestyle errors
+  "W",      # pycodestyle warnings
+  "F",      # pyflakes
+  "C",      # flake8-comprehensions
+  "B",      # flake8-bugbear
+  "D",      # pydocstyle
+  "T201",   # flake8-print
+  "I",      # isort
+  "FURB",   # refurb
+  "PGH003", # blanket-type-ignore
+  "UP",     # pyupgrade
+  "SIM",    # flake8-simplify
+]
+ignore = [
+  "E501",   # Line too long
+  "B008",   # Do not perform function calls in argument defaults
+  "C901",   # Too complex
+  "D100",   # Missing docstring in public module
+  "D101",   # Missing docstring in public class
+  "D102",   # Missing docstring in public method
+  "D103",   # Missing docstring in public function
+  "D104",   # Missing docstring in public package
+  "D105",   # Missing docstring in magic method
+  "D106",   # Missing docstring in public nested class
+  "D107",   # Missing docstring in `__init__`
+  "D202",   # No blank lines allowed after function docstring
+  "D203",   # One blank line before class
+  "D213",   # Multiline summary second line
+  "D401",   # Imperative mood
+  "D407",   # Missing dashed underline after section
+  "SIM105", # contextlib.suppress is less performant in many cases
+  "SIM108", # ternary expressions are not always readable
+  "SIM910", # delete default arguments in .get() in some cases
+]
+
+[tool.ruff.lint.isort]
+known-first-party = ["postmarker"]
+
+[tool.typos.default]
+# Verbatim Postmark spam check API message
+extend-ignore-re = ["SpamAssassin error occured"]

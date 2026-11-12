@@ -16,7 +16,7 @@ class Model:
         return "{}: {}".format(self.__class__.__name__, self._data.get("ID"))
 
     def __repr__(self):
-        return "<%s>" % self
+        return f"<{self}>"
 
     def _update(self, kwargs):
         if self._data:
@@ -51,10 +51,10 @@ class ModelManager:
         return self.__class__.__name__
 
     def __repr__(self):
-        return "<%s>" % self
+        return f"<{self}>"
 
     def _init_instance(self, data):
-        return self.model(manager=self, **data)  # pylint: disable=not-callable
+        return self.model(manager=self, **data)
 
     def _init_many(self, data):
         return [self._init_instance(part) for part in data]

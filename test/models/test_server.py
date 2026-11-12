@@ -8,4 +8,4 @@ def test_edit(server):
 
 
 def test_str(server):
-    assert ("%s" % server) == "Server: example.com (1)"
+    assert (f"{server}") == "Server: example.com (1)"

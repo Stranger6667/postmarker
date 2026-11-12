@@ -73,7 +73,7 @@ class EmailBackend(BaseEmailBackend):
         if len(exception_messages) == 1:
             message = exception_messages[0]
         else:
-            message = "[%s]" % ", ".join(exception_messages)
+            message = "[{}]".format(", ".join(exception_messages))
         raise PostmarkerException(message)
 
     def prepare_message(self, message):

@@ -38,7 +38,7 @@ class SenderSignaturesManager(ModelManager):
 
     def get(self, id):
         """Gets all the details for a specific sender signature."""
-        response = self.call("GET", "/senders/%s" % id)
+        response = self.call("GET", f"/senders/{id}")
         return self._init_instance(response)
 
     def create(self, FromEmail, Name, ReplyToEmail=None, ReturnPathDomain=None):
@@ -56,16 +56,16 @@ class SenderSignaturesManager(ModelManager):
             "ReplyToEmail": ReplyToEmail,
             "ReturnPathDomain": ReturnPathDomain,
         }
-        return self.call("PUT", "/senders/%s" % id, data=data)
+        return self.call("PUT", f"/senders/{id}", data=data)
 
     def delete(self, id):
-        return self.call("DELETE", "/senders/%s" % id)["Message"]
+        return self.call("DELETE", f"/senders/{id}")["Message"]
 
     def resend(self, id):
-        return self.call("POST", "/senders/%s/resend" % id)["Message"]
+        return self.call("POST", f"/senders/{id}/resend")["Message"]
 
     def verifyspf(self, id):
-        return self.call("POST", "/senders/%s/verifyspf" % id)
+        return self.call("POST", f"/senders/{id}/verifyspf")
 
     def requestnewdkim(self, id):
         """Request new DKIM.
@@ -78,5 +78,6 @@ class SenderSignaturesManager(ModelManager):
             "Please use the new Domains API (http://developer.postmarkapp.com/developer-api-domains.html) "
             "for updated SPF methods.",
             DeprecationWarning,
+            stacklevel=2,
         )
-        return self.call("POST", "/senders/%s/requestnewdkim" % id)
+        return self.call("POST", f"/senders/{id}/requestnewdkim")
