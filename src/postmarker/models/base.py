@@ -55,6 +55,8 @@ class ModelManager(Generic[ModelT]):
     count_key = "count"
     offset_key = "offset"
     max_chunk_size = 500
+    # Upper bound for count + offset; Postmark search endpoints reject anything above 10,000
+    pagination_limit: int | None = None
 
     def __init__(self, client: PostmarkClient) -> None:
         self.client = client
@@ -81,6 +83,9 @@ class ModelManager(Generic[ModelT]):
     def _call_many(self, *args: Any, **kwargs: Any) -> Iterator[Any]:
         count = kwargs.pop(self.count_key)
         offset = kwargs.pop(self.offset_key)
+        if self.pagination_limit is not None:
+            reachable = max(0, self.pagination_limit - offset)
+            count = reachable if count is None else min(count, reachable)
         loaded_items_count = 0
         for _count, _offset in sizes(count, offset, self.max_chunk_size):
             response = self.call(*args, **self.update_kwargs(kwargs, _count, _offset))

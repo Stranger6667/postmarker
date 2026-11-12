@@ -39,6 +39,7 @@ class BounceManager(ModelManager[Bounce]):
 
     name = "bounces"
     model = Bounce
+    pagination_limit = 10000
 
     @property
     def deliverystats(self) -> Any:
