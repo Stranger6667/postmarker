@@ -131,6 +131,11 @@ class BaseEmail(Model):
             kwargs["Attachments"] = []
         super().__init__(**kwargs)
 
+    def __str__(self) -> str:
+        return "{} from {} to {}".format(
+            self.__class__.__name__, self._data.get("From"), list_to_csv(self._data.get("To"))
+        )
+
     def __setitem__(self, key: str, value: str) -> None:
         self.Headers[key] = value
 

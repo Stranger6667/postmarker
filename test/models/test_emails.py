@@ -276,6 +276,16 @@ class TestEmailBatch:
 
 
 class TestEmail:
+    def test_str(self, email):
+        assert str(email) == "Email from sender@example.com to receiver@example.com"
+
+    def test_repr(self, email):
+        assert repr(email) == "<Email from sender@example.com to receiver@example.com>"
+
+    def test_str_multiple_recipients(self, postmark):
+        email = postmark.emails.Email(From="sender@example.com", To=["a@example.com", "b@example.com"], TextBody="text")
+        assert str(email) == "Email from sender@example.com to a@example.com,b@example.com"
+
     def test_set_header(self, email):
         assert email.Headers == {}
         email["X-Accept-Language"] = "en-us, en"
@@ -435,6 +445,14 @@ class TestTemplateBatchSend:
         )
         with pytest.raises(ValueError, match=f"^{re.escape(expected)}$"):
             postmark.emails.send_template_batch(container([email_template, email_template]))
+
+
+class TestEmailTemplate:
+    def test_str(self, email_template):
+        assert str(email_template) == "EmailTemplate from sender@example.com to receiver@example.com"
+
+    def test_repr(self, email_template):
+        assert repr(email_template) == "<EmailTemplate from sender@example.com to receiver@example.com>"
 
 
 class TestEmailTemplateBatch:
