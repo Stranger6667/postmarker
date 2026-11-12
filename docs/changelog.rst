@@ -6,6 +6,16 @@ Changelog
 `Unreleased`_
 -------------
 
+Added
+~~~~~
+
+- Support for Python 3.11–3.15.
+
+Removed
+~~~~~~~
+
+- Support for Python 3.6–3.9.
+
 `1.0`_ - 2022-01-15
 -------------------
 
