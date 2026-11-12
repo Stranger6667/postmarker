@@ -15,6 +15,7 @@ nav:
   - status.md
   - stats.md
   - triggers.md
+  - suppressions.md
   - domains.md
   - django.md
   - tornado.md
