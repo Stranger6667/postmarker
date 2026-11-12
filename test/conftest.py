@@ -41,7 +41,7 @@ def betamax_recorder(request, postmark):
     if request.config.getoption("--record"):
         record_mode = "new_episodes"
     else:
-        record_mode = "none" if os.environ.get("TRAVIS") else "once"
+        record_mode = "none" if os.environ.get("CI") else "once"
     cassette_name = getattr(request.node._obj, "CASSETTE_NAME", "default")
     vcr = Betamax(
         postmark.session,

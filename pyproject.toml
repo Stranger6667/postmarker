@@ -52,6 +52,8 @@ path = "src/postmarker/__init__.py"
 include = ["/src", "/test"]
 
 [tool.pytest.ini_options]
+addopts = ["-ra", "--strict-markers", "--strict-config"]
+xfail_strict = true
 testpaths = ["test"]
 pythonpath = ["."]
 DJANGO_SETTINGS_MODULE = "test.django.settings"

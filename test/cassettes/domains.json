@@ -1,5 +1,6 @@
 {
-  "http_interactions": [{
+  "http_interactions": [
+    {
       "recorded_at": "2016-12-04T20:21:59",
       "request": {
         "body": {
@@ -39,7 +40,7 @@
             "gzip"
           ],
           "Content-Length": [
-            "372"
+            "279"
           ],
           "Content-Type": [
             "application/json; charset=utf-8"
@@ -101,7 +102,7 @@
             "gzip"
           ],
           "Content-Length": [
-            "463"
+            "279"
           ],
           "Content-Type": [
             "application/json; charset=utf-8"
@@ -163,7 +164,7 @@
             "gzip"
           ],
           "Content-Length": [
-            "200"
+            "148"
           ],
           "Content-Type": [
             "application/json; charset=utf-8"
@@ -364,7 +365,7 @@
             "gzip"
           ],
           "Content-Length": [
-            "119"
+            "118"
           ],
           "Content-Type": [
             "application/json; charset=utf-8"
@@ -429,7 +430,7 @@
             "gzip"
           ],
           "Content-Length": [
-            "119"
+            "471"
           ],
           "Content-Type": [
             "application/json; charset=utf-8"
@@ -494,7 +495,7 @@
             "gzip"
           ],
           "Content-Length": [
-            "119"
+            "471"
           ],
           "Content-Type": [
             "application/json; charset=utf-8"
