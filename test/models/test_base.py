@@ -3,6 +3,7 @@ from unittest.mock import patch
 
 import pytest
 
+from postmarker.core import USER_AGENT
 from postmarker.models.base import Model, ModelManager
 
 
@@ -53,3 +54,19 @@ def test_pagination_limit(postmark, path, kwargs, expected):
 
 def test_no_pagination_limit(postmark):
     assert requested_pages(postmark, "domains", 25000, count=None) == [(500, offset) for offset in range(0, 25000, 500)]
+
+
+@pytest.mark.parametrize(
+    ("kwargs", "header"),
+    (
+        ({}, {"X-Postmark-Server-Token": "SERVER_TOKEN"}),
+        ({"token_type": "account"}, {"X-Postmark-Account-Token": "ACCOUNT_TOKEN"}),
+    ),
+)
+def test_manager_call_token_type(postmark_client, postmark_request, kwargs, header):
+    postmark_client.templates.call("GET", "/templates", **kwargs)
+    assert postmark_request.call_args[1]["headers"] == {
+        "Accept": "application/json",
+        "User-Agent": USER_AGENT,
+        **header,
+    }

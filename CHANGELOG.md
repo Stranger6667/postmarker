@@ -34,6 +34,7 @@
 - Django email backend incorrectly emitting `RemovedInDjango2028Warning` for `fail_silently` on Django 6.1+.
 - Django email backend incorrectly dropping the `MAILERS` alias on Django 6.1+, which hid unknown `OPTIONS`.
 - `Email` and `EmailTemplate` string representation incorrectly showing `None` (it should show the sender and recipients). [#211](https://github.com/Stranger6667/postmarker/issues/211)
+- `call` on API managers incorrectly ignoring an explicit `token_type` (it should only default to the manager's token type).
 
 ### Security
 
