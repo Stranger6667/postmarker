@@ -64,6 +64,69 @@ class OpensManager(ModelManager[Open]):
         return self.model.from_json(json, manager=self)
 
 
+class Click(MessageModel):
+    def __str__(self) -> str:
+        return "Click from {}".format(self._data.get("Recipient"))
+
+
+class ClicksManager(ModelManager[Click]):
+    name = "clicks"
+    model = Click
+
+    def all(
+        self,
+        count: int | None = 500,
+        offset: int = 0,
+        recipient: str | None = None,
+        tag: str | None = None,
+        client_name: str | None = None,
+        client_company: str | None = None,
+        client_family: str | None = None,
+        os_name: str | None = None,
+        os_family: str | None = None,
+        os_company: str | None = None,
+        platform: str | None = None,
+        country: str | None = None,
+        region: str | None = None,
+        city: str | None = None,
+        messagestream: str | None = None,
+    ) -> list[Click]:
+        """Clicks on tracked links in outbound messages, one per recipient and link.
+
+        :param count: Number of clicks to return; ``None`` for all.
+        :param offset: Number of clicks to skip.
+        :param messagestream: Message stream ID; Postmark defaults to the outbound transactional stream.
+        """
+        responses = self.call_many(
+            "GET",
+            "/messages/outbound/clicks",
+            count=count,
+            offset=offset,
+            recipient=recipient,
+            tag=tag,
+            client_name=client_name,
+            client_company=client_company,
+            client_family=client_family,
+            os_name=os_name,
+            os_family=os_family,
+            os_company=os_company,
+            platform=platform,
+            country=country,
+            region=region,
+            city=city,
+            messagestream=messagestream,
+        )
+        return self.expand_responses(responses, "Clicks")
+
+    def get(self, id: str, count: int = 500, offset: int = 0) -> Any:
+        """Clicks on tracked links in one message, as the raw ``TotalCount`` and ``Clicks`` response."""
+        return self.call("GET", f"/messages/outbound/clicks/{id}", count=count, offset=offset)
+
+    def Click(self, json: str | bytes) -> Click:
+        """Wraps a link click webhook payload."""
+        return self.model.from_json(json, manager=self)
+
+
 class BaseMessage(Model):
     def get(self) -> Any:
         return self._manager.get(self.MessageID)
@@ -80,13 +143,18 @@ class OutboundMessage(BaseMessage):
     def opens(self, count: int = 500, offset: int = 0) -> Any:
         return self._manager.opens.get(self.MessageID, count=count, offset=offset)
 
+    def clicks(self, count: int = 500, offset: int = 0) -> Any:
+        """Clicks on tracked links in this message, as `ClicksManager.get` returns them."""
+        return self._manager.clicks.get(self.MessageID, count=count, offset=offset)
+
 
 class OutboundMessageManager(SubModelManager[OutboundMessage]):
     name = "outbound"
     opens: OpensManager
+    clicks: ClicksManager
     model = OutboundMessage
     pagination_limit = 10000
-    _managers = (OpensManager,)
+    _managers = (OpensManager, ClicksManager)
 
     def all(
         self,

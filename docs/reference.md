@@ -58,7 +58,7 @@ Managers return models. Each Postmark field of a model is an attribute with the 
 
 ## Messages
 
-`postmark.messages.outbound`, `postmark.messages.outbound.opens` and `postmark.messages.inbound`, see [Messages](messages.md).
+`postmark.messages.outbound`, `postmark.messages.outbound.opens`, `postmark.messages.outbound.clicks` and `postmark.messages.inbound`, see [Messages](messages.md).
 
 ::: postmarker.models.messages.OutboundMessageManager
     options:
@@ -66,12 +66,16 @@ Managers return models. Each Postmark field of a model is an attribute with the 
 
 ::: postmarker.models.messages.OutboundMessage
     options:
-      members: [get, get_dump, opens]
+      members: [get, get_dump, opens, clicks]
       inherited_members: [get]
 
 ::: postmarker.models.messages.OpensManager
     options:
       members: [all, get, Open]
+
+::: postmarker.models.messages.ClicksManager
+    options:
+      members: [all, get, Click]
 
 ::: postmarker.models.messages.InboundMessageManager
     options:
