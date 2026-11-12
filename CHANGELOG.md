@@ -8,6 +8,7 @@
 - `on_exception` signal exported from `postmarker.django`, next to `pre_send` and `post_send`. [#213](https://github.com/Stranger6667/postmarker/pull/213)
 - Support for Django 5.2, 6.0 and 6.1.
 - Support for `email.message.EmailMessage` (the modern `email` API) wherever MIME messages are accepted.
+- Suppressions API: `suppressions.all`, `create` and `delete` per message stream. [#197](https://github.com/Stranger6667/postmarker/issues/197)
 - Type annotations and `py.typed` marker.
 
 ### Changed

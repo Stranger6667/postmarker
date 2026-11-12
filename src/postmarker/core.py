@@ -19,6 +19,7 @@ from .models.senders import SenderSignaturesManager
 from .models.server import ServerManager
 from .models.stats import StatsManager
 from .models.status import StatusManager
+from .models.suppressions import SuppressionsManager
 from .models.templates import TemplateManager
 from .models.triggers import TriggersManager
 from .utils import get_args
@@ -41,6 +42,7 @@ class PostmarkClient:
     server: ServerManager
     stats: StatsManager
     status: StatusManager
+    suppressions: SuppressionsManager
     templates: TemplateManager
     triggers: TriggersManager
     _session: requests.Session
@@ -54,6 +56,7 @@ class PostmarkClient:
         ServerManager,
         StatsManager,
         StatusManager,
+        SuppressionsManager,
         TemplateManager,
         TriggersManager,
     )
