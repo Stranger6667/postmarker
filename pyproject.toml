@@ -9,7 +9,7 @@ description = "Python client library for Postmark API"
 keywords = ["postmark", "api", "client", "email"]
 authors = [{ name = "Dmitry Dygalo", email = "dmitry@dygalo.dev" }]
 maintainers = [{ name = "Dmitry Dygalo", email = "dmitry@dygalo.dev" }]
-readme = "README.rst"
+readme = "README.md"
 license = "MIT"
 requires-python = ">=3.10"
 classifiers = [
@@ -37,13 +37,14 @@ dependencies = ["requests>=2.20.0"]
 
 [project.optional-dependencies]
 tests = ["coverage[toml]>=7", "pytest>=8", "pytest-django", "pytest-recording>=0.14", "tornado"]
+docs = ["mkdocstrings[python]", "pymdown-extensions", "zensical>=0.1.1,<0.2"]
 
 [project.entry-points.pytest11]
 postmark = "postmarker.pytest"
 
 [project.urls]
 Documentation = "https://postmarker.readthedocs.io/en/stable/"
-Changelog = "https://postmarker.readthedocs.io/en/stable/changelog.html"
+Changelog = "https://github.com/Stranger6667/postmarker/blob/master/CHANGELOG.md"
 "Bug Tracker" = "https://github.com/Stranger6667/postmarker"
 Funding = "https://github.com/sponsors/Stranger6667"
 "Source Code" = "https://github.com/Stranger6667/postmarker"
