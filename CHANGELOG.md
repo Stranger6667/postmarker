@@ -130,11 +130,11 @@
 ### Added
 
 - Support for Python 3.7. [#170](https://github.com/Stranger6667/postmarker/issues/170)
-- Support for <span class="title-ref">Metadata</span> option. [#168](https://github.com/Stranger6667/postmarker/issues/168)
+- Support for `Metadata` option. [#168](https://github.com/Stranger6667/postmarker/issues/168)
 
 ### Changed
 
-- Stream logs to <span class="title-ref">sys.stdout</span> by default. [#159](https://github.com/Stranger6667/postmarker/issues/159)
+- Stream logs to `sys.stdout` by default. [#159](https://github.com/Stranger6667/postmarker/issues/159)
 
 ### Removed
 
@@ -144,7 +144,7 @@
 
 ### Changed
 
-- Make <span class="title-ref">mock</span> package optional on Python 2. [#158](https://github.com/Stranger6667/postmarker/issues/158), [#162](https://github.com/Stranger6667/postmarker/issues/162)
+- Make `mock` package optional on Python 2. [#158](https://github.com/Stranger6667/postmarker/issues/158), [#162](https://github.com/Stranger6667/postmarker/issues/162)
 
 ## [0.12.1](https://github.com/Stranger6667/postmarker/compare/0.12.0...0.12.1) - 2018-11-05
 
@@ -156,12 +156,12 @@
 
 ### Added
 
-- Support for <span class="title-ref">TemplateAlias</span>. [#150](https://github.com/Stranger6667/postmarker/issues/150)
+- Support for `TemplateAlias`. [#150](https://github.com/Stranger6667/postmarker/issues/150)
 
 ### Fixed
 
 - Processing of alternatives together with attachments. [#148](https://github.com/Stranger6667/postmarker/issues/148)
-- Processing of <span class="title-ref">message/rfc822</span> attachments.
+- Processing of `message/rfc822` attachments.
 
 ## [0.11.3](https://github.com/Stranger6667/postmarker/compare/0.11.2...0.11.3) - 2017-11-08
 
@@ -171,7 +171,7 @@
 
 ### Fixed
 
-- Fix missed <span class="title-ref">mock</span> dependency for Python 2. [#145](https://github.com/Stranger6667/postmarker/issues/145)
+- Fix missed `mock` dependency for Python 2. [#145](https://github.com/Stranger6667/postmarker/issues/145)
 
 ## [0.11.2](https://github.com/Stranger6667/postmarker/compare/0.11.1...0.11.2) - 2017-05-14
 
@@ -209,7 +209,7 @@
 ### Changed
 
 - `OutboundMessageManager.get_details` and `InboundMessageManager.get_details` were methods were renamed to `get`. Now they returns `OutboundMessage` and `InboundMessage` instances respectively. [#125](https://github.com/Stranger6667/postmarker/issues/125)
-- Renamed `token` kwarg in <span class="title-ref">PostmarkClient</span> to `server_token`. [#130](https://github.com/Stranger6667/postmarker/issues/130)
+- Renamed `token` kwarg in `PostmarkClient` to `server_token`. [#130](https://github.com/Stranger6667/postmarker/issues/130)
 
 ### Fixed
 
@@ -232,7 +232,7 @@
 
 ### Added
 
-- Ability to load all items without specifying exact <span class="title-ref">count</span> value. [#106](https://github.com/Stranger6667/postmarker/issues/106)
+- Ability to load all items without specifying exact `count` value. [#106](https://github.com/Stranger6667/postmarker/issues/106)
 - Delivery webhook wrapper. [#95](https://github.com/Stranger6667/postmarker/issues/95)
 - Open webhook wrapper. [#96](https://github.com/Stranger6667/postmarker/issues/96)
 - Bounce webhook wrapper. [#97](https://github.com/Stranger6667/postmarker/issues/97)
@@ -249,14 +249,14 @@
 
 ### Fixed
 
-- Fix needless requests when <span class="title-ref">count</span> is more than number of available items. [#107](https://github.com/Stranger6667/postmarker/issues/107)
+- Fix needless requests when `count` is more than number of available items. [#107](https://github.com/Stranger6667/postmarker/issues/107)
 
 ## [0.8.0](https://github.com/Stranger6667/postmarker/compare/0.7.2...0.8.0) - 2017-03-13
 
 ### Added
 
 - Ability to download more than 500 items. [#70](https://github.com/Stranger6667/postmarker/issues/70)
-- <span class="title-ref">pre_send</span> and <span class="title-ref">post_send</span> Django signals. [#83](https://github.com/Stranger6667/postmarker/issues/83)
+- `pre_send` and `post_send` Django signals. [#83](https://github.com/Stranger6667/postmarker/issues/83)
 - Inbound rules triggers API. [#75](https://github.com/Stranger6667/postmarker/issues/75)
 - Tags triggers API. [#74](https://github.com/Stranger6667/postmarker/issues/74)
 
@@ -274,7 +274,7 @@
 
 ### Added
 
-- <span class="title-ref">VERBOSITY</span> option to the Django backend. [#92](https://github.com/Stranger6667/postmarker/issues/92)
+- `VERBOSITY` option to the Django backend. [#92](https://github.com/Stranger6667/postmarker/issues/92)
 
 ## [0.7.0](https://github.com/Stranger6667/postmarker/compare/0.6.2...0.7.0) - 2017-03-02
 
@@ -295,7 +295,7 @@
 
 ### Fixed
 
-- Fix handling of <span class="title-ref">quoted-printable</span> payload. [#76](https://github.com/Stranger6667/postmarker/issues/76)
+- Fix handling of `quoted-printable` payload. [#76](https://github.com/Stranger6667/postmarker/issues/76)
 
 ## [0.6.0](https://github.com/Stranger6667/postmarker/compare/0.5.3...0.6.0) - 2016-12-05
 
