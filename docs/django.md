@@ -43,6 +43,8 @@ For testing purposes, there is the `TEST_MODE` option. When it is set to `True` 
 
 To globally turn on `TrackOpens` feature, set `TRACK_OPENS` to `True`.
 
+When Postmark rejects a message, the backend raises `postmarker.exceptions.ClientError` with Postmark's error code in `error_code` (for a batch, the first failure's).
+
 ## Messages
 
 To mark messages with tags, add metadata, or specify the message stream, you could use `postmarker.django.PostmarkEmailMessage` / `postmarker.django.PostmarkEmailMultiAlternatives` instead of `EmailMessage` / `EmailMultiAlternatives` from Django. Example:

@@ -14,7 +14,7 @@ from requests import ConnectTimeout, Response
 from postmarker.core import TEST_TOKEN
 from postmarker.django import EmailBackend
 from postmarker.django.signals import on_exception, post_send, pre_send
-from postmarker.exceptions import PostmarkerException
+from postmarker.exceptions import ClientError
 from postmarker.models.emails import Email
 
 pytestmark = pytest.mark.usefixtures("outbox")
@@ -125,15 +125,19 @@ class TestMassSend:
 
     def test_single_exception_propagation(self, batch_send):
         with batch_send():
-            with pytest.raises(PostmarkerException) as exc:
+            with pytest.raises(ClientError) as exc:
                 send_mass_mail(self.messages, fail_silently=False)
             assert str(exc.value) == "[406] Bla bla, inactive recipient"
+            assert exc.value.error_code == 406
 
     def test_multiple_exceptions_propagation(self, batch_send):
-        with batch_send(EXAMPLE_BATCH_RESPONSE * 2):
-            with pytest.raises(PostmarkerException) as exc:
+        other_failure = {**EXAMPLE_BATCH_RESPONSE[1], "ErrorCode": 300, "Message": "Invalid email request"}
+        with batch_send([*EXAMPLE_BATCH_RESPONSE, EXAMPLE_BATCH_RESPONSE[0], other_failure]):
+            with pytest.raises(ClientError) as exc:
                 send_mass_mail(self.messages * 2, fail_silently=False)
-            assert str(exc.value) == "[[406] Bla bla, inactive recipient, [406] Bla bla, inactive recipient]"
+            assert str(exc.value) == "[[406] Bla bla, inactive recipient, [300] Invalid email request]"
+            # The first failure's code
+            assert exc.value.error_code == 406
 
 
 @pytest.fixture

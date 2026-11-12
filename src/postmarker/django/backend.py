@@ -11,7 +11,7 @@ from django.utils.encoding import force_str
 from django.utils.functional import partition
 
 from ..core import TEST_TOKEN, PostmarkClient
-from ..exceptions import PostmarkerException
+from ..exceptions import ClientError
 from .signals import on_exception, post_send, pre_send
 
 DEFAULT_CONFIG = {"TEST_MODE": False, "TRACK_OPENS": False, "VERBOSITY": 0}
@@ -84,7 +84,8 @@ class EmailBackend(BaseEmailBackend):
             message = exception_messages[0]
         else:
             message = "[{}]".format(", ".join(exception_messages))
-        raise PostmarkerException(message)
+        # For batches, the first failure's code
+        raise ClientError(message, error_code=responses[0]["ErrorCode"])
 
     def prepare_message(self, message: EmailMessage) -> Any:
         instance = message.message()
