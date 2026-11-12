@@ -1,6 +1,8 @@
 # Changelog
 
-## [Unreleased](https://github.com/Stranger6667/postmarker/compare/v1.0...HEAD)
+## [Unreleased](https://github.com/Stranger6667/postmarker/compare/v2.0...HEAD)
+
+## [2.0](https://github.com/Stranger6667/postmarker/compare/v1.0...v2.0) - 2026-11-12
 
 ### Added
 
