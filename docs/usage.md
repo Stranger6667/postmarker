@@ -3,16 +3,18 @@
 For the first step you have to initialize the client with a proper API token. Postmarker provides a single `PostmarkClient` class for Server and Account APIs.
 
 ```python
-from postmarker.core import PostmarkClient
-
-
->>> postmark = PostmarkClient(server_token='SERVER_TOKEN', account_token='ACCOUNT_TOKEN')
+>>> from postmarker.core import PostmarkClient
+>>> postmark = PostmarkClient(
+    server_token='SERVER_TOKEN', account_token='ACCOUNT_TOKEN'
+)
 ```
 
 The variable `postmark` from the example above will be used in the next examples. By default, logging is configured to be silent. To enable it, pass `verbosity` to client instantiation:
 
 ```python
->>> postmark = PostmarkClient(server_token='SERVER_TOKEN', account_token='ACCOUNT_TOKEN', verbosity=3)
+>>> postmark = PostmarkClient(
+    server_token='SERVER_TOKEN', account_token='ACCOUNT_TOKEN', verbosity=3
+)
 ```
 
 With `verbosity=3` every request and response will be logged to the console.
@@ -28,7 +30,7 @@ Alternatively you could use `PostmarkClient.from_config` method, which is helpfu
 >>> postmark = PostmarkClient.from_config(config, is_uppercase=True)
 ```
 
-With `is_uppercase` set to `True` keys will be converted to upper case before lookup in the config object. The default value for `is_uppercase` is `False`. All arguments names from `PostmarkClient.__init__` will be looked up in the config object with default prefix `postmark\_`. To use different prefix, just pass `prefix='my_prefix_'` to `PostmarkClient.from_config` method.
+With `is_uppercase` set to `True` keys will be converted to upper case before lookup in the config object. The default value for `is_uppercase` is `False`. All arguments names from `PostmarkClient.__init__` will be looked up in the config object with default prefix `postmark_`. To use different prefix, just pass `prefix='my_prefix_'` to `PostmarkClient.from_config` method.
 
 ```python
 >>> config = {'my_prefix_server_token': 'foo', 'my_prefix_timeout': 1}
@@ -39,6 +41,8 @@ If you want `postmarker` to send requests to a non-standard API url, use the `ro
 
 ```python
 PostmarkClient(
-    server_token="SERVER_TOKEN", account_token="ACCOUNT_TOKEN", root_api_url="https://api-ssl-temp.postmarkapp.com/"
+    server_token="SERVER_TOKEN",
+    account_token="ACCOUNT_TOKEN",
+    root_api_url="https://api-ssl-temp.postmarkapp.com/",
 )
 ```

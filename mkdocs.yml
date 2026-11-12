@@ -47,5 +47,8 @@ plugins:
           options:
             docstring_style: sphinx
             heading_level: 3
+            # Signatures go to their own block, formatted by ruff to fit without horizontal scrolling
+            separate_signature: true
+            line_length: 80
             show_source: false
   - search

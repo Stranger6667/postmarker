@@ -10,7 +10,8 @@ The Status API is available via the `status` manager:
     {'status': 'UP', 'url': '/services/api', 'name': 'API Response Time'},
     {'status': 'UP', 'url': '/services/smtp', 'name': 'SMTP Response Time'},
     {'status': 'UP', 'url': '/services/web', 'name': 'Web Response Time'},
-    {'status': 'UP', 'url': '/services/inbound', 'name': 'Inbound SMTP Response Time'}
+    {'status': 'UP', 'url': '/services/inbound',
+     'name': 'Inbound SMTP Response Time'}
 ]
 >>> postmark.status.availability
 {
@@ -22,11 +23,11 @@ The Status API is available via the `status` manager:
 }
 >>> postmark.status.delivery
 [
-    {'missing': 0, 'spf': 1, 'spam': 0, 'inbox': 1, 'dkim': 1, 'name': 'AOL'},
-    {'missing': 0, 'spf': 1, 'spam': 0, 'inbox': 1, 'dkim': 1, 'name': 'Apple'},
-    {'missing': 0, 'spf': 1, 'spam': 0, 'inbox': 1, 'dkim': 1, 'name': 'Gmail'},
-    {'missing': 0, 'spf': 1, 'spam': 0, 'inbox': 1, 'dkim': 1, 'name': 'Hotmail'},
-    {'missing': 0, 'spf': 1, 'spam': 0, 'inbox': 1, 'dkim': 1, 'name': 'Yahoo!'}
+  {'missing': 0, 'spf': 1, 'spam': 0, 'inbox': 1, 'dkim': 1, 'name': 'AOL'},
+  {'missing': 0, 'spf': 1, 'spam': 0, 'inbox': 1, 'dkim': 1, 'name': 'Apple'},
+  {'missing': 0, 'spf': 1, 'spam': 0, 'inbox': 1, 'dkim': 1, 'name': 'Gmail'},
+  {'missing': 0, 'spf': 1, 'spam': 0, 'inbox': 1, 'dkim': 1, 'name': 'Hotmail'},
+  {'missing': 0, 'spf': 1, 'spam': 0, 'inbox': 1, 'dkim': 1, 'name': 'Yahoo!'}
 ]
 ```
 
