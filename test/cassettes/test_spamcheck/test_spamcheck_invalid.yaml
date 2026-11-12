@@ -17,7 +17,7 @@ interactions:
       User-Agent:
       - Postmarker/0.6.0.dev
     method: POST
-    uri: http://spamcheck.postmarkapp.com/filter/
+    uri: https://spamcheck.postmarkapp.com/filter/
   response:
     body:
       string: '{"success":false,"message":"SpamAssassin error occured"}'
