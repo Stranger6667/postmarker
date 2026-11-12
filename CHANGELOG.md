@@ -11,6 +11,7 @@
 - `ConfirmationPersonalNote` on `senders.create` and `senders.edit`.
 - Support for Django 5.2, 6.0 and 6.1.
 - Message Streams API: `message_streams.all`, `get`, `create`, `edit`, `archive` and `unarchive`.
+- Message clicks: `messages.outbound.clicks.all` and `get`, `OutboundMessage.clicks()`, and a link click webhook wrapper. [#169](https://github.com/Stranger6667/postmarker/issues/169)
 - Support for `email.message.EmailMessage` (the modern `email` API) wherever MIME messages are accepted.
 - Suppressions API: `suppressions.all`, `create` and `delete` per message stream. [#197](https://github.com/Stranger6667/postmarker/issues/197)
 - Type annotations and `py.typed` marker.

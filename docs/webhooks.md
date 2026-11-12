@@ -39,6 +39,18 @@ Opens could be processed by `postmark.messages.outbound.opens.Open`:
 >>> open = postmark.messages.outbound.opens.Open(data)
 ```
 
+## Click
+
+Link clicks could be processed by `postmark.messages.outbound.clicks.Click`:
+
+```python
+>>> with open('/path/to/raw_content.json') as fd:
+        data = fd.read()
+>>> click = postmark.messages.outbound.clicks.Click(data)
+>>> click.OriginalLink
+https://example.com/confirm-your-address
+```
+
 ## Bounce
 
 For bounce webhook processing there is `Bounce` constructor in `bounces` manager. It constructs new `Bounce` instance from given JSON string.

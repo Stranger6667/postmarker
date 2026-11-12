@@ -84,3 +84,26 @@ Also, you can access to corresponding `OutboundMessage` instance via `message` p
 >>> open.message
 <Sent message to test@example.com>
 ```
+
+## Clicks
+
+The clicks API handler is located in `messages.outbound.clicks` manager.
+Each click is a unique link clicked by a recipient.
+
+```python
+>>> postmark.messages.outbound.clicks.all(tag='welcome-user')
+[<Click: Click from john.doe@yahoo.com>, ...]
+>>> click.OriginalLink
+https://example.com
+>>> click.ClickLocation
+HTML
+```
+
+Clicks for a single message, as the raw API response:
+
+```python
+>>> message.clicks()
+{'TotalCount': 1, 'Clicks': [{'ClickLocation': 'HTML', ...}]}
+```
+
+As with opens, `click.message` returns the corresponding `OutboundMessage`.
