@@ -1,4 +1,6 @@
+from base64 import b64decode
 from contextlib import contextmanager
+from email.mime.image import MIMEImage
 from unittest.mock import patch
 
 import pytest
@@ -152,11 +154,11 @@ def test_send_mail_with_attachment(postmark_request, message):
     constructing the same underlying datastructures that the backend would
     construct.
     """
-    message.attach("hello.txt", "Hello World", "text/plain")
+    message.attach("hello.txt", "Hello World\n", "text/plain")
     message.send()
     assert postmark_request.call_args[1]["json"][0] == {
         "TextBody": "text_content",
-        "Attachments": [{"Name": "hello.txt", "Content": "Hello World", "ContentType": "text/plain"}],
+        "Attachments": [{"Name": "hello.txt", "Content": "SGVsbG8gV29ybGQK", "ContentType": "text/plain"}],
         "From": "sender@example.com",
         "HtmlBody": None,
         "ReplyTo": None,
@@ -172,13 +174,31 @@ def test_send_mail_with_attachment(postmark_request, message):
     }
 
 
+def test_text_attachment_non_ascii(postmark_request, message):
+    message.attach("data.csv", "имя,значение\n", "text/csv")
+    message.send()
+    attachment = postmark_request.call_args[1]["json"][0]["Attachments"][0]
+    assert b64decode(attachment["Content"]) == "имя,значение\n".encode()
+
+
+def test_inline_image_content_id(postmark_request, message):
+    image = MIMEImage(b"GIF89a", "gif")
+    image.add_header("Content-ID", "<image@example.com>")
+    image.add_header("Content-Disposition", "inline", filename="image.gif")
+    message.attach(image)
+    message.send()
+    assert postmark_request.call_args[1]["json"][0]["Attachments"] == [
+        {"Name": "image.gif", "Content": "R0lGODlh", "ContentType": "image/gif", "ContentID": "cid:image@example.com"}
+    ]
+
+
 def test_text_html_alternative_and_pdf_attachment_failure(postmark_request, message):
     """Send a text body, HTML alternative, and PDF attachment."""
     message.attach_alternative("<html></html>", "text/html")
     content = "PDF-File-Contents"
     message.attach("hello.pdf", content, "application/pdf")
     message.send(fail_silently=False)
-    encoded_content = "UERGLUZpbGUtQ29udGVudHM=\n"
+    encoded_content = "UERGLUZpbGUtQ29udGVudHM="
     assert postmark_request.call_args[1]["json"][0] == {
         "Attachments": [
             {

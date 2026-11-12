@@ -71,7 +71,7 @@ def get_mime_message(text, html_text=None, **kwargs):
 
 MIME_MESSAGE = get_mime_message("Text", **DEFAULT_HEADERS)
 MIME_ALTERNATIVE = get_mime_message("Text", "HTML content", **DEFAULT_HEADERS)
-ENCODED_CONTENT = "dGVzdCBjb250ZW50\n"
+ENCODED_CONTENT = "dGVzdCBjb250ZW50"
 
 IMAGE = MIMEImage(b"test content", "png", name="image1.png")
 IMAGE.add_header("Content-ID", "<image1@example.com>")
@@ -127,7 +127,7 @@ class TestSimpleSend:
     def test_invalid(self, postmark):
         with pytest.raises(TypeError) as exc:
             postmark.emails.send(message=object())
-        assert str(exc.value) == "message should be either Email or MIMEText or MIMEMultipart instance"
+        assert str(exc.value) == "message should be either Email or email.message.Message instance"
 
     def test_message_and_kwargs(self, postmark, email):
         with pytest.raises(AssertionError) as exc:
