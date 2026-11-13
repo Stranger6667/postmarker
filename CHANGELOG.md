@@ -6,6 +6,10 @@
 
 - CSS inlining for HTML emails via the optional `css-inline` extra: `PostmarkClient(inline_css=True)` and the `INLINE_CSS` Django setting.
 
+### Fixed
+
+- `message/rfc822` attachments with a parsed message sent only its body, without headers, and crashed with `TypeError` for multipart messages (they should send the whole message).
+
 ## [2.0](https://github.com/Stranger6667/postmarker/compare/v1.0...v2.0) - 2026-11-12
 
 ### Added

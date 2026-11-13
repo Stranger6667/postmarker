@@ -235,8 +235,9 @@ def test_text_html_alternative_and_pdf_attachment_failure(postmark_request, mess
 
 
 def test_message_rfc822(postmark_request, message):
-    message_content = "Fake message"
-    expected_content = "RmFrZSBtZXNzYWdl"
+    # Headers of the attached message must survive, not only its body
+    message_content = "Subject: Hi\n\nFake message"
+    expected_content = "U3ViamVjdDogSGkKCkZha2UgbWVzc2FnZQ=="
     message.attach_alternative(message_content, "message/rfc822")
     message.send(fail_silently=False)
     assert postmark_request.call_args[1]["json"][0] == {
