@@ -2,7 +2,10 @@
 
 [![Build](https://github.com/Stranger6667/postmarker/actions/workflows/build.yml/badge.svg)](https://github.com/Stranger6667/postmarker/actions/workflows/build.yml) [![Coverage](https://codecov.io/gh/Stranger6667/postmarker/branch/master/graph/badge.svg)](https://codecov.io/gh/Stranger6667/postmarker) [![Version](https://img.shields.io/pypi/v/postmarker.svg)](https://pypi.org/project/postmarker/) [![Python versions](https://img.shields.io/pypi/pyversions/postmarker.svg)](https://pypi.org/project/postmarker/) [![Docs](https://readthedocs.org/projects/postmarker/badge/?version=stable)](https://postmarker.readthedocs.io/en/stable/) [![License](https://img.shields.io/pypi/l/postmarker.svg)](https://opensource.org/licenses/MIT)
 
-Python client for the [Postmark](https://postmarkapp.com) email API, with a Django email backend.
+Python client for the [Postmark](https://postmarkapp.com) email API.
+
+Postmarker covers Postmark's API beyond sending: templates, bounces, suppressions, message streams, stats, servers and domains.
+It also ships a Django email backend, Postmark webhook wrappers and a pytest fixture for your tests.
 
 > [!NOTE]
 > Postmarker keeps Postmark's field names: `From`, `HtmlBody`, `TemplateModel`, `MessageStream`.
@@ -14,7 +17,7 @@ Python client for the [Postmark](https://postmarkapp.com) email API, with a Djan
 uv pip install postmarker
 ```
 
-Add the `css-inline` extra to inline CSS into HTML emails:
+To inline `<style>` CSS into HTML emails, install the `css-inline` extra and create the client with `inline_css=True`:
 
 ```
 uv pip install 'postmarker[css-inline]'
@@ -25,16 +28,19 @@ uv pip install 'postmarker[css-inline]'
 ```python
 from postmarker.core import PostmarkClient
 
-postmark = PostmarkClient(server_token="API_TOKEN")
+postmark = PostmarkClient(server_token="POSTMARK_API_TEST")
 postmark.emails.send(
     From="sender@example.com",
     To="receiver@example.com",
     Subject="Postmark test",
     HtmlBody="<strong>Hello</strong> dear Postmark user.",
 )
+# {"ErrorCode": 0, "Message": "Test job accepted", "MessageID": "...", ...}
 ```
 
-Pass `POSTMARK_API_TEST` as the server token to test sending without delivering emails.
+With the `POSTMARK_API_TEST` token, Postmark validates the request without delivering it.
+To send real emails, use the server token from your server's API Tokens tab in Postmark.
+`From` must be a confirmed sender signature or an address on a verified domain.
 
 Send with a template:
 
@@ -50,10 +56,11 @@ postmark.emails.send_with_template(
 Send a batch. Postmarker splits it into requests of 500 messages, Postmark's limit:
 
 ```python
-responses = postmark.emails.send_batch(
-    {"From": "sender@example.com", "To": "first@example.com", "Subject": "Hi", "TextBody": "Hello"},
-    {"From": "sender@example.com", "To": "second@example.com", "Subject": "Hi", "TextBody": "Hello"},
-)
+messages = [
+    {"From": "sender@example.com", "To": to, "Subject": "Hi", "TextBody": "Hello"}
+    for to in ("first@example.com", "second@example.com")
+]
+responses = postmark.emails.send_batch(*messages)
 # Postmark accepts or rejects each message separately
 failed = [response for response in responses if response["ErrorCode"] != 0]
 ```
@@ -79,12 +86,29 @@ A rejected request raises `ClientError` with Postmark's [error code](https://pos
 from postmarker.exceptions import ClientError
 
 try:
-    postmark.emails.send(From="sender@example.com", To="receiver@example.com", TextBody="Hello")
+    postmark.emails.send(
+        From="sender@example.com",
+        To="receiver@example.com",
+        TextBody="Hello",
+    )
 except ClientError as exc:
     print(exc.error_code)  # For example, 406 for an inactive recipient
 ```
 
 ## Django
+
+Django 6.1+:
+
+```python
+MAILERS = {
+    "default": {
+        "BACKEND": "postmarker.django.EmailBackend",
+        "OPTIONS": {"token": "<YOUR POSTMARK SERVER TOKEN>"},
+    },
+}
+```
+
+Django 5.2 and 6.0:
 
 ```python
 EMAIL_BACKEND = "postmarker.django.EmailBackend"
@@ -92,15 +116,16 @@ POSTMARK = {"TOKEN": "<YOUR POSTMARK SERVER TOKEN>"}
 ```
 
 Django then sends `send_mail`, `EmailMessage` and emails from third-party apps through Postmark.
-On Django 6.1+, use `MAILERS`. The [Django guide](https://postmarker.readthedocs.io/en/stable/django/) covers it, along with tags, metadata, message streams and signals.
+The [Django guide](https://postmarker.readthedocs.io/en/stable/django/) covers tags, metadata, message streams and signals.
 
 ## Testing
 
-Postmarker ships a `postmark_request` pytest fixture. It mocks requests to Postmark and records what your code sent:
+Postmarker ships a `postmark_request` pytest fixture.
+It mocks requests to Postmark and records what your code sent, through `PostmarkClient` or the Django backend:
 
 ```python
 def test_welcome_email(postmark_request):
-    send_welcome_email("jane@example.com")
+    send_welcome_email("jane@example.com")  # Your code that sends an email
     assert postmark_request.call_args.kwargs["json"]["To"] == "jane@example.com"
 ```
 
