@@ -234,6 +234,13 @@ class Email(BaseEmail):
             MessageStream=message_stream,
         )
 
+    def as_dict(self) -> dict[str, Any]:
+        data = super().as_dict()
+        inliner = self._manager and self._manager.client.css_inliner
+        if inliner and data.get("HtmlBody"):
+            data["HtmlBody"] = inliner.inline(data["HtmlBody"])
+        return data
+
     def send(self) -> Any:
         return self._manager._send(**self.as_dict())
 

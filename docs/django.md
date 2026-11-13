@@ -43,6 +43,8 @@ For testing purposes, there is the `TEST_MODE` option. When it is set to `True` 
 
 To globally turn on `TrackOpens` feature, set `TRACK_OPENS` to `True`.
 
+To inline CSS into HTML emails, install `postmarker[css-inline]` and set `INLINE_CSS` to `True` or a `css_inline.CSSInliner` instance. See [CSS inlining](emails.md#css-inlining).
+
 When Postmark rejects a message, the backend raises `postmarker.exceptions.ClientError` with Postmark's error code in `error_code` (for a batch, the first failure's).
 
 ## Messages
