@@ -40,7 +40,7 @@ dependencies = ["requests>=2.20.0"]
 
 [project.optional-dependencies]
 css-inline = ["css-inline>=0.24"]
-tests = ["postmarker[css-inline]", "coverage[toml]>=7", "pytest>=8", "pytest-django", "pytest-recording>=0.14", "tornado"]
+tests = ["postmarker[css-inline]", "coverage[toml]>=7.2", "pytest>=8", "pytest-django", "pytest-recording>=0.14", "tornado"]
 docs = ["mkdocstrings[python]", "pymdown-extensions", "ruff", "zensical>=0.1.1,<0.2"]
 
 [project.entry-points.pytest11]
@@ -77,7 +77,8 @@ source = ["src", ".tox/*/site-packages", ".tox/*/lib/*/site-packages", ".tox/*/L
 [tool.coverage.report]
 show_missing = true
 precision = 2
-exclude_lines = ["raise NotImplementedError"]
+exclude_also = ["if TYPE_CHECKING:"]
+fail_under = 100
 
 [tool.ruff]
 line-length = 120

@@ -4,8 +4,10 @@ import platform
 import re
 import sys
 from email import encoders
+from email.message import EmailMessage
 from email.mime.base import MIMEBase
 from email.mime.image import MIMEImage
+from email.mime.message import MIMEMessage
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
@@ -544,3 +546,34 @@ def test_inline_css_missing_package(monkeypatch):
     monkeypatch.setitem(sys.modules, "css_inline", None)
     with pytest.raises(ImportError, match=r"postmarker\[css-inline\]"):
         PostmarkClient(server_token="SERVER_TOKEN", inline_css=True)
+
+
+@pytest.mark.parametrize(
+    "inner", (MIMEText("Forwarded"), get_mime_message("Text", "<b>HTML</b>")), ids=("simple", "multipart")
+)
+def test_email_attach_forwarded_message(email, postmark_request, inner):
+    attachment = MIMEMessage(inner)
+    attachment.add_header("Content-Disposition", "attachment", filename="forwarded.eml")
+    email.attach(attachment)
+    email.send()
+    assert postmark_request.call_args[1]["json"]["Attachments"] == [
+        {
+            "Name": "forwarded.eml",
+            "Content": base64.b64encode(inner.as_bytes()).decode(),
+            "ContentType": "message/rfc822",
+        }
+    ]
+
+
+def test_email_from_mime_encoded_headers(postmark):
+    message = MIMEText("Text")
+    # An encoded word followed by plain text decodes into parts with and without a charset
+    message["Subject"] = "=?utf-8?b?w6k=?= text"
+    assert Email.from_mime(message, postmark.emails).Subject == "\u00e9 text"
+
+
+def test_email_from_mime_set_content(postmark):
+    message = EmailMessage()
+    # `set_content` appends a newline the sender never wrote
+    message.set_content("Text")
+    assert Email.from_mime(message, postmark.emails).TextBody == "Text"

@@ -51,7 +51,7 @@ def prepare_attachments(attachment: AttachmentData) -> dict[str, Any]:
         # Postmark requires base64 content for every attachment, including `message/rfc822`.
         # A payload without `Content-Transfer-Encoding` is expected to be base64 already
         if content_type == "message/rfc822" and not isinstance(payload, str):
-            payload = b64encode(payload[0].get_payload(decode=True)).decode()
+            payload = b64encode(payload[0].as_bytes()).decode()
         elif "Content-Transfer-Encoding" in attachment:
             payload = b64encode(cast(bytes, attachment.get_payload(decode=True))).decode()
         result = {
