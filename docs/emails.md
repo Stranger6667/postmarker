@@ -152,7 +152,7 @@ Attachments and headers work in the same way as in basic email sending.
 Some email clients drop `<style>` blocks. Postmarker can move that CSS into `style` attributes with [css-inline](https://github.com/Stranger6667/css-inline):
 
 ```
-pip install 'postmarker[css-inline]'
+uv pip install 'postmarker[css-inline]'
 ```
 
 ```python
