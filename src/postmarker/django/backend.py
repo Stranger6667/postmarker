@@ -10,11 +10,11 @@ from django.core.mail.backends.base import BaseEmailBackend
 from django.utils.encoding import force_str
 from django.utils.functional import partition
 
-from ..core import TEST_TOKEN, PostmarkClient
+from ..core import TEST_TOKEN, PostmarkClient, make_css_inliner
 from ..exceptions import ClientError
 from .signals import on_exception, post_send, pre_send
 
-DEFAULT_CONFIG = {"TEST_MODE": False, "TRACK_OPENS": False, "VERBOSITY": 0}
+DEFAULT_CONFIG = {"TEST_MODE": False, "TRACK_OPENS": False, "VERBOSITY": 0, "INLINE_CSS": False}
 
 
 class EmailBackend(BaseEmailBackend):
@@ -31,6 +31,8 @@ class EmailBackend(BaseEmailBackend):
             self.server_token = token or self.get_option("TOKEN")
             if self.server_token is None:
                 raise ImproperlyConfigured("You should specify TOKEN to use Postmark email backend")
+        # Outside `send_messages`, so `fail_silently` can't hide a missing `css-inline`
+        self.inline_css = make_css_inliner(self.get_option("INLINE_CSS")) or False
 
     @property
     def config(self) -> dict[str, Any]:
@@ -42,7 +44,11 @@ class EmailBackend(BaseEmailBackend):
 
     def open(self) -> bool:
         if self.client is None:
-            self.client = PostmarkClient(server_token=self.server_token, verbosity=self.get_option("VERBOSITY"))
+            self.client = PostmarkClient(
+                server_token=self.server_token,
+                verbosity=self.get_option("VERBOSITY"),
+                inline_css=self.inline_css,
+            )
             return True
         return False
 

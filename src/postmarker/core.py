@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import sys
 from collections.abc import Mapping
-from typing import Any, TextIO
+from typing import TYPE_CHECKING, Any, TextIO
 from urllib.parse import urljoin
 
 import requests
@@ -26,11 +26,29 @@ from .models.templates import TemplateManager
 from .models.triggers import TriggersManager
 from .utils import get_args
 
+if TYPE_CHECKING:
+    from css_inline import CSSInliner
+
 DEFAULT_API = "https://api.postmarkapp.com/"
 STATUS_API = "https://status.postmarkapp.com/api/1.0/"
 SPAMCHECK_API = "https://spamcheck.postmarkapp.com/filter/"
 USER_AGENT = f"Postmarker/{__version__}"
 TEST_TOKEN = "POSTMARK_API_TEST"
+
+
+def make_css_inliner(inline_css: bool | CSSInliner) -> CSSInliner | None:
+    if not inline_css:
+        return None
+    if inline_css is not True:
+        return inline_css
+    try:
+        import css_inline
+    except ImportError as exc:
+        raise ImportError(
+            "`inline_css` requires the `css-inline` package: pip install 'postmarker[css-inline]'"
+        ) from exc
+    # Email HTML may carry user content; never fetch `<link>` URLs from it
+    return css_inline.CSSInliner(load_remote_stylesheets=False)
 
 
 class PostmarkClient:
@@ -76,6 +94,7 @@ class PostmarkClient:
         timeout: float | tuple[float, float] | None = None,
         logs_stream: TextIO = sys.stdout,
         root_api_url: str = DEFAULT_API,
+        inline_css: bool | CSSInliner = False,
     ) -> None:
         assert server_token or account_token, "You have to provide server_token or account_token to use Postmark API"
         self.server_token = server_token
@@ -84,6 +103,7 @@ class PostmarkClient:
         self.timeout = timeout
         self.logger = get_logger("Postmarker", verbosity, logs_stream)
         self.root_api_url = root_api_url
+        self.css_inliner = make_css_inliner(inline_css)
         self._setup_managers()
 
     @classmethod

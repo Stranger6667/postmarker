@@ -57,3 +57,4 @@ And run your app! That's it. All possible options have the same name as in `Post
 - `postmark_verbosity`
 - `postmark_max_retries`
 - `postmark_timeout`
+- `postmark_inline_css`

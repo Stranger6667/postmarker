@@ -1,3 +1,4 @@
+import sys
 import warnings
 from base64 import b64decode
 from contextlib import contextmanager
@@ -550,3 +551,22 @@ def test_signals_on_exception(catch_signal):
     assert kwargs["signal"] == on_exception
     assert isinstance(kwargs["exception"], ConnectTimeout)
     assert len(kwargs["raw_messages"]) == 1
+
+
+def test_inline_css(settings, postmark_request):
+    settings.POSTMARK = {**settings.POSTMARK, "INLINE_CSS": True}
+    send_mail(
+        html_message="<html><head><style>h1{color:red}</style></head><body><h1>Hi</h1></body></html>", **SEND_KWARGS
+    )
+    assert (
+        postmark_request.call_args[1]["json"][0]["HtmlBody"]
+        == '<html><head></head><body><h1 style="color: red;">Hi</h1></body></html>'
+    )
+
+
+def test_inline_css_missing_package(settings, monkeypatch):
+    # Raised outside `fail_silently`, otherwise every email is dropped without a trace
+    settings.POSTMARK = {**settings.POSTMARK, "INLINE_CSS": True}
+    monkeypatch.setitem(sys.modules, "css_inline", None)
+    with pytest.raises(ImportError, match=r"postmarker\[css-inline\]"):
+        EmailBackend(fail_silently=True)

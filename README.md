@@ -71,6 +71,7 @@ There are a lot of features available. Check it out in our documentation! Here's
 - Server APIs: Bounces, Messages, Message Streams, Suppressions, Templates with layouts, Server, Stats and Triggers.
 - Account APIs: Domains, Sender signatures, Servers and pushing templates between servers.
 - Status API.
+- CSS inlining for HTML emails via [css-inline](https://github.com/Stranger6667/css-inline).
 - Django email backend.
 - Tornado helper.
 - Spam check API.

@@ -2,14 +2,17 @@ import base64
 import os
 import platform
 import re
+import sys
 from email import encoders
 from email.mime.base import MIMEBase
 from email.mime.image import MIMEImage
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
+import css_inline
 import pytest
 
+from postmarker.core import PostmarkClient
 from postmarker.models.emails import Email
 
 pytestmark = pytest.mark.vcr
@@ -267,7 +270,7 @@ def test_batch_send_multiple(postmark, email, postmark_request):
 
 def test_batch_send_mime(postmark, postmark_request):
     postmark.emails.send_batch(MIME_MESSAGE)
-    email = Email.from_mime(MIME_MESSAGE, postmark)
+    email = Email.from_mime(MIME_MESSAGE, postmark.emails)
     assert postmark_request.call_args[1]["json"] == (email.as_dict(),)
 
 
@@ -364,7 +367,7 @@ def test_email_attach_binary(email, postmark_request):
 
 
 def test_email_from_mime(postmark):
-    email = Email.from_mime(MIME_MESSAGE, postmark)
+    email = Email.from_mime(MIME_MESSAGE, postmark.emails)
     assert email.TextBody == "Text"
     assert email.From == MIME_MESSAGE["From"]
     assert email.To == MIME_MESSAGE["To"]
@@ -485,3 +488,59 @@ def test_email_template_repr(email_template):
 
 def test_email_template_batch_len(email_template_batch):
     assert len(email_template_batch) == 1
+
+
+STYLED_HTML = "<html><head><style>h1{color:red}</style></head><body><h1>Hi</h1></body></html>"
+INLINED_HTML = '<html><head></head><body><h1 style="color: red;">Hi</h1></body></html>'
+STYLED_EMAIL = {"From": "sender@example.com", "To": "receiver@example.com", "HtmlBody": STYLED_HTML}
+
+
+def sent_html_body(postmark_request):
+    payload = postmark_request.call_args[1]["json"]
+    # Batches send a tuple of emails
+    if isinstance(payload, tuple):
+        payload = payload[0]
+    return payload["HtmlBody"]
+
+
+@pytest.mark.parametrize(
+    "send",
+    (
+        lambda client: client.emails.send(**STYLED_EMAIL),
+        lambda client: client.emails.send(message=get_mime_message("Text", STYLED_HTML, **DEFAULT_HEADERS)),
+        lambda client: client.emails.send_batch(STYLED_EMAIL),
+        lambda client: client.emails.send_batch(get_mime_message("Text", STYLED_HTML, **DEFAULT_HEADERS)),
+    ),
+    ids=("send", "send-mime", "batch", "batch-mime"),
+)
+def test_inline_css(postmark_request, send):
+    send(PostmarkClient(server_token="SERVER_TOKEN", inline_css=True))
+    assert sent_html_body(postmark_request) == INLINED_HTML
+
+
+def test_inline_css_from_config(postmark_request):
+    client = PostmarkClient.from_config({"postmark_server_token": "SERVER_TOKEN", "postmark_inline_css": True})
+    client.emails.send(**STYLED_EMAIL)
+    assert sent_html_body(postmark_request) == INLINED_HTML
+
+
+def test_inline_css_custom_inliner(postmark_request):
+    client = PostmarkClient(server_token="SERVER_TOKEN", inline_css=css_inline.CSSInliner(keep_style_tags=True))
+    client.emails.send(**STYLED_EMAIL)
+    assert (
+        sent_html_body(postmark_request)
+        == '<html><head><style>h1{color:red}</style></head><body><h1 style="color: red;">Hi</h1></body></html>'
+    )
+
+
+def test_inline_css_skips_remote_stylesheets(postmark_request):
+    # Email HTML may carry user content; the default inliner must not fetch `<link>` URLs
+    html = '<html><head><link rel="stylesheet" href="http://127.0.0.1:9/x.css"></head><body>Hi</body></html>'
+    PostmarkClient(server_token="SERVER_TOKEN", inline_css=True).emails.send(**{**STYLED_EMAIL, "HtmlBody": html})
+    assert sent_html_body(postmark_request) == "<html><head></head><body>Hi</body></html>"
+
+
+def test_inline_css_missing_package(monkeypatch):
+    monkeypatch.setitem(sys.modules, "css_inline", None)
+    with pytest.raises(ImportError, match=r"postmarker\[css-inline\]"):
+        PostmarkClient(server_token="SERVER_TOKEN", inline_css=True)

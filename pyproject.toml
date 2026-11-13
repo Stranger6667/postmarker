@@ -39,7 +39,8 @@ classifiers = [
 dependencies = ["requests>=2.20.0"]
 
 [project.optional-dependencies]
-tests = ["coverage[toml]>=7", "pytest>=8", "pytest-django", "pytest-recording>=0.14", "tornado"]
+css-inline = ["css-inline>=0.24"]
+tests = ["postmarker[css-inline]", "coverage[toml]>=7", "pytest>=8", "pytest-django", "pytest-recording>=0.14", "tornado"]
 docs = ["mkdocstrings[python]", "pymdown-extensions", "ruff", "zensical>=0.1.1,<0.2"]
 
 [project.entry-points.pytest11]

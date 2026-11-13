@@ -147,6 +147,38 @@ Postmark provides an interface to send emails created with a template. Example o
 
 Attachments and headers work in the same way as in basic email sending.
 
+## CSS inlining
+
+Some email clients drop `<style>` blocks. Postmarker can move that CSS into `style` attributes with [css-inline](https://github.com/Stranger6667/css-inline):
+
+```
+pip install 'postmarker[css-inline]'
+```
+
+```python
+>>> postmark = PostmarkClient(server_token='API_TOKEN', inline_css=True)
+>>> postmark.emails.send(
+    From='sender@example.com',
+    To='receiver@example.com',
+    Subject='Postmark test',
+    HtmlBody='<html><head><style>h1 { color: red }</style></head><body><h1>Hello</h1></body></html>'
+)
+```
+
+Postmark receives `<h1 style="color: red;">Hello</h1>`. Inlining applies to `send`, `send_batch`, `Email` objects and Python email instances. Postmark inlines template emails itself, see `InlineCss` in `send_with_template`.
+
+Stylesheets from `<link>` tags are not loaded. To change it or other options, pass a `CSSInliner` instance:
+
+```python
+>>> import css_inline
+>>> postmark = PostmarkClient(
+    server_token='API_TOKEN',
+    inline_css=css_inline.CSSInliner(keep_style_tags=True),
+)
+```
+
+With `load_remote_stylesheets=True`, your server fetches every `<link>` URL in the email HTML, so enable it only for HTML you control.
+
 ## Advanced
 
 To get more flexibility it is possible to use `Email` objects. `EmailManager` uses them internally to send emails. To instantiate one:
