@@ -4,7 +4,12 @@ from unittest.mock import patch
 import pytest
 
 from postmarker.core import USER_AGENT
-from postmarker.models.base import Model, ModelManager
+from postmarker.models.base import Model, ModelManager, SubModelManager
+from postmarker.models.bounces import BounceManager
+
+from ..conftest import aw, twin
+
+pytestmark = pytest.mark.anyio
 
 
 def test_model_as_dict():
@@ -25,35 +30,36 @@ def test_model_manager_repr():
     assert repr(ModelManager(None)) == "<ModelManager>"
 
 
-def requested_pages(postmark, path, total, **kwargs):
-    manager = reduce(getattr, path.split("."), postmark)
+async def requested_pages(client, path, total, **kwargs):
+    manager = reduce(getattr, path.split("."), client)
     response = {"TotalCount": total, "Bounces": [], "Messages": [], "InboundMessages": [], "Opens": [], "Domains": []}
     with patch.object(manager, "call", return_value=response) as call:
-        manager.all(**kwargs)
+        await aw(manager.all(**kwargs))
     return [(c.kwargs["count"], c.kwargs["offset"]) for c in call.call_args_list]
 
 
 UP_TO_LIMIT = [(500, offset) for offset in range(0, 10000, 500)]
 
 
-@pytest.mark.parametrize("path", ("bounces", "messages.outbound", "messages.inbound", "messages.outbound.opens"))
-@pytest.mark.parametrize(
-    "kwargs, expected",
-    (
-        ({"count": None}, UP_TO_LIMIT),
-        ({"count": 20000}, UP_TO_LIMIT),
-        ({"count": None, "offset": 9800}, [(200, 9800)]),
-        ({"count": 500, "offset": 9800}, [(200, 9800)]),
-        ({"count": None, "offset": 10000}, []),
-    ),
+LIMITED = (
+    ({"count": None}, UP_TO_LIMIT),
+    ({"count": 20000}, UP_TO_LIMIT),
+    ({"count": None, "offset": 9800}, [(200, 9800)]),
+    ({"count": 500, "offset": 9800}, [(200, 9800)]),
+    ({"count": None, "offset": 10000}, []),
 )
-def test_pagination_limit(postmark, path, kwargs, expected):
+
+
+@pytest.mark.parametrize("path", ("bounces", "messages.outbound", "messages.inbound", "messages.outbound.opens"))
+@pytest.mark.parametrize("kwargs, expected", LIMITED)
+async def test_pagination_limit(client, path, kwargs, expected):
     # Postmark rejects search requests where count + offset exceeds 10,000
-    assert requested_pages(postmark, path, 25000, **kwargs) == expected
+    assert await requested_pages(client, path, 25000, **kwargs) == expected
 
 
-def test_no_pagination_limit(postmark):
-    assert requested_pages(postmark, "domains", 25000, count=None) == [(500, offset) for offset in range(0, 25000, 500)]
+async def test_no_pagination_limit(client):
+    pages = await requested_pages(client, "domains", 25000, count=None)
+    assert pages == [(500, offset) for offset in range(0, 25000, 500)]
 
 
 @pytest.mark.parametrize(
@@ -63,10 +69,19 @@ def test_no_pagination_limit(postmark):
         ({"token_type": "account"}, {"X-Postmark-Account-Token": "ACCOUNT_TOKEN"}),
     ),
 )
-def test_manager_call_token_type(postmark_client, postmark_request, kwargs, header):
-    postmark_client.templates.call("GET", "/templates", **kwargs)
-    assert postmark_request.call_args[1]["headers"] == {
+async def test_manager_call_token_type(client, api_request, kwargs, header):
+    await aw(client.bounces.call("GET", "/bounces", **kwargs))
+    assert api_request.call_args[1]["headers"] == {
         "Accept": "application/json",
         "User-Agent": USER_AGENT,
         **header,
     }
+
+
+def test_sub_model_manager_attaches_managers(flavor):
+    class Holder(twin(SubModelManager, flavor)):
+        _managers = (twin(BounceManager, flavor),)
+
+    holder = Holder("client")
+    assert isinstance(holder.bounces, twin(BounceManager, flavor))
+    assert holder.bounces.client == "client"

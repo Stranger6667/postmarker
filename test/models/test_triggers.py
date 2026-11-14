@@ -3,56 +3,58 @@ import pytest
 from postmarker.models.base import ModelManager
 from postmarker.models.triggers import InboundRule, Tag
 
-pytestmark = pytest.mark.vcr
+from ..conftest import aw, twin
+
+pytestmark = [pytest.mark.vcr, pytest.mark.anyio]
 
 
 @pytest.mark.parametrize("name", ("inboundrules", "tags"))
-def test_triggers_manager(postmark, name):
-    manager = getattr(postmark.triggers, name)
-    assert isinstance(manager, ModelManager)
-    assert manager.client is postmark
+async def test_triggers_manager(client, flavor, name):
+    manager = getattr(client.triggers, name)
+    assert isinstance(manager, twin(ModelManager, flavor))
+    assert manager.client is client
 
 
-def test_inbound_rules_create(postmark):
-    rule = postmark.triggers.inboundrules.create("someone@example.com")
-    assert isinstance(rule, InboundRule)
-    assert str(rule) == "InboundRule: 962286"
+async def test_inbound_rules_create(client, flavor):
+    rule = await aw(client.triggers.inboundrules.create("someone@example.com"))
+    assert isinstance(rule, twin(InboundRule, flavor))
+    assert str(rule) == f"{twin(InboundRule, flavor).__name__}: 962286"
 
 
-def test_inbound_rules_all(postmark):
-    rules = postmark.triggers.inboundrules.all()
+async def test_inbound_rules_all(client, flavor):
+    rules = await aw(client.triggers.inboundrules.all())
     assert len(rules) == 1
-    assert isinstance(rules[0], InboundRule)
+    assert isinstance(rules[0], twin(InboundRule, flavor))
 
 
-def test_inbound_rules_delete(postmark):
-    rule = postmark.triggers.inboundrules.all()[0]
-    assert rule.delete() == "Rule someone@example.com removed."
+async def test_inbound_rules_delete(client):
+    rule = (await aw(client.triggers.inboundrules.all()))[0]
+    assert await aw(rule.delete()) == "Rule someone@example.com removed."
 
 
-def test_tags_create(postmark):
-    tag = postmark.triggers.tags.create("welcome")
-    assert isinstance(tag, Tag)
+async def test_tags_create(client, flavor):
+    tag = await aw(client.triggers.tags.create("welcome"))
+    assert isinstance(tag, twin(Tag, flavor))
     assert str(tag) == "welcome"
 
 
-def test_tags_all(postmark):
-    tags = postmark.triggers.tags.all()
+async def test_tags_all(client, flavor):
+    tags = await aw(client.triggers.tags.all())
     assert len(tags) == 1
-    assert isinstance(tags[0], Tag)
+    assert isinstance(tags[0], twin(Tag, flavor))
 
 
-def test_tags_get(postmark):
-    tag = postmark.triggers.tags.all()[0]
-    assert isinstance(tag.get(), Tag)
+async def test_tags_get(client, flavor):
+    tag = (await aw(client.triggers.tags.all()))[0]
+    assert isinstance(await aw(tag.get()), twin(Tag, flavor))
 
 
-def test_tags_edit(postmark):
-    tag = postmark.triggers.tags.create("welcome2")
-    tag.edit(MatchName="blabla")
+async def test_tags_edit(client):
+    tag = await aw(client.triggers.tags.create("welcome2"))
+    await aw(tag.edit(MatchName="blabla"))
     assert tag.MatchName == "blabla"
 
 
-def test_tags_delete(postmark):
-    tag = postmark.triggers.tags.all()[0]
-    assert tag.delete() == "Tag 1616731 removed."
+async def test_tags_delete(client):
+    tag = (await aw(client.triggers.tags.all()))[0]
+    assert await aw(tag.delete()) == "Tag 1616731 removed."

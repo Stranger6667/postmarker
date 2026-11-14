@@ -9,6 +9,15 @@ Managers return models. Each Postmark field of a model is an attribute with the 
     options:
       merge_init_into_class: true
       members: [from_config, spamcheck]
+      inherited_members: [from_config]
+
+`AsyncPostmarkClient` takes the same arguments; see [Async client](async.md).
+Every manager and model that makes requests has an `Async` twin in the same module, e.g. `AsyncBounceManager`, with the same members as coroutines.
+
+::: postmarker.core.AsyncPostmarkClient
+    options:
+      merge_init_into_class: true
+      members: [aclose]
 
 ## Emails
 
@@ -17,6 +26,7 @@ Managers return models. Each Postmark field of a model is an attribute with the 
 ::: postmarker.models.emails.EmailManager
     options:
       members: [send, send_with_template, send_batch, send_template_batch, Email, EmailTemplate, EmailBatch, EmailTemplateBatch]
+      inherited_members: [Email, EmailTemplate, EmailBatch, EmailTemplateBatch]
 
 ::: postmarker.models.emails.Email
     options:
@@ -45,6 +55,8 @@ Managers return models. Each Postmark field of a model is an attribute with the 
 `postmark.bounces`, see [Bounces](bounces.md).
 
 ::: postmarker.models.bounces.BounceManager
+    options:
+      inherited_members: [Bounce]
 
 ::: postmarker.models.bounces.Bounce
     options:
@@ -72,19 +84,22 @@ Managers return models. Each Postmark field of a model is an attribute with the 
 ::: postmarker.models.messages.OpensManager
     options:
       members: [all, get, Open]
+      inherited_members: [Open]
 
 ::: postmarker.models.messages.ClicksManager
     options:
       members: [all, get, Click]
+      inherited_members: [Click]
 
 ::: postmarker.models.messages.InboundMessageManager
     options:
       members: [all, get, bypass, retry, InboundMessage]
+      inherited_members: [InboundMessage]
 
 ::: postmarker.models.messages.InboundMessage
     options:
       members: [get, bypass, retry, as_mime, Attachments]
-      inherited_members: [get]
+      inherited_members: [get, as_mime, Attachments]
 
 ::: postmarker.models.messages.Attachment
     options:

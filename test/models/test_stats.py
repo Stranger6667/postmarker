@@ -1,6 +1,8 @@
 import pytest
 
-pytestmark = pytest.mark.vcr
+from ..conftest import aw
+
+pytestmark = [pytest.mark.vcr, pytest.mark.anyio]
 
 
 @pytest.mark.parametrize(
@@ -126,5 +128,5 @@ pytestmark = pytest.mark.vcr
         ("location", {}, {"Days": []}),
     ),
 )
-def test_methods(postmark, method, kwargs, expected):
-    assert getattr(postmark.stats, method)(**kwargs) == expected
+async def test_methods(client, method, kwargs, expected):
+    assert await aw(getattr(client.stats, method)(**kwargs)) == expected

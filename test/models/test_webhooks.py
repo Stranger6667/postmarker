@@ -3,7 +3,12 @@ import json
 import pytest
 
 from postmarker.models.bounces import Bounce, SpamComplaint
+from postmarker.models.messages import OutboundMessage
 from postmarker.models.suppressions import SubscriptionChange
+
+from ..conftest import BOUNCE_WEBHOOK, aw, twin
+
+pytestmark = pytest.mark.anyio
 
 API = "https://api.postmarkapp.com"
 MESSAGE_ID = "883953f4-6105-42a2-a16a-77a8eac79483"
@@ -54,22 +59,22 @@ SUBSCRIPTION_CHANGE_WEBHOOK = """{
 }"""
 
 
-def test_spam_complaint(postmark_client):
-    complaint = postmark_client.bounces.SpamComplaint(SPAM_COMPLAINT_WEBHOOK)
+def test_spam_complaint(client, flavor):
+    complaint = client.bounces.SpamComplaint(SPAM_COMPLAINT_WEBHOOK)
 
-    assert type(complaint) is SpamComplaint
-    assert isinstance(complaint, Bounce)
-    assert complaint._manager is postmark_client.bounces
+    assert type(complaint) is twin(SpamComplaint, flavor)
+    assert isinstance(complaint, twin(Bounce, flavor))
+    assert complaint._manager is client.bounces
     assert complaint.as_dict() == json.loads(SPAM_COMPLAINT_WEBHOOK)
     assert complaint.Email == "margareth@nasa.com"
     assert str(complaint) == "Spam complaint from margareth@nasa.com"
 
 
-def test_subscription_change(postmark_client):
-    change = postmark_client.suppressions.SubscriptionChange(SUBSCRIPTION_CHANGE_WEBHOOK)
+def test_subscription_change(client, flavor):
+    change = client.suppressions.SubscriptionChange(SUBSCRIPTION_CHANGE_WEBHOOK)
 
-    assert type(change) is SubscriptionChange
-    assert change._manager is postmark_client.suppressions
+    assert type(change) is twin(SubscriptionChange, flavor)
+    assert change._manager is client.suppressions
     assert change.as_dict() == json.loads(SUBSCRIPTION_CHANGE_WEBHOOK)
     assert change.SuppressSending is True
     assert change.SuppressionReason == "HardBounce"
@@ -97,7 +102,16 @@ def test_subscription_change(postmark_client):
     ),
     ids=("spam-complaint-message", "spam-complaint-dump", "subscription-change-message"),
 )
-def test_related_data(postmark_client, postmark_request, parse, attribute, url):
-    getattr(parse(postmark_client), attribute)
+async def test_related_data(client, api_request, parse, attribute, url):
+    await aw(getattr(parse(client), attribute))
 
-    assert postmark_request.call_args.args == ("GET", url)
+    assert api_request.call_args.args == ("GET", url)
+
+
+async def test_webhook_model_message(client, flavor, api_request):
+    api_request.return_value.json.return_value = {"MessageID": MESSAGE_ID, "Status": "Sent", "Recipients": []}
+    bounce = client.bounces.Bounce(BOUNCE_WEBHOOK)
+    assert isinstance(bounce, twin(Bounce, flavor))
+    message = await aw(bounce.message)
+    assert isinstance(message, twin(OutboundMessage, flavor))
+    assert message.MessageID == MESSAGE_ID

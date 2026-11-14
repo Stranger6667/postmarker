@@ -10,21 +10,33 @@ from postmarker.models.base import ModelManager
 from postmarker.models.emails import deconstruct_multipart
 from postmarker.models.messages import Attachment, InboundMessage, Open, OutboundMessage
 
-pytestmark = pytest.mark.vcr
+from ..conftest import OPEN_WEBHOOK, aw, twin
+
+pytestmark = [pytest.mark.vcr, pytest.mark.anyio]
 
 
-def test_sub_managers(postmark):
-    outbound = postmark.messages.outbound
-    assert isinstance(outbound, ModelManager)
-    assert outbound.client is postmark
+@pytest.fixture
+async def outbound_message(client):
+    return (await aw(client.messages.outbound.all(count=1)))[0]
 
-    inbound = postmark.messages.inbound
-    assert isinstance(inbound, ModelManager)
-    assert inbound.client is postmark
 
-    opens = postmark.messages.outbound.opens
-    assert isinstance(opens, ModelManager)
-    assert opens.client is postmark
+@pytest.fixture
+def open_webhook(client):
+    return client.messages.outbound.opens.Open(json=OPEN_WEBHOOK)
+
+
+async def test_sub_managers(client, flavor):
+    outbound = client.messages.outbound
+    assert isinstance(outbound, twin(ModelManager, flavor))
+    assert outbound.client is client
+
+    inbound = client.messages.inbound
+    assert isinstance(inbound, twin(ModelManager, flavor))
+    assert inbound.client is client
+
+    opens = client.messages.outbound.opens
+    assert isinstance(opens, twin(ModelManager, flavor))
+    assert opens.client is client
 
 
 @contextmanager
@@ -34,57 +46,57 @@ def not_found(message="[701] This message was not found."):
     assert str(exc.value) == message
 
 
-def test_outbound_message(outbound_message):
-    assert isinstance(outbound_message, OutboundMessage)
+async def test_outbound_message(flavor, outbound_message):
+    assert isinstance(outbound_message, twin(OutboundMessage, flavor))
     assert str(outbound_message) == "Sent message to test@example.com"
 
 
-def test_outbound_message_get(outbound_message):
-    assert outbound_message.get().Body == "Body example"
+async def test_outbound_message_get(outbound_message):
+    assert (await aw(outbound_message.get())).Body == "Body example"
 
 
-def test_outbound_message_get_dump(outbound_message):
-    assert outbound_message.get_dump() == "Body example"
+async def test_outbound_message_get_dump(outbound_message):
+    assert await aw(outbound_message.get_dump()) == "Body example"
 
 
-def test_outbound_message_opens(outbound_message):
+async def test_outbound_message_opens(outbound_message):
     with not_found():
-        outbound_message.opens()
+        await aw(outbound_message.opens())
 
 
 @pytest.fixture
-def inbound_message(postmark):
-    return InboundMessage(
-        postmark.messages.inbound,
+def inbound_message(client, flavor):
+    return twin(InboundMessage, flavor)(
+        client.messages.inbound,
         MessageID="123",
         Status="Blocked",
         From="test@example.com",
     )
 
 
-def test_inbound_message(inbound_message):
-    assert isinstance(inbound_message, InboundMessage)
+async def test_inbound_message(flavor, inbound_message):
+    assert isinstance(inbound_message, twin(InboundMessage, flavor))
     assert str(inbound_message) == "Blocked message from test@example.com"
 
 
-def test_inbound_message_get(inbound_message):
+async def test_inbound_message_get(flavor, inbound_message):
     with patch.object(inbound_message._manager, "call", return_value=inbound_message.as_dict()):
-        instance = inbound_message.get()
-    assert isinstance(instance, InboundMessage)
+        instance = await aw(inbound_message.get())
+    assert isinstance(instance, twin(InboundMessage, flavor))
 
 
-def test_inbound_message_bypass(inbound_message):
+async def test_inbound_message_bypass(inbound_message):
     with not_found("[701] This message was not found or cannot be bypassed."):
-        inbound_message.bypass()
+        await aw(inbound_message.bypass())
 
 
-def test_inbound_message_retry(inbound_message):
+async def test_inbound_message_retry(inbound_message):
     with not_found("[701] This message was not found or cannot be retried."):
-        inbound_message.retry()
+        await aw(inbound_message.retry())
 
 
-def test_inbound_messages_all(postmark):
-    assert postmark.messages.inbound.all() == []
+async def test_inbound_messages_all(client):
+    assert await aw(client.messages.inbound.all()) == []
 
 
 def test_inbound_message_headers(inbound_webhook):
@@ -169,12 +181,12 @@ def test_attachment_as_mime(attachment):
     assert message.get_payload(decode=True) == b"This is attachment contents, base-64 encoded."
 
 
-def test_opens_model(postmark):
-    open = postmark.messages.outbound.opens.all(count=1)[0]
-    assert isinstance(open, Open)
+async def test_opens_model(client, flavor):
+    open = (await aw(client.messages.outbound.opens.all(count=1)))[0]
+    assert isinstance(open, twin(Open, flavor))
     assert str(open) == "Open from test@example.com"
 
 
-def test_opens_webhook(open_webhook):
-    assert isinstance(open_webhook, Open)
+async def test_opens_webhook(flavor, open_webhook):
+    assert isinstance(open_webhook, twin(Open, flavor))
     assert str(open_webhook) == "Open from john@example.com"

@@ -2,10 +2,10 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
-from .base import Model, ModelManager
+from .base import AsyncModelManager, Model, ModelManager
 
 if TYPE_CHECKING:
-    from ..core import PostmarkClient
+    from ..core import AsyncPostmarkClient, PostmarkClient
 
 
 class Incident(Model):
@@ -57,3 +57,51 @@ class StatusManager(ModelManager[Model]):
     @property
     def delivery(self) -> Any:
         return self.call("delivery")
+
+
+class AsyncIncidentsManager(AsyncModelManager[Incident]):
+    """Async twin of :py:class:`IncidentsManager`."""
+
+    name = "incidents"
+    model = Incident
+
+    async def call(self, *args: Any, **kwargs: Any) -> Any:
+        return await self.client.call_status(*args, **kwargs)
+
+    @property
+    async def last(self) -> Incident:
+        return self._init_instance(await self.call("last_incident"))
+
+    async def all(self) -> list[Incident]:
+        return self._init_many(await self.call("incidents"))
+
+    async def get(self, id: int) -> Incident:
+        return self._init_instance(await self.call(f"incidents/{id}"))
+
+
+class AsyncStatusManager(AsyncModelManager[Model]):
+    """Async twin of :py:class:`StatusManager`."""
+
+    name = "status"
+
+    def __init__(self, client: AsyncPostmarkClient) -> None:
+        super().__init__(client)
+        self.incidents = AsyncIncidentsManager(self.client)
+
+    async def call(self, *args: Any, **kwargs: Any) -> Any:
+        return await self.client.call_status(*args, **kwargs)
+
+    async def get(self) -> Any:
+        return await self.call("status")
+
+    @property
+    async def services(self) -> Any:
+        return await self.call("services")
+
+    @property
+    async def availability(self) -> Any:
+        return await self.call("services/availability")
+
+    @property
+    async def delivery(self) -> Any:
+        return await self.call("delivery")

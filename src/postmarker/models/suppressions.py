@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from .base import MessageModel, Model, ModelManager
+from .base import AsyncMessageModel, AsyncModelManager, MessageModel, Model, ModelManager
 
 DEFAULT_STREAM_ID = "outbound"
 
@@ -20,11 +20,17 @@ class Suppression(Model):
         return f"{self.__class__.__name__}: {self.EmailAddress}"
 
 
-class SubscriptionChange(MessageModel):
-    """Subscription change webhook model: an address added to or removed from a suppression list."""
-
+class BaseSubscriptionChange(Model):
     def __str__(self) -> str:
         return "Subscription change for {}".format(self._data.get("Recipient"))
+
+
+class SubscriptionChange(BaseSubscriptionChange, MessageModel):
+    """Subscription change webhook model: an address added to or removed from a suppression list."""
+
+
+class AsyncSubscriptionChange(BaseSubscriptionChange, AsyncMessageModel):
+    """Async twin of :py:class:`SubscriptionChange`."""
 
 
 class SuppressionsManager(ModelManager[Suppression]):
@@ -92,4 +98,45 @@ class SuppressionsManager(ModelManager[Suppression]):
     def _change(self, endpoint: str, emails: list[str]) -> list[dict[str, Any]]:
         data = {"Suppressions": [{"EmailAddress": email} for email in emails]}
         statuses: list[dict[str, Any]] = self.call("POST", endpoint, data=data)["Suppressions"]
+        return statuses
+
+
+class AsyncSuppressionsManager(AsyncModelManager[Suppression]):
+    """Async twin of :py:class:`SuppressionsManager`."""
+
+    name = "suppressions"
+    model = Suppression
+
+    async def all(
+        self,
+        stream_id: str = DEFAULT_STREAM_ID,
+        SuppressionReason: str | None = None,
+        Origin: str | None = None,
+        fromdate: Any = None,
+        todate: Any = None,
+        EmailAddress: str | None = None,
+    ) -> list[Suppression]:
+        response = await self.call(
+            "GET",
+            f"/message-streams/{stream_id}/suppressions/dump",
+            SuppressionReason=SuppressionReason,
+            Origin=Origin,
+            fromdate=fromdate,
+            todate=todate,
+            EmailAddress=EmailAddress,
+        )
+        return self._init_many(response["Suppressions"])
+
+    async def create(self, emails: list[str], stream_id: str = DEFAULT_STREAM_ID) -> list[dict[str, Any]]:
+        return await self._change(f"/message-streams/{stream_id}/suppressions", emails)
+
+    async def delete(self, emails: list[str], stream_id: str = DEFAULT_STREAM_ID) -> list[dict[str, Any]]:
+        return await self._change(f"/message-streams/{stream_id}/suppressions/delete", emails)
+
+    def SubscriptionChange(self, json: str | bytes) -> AsyncSubscriptionChange:
+        return AsyncSubscriptionChange.from_json(json, manager=self)
+
+    async def _change(self, endpoint: str, emails: list[str]) -> list[dict[str, Any]]:
+        data = {"Suppressions": [{"EmailAddress": email} for email in emails]}
+        statuses: list[dict[str, Any]] = (await self.call("POST", endpoint, data=data))["Suppressions"]
         return statuses

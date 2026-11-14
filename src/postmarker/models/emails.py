@@ -7,10 +7,10 @@ import os
 from base64 import b64encode
 from email.header import decode_header
 from email.message import Message, MIMEPart
-from typing import Any, cast
+from typing import Any, Generic, Self, TypeVar, cast
 
 from ..utils import chunks
-from .base import MessageModel, Model, ModelManager
+from .base import AsyncMessageModel, AsyncModelManager, BaseModelManager, MessageModel, Model, ModelManager
 
 SEPARATOR = ""
 
@@ -195,13 +195,15 @@ def prepare_header(value: Any) -> str | None:
     return SEPARATOR.join([maybe_decode(value, encoding) for value, encoding in decode_header(value)])
 
 
-class Email(BaseEmail):
+class BaseEmailMessage(BaseEmail):
+    """A plain (non-template) email; shared by :py:class:`Email` and :py:class:`AsyncEmail`."""
+
     def __init__(self, **kwargs: Any) -> None:
         assert kwargs.get("TextBody") or kwargs.get("HtmlBody"), "Provide either email TextBody or HtmlBody or both"
         super().__init__(**kwargs)
 
     @classmethod
-    def from_mime(cls, message: Message, manager: Any) -> Email:
+    def from_mime(cls, message: Message, manager: Any) -> Self:
         """Instantiates ``Email`` instance from ``email.message.Message`` instance.
 
         :param message: ``email.message.Message`` instance.
@@ -241,18 +243,36 @@ class Email(BaseEmail):
             data["HtmlBody"] = inliner.inline(data["HtmlBody"])
         return data
 
+
+class Email(BaseEmailMessage):
     def send(self) -> Any:
         return self._manager._send(**self.as_dict())
 
 
-class EmailTemplate(BaseEmail):
+class AsyncEmail(BaseEmailMessage):
+    """Async twin of :py:class:`Email`."""
+
+    async def send(self) -> Any:
+        return await self._manager._send(**self.as_dict())
+
+
+class BaseEmailTemplate(BaseEmail):
     def __init__(self, **kwargs: Any) -> None:
         if kwargs.get("TemplateId") is None and kwargs.get("TemplateAlias") is None:
             raise ValueError("You need to specify either TemplateId or TemplateAlias")
         super().__init__(**kwargs)
 
+
+class EmailTemplate(BaseEmailTemplate):
     def send(self) -> Any:
         return self._manager._send_with_template(**self.as_dict())
+
+
+class AsyncEmailTemplate(BaseEmailTemplate):
+    """Async twin of :py:class:`EmailTemplate`."""
+
+    async def send(self) -> Any:
+        return await self._manager._send_with_template(**self.as_dict())
 
 
 def invalid_batch_email(email: object, expected: str, method: str) -> ValueError:
@@ -262,12 +282,11 @@ def invalid_batch_email(email: object, expected: str, method: str) -> ValueError
     return ValueError(message)
 
 
-class EmailTemplateBatch(Model):
-    """Gathers multiple email templates in a single batch."""
-
+class BaseEmailTemplateBatch(Model):
     MAX_SIZE = 500
+    _template_class: type[BaseEmailTemplate]
 
-    def __init__(self, *emails: EmailTemplate | dict[str, Any], **kwargs: Any) -> None:
+    def __init__(self, *emails: BaseEmailTemplate | dict[str, Any], **kwargs: Any) -> None:
         self.emails = emails
         super().__init__(**kwargs)
 
@@ -282,14 +301,20 @@ class EmailTemplateBatch(Model):
         """
         return [self._construct_email(email, **extra) for email in self.emails]
 
-    def _construct_email(self, email: EmailTemplate | dict[str, Any], **extra: Any) -> dict[str, Any]:
+    def _construct_email(self, email: BaseEmailTemplate | dict[str, Any], **extra: Any) -> dict[str, Any]:
         """Converts incoming data to properly structured dictionary."""
         if isinstance(email, dict):
-            email = EmailTemplate(manager=self._manager, **email)
-        elif not isinstance(email, EmailTemplate):
-            raise invalid_batch_email(email, "EmailTemplate or dict", "send_template_batch")
+            email = self._template_class(manager=self._manager, **email)
+        elif not isinstance(email, self._template_class):
+            raise invalid_batch_email(email, f"{self._template_class.__name__} or dict", "send_template_batch")
         email._update(extra)
         return email.as_dict()
+
+
+class EmailTemplateBatch(BaseEmailTemplateBatch):
+    """Gathers multiple email templates in a single batch."""
+
+    _template_class = EmailTemplate
 
     def send(self, **extra: Any) -> list[Any]:
         """Sends email batch.
@@ -302,12 +327,23 @@ class EmailTemplateBatch(Model):
         return sum(responses, [])
 
 
-class EmailBatch(Model):
-    """Gathers multiple emails in a single batch."""
+class AsyncEmailTemplateBatch(BaseEmailTemplateBatch):
+    """Async twin of :py:class:`EmailTemplateBatch`."""
 
+    _template_class = AsyncEmailTemplate
+
+    async def send(self, **extra: Any) -> list[Any]:
+        emails = self.as_dict(**extra)
+        # Chunks go one after another, like the sync client
+        responses = [await self._manager._send_batch_with_template(*batch) for batch in chunks(emails, self.MAX_SIZE)]
+        return sum(responses, [])
+
+
+class BaseEmailBatch(Model):
     MAX_SIZE = 500
+    _email_class: type[BaseEmailMessage]
 
-    def __init__(self, *emails: Email | Message | dict[str, Any], **kwargs: Any) -> None:
+    def __init__(self, *emails: BaseEmailMessage | Message | dict[str, Any], **kwargs: Any) -> None:
         self.emails = emails
         super().__init__(**kwargs)
 
@@ -322,16 +358,24 @@ class EmailBatch(Model):
         """
         return [self._construct_email(email, **extra) for email in self.emails]
 
-    def _construct_email(self, email: Email | Message | dict[str, Any], **extra: Any) -> dict[str, Any]:
+    def _construct_email(self, email: BaseEmailMessage | Message | dict[str, Any], **extra: Any) -> dict[str, Any]:
         """Converts incoming data to properly structured dictionary."""
         if isinstance(email, dict):
-            email = Email(manager=self._manager, **email)
+            email = self._email_class(manager=self._manager, **email)
         elif isinstance(email, Message):
-            email = Email.from_mime(email, self._manager)
-        elif not isinstance(email, Email):
-            raise invalid_batch_email(email, "Email, email.message.Message or dict", "send_batch")
+            email = self._email_class.from_mime(email, self._manager)
+        elif not isinstance(email, self._email_class):
+            raise invalid_batch_email(
+                email, f"{self._email_class.__name__}, email.message.Message or dict", "send_batch"
+            )
         email._update(extra)
         return email.as_dict()
+
+
+class EmailBatch(BaseEmailBatch):
+    """Gathers multiple emails in a single batch."""
+
+    _email_class = Email
 
     def send(self, **extra: Any) -> list[Any]:
         """Sends email batch.
@@ -344,20 +388,166 @@ class EmailBatch(Model):
         return sum(responses, [])
 
 
-class Delivery(MessageModel):
+class AsyncEmailBatch(BaseEmailBatch):
+    """Async twin of :py:class:`EmailBatch`."""
+
+    _email_class = AsyncEmail
+
+    async def send(self, **extra: Any) -> list[Any]:
+        emails = self.as_dict(**extra)
+        # Chunks go one after another, like the sync client
+        responses = [await self._manager._send_batch(*batch) for batch in chunks(emails, self.MAX_SIZE)]
+        return sum(responses, [])
+
+
+class BaseDelivery(Model):
     def __str__(self) -> str:
         return "Delivery to {}".format(self._data.get("Recipient"))
 
 
-# The `EmailManager` methods of the same name shadow these classes in its body
-_Email = Email
-_EmailTemplate = EmailTemplate
+class Delivery(BaseDelivery, MessageModel):
+    """Delivery webhook model."""
 
 
-class EmailManager(ModelManager[Model]):
+class AsyncDelivery(BaseDelivery, AsyncMessageModel):
+    """Async twin of :py:class:`Delivery`."""
+
+
+EmailT = TypeVar("EmailT", bound=BaseEmailMessage)
+TemplateT = TypeVar("TemplateT", bound=BaseEmailTemplate)
+BatchT = TypeVar("BatchT", bound=BaseEmailBatch)
+TemplateBatchT = TypeVar("TemplateBatchT", bound=BaseEmailTemplateBatch)
+
+
+class BaseEmailManager(BaseModelManager[Model], Generic[EmailT, TemplateT, BatchT, TemplateBatchT]):
+    name = "emails"
+    _email_class: type[EmailT]
+    _template_class: type[TemplateT]
+    _batch_class: type[BatchT]
+    _template_batch_class: type[TemplateBatchT]
+
+    def _email_to_send(self, message: BaseEmailMessage | Message | None, **fields: Any) -> EmailT:
+        assert not (message and (fields["From"] or fields["To"])), (
+            "You should specify either message or From and To parameters"
+        )
+        assert fields["TrackLinks"] in ("None", "HtmlAndText", "HtmlOnly", "TextOnly")
+        if message is None:
+            return self.Email(**fields)
+        if isinstance(message, Message):
+            return self._email_class.from_mime(message, self)
+        if isinstance(message, self._email_class):
+            return message
+        raise TypeError(f"message should be either {self._email_class.__name__} or email.message.Message instance")
+
+    def Email(
+        self,
+        From: str | None,
+        To: Recipients | None,
+        Cc: Recipients | None = None,
+        Bcc: Recipients | None = None,
+        Subject: str | None = None,
+        Tag: str | None = None,
+        HtmlBody: str | None = None,
+        TextBody: str | None = None,
+        Metadata: dict[str, Any] | None = None,
+        ReplyTo: str | None = None,
+        Headers: dict[str, str] | None = None,
+        TrackOpens: bool | None = None,
+        TrackLinks: str = "None",
+        Attachments: list[AttachmentData] | None = None,
+        MessageStream: str | None = None,
+    ) -> EmailT:
+        """Constructs :py:class:`Email` instance.
+
+        :return: :py:class:`Email`
+        """
+        return self._email_class(
+            manager=self,
+            From=From,
+            To=To,
+            Cc=Cc,
+            Bcc=Bcc,
+            Subject=Subject,
+            Tag=Tag,
+            HtmlBody=HtmlBody,
+            TextBody=TextBody,
+            Metadata=Metadata,
+            ReplyTo=ReplyTo,
+            Headers=Headers,
+            TrackOpens=TrackOpens,
+            TrackLinks=TrackLinks,
+            Attachments=Attachments,
+            MessageStream=MessageStream,
+        )
+
+    def EmailTemplate(
+        self,
+        *,
+        TemplateId: int | None = None,
+        TemplateModel: dict[str, Any],
+        From: str,
+        To: Recipients,
+        TemplateAlias: str | None = None,
+        Cc: Recipients | None = None,
+        Bcc: Recipients | None = None,
+        Subject: str | None = None,
+        Tag: str | None = None,
+        ReplyTo: str | None = None,
+        Headers: dict[str, str] | None = None,
+        TrackOpens: bool | None = None,
+        TrackLinks: str = "None",
+        Attachments: list[AttachmentData] | None = None,
+        InlineCss: bool = True,
+        Metadata: dict[str, Any] | None = None,
+        MessageStream: str | None = None,
+    ) -> TemplateT:
+        """Constructs :py:class:`EmailTemplate` instance.
+
+        :return: :py:class:`EmailTemplate`
+        """
+        return self._template_class(
+            manager=self,
+            TemplateId=TemplateId,
+            TemplateAlias=TemplateAlias,
+            TemplateModel=TemplateModel,
+            From=From,
+            To=To,
+            Cc=Cc,
+            Bcc=Bcc,
+            Subject=Subject,
+            Tag=Tag,
+            ReplyTo=ReplyTo,
+            Headers=Headers,
+            TrackOpens=TrackOpens,
+            TrackLinks=TrackLinks,
+            Attachments=Attachments,
+            InlineCss=InlineCss,
+            Metadata=Metadata,
+            MessageStream=MessageStream,
+        )
+
+    def EmailBatch(self, *emails: EmailT | Message | dict[str, Any]) -> BatchT:
+        """Constructs :py:class:`EmailBatch` instance.
+
+        :return: :py:class:`EmailBatch`
+        """
+        return self._batch_class(*emails, manager=self)
+
+    def EmailTemplateBatch(self, *emails: TemplateT | dict[str, Any]) -> TemplateBatchT:
+        """Constructs :py:class:`EmailTemplateBatch` instance.
+
+        :return: :py:class:`EmailTemplateBatch`
+        """
+        return self._template_batch_class(*emails, manager=self)
+
+
+class EmailManager(BaseEmailManager[Email, EmailTemplate, EmailBatch, EmailTemplateBatch], ModelManager[Model]):
     """Sends emails via Postmark REST API."""
 
-    name = "emails"
+    _email_class = Email
+    _template_class = EmailTemplate
+    _batch_class = EmailBatch
+    _template_batch_class = EmailTemplateBatch
 
     def _send(self, **kwargs: Any) -> Any:
         """Low-level send call. Does not apply any transformation to given data."""
@@ -417,35 +607,24 @@ class EmailManager(ModelManager[Model]):
         :return: Information about sent email.
         :rtype: `dict`
         """
-        assert not (message and (From or To)), "You should specify either message or From and To parameters"
-        assert TrackLinks in ("None", "HtmlAndText", "HtmlOnly", "TextOnly")
-        email: Email
-        if message is None:
-            email = self.Email(
-                From=From,
-                To=To,
-                Cc=Cc,
-                Bcc=Bcc,
-                Subject=Subject,
-                Tag=Tag,
-                HtmlBody=HtmlBody,
-                TextBody=TextBody,
-                Metadata=Metadata,
-                ReplyTo=ReplyTo,
-                Headers=Headers,
-                TrackOpens=TrackOpens,
-                TrackLinks=TrackLinks,
-                Attachments=Attachments,
-                MessageStream=MessageStream,
-            )
-        elif isinstance(message, Message):
-            email = Email.from_mime(message, self)
-        elif isinstance(message, Email):
-            email = message
-        else:
-            # Runtime guard for callers without type checking
-            raise TypeError("message should be either Email or email.message.Message instance")
-        return email.send()
+        return self._email_to_send(
+            message,
+            From=From,
+            To=To,
+            Cc=Cc,
+            Bcc=Bcc,
+            Subject=Subject,
+            Tag=Tag,
+            HtmlBody=HtmlBody,
+            TextBody=TextBody,
+            Metadata=Metadata,
+            ReplyTo=ReplyTo,
+            Headers=Headers,
+            TrackOpens=TrackOpens,
+            TrackLinks=TrackLinks,
+            Attachments=Attachments,
+            MessageStream=MessageStream,
+        ).send()
 
     def send_with_template(
         self,
@@ -505,12 +684,34 @@ class EmailManager(ModelManager[Model]):
         """
         return self.EmailTemplateBatch(*emails).send(**extra)
 
-    # NOTE. The following methods are included here to expose better interface without need to import relevant classes.
 
-    def Email(
+class AsyncEmailManager(
+    BaseEmailManager[AsyncEmail, AsyncEmailTemplate, AsyncEmailBatch, AsyncEmailTemplateBatch], AsyncModelManager[Model]
+):
+    """Async twin of :py:class:`EmailManager`."""
+
+    _email_class = AsyncEmail
+    _template_class = AsyncEmailTemplate
+    _batch_class = AsyncEmailBatch
+    _template_batch_class = AsyncEmailTemplateBatch
+
+    async def _send(self, **kwargs: Any) -> Any:
+        return await self.call("POST", "/email", data=kwargs)
+
+    async def _send_with_template(self, **kwargs: Any) -> Any:
+        return await self.call("POST", "/email/withTemplate/", data=kwargs)
+
+    async def _send_batch_with_template(self, *email_templates: dict[str, Any]) -> Any:
+        return await self.call("POST", "/email/batchWithTemplates/", data={"Messages": email_templates})
+
+    async def _send_batch(self, *emails: dict[str, Any]) -> Any:
+        return await self.call("POST", "/email/batch", data=emails)
+
+    async def send(
         self,
-        From: str | None,
-        To: Recipients | None,
+        message: AsyncEmail | Message | None = None,
+        From: str | None = None,
+        To: Recipients | None = None,
         Cc: Recipients | None = None,
         Bcc: Recipients | None = None,
         Subject: str | None = None,
@@ -524,13 +725,9 @@ class EmailManager(ModelManager[Model]):
         TrackLinks: str = "None",
         Attachments: list[AttachmentData] | None = None,
         MessageStream: str | None = None,
-    ) -> Email:
-        """Constructs :py:class:`Email` instance.
-
-        :return: :py:class:`Email`
-        """
-        return Email(
-            manager=self,
+    ) -> Any:
+        return await self._email_to_send(
+            message,
             From=From,
             To=To,
             Cc=Cc,
@@ -546,9 +743,9 @@ class EmailManager(ModelManager[Model]):
             TrackLinks=TrackLinks,
             Attachments=Attachments,
             MessageStream=MessageStream,
-        )
+        ).send()
 
-    def EmailTemplate(
+    async def send_with_template(
         self,
         *,
         TemplateId: int | None = None,
@@ -568,18 +765,13 @@ class EmailManager(ModelManager[Model]):
         InlineCss: bool = True,
         Metadata: dict[str, Any] | None = None,
         MessageStream: str | None = None,
-    ) -> EmailTemplate:
-        """Constructs :py:class:`EmailTemplate` instance.
-
-        :return: :py:class:`EmailTemplate`
-        """
-        return EmailTemplate(
-            manager=self,
+    ) -> Any:
+        return await self.EmailTemplate(
             TemplateId=TemplateId,
-            TemplateAlias=TemplateAlias,
             TemplateModel=TemplateModel,
             From=From,
             To=To,
+            TemplateAlias=TemplateAlias,
             Cc=Cc,
             Bcc=Bcc,
             Subject=Subject,
@@ -592,18 +784,10 @@ class EmailManager(ModelManager[Model]):
             InlineCss=InlineCss,
             Metadata=Metadata,
             MessageStream=MessageStream,
-        )
+        ).send()
 
-    def EmailBatch(self, *emails: _Email | Message | dict[str, Any]) -> EmailBatch:
-        """Constructs :py:class:`EmailBatch` instance.
+    async def send_batch(self, *emails: AsyncEmail | Message | dict[str, Any], **extra: Any) -> list[Any]:
+        return await self.EmailBatch(*emails).send(**extra)
 
-        :return: :py:class:`EmailBatch`
-        """
-        return EmailBatch(*emails, manager=self)
-
-    def EmailTemplateBatch(self, *emails: _EmailTemplate | dict[str, Any]) -> EmailTemplateBatch:
-        """Constructs :py:class:`EmailTemplateBatch` instance.
-
-        :return: :py:class:`EmailTemplateBatch`
-        """
-        return EmailTemplateBatch(*emails, manager=self)
+    async def send_template_batch(self, *emails: AsyncEmailTemplate | dict[str, Any], **extra: Any) -> list[Any]:
+        return await self.EmailTemplateBatch(*emails).send(**extra)

@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from .base import Model, ModelManager
+from .base import AsyncModelManager, Model, ModelManager
 
 
 class MessageStream(Model):
@@ -93,3 +93,79 @@ class MessageStreamsManager(ModelManager[MessageStream]):
 
 def _without_none(data: dict[str, Any]) -> dict[str, Any]:
     return {key: value for key, value in data.items() if value is not None}
+
+
+class AsyncMessageStream(Model):
+    """Async twin of :py:class:`MessageStream`."""
+
+    async def get(self) -> AsyncMessageStream:
+        self._update((await self._manager.get(self.ID)).as_dict())
+        return self
+
+    async def edit(self, **kwargs: Any) -> None:
+        self._update((await self._manager.edit(self.ID, **kwargs)).as_dict())
+
+    async def archive(self) -> Any:
+        return await self._manager.archive(self.ID)
+
+    async def unarchive(self) -> AsyncMessageStream:
+        restored: AsyncMessageStream = await self._manager.unarchive(self.ID)
+        return restored
+
+
+class AsyncMessageStreamsManager(AsyncModelManager[AsyncMessageStream]):
+    """Async twin of :py:class:`MessageStreamsManager`."""
+
+    name = "message_streams"
+    model = AsyncMessageStream
+
+    async def all(
+        self, MessageStreamType: str | None = None, IncludeArchivedStreams: bool | None = None
+    ) -> list[AsyncMessageStream]:
+        response = await self.call(
+            "GET",
+            "/message-streams",
+            MessageStreamType=MessageStreamType,
+            IncludeArchivedStreams=IncludeArchivedStreams,
+        )
+        return self._init_many(response["MessageStreams"])
+
+    async def get(self, id: str) -> AsyncMessageStream:
+        return self._init_instance(await self.call("GET", f"/message-streams/{id}"))
+
+    async def create(
+        self,
+        ID: str,
+        Name: str,
+        MessageStreamType: str,
+        Description: str | None = None,
+        SubscriptionManagementConfiguration: dict[str, Any] | None = None,
+    ) -> AsyncMessageStream:
+        data = {
+            "ID": ID,
+            "Name": Name,
+            "MessageStreamType": MessageStreamType,
+            "Description": Description,
+            "SubscriptionManagementConfiguration": SubscriptionManagementConfiguration,
+        }
+        return self._init_instance(await self.call("POST", "/message-streams", data=_without_none(data)))
+
+    async def edit(
+        self,
+        id: str,
+        Name: str | None = None,
+        Description: str | None = None,
+        SubscriptionManagementConfiguration: dict[str, Any] | None = None,
+    ) -> AsyncMessageStream:
+        data = {
+            "Name": Name,
+            "Description": Description,
+            "SubscriptionManagementConfiguration": SubscriptionManagementConfiguration,
+        }
+        return self._init_instance(await self.call("PATCH", f"/message-streams/{id}", data=_without_none(data)))
+
+    async def archive(self, id: str) -> Any:
+        return await self.call("POST", f"/message-streams/{id}/archive")
+
+    async def unarchive(self, id: str) -> AsyncMessageStream:
+        return self._init_instance(await self.call("POST", f"/message-streams/{id}/unarchive"))

@@ -95,6 +95,28 @@ except ClientError as exc:
     print(exc.error_code)  # For example, 406 for an inactive recipient
 ```
 
+## Async
+
+`AsyncPostmarkClient` has the same API, with every method that makes a request as a coroutine.
+Install the `async` extra:
+
+```
+uv pip install 'postmarker[async]'
+```
+
+```python
+from postmarker.core import AsyncPostmarkClient
+
+async with AsyncPostmarkClient(server_token="POSTMARK_API_TEST") as postmark:
+    await postmark.emails.send(
+        From="sender@example.com",
+        To="receiver@example.com",
+        TextBody="Hello",
+    )
+```
+
+See the [async guide](https://postmarker.readthedocs.io/en/stable/async/) for properties, fixtures and differences.
+
 ## Django
 
 Django 6.1+:
@@ -137,6 +159,7 @@ def test_welcome_email(postmark_request):
 - Webhook wrappers: Inbound, Delivery, Open, Click, Bounce, Spam complaint and Subscription change.
 - Sending `email.message.Message` instances.
 - CSS inlining via [css-inline](https://github.com/Stranger6667/css-inline).
+- Async client (`AsyncPostmarkClient`) via the `async` extra.
 - Django email backend and Tornado helper.
 - Type annotations, with a `py.typed` marker.
 
@@ -146,4 +169,4 @@ def test_welcome_email(postmark_request):
 
 ## Python support
 
-Postmarker supports CPython 3.10 to 3.15 and PyPy 3.11. The Django email backend supports Django 5.2, 6.0 and 6.1.
+Postmarker supports CPython 3.11 to 3.15 and PyPy 3.11. The Django email backend supports Django 5.2, 6.0 and 6.1.

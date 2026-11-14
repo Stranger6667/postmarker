@@ -104,3 +104,11 @@ def test_malformed_request(postmark, postmark_request):
     postmark_request.return_value._content = b"Server Error"
     with pytest.raises(HTTPError, match="Server Error"):
         postmark.call("GET", "endpoint")
+
+
+def test_model_manager_import_path():
+    # Importable from `postmarker.core` before the async client; kept for existing imports
+    from postmarker.core import ModelManager
+    from postmarker.models.base import ModelManager as BaseModuleModelManager
+
+    assert ModelManager is BaseModuleModelManager
