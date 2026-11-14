@@ -7,18 +7,38 @@ from email.mime.text import MIMEText
 from os.path import join
 from typing import Any
 
-from .base import MessageModel, Model, ModelManager, SubModelManager
+from .base import (
+    AsyncMessageModel,
+    AsyncModelManager,
+    AsyncSubModelManager,
+    BaseModelManager,
+    MessageModel,
+    Model,
+    ModelManager,
+    ModelT,
+    SubModelManager,
+)
 
 
-class Open(MessageModel):
+class BaseOpen(Model):
     def __str__(self) -> str:
         return "Open from {}".format(self._data.get("Recipient"))
 
 
-class OpensManager(ModelManager[Open]):
+class Open(BaseOpen, MessageModel):
+    """Open tracking event."""
+
+
+class BaseOpensManager(BaseModelManager[ModelT]):
     name = "opens"
-    model = Open
     pagination_limit = 10000
+
+    def Open(self, json: str | bytes) -> ModelT:
+        return self.model.from_json(json, manager=self)
+
+
+class OpensManager(BaseOpensManager[Open], ModelManager[Open]):
+    model = Open
 
     def all(
         self,
@@ -60,17 +80,25 @@ class OpensManager(ModelManager[Open]):
     def get(self, id: str, count: int = 500, offset: int = 0) -> Any:
         return self.call("GET", f"/messages/outbound/opens/{id}", count=count, offset=offset)
 
-    def Open(self, json: str | bytes) -> Open:
-        return self.model.from_json(json, manager=self)
 
-
-class Click(MessageModel):
+class BaseClick(Model):
     def __str__(self) -> str:
         return "Click from {}".format(self._data.get("Recipient"))
 
 
-class ClicksManager(ModelManager[Click]):
+class Click(BaseClick, MessageModel):
+    """Link click event."""
+
+
+class BaseClicksManager(BaseModelManager[ModelT]):
     name = "clicks"
+
+    def Click(self, json: str | bytes) -> ModelT:
+        """Wraps a link click webhook payload."""
+        return self.model.from_json(json, manager=self)
+
+
+class ClicksManager(BaseClicksManager[Click], ModelManager[Click]):
     model = Click
 
     def all(
@@ -122,21 +150,19 @@ class ClicksManager(ModelManager[Click]):
         """Clicks on tracked links in one message, as the raw ``TotalCount`` and ``Clicks`` response."""
         return self.call("GET", f"/messages/outbound/clicks/{id}", count=count, offset=offset)
 
-    def Click(self, json: str | bytes) -> Click:
-        """Wraps a link click webhook payload."""
-        return self.model.from_json(json, manager=self)
-
 
 class BaseMessage(Model):
     def get(self) -> Any:
         return self._manager.get(self.MessageID)
 
 
-class OutboundMessage(BaseMessage):
+class BaseOutboundMessage(Model):
     def __str__(self) -> str:
         recipients = ", ".join(self._data["Recipients"])
         return "{} message to {}".format(self._data.get("Status"), recipients)
 
+
+class OutboundMessage(BaseOutboundMessage, BaseMessage):
     def get_dump(self) -> Any:
         return self._manager.get_dump(self.MessageID)
 
@@ -208,7 +234,7 @@ class OutboundMessageManager(SubModelManager[OutboundMessage]):
         return self.call("GET", f"/messages/outbound/{id}/dump").get("Body")
 
 
-class InboundMessage(BaseMessage):
+class BaseInboundMessage(Model):
     def __str__(self) -> str:
         return "{} message from {}".format(self._data.get("Status"), self._data.get("From"))
 
@@ -222,12 +248,6 @@ class InboundMessage(BaseMessage):
     def Attachments(self) -> list[Attachment]:
         attachments = self._data.get("Attachments", ())
         return [Attachment(**data) for data in attachments]
-
-    def bypass(self) -> Any:
-        return self._manager.bypass(self.MessageID)
-
-    def retry(self) -> Any:
-        return self._manager.retry(self.MessageID)
 
     def as_mime(self) -> MIMEMultipart:
         message = MIMEMultipart("alternative")
@@ -244,6 +264,14 @@ class InboundMessage(BaseMessage):
         for attachment in self.Attachments:
             message.attach(attachment.as_mime())
         return message
+
+
+class InboundMessage(BaseInboundMessage, BaseMessage):
+    def bypass(self) -> Any:
+        return self._manager.bypass(self.MessageID)
+
+    def retry(self) -> Any:
+        return self._manager.retry(self.MessageID)
 
 
 class Attachment(Model):
@@ -275,10 +303,16 @@ class Attachment(Model):
         return message
 
 
-class InboundMessageManager(ModelManager[InboundMessage]):
+class BaseInboundMessageManager(BaseModelManager[ModelT]):
     name = "inbound"
-    model = InboundMessage
     pagination_limit = 10000
+
+    def InboundMessage(self, json: str | bytes) -> ModelT:
+        return self.model.from_json(json, manager=self)
+
+
+class InboundMessageManager(BaseInboundMessageManager[InboundMessage], ModelManager[InboundMessage]):
+    model = InboundMessage
 
     def all(
         self,
@@ -334,12 +368,242 @@ class InboundMessageManager(ModelManager[InboundMessage]):
     def retry(self, id: str) -> Any:
         return self.call("PUT", f"/messages/inbound/{id}/retry")
 
-    def InboundMessage(self, json: str | bytes) -> InboundMessage:
-        return self.model.from_json(json, manager=self)
-
 
 class MessageManager(SubModelManager[Model]):
     name = "messages"
     outbound: OutboundMessageManager
     inbound: InboundMessageManager
     _managers = (OutboundMessageManager, InboundMessageManager)
+
+
+class AsyncOpen(BaseOpen, AsyncMessageModel):
+    """Async twin of :py:class:`Open`."""
+
+
+class AsyncOpensManager(BaseOpensManager[AsyncOpen], AsyncModelManager[AsyncOpen]):
+    """Async twin of :py:class:`OpensManager`."""
+
+    model = AsyncOpen
+
+    async def all(
+        self,
+        count: int | None = 500,
+        offset: int = 0,
+        recipient: str | None = None,
+        tag: str | None = None,
+        client_name: str | None = None,
+        client_company: str | None = None,
+        client_family: str | None = None,
+        os_name: str | None = None,
+        os_family: str | None = None,
+        os_company: str | None = None,
+        platform: str | None = None,
+        country: str | None = None,
+        region: str | None = None,
+        city: str | None = None,
+    ) -> list[AsyncOpen]:
+        responses = await self.call_many(
+            "GET",
+            "/messages/outbound/opens",
+            count=count,
+            offset=offset,
+            recipient=recipient,
+            tag=tag,
+            client_name=client_name,
+            client_company=client_company,
+            client_family=client_family,
+            os_name=os_name,
+            os_family=os_family,
+            os_company=os_company,
+            platform=platform,
+            country=country,
+            region=region,
+            city=city,
+        )
+        return self.expand_responses(responses, "Opens")
+
+    async def get(self, id: str, count: int = 500, offset: int = 0) -> Any:
+        return await self.call("GET", f"/messages/outbound/opens/{id}", count=count, offset=offset)
+
+
+class AsyncClick(BaseClick, AsyncMessageModel):
+    """Async twin of :py:class:`Click`."""
+
+
+class AsyncClicksManager(BaseClicksManager[AsyncClick], AsyncModelManager[AsyncClick]):
+    """Async twin of :py:class:`ClicksManager`."""
+
+    model = AsyncClick
+
+    async def all(
+        self,
+        count: int | None = 500,
+        offset: int = 0,
+        recipient: str | None = None,
+        tag: str | None = None,
+        client_name: str | None = None,
+        client_company: str | None = None,
+        client_family: str | None = None,
+        os_name: str | None = None,
+        os_family: str | None = None,
+        os_company: str | None = None,
+        platform: str | None = None,
+        country: str | None = None,
+        region: str | None = None,
+        city: str | None = None,
+        messagestream: str | None = None,
+    ) -> list[AsyncClick]:
+        responses = await self.call_many(
+            "GET",
+            "/messages/outbound/clicks",
+            count=count,
+            offset=offset,
+            recipient=recipient,
+            tag=tag,
+            client_name=client_name,
+            client_company=client_company,
+            client_family=client_family,
+            os_name=os_name,
+            os_family=os_family,
+            os_company=os_company,
+            platform=platform,
+            country=country,
+            region=region,
+            city=city,
+            messagestream=messagestream,
+        )
+        return self.expand_responses(responses, "Clicks")
+
+    async def get(self, id: str, count: int = 500, offset: int = 0) -> Any:
+        return await self.call("GET", f"/messages/outbound/clicks/{id}", count=count, offset=offset)
+
+
+class AsyncBaseMessage(Model):
+    """Async twin of :py:class:`BaseMessage`."""
+
+    async def get(self) -> Any:
+        return await self._manager.get(self.MessageID)
+
+
+class AsyncOutboundMessage(BaseOutboundMessage, AsyncBaseMessage):
+    """Async twin of :py:class:`OutboundMessage`."""
+
+    async def get_dump(self) -> Any:
+        return await self._manager.get_dump(self.MessageID)
+
+    async def opens(self, count: int = 500, offset: int = 0) -> Any:
+        return await self._manager.opens.get(self.MessageID, count=count, offset=offset)
+
+    async def clicks(self, count: int = 500, offset: int = 0) -> Any:
+        return await self._manager.clicks.get(self.MessageID, count=count, offset=offset)
+
+
+class AsyncOutboundMessageManager(AsyncSubModelManager[AsyncOutboundMessage]):
+    """Async twin of :py:class:`OutboundMessageManager`."""
+
+    name = "outbound"
+    opens: AsyncOpensManager
+    clicks: AsyncClicksManager
+    model = AsyncOutboundMessage
+    pagination_limit = 10000
+    _managers = (AsyncOpensManager, AsyncClicksManager)
+
+    async def all(
+        self,
+        count: int | None = 500,
+        offset: int = 0,
+        recipient: str | None = None,
+        fromemail: str | None = None,
+        tag: str | None = None,
+        status: str | None = None,
+        todate: Any = None,
+        fromdate: Any = None,
+        subject: str | None = None,
+    ) -> list[AsyncOutboundMessage]:
+        responses = await self.call_many(
+            "GET",
+            "/messages/outbound",
+            count=count,
+            offset=offset,
+            recipient=recipient,
+            fromemail=fromemail,
+            tag=tag,
+            status=status,
+            todate=todate,
+            fromdate=fromdate,
+            subject=subject,
+        )
+        return self.expand_responses(responses, "Messages")
+
+    async def get(self, id: str) -> AsyncOutboundMessage:
+        response = await self.call("GET", f"/messages/outbound/{id}/details")
+        return self._init_instance(response)
+
+    async def get_dump(self, id: str) -> Any:
+        return (await self.call("GET", f"/messages/outbound/{id}/dump")).get("Body")
+
+
+class AsyncInboundMessage(BaseInboundMessage, AsyncBaseMessage):
+    """Async twin of :py:class:`InboundMessage`."""
+
+    async def bypass(self) -> Any:
+        return await self._manager.bypass(self.MessageID)
+
+    async def retry(self) -> Any:
+        return await self._manager.retry(self.MessageID)
+
+
+class AsyncInboundMessageManager(
+    BaseInboundMessageManager[AsyncInboundMessage], AsyncModelManager[AsyncInboundMessage]
+):
+    """Async twin of :py:class:`InboundMessageManager`."""
+
+    model = AsyncInboundMessage
+
+    async def all(
+        self,
+        count: int | None = 500,
+        offset: int = 0,
+        recipient: str | None = None,
+        fromemail: str | None = None,
+        tag: str | None = None,
+        subject: str | None = None,
+        mailboxhash: str | None = None,
+        status: str | None = None,
+        todate: Any = None,
+        fromdate: Any = None,
+    ) -> list[AsyncInboundMessage]:
+        responses = await self.call_many(
+            "GET",
+            "/messages/inbound",
+            count=count,
+            offset=offset,
+            recipient=recipient,
+            fromemail=fromemail,
+            tag=tag,
+            subject=subject,
+            mailboxhash=mailboxhash,
+            status=status,
+            todate=todate,
+            fromdate=fromdate,
+        )
+        return self.expand_responses(responses, "InboundMessages")
+
+    async def get(self, id: str) -> AsyncInboundMessage:
+        response = await self.call("GET", f"/messages/inbound/{id}/details")
+        return self._init_instance(response)
+
+    async def bypass(self, id: str) -> Any:
+        return await self.call("PUT", f"/messages/inbound/{id}/bypass")
+
+    async def retry(self, id: str) -> Any:
+        return await self.call("PUT", f"/messages/inbound/{id}/retry")
+
+
+class AsyncMessageManager(AsyncSubModelManager[Model]):
+    """Async twin of :py:class:`MessageManager`."""
+
+    name = "messages"
+    outbound: AsyncOutboundMessageManager
+    inbound: AsyncInboundMessageManager
+    _managers = (AsyncOutboundMessageManager, AsyncInboundMessageManager)

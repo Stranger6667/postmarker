@@ -1,13 +1,23 @@
 import pytest
 
-pytestmark = pytest.mark.vcr
+from postmarker.models.server import Server
+
+from ..conftest import aw, twin
+
+pytestmark = [pytest.mark.vcr, pytest.mark.anyio]
 
 
-def test_edit(server):
+async def get_server(client):
+    return await aw(client.server.get())
+
+
+async def test_edit(client):
+    server = await get_server(client)
     assert not server.TrackOpens
-    server.edit(TrackOpens=True)
+    await aw(server.edit(TrackOpens=True))
     assert server.TrackOpens
 
 
-def test_str(server):
-    assert (f"{server}") == "Server: example.com (1)"
+async def test_str(client, flavor):
+    server = await get_server(client)
+    assert f"{server}" == f"{twin(Server, flavor).__name__}: example.com (1)"

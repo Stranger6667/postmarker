@@ -3,6 +3,10 @@ import pytest
 from postmarker.core import USER_AGENT
 from postmarker.models.message_streams import MessageStream, MessageStreamsManager
 
+from ..conftest import aw, twin
+
+pytestmark = pytest.mark.anyio
+
 # Shaped like the response examples at https://postmarkapp.com/developer/api/message-streams-api
 BROADCASTS = {
     "ID": "broadcasts",
@@ -84,8 +88,8 @@ UNARCHIVED = {
 }
 
 
-def assert_request(postmark_request, method, path, json=None, params=None):
-    postmark_request.assert_called_once_with(
+def assert_request(api_request, method, path, json=None, params=None):
+    api_request.assert_called_once_with(
         method,
         f"https://api.postmarkapp.com{path}",
         json=json,
@@ -100,20 +104,20 @@ def assert_request(postmark_request, method, path, json=None, params=None):
 
 
 @pytest.fixture
-def respond(postmark_request):
+def respond(api_request):
     def inner(data):
-        postmark_request.return_value.json.return_value = data
+        api_request.return_value.json.return_value = data
 
     return inner
 
 
 @pytest.fixture
-def stream(postmark_client):
-    return MessageStream(manager=postmark_client.message_streams, **CREATED)
+def stream(client, flavor):
+    return twin(MessageStream, flavor)(manager=client.message_streams, **CREATED)
 
 
-def test_manager_registered(postmark_client):
-    assert isinstance(postmark_client.message_streams, MessageStreamsManager)
+async def test_manager_registered(client, flavor):
+    assert isinstance(client.message_streams, twin(MessageStreamsManager, flavor))
 
 
 @pytest.mark.parametrize(
@@ -126,36 +130,38 @@ def test_manager_registered(postmark_client):
         ),
     ),
 )
-def test_manager_all(postmark_client, postmark_request, respond, kwargs, params):
+async def test_manager_all(client, flavor, api_request, respond, kwargs, params):
     respond({"MessageStreams": LISTED, "TotalCount": 2})
-    streams = postmark_client.message_streams.all(**kwargs)
-    assert_request(postmark_request, "GET", "/message-streams", params=params)
-    assert all(isinstance(stream, MessageStream) for stream in streams)
+    streams = await aw(client.message_streams.all(**kwargs))
+    assert_request(api_request, "GET", "/message-streams", params=params)
+    assert all(isinstance(stream, twin(MessageStream, flavor)) for stream in streams)
     assert [stream.as_dict() for stream in streams] == LISTED
     assert [stream.Name for stream in streams] == ["Broadcast Stream", "Transactional Stream"]
 
 
-def test_manager_get(postmark_client, postmark_request, respond):
+async def test_manager_get(client, flavor, api_request, respond):
     respond(BROADCASTS)
-    stream = postmark_client.message_streams.get("broadcasts")
-    assert_request(postmark_request, "GET", "/message-streams/broadcasts")
-    assert isinstance(stream, MessageStream)
+    stream = await aw(client.message_streams.get("broadcasts"))
+    assert_request(api_request, "GET", "/message-streams/broadcasts")
+    assert isinstance(stream, twin(MessageStream, flavor))
     assert stream.as_dict() == BROADCASTS
     assert stream.SubscriptionManagementConfiguration == {"UnsubscribeHandlingType": "Postmark"}
-    assert repr(stream) == "<MessageStream: broadcasts>"
+    assert repr(stream) == f"<{twin(MessageStream, flavor).__name__}: broadcasts>"
 
 
-def test_manager_create(postmark_client, postmark_request, respond):
+async def test_manager_create(client, flavor, api_request, respond):
     respond(CREATED)
-    stream = postmark_client.message_streams.create(
-        ID="transactional-dev",
-        Name="My Dev Transactional Stream",
-        MessageStreamType="Transactional",
-        Description="This is my second transactional stream",
-        SubscriptionManagementConfiguration={"UnsubscribeHandlingType": "None"},
+    stream = await aw(
+        client.message_streams.create(
+            ID="transactional-dev",
+            Name="My Dev Transactional Stream",
+            MessageStreamType="Transactional",
+            Description="This is my second transactional stream",
+            SubscriptionManagementConfiguration={"UnsubscribeHandlingType": "None"},
+        )
     )
     assert_request(
-        postmark_request,
+        api_request,
         "POST",
         "/message-streams",
         json={
@@ -166,17 +172,19 @@ def test_manager_create(postmark_client, postmark_request, respond):
             "SubscriptionManagementConfiguration": {"UnsubscribeHandlingType": "None"},
         },
     )
-    assert isinstance(stream, MessageStream)
+    assert isinstance(stream, twin(MessageStream, flavor))
     assert stream.as_dict() == CREATED
 
 
-def test_manager_create_omits_unset_optional_fields(postmark_client, postmark_request, respond):
+async def test_manager_create_omits_unset_optional_fields(client, api_request, respond):
     respond(CREATED)
-    postmark_client.message_streams.create(
-        ID="transactional-dev", Name="My Dev Transactional Stream", MessageStreamType="Transactional"
+    await aw(
+        client.message_streams.create(
+            ID="transactional-dev", Name="My Dev Transactional Stream", MessageStreamType="Transactional"
+        )
     )
     assert_request(
-        postmark_request,
+        api_request,
         "POST",
         "/message-streams",
         json={
@@ -194,58 +202,58 @@ def test_manager_create_omits_unset_optional_fields(postmark_client, postmark_re
         {"SubscriptionManagementConfiguration": {"UnsubscribeHandlingType": "Custom"}},
     ),
 )
-def test_manager_edit(postmark_client, postmark_request, respond, kwargs):
+async def test_manager_edit(client, flavor, api_request, respond, kwargs):
     respond(EDITED)
-    stream = postmark_client.message_streams.edit("transactional-dev", **kwargs)
-    assert_request(postmark_request, "PATCH", "/message-streams/transactional-dev", json=kwargs)
-    assert isinstance(stream, MessageStream)
+    stream = await aw(client.message_streams.edit("transactional-dev", **kwargs))
+    assert_request(api_request, "PATCH", "/message-streams/transactional-dev", json=kwargs)
+    assert isinstance(stream, twin(MessageStream, flavor))
     assert stream.as_dict() == EDITED
 
 
-def test_manager_archive(postmark_client, postmark_request, respond):
+async def test_manager_archive(client, api_request, respond):
     respond(ARCHIVED)
-    assert postmark_client.message_streams.archive("transactional-dev") == ARCHIVED
-    assert_request(postmark_request, "POST", "/message-streams/transactional-dev/archive")
+    assert await aw(client.message_streams.archive("transactional-dev")) == ARCHIVED
+    assert_request(api_request, "POST", "/message-streams/transactional-dev/archive")
 
 
-def test_manager_unarchive(postmark_client, postmark_request, respond):
+async def test_manager_unarchive(client, flavor, api_request, respond):
     respond(UNARCHIVED)
-    stream = postmark_client.message_streams.unarchive("transactional-dev")
-    assert_request(postmark_request, "POST", "/message-streams/transactional-dev/unarchive")
-    assert isinstance(stream, MessageStream)
+    stream = await aw(client.message_streams.unarchive("transactional-dev"))
+    assert_request(api_request, "POST", "/message-streams/transactional-dev/unarchive")
+    assert isinstance(stream, twin(MessageStream, flavor))
     assert stream.as_dict() == UNARCHIVED
 
 
-def test_model_str(stream):
-    assert str(stream) == "MessageStream: transactional-dev"
+async def test_model_str(stream, flavor):
+    assert str(stream) == f"{twin(MessageStream, flavor).__name__}: transactional-dev"
 
 
-def test_model_get(stream, postmark_request, respond):
+async def test_model_get(stream, api_request, respond):
     respond(EDITED)
-    assert stream.get() is stream
-    assert_request(postmark_request, "GET", "/message-streams/transactional-dev")
+    assert await aw(stream.get()) is stream
+    assert_request(api_request, "GET", "/message-streams/transactional-dev")
     assert stream.as_dict() == EDITED
     assert stream.Name == "Updated Dev Stream"
 
 
-def test_model_edit(stream, postmark_request, respond):
+async def test_model_edit(stream, api_request, respond):
     respond(EDITED)
-    assert stream.edit(Name="Updated Dev Stream") is None
-    assert_request(postmark_request, "PATCH", "/message-streams/transactional-dev", json={"Name": "Updated Dev Stream"})
+    assert await aw(stream.edit(Name="Updated Dev Stream")) is None
+    assert_request(api_request, "PATCH", "/message-streams/transactional-dev", json={"Name": "Updated Dev Stream"})
     assert stream.as_dict() == EDITED
     assert stream.Name == "Updated Dev Stream"
     assert stream.UpdatedAt == "2020-07-03T00:00:00-04:00"
 
 
-def test_model_archive(stream, postmark_request, respond):
+async def test_model_archive(stream, api_request, respond):
     respond(ARCHIVED)
-    assert stream.archive() == ARCHIVED
-    assert_request(postmark_request, "POST", "/message-streams/transactional-dev/archive")
+    assert await aw(stream.archive()) == ARCHIVED
+    assert_request(api_request, "POST", "/message-streams/transactional-dev/archive")
 
 
-def test_model_unarchive(stream, postmark_request, respond):
+async def test_model_unarchive(flavor, stream, api_request, respond):
     respond(UNARCHIVED)
-    restored = stream.unarchive()
-    assert_request(postmark_request, "POST", "/message-streams/transactional-dev/unarchive")
-    assert isinstance(restored, MessageStream)
+    restored = await aw(stream.unarchive())
+    assert_request(api_request, "POST", "/message-streams/transactional-dev/unarchive")
+    assert isinstance(restored, twin(MessageStream, flavor))
     assert restored.as_dict() == UNARCHIVED

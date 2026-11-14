@@ -2,7 +2,11 @@ import pytest
 from requests import Request
 
 from postmarker.core import USER_AGENT
-from postmarker.models.suppressions import Suppression
+from postmarker.models.suppressions import Suppression, SuppressionsManager
+
+from ..conftest import aw, twin
+
+pytestmark = pytest.mark.anyio
 
 # Response shapes from https://postmarkapp.com/developer/api/suppressions-api
 DUMP = {
@@ -55,16 +59,16 @@ NO_FILTERS = {
 }
 
 
-def test_manager(postmark_client):
-    assert repr(postmark_client.suppressions) == "<SuppressionsManager>"
+async def test_manager(client, flavor):
+    assert repr(client.suppressions) == f"<{twin(SuppressionsManager, flavor).__name__}>"
 
 
-def test_all(postmark_client, postmark_request):
-    postmark_request.return_value.json.return_value = DUMP
+async def test_all(client, api_request):
+    api_request.return_value.json.return_value = DUMP
 
-    suppressions = postmark_client.suppressions.all()
+    suppressions = await aw(client.suppressions.all())
 
-    postmark_request.assert_called_once_with(
+    api_request.assert_called_once_with(
         "GET",
         "https://api.postmarkapp.com/message-streams/outbound/suppressions/dump",
         json=None,
@@ -78,22 +82,24 @@ def test_all(postmark_client, postmark_request):
     assert suppressions[1].SuppressionReason == "HardBounce"
 
 
-def test_all_filters(postmark_client, postmark_request):
-    postmark_request.return_value.json.return_value = {"Suppressions": DUMP["Suppressions"][1:]}
+async def test_all_filters(client, api_request):
+    api_request.return_value.json.return_value = {"Suppressions": DUMP["Suppressions"][1:]}
 
-    suppressions = postmark_client.suppressions.all(
-        "broadcast",
-        SuppressionReason="HardBounce",
-        Origin="Recipient",
-        fromdate="2019-12-01",
-        todate="2019-12-31",
-        EmailAddress="bounce.address@wildbit.com",
+    suppressions = await aw(
+        client.suppressions.all(
+            "broadcast",
+            SuppressionReason="HardBounce",
+            Origin="Recipient",
+            fromdate="2019-12-01",
+            todate="2019-12-31",
+            EmailAddress="bounce.address@wildbit.com",
+        )
     )
 
-    method, url = postmark_request.call_args[0]
+    method, url = api_request.call_args[0]
     assert method == "GET"
     assert url == "https://api.postmarkapp.com/message-streams/broadcast/suppressions/dump"
-    params = postmark_request.call_args[1]["params"]
+    params = api_request.call_args[1]["params"]
     assert params == {
         "SuppressionReason": "HardBounce",
         "Origin": "Recipient",
@@ -117,12 +123,12 @@ def test_all_filters(postmark_client, postmark_request):
         ({"stream_id": "broadcast"}, "broadcast"),
     ),
 )
-def test_create(postmark_client, postmark_request, kwargs, stream_id):
-    postmark_request.return_value.json.return_value = CREATED
+async def test_create(client, api_request, kwargs, stream_id):
+    api_request.return_value.json.return_value = CREATED
 
-    statuses = postmark_client.suppressions.create(["good.address@wildbit.com", "invalid-email-address"], **kwargs)
+    statuses = await aw(client.suppressions.create(["good.address@wildbit.com", "invalid-email-address"], **kwargs))
 
-    postmark_request.assert_called_once_with(
+    api_request.assert_called_once_with(
         "POST",
         f"https://api.postmarkapp.com/message-streams/{stream_id}/suppressions",
         json={
@@ -152,12 +158,14 @@ def test_create(postmark_client, postmark_request, kwargs, stream_id):
         ({"stream_id": "broadcast"}, "broadcast"),
     ),
 )
-def test_delete(postmark_client, postmark_request, kwargs, stream_id):
-    postmark_request.return_value.json.return_value = DELETED
+async def test_delete(client, api_request, kwargs, stream_id):
+    api_request.return_value.json.return_value = DELETED
 
-    statuses = postmark_client.suppressions.delete(["good.address@wildbit.com", "spammy.address@wildbit.com"], **kwargs)
+    statuses = await aw(
+        client.suppressions.delete(["good.address@wildbit.com", "spammy.address@wildbit.com"], **kwargs)
+    )
 
-    postmark_request.assert_called_once_with(
+    api_request.assert_called_once_with(
         "POST",
         f"https://api.postmarkapp.com/message-streams/{stream_id}/suppressions/delete",
         json={

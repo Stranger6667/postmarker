@@ -1,11 +1,17 @@
+import inspect
 import os
+import sys
 import unittest
 from contextlib import contextmanager
 from unittest.mock import Mock
+from urllib.parse import parse_qsl, urlsplit
 
+import httpx2
 import pytest
+import yaml
+from pytest_recording.plugin import get_default_cassette_name
 
-from postmarker.core import PostmarkClient
+from postmarker.core import AsyncPostmarkClient, PostmarkClient
 from postmarker.models.emails import Delivery
 
 DEFAULT_SERVER_TOKEN = "SERVER_TOKEN"
@@ -19,6 +25,85 @@ def pytest_collection_modifyitems(items):
     classes = [item.nodeid for item in items if item.cls and not issubclass(item.cls, unittest.TestCase)]
     if classes:
         raise pytest.UsageError("Write test functions, not test classes:\n" + "\n".join(classes))
+
+
+@pytest.fixture(scope="session")
+def anyio_backend():
+    return "asyncio"
+
+
+@pytest.fixture(params=["sync", "async"])
+def flavor(request):
+    return request.param
+
+
+@pytest.fixture
+def api_request(flavor, request):
+    return request.getfixturevalue("postmark_request" if flavor == "sync" else "postmark_async_request")
+
+
+def without_flavor(name):
+    """Drops the `sync` / `async` parameter id, so both flavors share today's cassette names."""
+    if "[" not in name:
+        return name
+    base, ids = name[:-1].split("[", 1)
+    ids = "-".join(part for part in ids.split("-") if part not in ("sync", "async"))
+    return f"{base}[{ids}]" if ids else base
+
+
+@pytest.fixture
+def default_cassette_name(request):
+    marker = request.node.get_closest_marker("default_cassette")
+    if marker is not None:
+        return marker.args[0]
+    return get_default_cassette_name(request.cls, without_flavor(request.node.name))
+
+
+def request_key(method, url):
+    parts = urlsplit(str(url))
+    return method, parts.path, sorted(parse_qsl(parts.query, keep_blank_values=True))
+
+
+def CassetteTransport(path):
+    """Replays a vcr cassette for the async client, in recording order."""
+    with open(path) as fd:
+        pending = iter(yaml.safe_load(fd)["interactions"])
+
+    def handler(request):
+        interaction = next(pending, None)
+        assert interaction is not None, f"No recorded interaction left for {request.method} {request.url}"
+        recorded = request_key(interaction["request"]["method"], interaction["request"]["uri"])
+        assert request_key(request.method, request.url) == recorded, f"{request.method} {request.url} != {recorded}"
+        response = interaction["response"]
+        body = response["body"]["string"]
+        headers = {name: values[0] for name, values in response["headers"].items() if name.lower() == "content-type"}
+        return httpx2.Response(
+            response["status"]["code"], content=body if isinstance(body, bytes) else body.encode(), headers=headers
+        )
+
+    return httpx2.MockTransport(handler)
+
+
+def no_network(request):
+    raise AssertionError(f"No cassette for {request.method} {request.url}")
+
+
+@pytest.fixture
+def client(flavor, server_token, account_token, vcr_cassette_dir, default_cassette_name):
+    if flavor == "sync":
+        return PostmarkClient(server_token=server_token, account_token=account_token)
+    client = AsyncPostmarkClient(server_token=server_token, account_token=account_token)
+    path = os.path.join(vcr_cassette_dir, f"{default_cassette_name}.yaml")
+    client._transport = CassetteTransport(path) if os.path.exists(path) else httpx2.MockTransport(no_network)
+    return client
+
+
+async def aw(value):
+    return await value if inspect.isawaitable(value) else value
+
+
+def twin(cls, flavor):
+    return cls if flavor == "sync" else getattr(sys.modules[cls.__module__], f"Async{cls.__name__}")
 
 
 @pytest.fixture(scope="session")

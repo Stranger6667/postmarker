@@ -6,6 +6,10 @@ from requests import Request
 from postmarker.core import USER_AGENT
 from postmarker.models.messages import Click, ClicksManager, OutboundMessage
 
+from ..conftest import aw, twin
+
+pytestmark = pytest.mark.anyio
+
 HEADERS = {
     "Accept": "application/json",
     "User-Agent": USER_AGENT,
@@ -95,19 +99,19 @@ CLICK_WEBHOOK = """{
 }"""
 
 
-def test_manager(postmark_client):
-    clicks = postmark_client.messages.outbound.clicks
-    assert isinstance(clicks, ClicksManager)
-    assert clicks.client is postmark_client
-    assert repr(clicks) == "<ClicksManager>"
+async def test_manager(client, flavor):
+    clicks = client.messages.outbound.clicks
+    assert isinstance(clicks, twin(ClicksManager, flavor))
+    assert clicks.client is client
+    assert repr(clicks) == f"<{twin(ClicksManager, flavor).__name__}>"
 
 
-def test_all(postmark_client, postmark_request):
-    postmark_request.return_value.json.return_value = CLICKS
+async def test_all(client, flavor, api_request):
+    api_request.return_value.json.return_value = CLICKS
 
-    clicks = postmark_client.messages.outbound.clicks.all()
+    clicks = await aw(client.messages.outbound.clicks.all())
 
-    postmark_request.assert_called_once_with(
+    api_request.assert_called_once_with(
         "GET",
         "https://api.postmarkapp.com/messages/outbound/clicks",
         json=None,
@@ -117,36 +121,38 @@ def test_all(postmark_client, postmark_request):
     )
     assert len(clicks) == 1
     click = clicks[0]
-    assert isinstance(click, Click)
+    assert isinstance(click, twin(Click, flavor))
     assert click.as_dict() == CLICK
     assert str(click) == "Click from john.doe@yahoo.com"
     assert click.ClickLocation == "HTML"
     assert click.OriginalLink == "https://example.com"
 
 
-def test_all_filters(postmark_client, postmark_request):
-    postmark_request.return_value.json.return_value = CLICKS
+async def test_all_filters(client, api_request):
+    api_request.return_value.json.return_value = CLICKS
 
-    postmark_client.messages.outbound.clicks.all(
-        count=50,
-        offset=10,
-        recipient="john.doe@yahoo.com",
-        tag="welcome-user",
-        client_name="Chrome 34.0.1847.131",
-        client_company="Google Inc.",
-        client_family="Chrome",
-        os_name="OS X 10.7 Lion",
-        os_family="OS X",
-        os_company="Apple Computer, Inc.",
-        platform="WebMail",
-        country="Serbia",
-        region="Autonomna Pokrajina Vojvodina",
-        city="Novi Sad",
-        messagestream="broadcast",
+    await aw(
+        client.messages.outbound.clicks.all(
+            count=50,
+            offset=10,
+            recipient="john.doe@yahoo.com",
+            tag="welcome-user",
+            client_name="Chrome 34.0.1847.131",
+            client_company="Google Inc.",
+            client_family="Chrome",
+            os_name="OS X 10.7 Lion",
+            os_family="OS X",
+            os_company="Apple Computer, Inc.",
+            platform="WebMail",
+            country="Serbia",
+            region="Autonomna Pokrajina Vojvodina",
+            city="Novi Sad",
+            messagestream="broadcast",
+        )
     )
 
-    method, url = postmark_request.call_args[0]
-    params = postmark_request.call_args[1]["params"]
+    method, url = api_request.call_args[0]
+    params = api_request.call_args[1]["params"]
     assert Request(method, url, params=params).prepare().url == (
         "https://api.postmarkapp.com/messages/outbound/clicks"
         "?recipient=john.doe%40yahoo.com&tag=welcome-user"
@@ -157,26 +163,26 @@ def test_all_filters(postmark_client, postmark_request):
     )
 
 
-def test_all_pages(postmark_client, postmark_request):
+async def test_all_pages(client, api_request):
     second = {**CLICK, "Recipient": "jane.doe@yahoo.com"}
-    postmark_request.return_value.json.side_effect = [
+    api_request.return_value.json.side_effect = [
         {"TotalCount": 501, "Clicks": [CLICK]},
         {"TotalCount": 501, "Clicks": [second]},
     ]
 
-    clicks = postmark_client.messages.outbound.clicks.all(count=None)
+    clicks = await aw(client.messages.outbound.clicks.all(count=None))
 
-    pages = [(call[1]["params"]["count"], call[1]["params"]["offset"]) for call in postmark_request.call_args_list]
+    pages = [(call[1]["params"]["count"], call[1]["params"]["offset"]) for call in api_request.call_args_list]
     assert pages == [(500, 0), (500, 500)]
     assert [click.as_dict() for click in clicks] == [CLICK, second]
 
 
-def test_get(postmark_client, postmark_request):
-    postmark_request.return_value.json.return_value = CLICKS
+async def test_get(client, api_request):
+    api_request.return_value.json.return_value = CLICKS
 
-    response = postmark_client.messages.outbound.clicks.get(MESSAGE_ID, count=10, offset=5)
+    response = await aw(client.messages.outbound.clicks.get(MESSAGE_ID, count=10, offset=5))
 
-    postmark_request.assert_called_once_with(
+    api_request.assert_called_once_with(
         "GET",
         f"https://api.postmarkapp.com/messages/outbound/clicks/{MESSAGE_ID}",
         json=None,
@@ -194,13 +200,13 @@ def test_get(postmark_client, postmark_request):
         ({"count": 10, "offset": 5}, {"count": 10, "offset": 5}),
     ),
 )
-def test_outbound_message_clicks(postmark_client, postmark_request, kwargs, params):
-    postmark_request.return_value.json.return_value = CLICKS
-    message = OutboundMessage(postmark_client.messages.outbound, MessageID=MESSAGE_ID)
+async def test_outbound_message_clicks(client, flavor, api_request, kwargs, params):
+    api_request.return_value.json.return_value = CLICKS
+    message = twin(OutboundMessage, flavor)(client.messages.outbound, MessageID=MESSAGE_ID)
 
-    assert message.clicks(**kwargs) == CLICKS
+    assert await aw(message.clicks(**kwargs)) == CLICKS
 
-    postmark_request.assert_called_once_with(
+    api_request.assert_called_once_with(
         "GET",
         f"https://api.postmarkapp.com/messages/outbound/clicks/{MESSAGE_ID}",
         json=None,
@@ -210,15 +216,15 @@ def test_outbound_message_clicks(postmark_client, postmark_request, kwargs, para
     )
 
 
-def test_click_message(postmark_client, postmark_request):
-    postmark_request.return_value.json.return_value = CLICKS
-    click = postmark_client.messages.outbound.clicks.all()[0]
-    postmark_request.reset_mock()
-    postmark_request.return_value.json.return_value = {"MessageID": MESSAGE_ID, "Status": "Sent", "Recipients": []}
+async def test_click_message(client, flavor, api_request):
+    api_request.return_value.json.return_value = CLICKS
+    click = (await aw(client.messages.outbound.clicks.all()))[0]
+    api_request.reset_mock()
+    api_request.return_value.json.return_value = {"MessageID": MESSAGE_ID, "Status": "Sent", "Recipients": []}
 
-    message = click.message
+    message = await aw(click.message)
 
-    postmark_request.assert_called_once_with(
+    api_request.assert_called_once_with(
         "GET",
         f"https://api.postmarkapp.com/messages/outbound/{MESSAGE_ID}/details",
         json=None,
@@ -226,14 +232,14 @@ def test_click_message(postmark_client, postmark_request):
         headers=HEADERS,
         timeout=None,
     )
-    assert isinstance(message, OutboundMessage)
+    assert isinstance(message, twin(OutboundMessage, flavor))
     assert message.MessageID == MESSAGE_ID
 
 
-def test_webhook(postmark_client):
-    click = postmark_client.messages.outbound.clicks.Click(CLICK_WEBHOOK)
+async def test_webhook(client, flavor):
+    click = client.messages.outbound.clicks.Click(CLICK_WEBHOOK)
 
-    assert isinstance(click, Click)
+    assert isinstance(click, twin(Click, flavor))
     assert str(click) == "Click from margareth@nasa.com"
     assert click.as_dict() == json.loads(CLICK_WEBHOOK)
     assert click.RecordType == "Click"

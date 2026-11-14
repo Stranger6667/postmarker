@@ -2,6 +2,14 @@
 
 ## [Unreleased](https://github.com/Stranger6667/postmarker/compare/v2.1...HEAD)
 
+### Added
+
+- Async client: `AsyncPostmarkClient` with the same API as `PostmarkClient`, via the `async` extra.
+
+### Removed
+
+- Support for Python 3.10.
+
 ## [2.1](https://github.com/Stranger6667/postmarker/compare/v2.0...v2.1) - 2026-11-13
 
 ### Added

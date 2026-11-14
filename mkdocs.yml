@@ -5,6 +5,7 @@ repo_url: https://github.com/Stranger6667/postmarker
 nav:
   - Introduction: index.md
   - usage.md
+  - async.md
   - emails.md
   - templates.md
   - bounces.md

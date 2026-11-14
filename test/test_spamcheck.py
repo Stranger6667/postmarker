@@ -2,7 +2,9 @@ import pytest
 
 from postmarker.exceptions import SpamAssassinError
 
-pytestmark = pytest.mark.vcr
+from .conftest import aw
+
+pytestmark = [pytest.mark.vcr, pytest.mark.anyio]
 
 
 EMAIL_DUMP = """Delivered-To: receiver@gmail.com
@@ -37,8 +39,8 @@ Bla bla bla,
 """
 
 
-def test_spamcheck_valid(postmark):
-    response = postmark.spamcheck(EMAIL_DUMP)
+async def test_spamcheck_valid(client):
+    response = await aw(client.spamcheck(EMAIL_DUMP))
     assert response["success"]
     assert (
         response["report"]
@@ -53,7 +55,7 @@ def test_spamcheck_valid(postmark):
     )
 
 
-def test_spamcheck_invalid(postmark):
+async def test_spamcheck_invalid(client):
     with pytest.raises(SpamAssassinError) as exc:
-        postmark.spamcheck("")
+        await aw(client.spamcheck(""))
     assert str(exc.value) == "SpamAssassin error occured"

@@ -5,6 +5,10 @@ import pytest
 from postmarker.core import USER_AGENT
 from postmarker.models.servers import AccountServer
 
+from ..conftest import aw, twin
+
+pytestmark = pytest.mark.anyio
+
 HEADERS = {
     "Accept": "application/json",
     "User-Agent": USER_AGENT,
@@ -59,100 +63,98 @@ def request(method, endpoint, json=None, params=None):
 
 
 @pytest.fixture
-def server(postmark_client, postmark_request):
-    postmark_request.return_value.json.return_value = STAGING
-    instance = postmark_client.servers.get(1)
-    postmark_request.reset_mock()
+async def server(client, api_request):
+    api_request.return_value.json.return_value = STAGING
+    instance = await aw(client.servers.get(1))
+    api_request.reset_mock()
     return instance
 
 
-def test_manager_all(postmark_client, postmark_request):
-    postmark_request.return_value.json.return_value = {"TotalCount": 2, "Servers": [STAGING, SANDBOX]}
-    servers = postmark_client.servers.all()
-    assert postmark_request.call_args_list == [
-        request("GET", "/servers", params={"count": 500, "offset": 0, "name": None})
-    ]
-    assert all(isinstance(server, AccountServer) for server in servers)
+async def test_manager_all(client, flavor, api_request):
+    api_request.return_value.json.return_value = {"TotalCount": 2, "Servers": [STAGING, SANDBOX]}
+    servers = await aw(client.servers.all())
+    assert api_request.call_args_list == [request("GET", "/servers", params={"count": 500, "offset": 0, "name": None})]
+    assert all(isinstance(server, twin(AccountServer, flavor)) for server in servers)
     assert [server.as_dict() for server in servers] == [STAGING, SANDBOX]
 
 
-def test_manager_all_name(postmark_client, postmark_request):
-    postmark_request.return_value.json.return_value = {"TotalCount": 1, "Servers": [STAGING]}
-    servers = postmark_client.servers.all(count=10, offset=5, name="Staging")
-    assert postmark_request.call_args_list == [
+async def test_manager_all_name(client, api_request):
+    api_request.return_value.json.return_value = {"TotalCount": 1, "Servers": [STAGING]}
+    servers = await aw(client.servers.all(count=10, offset=5, name="Staging"))
+    assert api_request.call_args_list == [
         request("GET", "/servers", params={"count": 10, "offset": 5, "name": "Staging"})
     ]
     assert [server.as_dict() for server in servers] == [STAGING]
 
 
-def test_manager_all_paginates(postmark_client, postmark_request):
-    postmark_request.return_value.json.side_effect = [
+async def test_manager_all_paginates(client, api_request):
+    api_request.return_value.json.side_effect = [
         {"TotalCount": 600, "Servers": [STAGING]},
         {"TotalCount": 600, "Servers": [SANDBOX]},
     ]
-    servers = postmark_client.servers.all(count=600)
-    assert postmark_request.call_args_list == [
+    servers = await aw(client.servers.all(count=600))
+    assert api_request.call_args_list == [
         request("GET", "/servers", params={"count": 500, "offset": 0, "name": None}),
         request("GET", "/servers", params={"count": 100, "offset": 500, "name": None}),
     ]
     assert [server.as_dict() for server in servers] == [STAGING, SANDBOX]
 
 
-def test_manager_get(postmark_client, postmark_request):
-    postmark_request.return_value.json.return_value = STAGING
-    server = postmark_client.servers.get(1)
-    assert postmark_request.call_args_list == [request("GET", "/servers/1")]
-    assert isinstance(server, AccountServer)
+async def test_manager_get(client, flavor, api_request):
+    api_request.return_value.json.return_value = STAGING
+    server = await aw(client.servers.get(1))
+    assert api_request.call_args_list == [request("GET", "/servers/1")]
+    assert isinstance(server, twin(AccountServer, flavor))
     assert server.as_dict() == STAGING
 
 
-def test_manager_create(postmark_client, postmark_request):
-    postmark_request.return_value.json.return_value = STAGING
-    server = postmark_client.servers.create("Staging Testing", Color="Red", InboundSpamThreshold=5)
-    assert postmark_request.call_args_list == [
+async def test_manager_create(client, flavor, api_request):
+    api_request.return_value.json.return_value = STAGING
+    server = await aw(client.servers.create("Staging Testing", Color="Red", InboundSpamThreshold=5))
+    assert api_request.call_args_list == [
         request("POST", "/servers", json={"Name": "Staging Testing", "Color": "Red", "InboundSpamThreshold": 5})
     ]
-    assert isinstance(server, AccountServer)
+    assert isinstance(server, twin(AccountServer, flavor))
     assert server.as_dict() == STAGING
 
 
-def test_manager_edit(postmark_client, postmark_request):
-    postmark_request.return_value.json.return_value = PRODUCTION
-    assert postmark_client.servers.edit(1, Name="Production Testing", Color="Blue") == PRODUCTION
-    assert postmark_request.call_args_list == [
+async def test_manager_edit(client, api_request):
+    api_request.return_value.json.return_value = PRODUCTION
+    assert (await aw(client.servers.edit(1, Name="Production Testing", Color="Blue"))) == PRODUCTION
+    assert api_request.call_args_list == [
         request("PUT", "/servers/1", json={"Name": "Production Testing", "Color": "Blue"})
     ]
 
 
-def test_manager_delete(postmark_client, postmark_request):
-    postmark_request.return_value.json.return_value = DELETED
-    assert postmark_client.servers.delete(2) == "Server Production Server 2 removed."
-    assert postmark_request.call_args_list == [request("DELETE", "/servers/2")]
+async def test_manager_delete(client, api_request):
+    api_request.return_value.json.return_value = DELETED
+    assert (await aw(client.servers.delete(2))) == "Server Production Server 2 removed."
+    assert api_request.call_args_list == [request("DELETE", "/servers/2")]
 
 
-def test_model_str(server):
-    assert str(server) == "AccountServer: Staging Testing (1)"
+async def test_model_str(server, flavor):
+    assert str(server) == f"{twin(AccountServer, flavor).__name__}: Staging Testing (1)"
 
 
-def test_model_get(server, postmark_request):
-    postmark_request.return_value.json.return_value = PRODUCTION
-    assert server.get() is server
-    assert postmark_request.call_args_list == [request("GET", "/servers/1")]
+async def test_model_get(server, api_request):
+    api_request.return_value.json.return_value = PRODUCTION
+    assert (await aw(server.get())) is server
+    assert api_request.call_args_list == [request("GET", "/servers/1")]
     assert server.as_dict() == PRODUCTION
     assert server.Name == "Production Testing"
 
 
-def test_model_edit(server, postmark_request):
-    postmark_request.return_value.json.return_value = PRODUCTION
-    server.edit(Name="Production Testing", Color="Blue")
-    assert postmark_request.call_args_list == [
+async def test_model_edit(server, api_request):
+    api_request.return_value.json.return_value = PRODUCTION
+    (await aw(server.edit(Name="Production Testing", Color="Blue")))
+    assert api_request.call_args_list == [
         request("PUT", "/servers/1", json={"Name": "Production Testing", "Color": "Blue"})
     ]
     assert server.as_dict() == PRODUCTION
     assert server.Name == "Production Testing"
 
 
-def test_model_delete(server, postmark_request):
-    postmark_request.return_value.json.return_value = DELETED
-    assert server.delete() == "Server Production Server 2 removed."
-    assert postmark_request.call_args_list == [request("DELETE", "/servers/1")]
+async def test_model_delete(server, api_request):
+    api_request.return_value.json.return_value = DELETED
+    assert (await aw(server.delete())) == "Server Production Server 2 removed."
+    assert api_request.call_args_list == [request("DELETE", "/servers/1")]

@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from .base import Model, ModelManager
+from .base import AsyncModelManager, Model, ModelManager
 
 
 class StatsManager(ModelManager[Model]):
@@ -117,3 +117,50 @@ class StatsManager(ModelManager[Model]):
             fromdate=fromdate,
             todate=todate,
         )
+
+
+class AsyncStatsManager(AsyncModelManager[Model]):
+    """Async twin of :py:class:`StatsManager`."""
+
+    name = "stats"
+
+    async def overview(self, tag: str | None = None, fromdate: Any = None, todate: Any = None) -> Any:
+        return await self.call("GET", "/stats/outbound", tag=tag, fromdate=fromdate, todate=todate)
+
+    async def sends(self, tag: str | None = None, fromdate: Any = None, todate: Any = None) -> Any:
+        return await self.call("GET", "/stats/outbound/sends", tag=tag, fromdate=fromdate, todate=todate)
+
+    async def bounces(self, tag: str | None = None, fromdate: Any = None, todate: Any = None) -> Any:
+        return await self.call("GET", "/stats/outbound/bounces", tag=tag, fromdate=fromdate, todate=todate)
+
+    async def spam(self, tag: str | None = None, fromdate: Any = None, todate: Any = None) -> Any:
+        return await self.call("GET", "/stats/outbound/spam", tag=tag, fromdate=fromdate, todate=todate)
+
+    async def tracked(self, tag: str | None = None, fromdate: Any = None, todate: Any = None) -> Any:
+        return await self.call("GET", "/stats/outbound/tracked", tag=tag, fromdate=fromdate, todate=todate)
+
+    async def opens(self, tag: str | None = None, fromdate: Any = None, todate: Any = None) -> Any:
+        return await self.call("GET", "/stats/outbound/opens", tag=tag, fromdate=fromdate, todate=todate)
+
+    async def opens_platforms(self, tag: str | None = None, fromdate: Any = None, todate: Any = None) -> Any:
+        return await self.call("GET", "/stats/outbound/opens/platforms", tag=tag, fromdate=fromdate, todate=todate)
+
+    async def emailclients(self, tag: str | None = None, fromdate: Any = None, todate: Any = None) -> Any:
+        return await self.call("GET", "/stats/outbound/opens/emailclients", tag=tag, fromdate=fromdate, todate=todate)
+
+    async def readtimes(self, tag: str | None = None, fromdate: Any = None, todate: Any = None) -> Any:
+        return await self.call("GET", "/stats/outbound/opens/readtimes", tag=tag, fromdate=fromdate, todate=todate)
+
+    async def clicks(self, tag: str | None = None, fromdate: Any = None, todate: Any = None) -> Any:
+        return await self.call("GET", "/stats/outbound/clicks", tag=tag, fromdate=fromdate, todate=todate)
+
+    async def browserfamilies(self, tag: str | None = None, fromdate: Any = None, todate: Any = None) -> Any:
+        return await self.call(
+            "GET", "/stats/outbound/clicks/browserfamilies", tag=tag, fromdate=fromdate, todate=todate
+        )
+
+    async def clicks_platforms(self, tag: str | None = None, fromdate: Any = None, todate: Any = None) -> Any:
+        return await self.call("GET", "/stats/outbound/clicks/platforms", tag=tag, fromdate=fromdate, todate=todate)
+
+    async def location(self, tag: str | None = None, fromdate: Any = None, todate: Any = None) -> Any:
+        return await self.call("GET", "/stats/outbound/clicks/location", tag=tag, fromdate=fromdate, todate=todate)

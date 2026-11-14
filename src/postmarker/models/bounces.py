@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from .base import MessageModel, ModelManager
+from .base import AsyncMessageModel, AsyncModelManager, BaseModelManager, MessageModel, Model, ModelManager, ModelT
 
 
 class Bounce(MessageModel):
@@ -34,19 +34,49 @@ class Bounce(MessageModel):
         return response["Message"]
 
 
-class SpamComplaint(Bounce):
-    """Spam complaint webhook model. Postmark records spam complaints as bounces that can't be activated."""
+class AsyncBounce(AsyncMessageModel):
+    """Async twin of :py:class:`Bounce`."""
 
+    @property
+    async def dump(self) -> Any:
+        return await self._manager.get_dump(self.ID)
+
+    async def activate(self) -> Any:
+        response = await self._manager.activate(self.ID)
+        self._update(response["Bounce"])
+        return response["Message"]
+
+
+class BaseSpamComplaint(Model):
     def __str__(self) -> str:
         return "Spam complaint from {}".format(self._data.get("Email"))
 
 
-class BounceManager(ModelManager[Bounce]):
+class SpamComplaint(BaseSpamComplaint, Bounce):
+    """Spam complaint webhook model. Postmark records spam complaints as bounces that can't be activated."""
+
+
+class AsyncSpamComplaint(BaseSpamComplaint, AsyncBounce):
+    """Async twin of :py:class:`SpamComplaint`."""
+
+
+class BaseBounceManager(BaseModelManager[ModelT]):
+    name = "bounces"
+    pagination_limit = 10000
+
+    def Bounce(self, json: str | bytes) -> ModelT:
+        """Constructs new Bounce instance from JSON-encoded string. Intended to use for bounce webhook processing.
+
+        :param json: `str`
+        :return: :py:class:`Bounce`
+        """
+        return self.model.from_json(json, manager=self)
+
+
+class BounceManager(BaseBounceManager[Bounce], ModelManager[Bounce]):
     """Encapsulates logic about bounces."""
 
-    name = "bounces"
     model = Bounce
-    pagination_limit = 10000
 
     @property
     def deliverystats(self) -> Any:
@@ -132,14 +162,6 @@ class BounceManager(ModelManager[Bounce]):
         """
         return self.call("GET", f"/bounces/{id}/dump").get("Body")
 
-    def Bounce(self, json: str | bytes) -> Bounce:
-        """Constructs new Bounce instance from JSON-encoded string. Intended to use for bounce webhook processing.
-
-        :param json: `str`
-        :return: :py:class:`Bounce`
-        """
-        return self.model.from_json(json, manager=self)
-
     def SpamComplaint(self, json: str | bytes) -> SpamComplaint:
         """Constructs a :py:class:`SpamComplaint` from the spam complaint webhook payload.
 
@@ -147,3 +169,57 @@ class BounceManager(ModelManager[Bounce]):
         :rtype: :py:class:`SpamComplaint`
         """
         return SpamComplaint.from_json(json, manager=self)
+
+
+class AsyncBounceManager(BaseBounceManager[AsyncBounce], AsyncModelManager[AsyncBounce]):
+    """Async twin of :py:class:`BounceManager`."""
+
+    model = AsyncBounce
+
+    @property
+    async def deliverystats(self) -> Any:
+        return await self.call("GET", "/deliverystats")
+
+    @property
+    async def tags(self) -> Any:
+        return await self.call("GET", "/bounces/tags")
+
+    async def get(self, id: int) -> AsyncBounce:
+        response = await self.call("GET", f"/bounces/{id}")
+        return self._init_instance(response)
+
+    async def all(
+        self,
+        count: int | None = 500,
+        offset: int = 0,
+        type: str | None = None,
+        inactive: bool | None = None,
+        emailFilter: str | None = None,
+        tag: str | None = None,
+        messageID: str | None = None,
+        fromdate: Any = None,
+        todate: Any = None,
+    ) -> list[AsyncBounce]:
+        responses = await self.call_many(
+            "GET",
+            "/bounces/",
+            count=count,
+            offset=offset,
+            type=type,
+            inactive=inactive,
+            emailFilter=emailFilter,
+            tag=tag,
+            messageID=messageID,
+            fromdate=fromdate,
+            todate=todate,
+        )
+        return self.expand_responses(responses, "Bounces")
+
+    async def activate(self, id: int) -> Any:
+        return await self.call("PUT", f"/bounces/{id}/activate")
+
+    async def get_dump(self, id: int) -> Any:
+        return (await self.call("GET", f"/bounces/{id}/dump")).get("Body")
+
+    def SpamComplaint(self, json: str | bytes) -> AsyncSpamComplaint:
+        return AsyncSpamComplaint.from_json(json, manager=self)

@@ -2,7 +2,9 @@ import pytest
 
 from postmarker.models.status import Incident
 
-pytestmark = pytest.mark.vcr
+from ..conftest import aw
+
+pytestmark = [pytest.mark.vcr, pytest.mark.anyio]
 
 LAST_INCIDENT = {
     "body": "",
@@ -34,33 +36,33 @@ LAST_INCIDENT = {
 }
 
 
-def test_status(postmark):
-    assert postmark.status.get() == {
+async def test_status(client):
+    assert await aw(client.status.get()) == {
         "lastCheckDate": "2016-10-09T11:48:21Z",
         "status": "UP",
     }
 
 
-def test_last_incident(postmark):
-    incident = postmark.status.incidents.last
+async def test_last_incident(client):
+    incident = await aw(client.status.incidents.last)
     assert isinstance(incident, Incident)
     assert incident.as_dict() == LAST_INCIDENT
     assert str(incident) == "Incident: 1965"
 
 
-def test_incidents(postmark):
-    incidents = postmark.status.incidents.all()
+async def test_incidents(client):
+    incidents = await aw(client.status.incidents.all())
     assert all(isinstance(incident, Incident) for incident in incidents)
 
 
-def test_get_incident(postmark):
-    incident = postmark.status.incidents.get(1965)
+async def test_get_incident(client):
+    incident = await aw(client.status.incidents.get(1965))
     assert isinstance(incident, Incident)
     assert incident.as_dict() == LAST_INCIDENT
 
 
-def test_services(postmark):
-    assert postmark.status.services == [
+async def test_services(client):
+    assert await aw(client.status.services) == [
         {"status": "UP", "url": "/services/api", "name": "API Response Time"},
         {"status": "UP", "url": "/services/smtp", "name": "SMTP Response Time"},
         {"status": "UP", "url": "/services/web", "name": "Web Response Time"},
@@ -72,8 +74,8 @@ def test_services(postmark):
     ]
 
 
-def test_availability(postmark):
-    assert postmark.status.availability == {
+async def test_availability(client):
+    assert await aw(client.status.availability) == {
         "fromDate": "2016-07-11T11:47:10.371Z",
         "percentageUp": 0.9998308505688754,
         "secondsDown": 5280,
@@ -82,8 +84,8 @@ def test_availability(postmark):
     }
 
 
-def test_delivery(postmark):
-    assert postmark.status.delivery == [
+async def test_delivery(client):
+    assert await aw(client.status.delivery) == [
         {"missing": 0, "spf": 1, "spam": 0, "inbox": 1, "dkim": 1, "name": "AOL"},
         {"missing": 0, "spf": 1, "spam": 0, "inbox": 1, "dkim": 1, "name": "Apple"},
         {"missing": 0, "spf": 1, "spam": 0, "inbox": 1, "dkim": 1, "name": "Gmail"},

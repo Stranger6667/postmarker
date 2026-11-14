@@ -24,7 +24,6 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - { os: ubuntu-24.04, python: "3.10", tox-env: py310-django52 }
           - { os: ubuntu-24.04, python: "3.11", tox-env: py311-django52 }
           - { os: ubuntu-24.04, python: "3.12", tox-env: py312-django61 }
           - { os: ubuntu-24.04, python: "3.13", tox-env: py313-django61 }
