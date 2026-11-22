@@ -99,7 +99,7 @@ def assert_request(api_request, method, path, json=None, params=None):
             "User-Agent": USER_AGENT,
             "X-Postmark-Server-Token": "SERVER_TOKEN",
         },
-        timeout=None,
+        timeout=30,
     )
 
 

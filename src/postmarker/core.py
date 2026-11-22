@@ -37,6 +37,8 @@ DEFAULT_API = "https://api.postmarkapp.com/"
 STATUS_API = "https://status.postmarkapp.com/api/1.0/"
 SPAMCHECK_API = "https://spamcheck.postmarkapp.com/filter/"
 USER_AGENT = f"Postmarker/{__version__}"
+# Seconds per connect / read; `None` waits forever, which can hang a worker on a stalled connection
+DEFAULT_TIMEOUT = 30
 TEST_TOKEN = "POSTMARK_API_TEST"
 
 
@@ -66,7 +68,7 @@ class BaseClient:
         account_token: str | None = None,
         verbosity: int = 0,
         max_retries: int = 0,
-        timeout: float | tuple[float, float] | None = None,
+        timeout: float | tuple[float, float] | None = DEFAULT_TIMEOUT,
         logs_stream: TextIO = sys.stdout,
         root_api_url: str = DEFAULT_API,
         inline_css: bool | CSSInliner = False,
@@ -267,7 +269,7 @@ class AsyncPostmarkClient(BaseClient):
         account_token: str | None = None,
         verbosity: int = 0,
         max_retries: int = 0,
-        timeout: float | tuple[float, float] | None = None,
+        timeout: float | tuple[float, float] | None = DEFAULT_TIMEOUT,
         logs_stream: TextIO = sys.stdout,
         root_api_url: str = DEFAULT_API,
         inline_css: bool | CSSInliner = False,

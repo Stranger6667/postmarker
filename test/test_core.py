@@ -3,7 +3,7 @@ from unittest.mock import patch
 import pytest
 from requests import ConnectTimeout, HTTPError, Response
 
-from postmarker.core import USER_AGENT, PostmarkClient
+from postmarker.core import DEFAULT_TIMEOUT, USER_AGENT, PostmarkClient
 from postmarker.exceptions import TransportError
 from postmarker.models.messages import MessageManager, OutboundMessageManager
 from postmarker.models.triggers import TriggersManager
@@ -21,7 +21,7 @@ def test_server_client(postmark, server_token, postmark_request):
         },
         params={},
         json=None,
-        timeout=None,
+        timeout=30,
     )
 
 
@@ -38,7 +38,7 @@ def test_account_client(postmark_request):
         },
         params={},
         json=None,
-        timeout=None,
+        timeout=30,
     )
 
 
@@ -97,6 +97,11 @@ def test_managers_names_overriding(klass):
     assert not any(manager.name in dir(klass) for manager in klass._managers), (
         "Defined managers names override client's members"
     )
+
+
+def test_default_timeout(postmark, postmark_request):
+    postmark.call("GET", "endpoint")
+    assert postmark_request.call_args.kwargs["timeout"] == DEFAULT_TIMEOUT == 30
 
 
 def make_response(status_code, content):

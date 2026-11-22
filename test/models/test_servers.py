@@ -58,7 +58,7 @@ def request(method, endpoint, json=None, params=None):
         json=json,
         params=params or {},
         headers=HEADERS,
-        timeout=None,
+        timeout=30,
     )
 
 

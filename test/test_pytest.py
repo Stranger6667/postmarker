@@ -36,7 +36,7 @@ async def test_async_call_args_match_sync_shape(postmark_async_client, postmark_
         headers={"X-Postmark-Server-Token": "SERVER_TOKEN", "Accept": "application/json", "User-Agent": USER_AGENT},
         params={},
         json=None,
-        timeout=None,
+        timeout=30,
     )
 
 

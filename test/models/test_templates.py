@@ -84,7 +84,7 @@ def sent(method, endpoint, json=None, params=None, token=("X-Postmark-Server-Tok
         json=json,
         params={} if params is None else params,
         headers={"Accept": "application/json", "User-Agent": USER_AGENT, header: value},
-        timeout=None,
+        timeout=30,
     )
 
 
