@@ -10,7 +10,7 @@ from unittest.mock import patch
 import httpx2
 import pytest
 
-from postmarker.core import SPAMCHECK_API, STATUS_API, USER_AGENT, AsyncPostmarkClient
+from postmarker.core import DEFAULT_TIMEOUT, SPAMCHECK_API, STATUS_API, USER_AGENT, AsyncPostmarkClient
 from postmarker.exceptions import ClientError, SpamAssassinError, TransportError
 
 pytestmark = pytest.mark.anyio
@@ -138,6 +138,12 @@ async def test_timeout(timeout, expected):
     sent, handler = respond()
     await make_client(handler, timeout=timeout).call("GET", "endpoint")
     assert sent[0].extensions["timeout"] == expected
+
+
+async def test_default_timeout():
+    sent, handler = respond()
+    await make_client(handler).call("GET", "endpoint")
+    assert sent[0].extensions["timeout"] == dict.fromkeys(("connect", "read", "write", "pool"), DEFAULT_TIMEOUT)
 
 
 async def test_timeout_read_per_request():

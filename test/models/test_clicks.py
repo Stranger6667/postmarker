@@ -117,7 +117,7 @@ async def test_all(client, flavor, api_request):
         json=None,
         params={"count": 500, "offset": 0, **NO_FILTERS},
         headers=HEADERS,
-        timeout=None,
+        timeout=30,
     )
     assert len(clicks) == 1
     click = clicks[0]
@@ -188,7 +188,7 @@ async def test_get(client, api_request):
         json=None,
         params={"count": 10, "offset": 5},
         headers=HEADERS,
-        timeout=None,
+        timeout=30,
     )
     assert response == CLICKS
 
@@ -212,7 +212,7 @@ async def test_outbound_message_clicks(client, flavor, api_request, kwargs, para
         json=None,
         params=params,
         headers=HEADERS,
-        timeout=None,
+        timeout=30,
     )
 
 
@@ -230,7 +230,7 @@ async def test_click_message(client, flavor, api_request):
         json=None,
         params={},
         headers=HEADERS,
-        timeout=None,
+        timeout=30,
     )
     assert isinstance(message, twin(OutboundMessage, flavor))
     assert message.MessageID == MESSAGE_ID

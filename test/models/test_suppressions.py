@@ -74,7 +74,7 @@ async def test_all(client, api_request):
         json=None,
         params=NO_FILTERS,
         headers=HEADERS,
-        timeout=None,
+        timeout=30,
     )
     assert all(isinstance(suppression, Suppression) for suppression in suppressions)
     assert [suppression.as_dict() for suppression in suppressions] == DUMP["Suppressions"]
@@ -139,7 +139,7 @@ async def test_create(client, api_request, kwargs, stream_id):
         },
         params={},
         headers=HEADERS,
-        timeout=None,
+        timeout=30,
     )
     assert statuses == [
         {"EmailAddress": "good.address@wildbit.com", "Status": "Suppressed", "Message": None},
@@ -176,7 +176,7 @@ async def test_delete(client, api_request, kwargs, stream_id):
         },
         params={},
         headers=HEADERS,
-        timeout=None,
+        timeout=30,
     )
     assert statuses == [
         {"EmailAddress": "good.address@wildbit.com", "Status": "Deleted", "Message": None},

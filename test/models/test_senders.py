@@ -91,7 +91,7 @@ async def test_create_confirmation_personal_note(client, api_request, note):
         },
         params={},
         headers=ACCOUNT_HEADERS,
-        timeout=None,
+        timeout=30,
     )
 
 
@@ -105,5 +105,5 @@ async def test_edit_confirmation_personal_note(client, api_request, note):
         json={"Name": "John Doe", "ReplyToEmail": None, "ReturnPathDomain": None, **note},
         params={},
         headers=ACCOUNT_HEADERS,
-        timeout=None,
+        timeout=30,
     )
