@@ -5,6 +5,9 @@
 ### Added
 
 - `LinkTracking` type for `TrackLinks`, so type checkers reject values other than `None`, `HtmlAndText`, `HtmlOnly` and `TextOnly`.
+- `Literal` types for `SuppressionReason` and `Origin` on `suppressions.all`, `TemplateType` on `templates.create`, `validate` and `all`, and `MessageStreamType` on `message_streams.create` and `all`.
+- `SendResponse` and `BatchSendResponse` return types for sending emails, and `SuppressionResult` for `suppressions.create` and `delete`.
+- `ServerSettings` and `NewServerSettings` for the keyword arguments of `server.edit`, `servers.edit` and `servers.create`.
 
 ### Changed
 

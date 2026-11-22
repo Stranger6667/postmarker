@@ -45,3 +45,29 @@ async def _async_usage() -> None:
         async_template: Any = await async_client.emails.send_with_template(
             TemplateId=1, TemplateModel={}, From="a@example.com", To="b@example.com"
         )
+
+
+# Send responses
+sent = client.emails.send(From="a@example.com", To="b@example.com", TextBody="Hi")
+sent_id: str = sent["MessageID"]
+sent_typo = sent["MessageId"]  # type: ignore[typeddict-item]
+batch_items = client.emails.send_batch({"From": "a@example.com", "To": "b@example.com", "TextBody": "Hi"})
+batch_code: int = batch_items[0]["ErrorCode"]
+
+# Fixed-value parameters
+suppressed = client.suppressions.all(SuppressionReason="HardBounce", Origin="Recipient")
+bad_reason = client.suppressions.all(SuppressionReason="Bounce")  # type: ignore[arg-type]
+results = client.suppressions.create(["a@example.com"])
+result_status: str = results[0]["Status"]
+layouts = client.templates.all(TemplateType="Layout")
+bad_layout = client.templates.create(Name="x", HtmlBody="x", TemplateType="All")  # type: ignore[arg-type]
+streams = client.message_streams.all(MessageStreamType="All")
+bad_stream = client.message_streams.create(ID="x", Name="x", MessageStreamType="Inbound")  # type: ignore[arg-type]
+
+# Server settings
+account = PostmarkClient(account_token="ACCOUNT_TOKEN")
+new_server = account.servers.create(Name="x", DeliveryType="Sandbox", TrackLinks="HtmlOnly")
+account.servers.edit(1, InboundSpamThreshold=5)
+account.servers.edit(1, DeliveryType="Live")  # type: ignore[call-arg]
+client.server.edit(TrackOpens=True)
+client.server.edit(TrackOpen=True)  # type: ignore[call-arg]
