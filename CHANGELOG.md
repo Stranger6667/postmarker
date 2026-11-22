@@ -2,6 +2,10 @@
 
 ## [Unreleased](https://github.com/Stranger6667/postmarker/compare/v3.0...HEAD)
 
+### Added
+
+- `LinkTracking` type for `TrackLinks`, so type checkers reject values other than `None`, `HtmlAndText`, `HtmlOnly` and `TextOnly`.
+
 ### Changed
 
 - **BREAKING**: Network errors, timeouts and responses without a Postmark JSON body raising `postmarker.exceptions.TransportError` with `status_code` instead of `requests` or `httpx2` exceptions, which stay available as `__cause__`.
