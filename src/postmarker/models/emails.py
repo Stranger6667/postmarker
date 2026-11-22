@@ -5,6 +5,7 @@ from __future__ import annotations
 import mimetypes
 import os
 from base64 import b64encode
+from collections.abc import Sequence
 from email.header import decode_header
 from email.message import Message, MIMEPart
 from typing import Any, Generic, Literal, NotRequired, Self, TypedDict, TypeVar, cast, get_args
@@ -149,10 +150,9 @@ def deconstruct_multipart(message: Message) -> tuple[str | None, str | None, lis
 
 class BaseEmail(Model):
     def __init__(self, **kwargs: Any) -> None:
-        if not kwargs.get("Headers"):
-            kwargs["Headers"] = {}
-        if not kwargs.get("Attachments"):
-            kwargs["Attachments"] = []
+        # Copies, so `attach` and header assignment never change the caller's collections
+        kwargs["Headers"] = dict(kwargs.get("Headers") or {})
+        kwargs["Attachments"] = list(kwargs.get("Attachments") or [])
         super().__init__(**kwargs)
 
     def __str__(self) -> str:
@@ -482,7 +482,7 @@ class BaseEmailManager(BaseModelManager[Model], Generic[EmailT, TemplateT, Batch
         Headers: dict[str, str] | None = None,
         TrackOpens: bool | None = None,
         TrackLinks: LinkTracking = "None",
-        Attachments: list[AttachmentData] | None = None,
+        Attachments: Sequence[AttachmentData] | None = None,
         MessageStream: str | None = None,
     ) -> EmailT:
         """Constructs :py:class:`Email` instance.
@@ -524,7 +524,7 @@ class BaseEmailManager(BaseModelManager[Model], Generic[EmailT, TemplateT, Batch
         Headers: dict[str, str] | None = None,
         TrackOpens: bool | None = None,
         TrackLinks: LinkTracking = "None",
-        Attachments: list[AttachmentData] | None = None,
+        Attachments: Sequence[AttachmentData] | None = None,
         InlineCss: bool = True,
         Metadata: dict[str, Any] | None = None,
         MessageStream: str | None = None,
@@ -607,7 +607,7 @@ class EmailManager(BaseEmailManager[Email, EmailTemplate, EmailBatch, EmailTempl
         Headers: dict[str, str] | None = None,
         TrackOpens: bool | None = None,
         TrackLinks: LinkTracking = "None",
-        Attachments: list[AttachmentData] | None = None,
+        Attachments: Sequence[AttachmentData] | None = None,
         MessageStream: str | None = None,
     ) -> SendResponse:
         """Sends a single email.
@@ -670,7 +670,7 @@ class EmailManager(BaseEmailManager[Email, EmailTemplate, EmailBatch, EmailTempl
         Headers: dict[str, str] | None = None,
         TrackOpens: bool | None = None,
         TrackLinks: LinkTracking = "None",
-        Attachments: list[AttachmentData] | None = None,
+        Attachments: Sequence[AttachmentData] | None = None,
         InlineCss: bool = True,
         Metadata: dict[str, Any] | None = None,
         MessageStream: str | None = None,
@@ -751,7 +751,7 @@ class AsyncEmailManager(
         Headers: dict[str, str] | None = None,
         TrackOpens: bool | None = None,
         TrackLinks: LinkTracking = "None",
-        Attachments: list[AttachmentData] | None = None,
+        Attachments: Sequence[AttachmentData] | None = None,
         MessageStream: str | None = None,
     ) -> SendResponse:
         return await self._email_to_send(
@@ -789,7 +789,7 @@ class AsyncEmailManager(
         Headers: dict[str, str] | None = None,
         TrackOpens: bool | None = None,
         TrackLinks: LinkTracking = "None",
-        Attachments: list[AttachmentData] | None = None,
+        Attachments: Sequence[AttachmentData] | None = None,
         InlineCss: bool = True,
         Metadata: dict[str, Any] | None = None,
         MessageStream: str | None = None,

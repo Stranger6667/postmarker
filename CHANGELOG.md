@@ -2,6 +2,11 @@
 
 ## [Unreleased](https://github.com/Stranger6667/postmarker/compare/v4.0...HEAD)
 
+### Fixed
+
+- `Attachments` typed as `list`, which type checkers reject for a narrower list such as `list[dict[str, str]]` (it should accept any sequence).
+- `attach` and setting a header on an email changing the `Attachments` list and `Headers` dictionary that were passed to it.
+
 ## [4.0](https://github.com/Stranger6667/postmarker/compare/v3.0...v4.0) - 2026-11-22
 
 ### Added

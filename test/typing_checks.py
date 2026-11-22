@@ -54,6 +54,11 @@ sent_typo = sent["MessageId"]  # type: ignore[typeddict-item]
 batch_items = client.emails.send_batch({"From": "a@example.com", "To": "b@example.com", "TextBody": "Hi"})
 batch_code: int = batch_items[0]["ErrorCode"]
 
+attachment_dicts: list[dict[str, str]] = [{"Name": "a.txt", "Content": "YQ==", "ContentType": "text/plain"}]
+with_attachments = client.emails.send(
+    From="a@example.com", To="b@example.com", TextBody="Hi", Attachments=attachment_dicts
+)
+
 # Fixed-value parameters
 suppressed = client.suppressions.all(SuppressionReason="HardBounce", Origin="Recipient")
 bad_reason = client.suppressions.all(SuppressionReason="Bounce")  # type: ignore[arg-type]
