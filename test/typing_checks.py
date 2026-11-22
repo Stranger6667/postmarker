@@ -16,6 +16,8 @@ opens: Any = client.messages.outbound.opens.all()
 email: Email = client.emails.Email(From="a@example.com", To=["b@example.com", "c@example.com"], TextBody="Hi")
 email.attach("readme.txt")
 email["X-Accept-Language"] = "en-us, en"
+tracked: Any = client.emails.send(From="a@example.com", To="b@example.com", TextBody="Hi", TrackLinks="HtmlOnly")
+mistyped: Any = client.emails.send(From="a@example.com", To="b@example.com", TextBody="Hi", TrackLinks="Html")  # type: ignore[arg-type]
 template_response: Any = client.emails.send_with_template(
     TemplateId=1, TemplateModel={"name": "x"}, From="a@example.com", To="b@example.com"
 )

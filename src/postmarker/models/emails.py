@@ -7,7 +7,7 @@ import os
 from base64 import b64encode
 from email.header import decode_header
 from email.message import Message, MIMEPart
-from typing import Any, Generic, Self, TypeVar, cast
+from typing import Any, Generic, Literal, Self, TypeVar, cast, get_args
 
 from ..utils import chunks
 from .base import AsyncMessageModel, AsyncModelManager, BaseModelManager, MessageModel, Model, ModelManager
@@ -16,6 +16,8 @@ SEPARATOR = ""
 
 # What `list_to_csv` joins
 Recipients = str | list[str] | tuple[str, ...] | set[str]
+# Values of `TrackLinks`
+LinkTracking = Literal["None", "HtmlAndText", "HtmlOnly", "TextOnly"]
 # What `prepare_attachments` accepts
 AttachmentData = dict[str, Any] | tuple[str, ...] | Message | str
 
@@ -430,7 +432,7 @@ class BaseEmailManager(BaseModelManager[Model], Generic[EmailT, TemplateT, Batch
         assert not (message and (fields["From"] or fields["To"])), (
             "You should specify either message or From and To parameters"
         )
-        assert fields["TrackLinks"] in ("None", "HtmlAndText", "HtmlOnly", "TextOnly")
+        assert fields["TrackLinks"] in get_args(LinkTracking)
         if message is None:
             return self.Email(**fields)
         if isinstance(message, Message):
@@ -453,7 +455,7 @@ class BaseEmailManager(BaseModelManager[Model], Generic[EmailT, TemplateT, Batch
         ReplyTo: str | None = None,
         Headers: dict[str, str] | None = None,
         TrackOpens: bool | None = None,
-        TrackLinks: str = "None",
+        TrackLinks: LinkTracking = "None",
         Attachments: list[AttachmentData] | None = None,
         MessageStream: str | None = None,
     ) -> EmailT:
@@ -495,7 +497,7 @@ class BaseEmailManager(BaseModelManager[Model], Generic[EmailT, TemplateT, Batch
         ReplyTo: str | None = None,
         Headers: dict[str, str] | None = None,
         TrackOpens: bool | None = None,
-        TrackLinks: str = "None",
+        TrackLinks: LinkTracking = "None",
         Attachments: list[AttachmentData] | None = None,
         InlineCss: bool = True,
         Metadata: dict[str, Any] | None = None,
@@ -578,7 +580,7 @@ class EmailManager(BaseEmailManager[Email, EmailTemplate, EmailBatch, EmailTempl
         ReplyTo: str | None = None,
         Headers: dict[str, str] | None = None,
         TrackOpens: bool | None = None,
-        TrackLinks: str = "None",
+        TrackLinks: LinkTracking = "None",
         Attachments: list[AttachmentData] | None = None,
         MessageStream: str | None = None,
     ) -> Any:
@@ -602,7 +604,7 @@ class EmailManager(BaseEmailManager[Email, EmailTemplate, EmailBatch, EmailTempl
         :param str ReplyTo: Reply To override email address.
         :param dict Headers: Dictionary of custom headers to include.
         :param bool TrackOpens: Activate open tracking for this email.
-        :param str TrackLinks: Activate link tracking for links in the HTML or Text bodies of this email.
+        :param LinkTracking TrackLinks: Activate link tracking for links in the HTML or Text bodies of this email.
         :param list Attachments: List of attachments.
         :return: Information about sent email.
         :rtype: `dict`
@@ -641,7 +643,7 @@ class EmailManager(BaseEmailManager[Email, EmailTemplate, EmailBatch, EmailTempl
         ReplyTo: str | None = None,
         Headers: dict[str, str] | None = None,
         TrackOpens: bool | None = None,
-        TrackLinks: str = "None",
+        TrackLinks: LinkTracking = "None",
         Attachments: list[AttachmentData] | None = None,
         InlineCss: bool = True,
         Metadata: dict[str, Any] | None = None,
@@ -722,7 +724,7 @@ class AsyncEmailManager(
         ReplyTo: str | None = None,
         Headers: dict[str, str] | None = None,
         TrackOpens: bool | None = None,
-        TrackLinks: str = "None",
+        TrackLinks: LinkTracking = "None",
         Attachments: list[AttachmentData] | None = None,
         MessageStream: str | None = None,
     ) -> Any:
@@ -760,7 +762,7 @@ class AsyncEmailManager(
         ReplyTo: str | None = None,
         Headers: dict[str, str] | None = None,
         TrackOpens: bool | None = None,
-        TrackLinks: str = "None",
+        TrackLinks: LinkTracking = "None",
         Attachments: list[AttachmentData] | None = None,
         InlineCss: bool = True,
         Metadata: dict[str, Any] | None = None,
