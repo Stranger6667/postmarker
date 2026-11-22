@@ -11,7 +11,7 @@ import httpx2
 import pytest
 
 from postmarker.core import SPAMCHECK_API, STATUS_API, USER_AGENT, AsyncPostmarkClient
-from postmarker.exceptions import ClientError, SpamAssassinError
+from postmarker.exceptions import ClientError, SpamAssassinError, TransportError
 
 pytestmark = pytest.mark.anyio
 
@@ -90,10 +90,30 @@ async def test_client_error():
     assert exc.value.error_code == 406
 
 
-async def test_http_error_without_json():
-    _, handler = respond(httpx2.Response(500, text="oops"))
-    with pytest.raises(httpx2.HTTPStatusError):
+@pytest.mark.parametrize(
+    "response",
+    [
+        httpx2.Response(500, text="oops"),
+        httpx2.Response(502, json={"error": "Bad Gateway"}),
+        httpx2.Response(200, text="<html>OK</html>"),
+    ],
+    ids=["http-error-without-json", "json-without-error-code", "success-without-json"],
+)
+async def test_transport_error_for_unusable_response(response):
+    _, handler = respond(response)
+    with pytest.raises(TransportError) as exc:
         await make_client(handler).call("GET", "endpoint")
+    assert exc.value.status_code == response.status_code
+
+
+async def test_transport_error_for_network_failure():
+    def handler(request):
+        raise httpx2.ConnectTimeout("timed out", request=request)
+
+    with pytest.raises(TransportError, match="timed out") as exc:
+        await make_client(handler).call("GET", "endpoint")
+    assert exc.value.status_code is None
+    assert isinstance(exc.value.__cause__, httpx2.ConnectTimeout)
 
 
 async def test_format_exception_message_overridable():

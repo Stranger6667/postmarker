@@ -15,7 +15,7 @@ from requests import ConnectTimeout, Response
 from postmarker.core import TEST_TOKEN
 from postmarker.django import EmailBackend
 from postmarker.django.signals import on_exception, post_send, pre_send
-from postmarker.exceptions import ClientError
+from postmarker.exceptions import ClientError, TransportError
 from postmarker.models.emails import Email
 
 pytestmark = pytest.mark.usefixtures("outbox")
@@ -470,7 +470,7 @@ def test_silent_exception():
 
 @pytest.mark.usefixtures("invalid_json_response")
 def test_loud_exception():
-    with mail.get_connection() as connection, pytest.raises(ValueError):
+    with mail.get_connection() as connection, pytest.raises(TransportError):
         send_with_connection(connection)
 
 
@@ -550,7 +550,8 @@ def test_signals_on_exception(catch_signal):
     kwargs = handler.call_args[1]
     assert kwargs["sender"] == EmailBackend
     assert kwargs["signal"] == on_exception
-    assert isinstance(kwargs["exception"], ConnectTimeout)
+    assert isinstance(kwargs["exception"], TransportError)
+    assert isinstance(kwargs["exception"].__cause__, ConnectTimeout)
     assert len(kwargs["raw_messages"]) == 1
 
 

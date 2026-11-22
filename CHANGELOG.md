@@ -2,6 +2,10 @@
 
 ## [Unreleased](https://github.com/Stranger6667/postmarker/compare/v3.0...HEAD)
 
+### Changed
+
+- **BREAKING**: Network errors, timeouts and responses without a Postmark JSON body raising `postmarker.exceptions.TransportError` with `status_code` instead of `requests` or `httpx2` exceptions, which stay available as `__cause__`.
+
 ## [3.0](https://github.com/Stranger6667/postmarker/compare/v2.1...v3.0) - 2026-11-15
 
 ### Added

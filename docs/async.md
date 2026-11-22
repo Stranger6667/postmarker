@@ -39,8 +39,6 @@ Webhook wrappers on the async client return async models, so `await postmark.bou
 
 ## Differences from the sync client
 
-- Network errors raise httpx2 exceptions, e.g. `httpx2.ConnectError` and `httpx2.TimeoutException`. Postmark API errors raise `ClientError`, as in the sync client.
-- An HTTP error without a JSON body, e.g. an HTML 502 from a proxy, raises `httpx2.HTTPStatusError` instead of `requests.HTTPError`.
 - `max_retries` doesn't apply to requests through a proxy from `HTTP_PROXY` / `HTTPS_PROXY`: httpx2 doesn't retry proxy connections.
 - Batches accept the async email classes: pass `AsyncEmail` instances, dictionaries or `email.message.Message` instances to `send_batch`.
 
