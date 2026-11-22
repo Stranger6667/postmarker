@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, Literal
 
 from .base import AsyncModelManager, Model, ModelManager
 
@@ -26,7 +26,9 @@ class MessageStreamsManager(ModelManager[MessageStream]):
     model = MessageStream
 
     def all(
-        self, MessageStreamType: str | None = None, IncludeArchivedStreams: bool | None = None
+        self,
+        MessageStreamType: Literal["All", "Inbound", "Transactional", "Broadcasts"] | None = None,
+        IncludeArchivedStreams: bool | None = None,
     ) -> list[MessageStream]:
         """Lists the server's message streams.
 
@@ -48,7 +50,7 @@ class MessageStreamsManager(ModelManager[MessageStream]):
         self,
         ID: str,
         Name: str,
-        MessageStreamType: str,
+        MessageStreamType: Literal["Transactional", "Broadcasts"],
         Description: str | None = None,
         SubscriptionManagementConfiguration: dict[str, Any] | None = None,
     ) -> MessageStream:
@@ -120,7 +122,9 @@ class AsyncMessageStreamsManager(AsyncModelManager[AsyncMessageStream]):
     model = AsyncMessageStream
 
     async def all(
-        self, MessageStreamType: str | None = None, IncludeArchivedStreams: bool | None = None
+        self,
+        MessageStreamType: Literal["All", "Inbound", "Transactional", "Broadcasts"] | None = None,
+        IncludeArchivedStreams: bool | None = None,
     ) -> list[AsyncMessageStream]:
         response = await self.call(
             "GET",
@@ -137,7 +141,7 @@ class AsyncMessageStreamsManager(AsyncModelManager[AsyncMessageStream]):
         self,
         ID: str,
         Name: str,
-        MessageStreamType: str,
+        MessageStreamType: Literal["Transactional", "Broadcasts"],
         Description: str | None = None,
         SubscriptionManagementConfiguration: dict[str, Any] | None = None,
     ) -> AsyncMessageStream:

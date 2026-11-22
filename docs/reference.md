@@ -38,6 +38,10 @@ Every manager and model that makes requests has an `Async` twin in the same modu
       members: [attach, attach_binary, send]
       inherited_members: [attach, attach_binary]
 
+::: postmarker.models.emails.SendResponse
+
+::: postmarker.models.emails.BatchSendResponse
+
 ## Templates
 
 `postmark.templates`, see [Templates](templates.md). `push` needs the account token.
@@ -153,6 +157,10 @@ Every manager and model that makes requests has an `Async` twin in the same modu
     options:
       members: [get, edit, delete]
 
+::: postmarker.models.servers.ServerSettings
+
+::: postmarker.models.servers.NewServerSettings
+
 ## Status
 
 `postmark.status` and `postmark.status.incidents`, see [Status](status.md).
@@ -196,6 +204,8 @@ Every manager and model that makes requests has an `Async` twin in the same modu
 `postmark.suppressions`, see [Suppressions](suppressions.md).
 
 ::: postmarker.models.suppressions.SuppressionsManager
+
+::: postmarker.models.suppressions.SuppressionResult
 
 ::: postmarker.models.suppressions.SubscriptionChange
     options:

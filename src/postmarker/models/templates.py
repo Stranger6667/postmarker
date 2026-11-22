@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, Literal
 
 from .base import AsyncModelManager, Model, ModelManager
 
@@ -44,7 +44,7 @@ class TemplateManager(ModelManager[Template]):
         HtmlBody: str | None = None,
         TextBody: str | None = None,
         Alias: str | None = None,
-        TemplateType: str | None = None,
+        TemplateType: Literal["Standard", "Layout"] | None = None,
         LayoutTemplate: str | None = None,
     ) -> Template:
         """Creates a template.
@@ -98,7 +98,7 @@ class TemplateManager(ModelManager[Template]):
         self,
         Count: int | None = 100,
         Offset: int = 0,
-        TemplateType: str | None = None,
+        TemplateType: Literal["All", "Standard", "Layout"] | None = None,
         LayoutTemplate: str | None = None,
     ) -> list[Template]:
         """Returns templates, optionally filtered by ``TemplateType`` (``All``, ``Standard``, ``Layout``) or layout alias."""
@@ -122,7 +122,7 @@ class TemplateManager(ModelManager[Template]):
         TextBody: str | None = None,
         TestRenderModel: dict[str, Any] | None = None,
         InlineCssForHtmlTestRender: bool = True,
-        TemplateType: str | None = None,
+        TemplateType: Literal["Standard", "Layout"] | None = None,
         LayoutTemplate: str | None = None,
     ) -> Any:
         """Validates template content; ``LayoutTemplate`` renders a standard template inside that layout."""
@@ -191,7 +191,7 @@ class AsyncTemplateManager(AsyncModelManager[AsyncTemplate]):
         HtmlBody: str | None = None,
         TextBody: str | None = None,
         Alias: str | None = None,
-        TemplateType: str | None = None,
+        TemplateType: Literal["Standard", "Layout"] | None = None,
         LayoutTemplate: str | None = None,
     ) -> AsyncTemplate:
         assert TextBody or HtmlBody, "Provide either email TextBody or HtmlBody or both"
@@ -234,7 +234,7 @@ class AsyncTemplateManager(AsyncModelManager[AsyncTemplate]):
         self,
         Count: int | None = 100,
         Offset: int = 0,
-        TemplateType: str | None = None,
+        TemplateType: Literal["All", "Standard", "Layout"] | None = None,
         LayoutTemplate: str | None = None,
     ) -> list[AsyncTemplate]:
         responses = await self.call_many(
@@ -252,7 +252,7 @@ class AsyncTemplateManager(AsyncModelManager[AsyncTemplate]):
         TextBody: str | None = None,
         TestRenderModel: dict[str, Any] | None = None,
         InlineCssForHtmlTestRender: bool = True,
-        TemplateType: str | None = None,
+        TemplateType: Literal["Standard", "Layout"] | None = None,
         LayoutTemplate: str | None = None,
     ) -> Any:
         data = _present(

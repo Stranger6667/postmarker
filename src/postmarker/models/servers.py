@@ -1,8 +1,39 @@
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, Literal, TypedDict, Unpack
 
 from .base import AsyncModelManager, Model, ModelManager
+from .emails import LinkTracking
+
+
+class BaseServerSettings(TypedDict, total=False):
+    Color: str
+    SmtpApiActivated: bool
+    RawEmailEnabled: bool
+    InboundHookUrl: str
+    BounceHookUrl: str
+    OpenHookUrl: str
+    DeliveryHookUrl: str
+    ClickHookUrl: str
+    PostFirstOpenOnly: bool
+    InboundDomain: str
+    InboundSpamThreshold: int
+    TrackOpens: bool
+    TrackLinks: LinkTracking
+    IncludeBounceContentInHook: bool
+    EnableSmtpApiErrorHooks: bool
+
+
+class ServerSettings(BaseServerSettings, total=False):
+    """Server fields that `server.edit` and `servers.edit` accept."""
+
+    Name: str
+
+
+class NewServerSettings(BaseServerSettings, total=False):
+    """Server fields that `servers.create` accepts besides `Name`; `DeliveryType` can't change later."""
+
+    DeliveryType: Literal["Live", "Sandbox"]
 
 
 class BaseAccountServer(Model):
@@ -21,7 +52,7 @@ class AccountServer(BaseAccountServer):
         self._update(self._manager.get(self.ID).as_dict())
         return self
 
-    def edit(self, **kwargs: Any) -> None:
+    def edit(self, **kwargs: Unpack[ServerSettings]) -> None:
         response = self._manager.edit(self.ID, **kwargs)
         self._update(response)
 
@@ -45,12 +76,12 @@ class ServersManager(ModelManager[AccountServer]):
         response = self.call("GET", f"/servers/{id}")
         return self._init_instance(response)
 
-    def create(self, Name: str, **kwargs: Any) -> AccountServer:
+    def create(self, Name: str, **kwargs: Unpack[NewServerSettings]) -> AccountServer:
         """Creates a server; other fields from Postmark's Servers API go as keyword arguments."""
         data = {"Name": Name, **kwargs}
         return self._init_instance(self.call("POST", "/servers", data=data))
 
-    def edit(self, id: int, **kwargs: Any) -> Any:
+    def edit(self, id: int, **kwargs: Unpack[ServerSettings]) -> Any:
         return self.call("PUT", f"/servers/{id}", data=kwargs)
 
     def delete(self, id: int) -> Any:
@@ -64,7 +95,7 @@ class AsyncAccountServer(BaseAccountServer):
         self._update((await self._manager.get(self.ID)).as_dict())
         return self
 
-    async def edit(self, **kwargs: Any) -> None:
+    async def edit(self, **kwargs: Unpack[ServerSettings]) -> None:
         response = await self._manager.edit(self.ID, **kwargs)
         self._update(response)
 
@@ -87,11 +118,11 @@ class AsyncServersManager(AsyncModelManager[AsyncAccountServer]):
         response = await self.call("GET", f"/servers/{id}")
         return self._init_instance(response)
 
-    async def create(self, Name: str, **kwargs: Any) -> AsyncAccountServer:
+    async def create(self, Name: str, **kwargs: Unpack[NewServerSettings]) -> AsyncAccountServer:
         data = {"Name": Name, **kwargs}
         return self._init_instance(await self.call("POST", "/servers", data=data))
 
-    async def edit(self, id: int, **kwargs: Any) -> Any:
+    async def edit(self, id: int, **kwargs: Unpack[ServerSettings]) -> Any:
         return await self.call("PUT", f"/servers/{id}", data=kwargs)
 
     async def delete(self, id: int) -> Any:

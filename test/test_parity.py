@@ -4,6 +4,7 @@ import importlib
 import inspect
 import pkgutil
 import re
+from typing import is_typeddict
 
 import pytest
 
@@ -30,7 +31,10 @@ def classes(module):
     return [
         cls
         for name, cls in vars(module).items()
-        if inspect.isclass(cls) and cls.__module__ == module.__name__ and not name.startswith(("Async", "Base", "_"))
+        if inspect.isclass(cls)
+        and not is_typeddict(cls)
+        and cls.__module__ == module.__name__
+        and not name.startswith(("Async", "Base", "_"))
     ]
 
 
@@ -51,7 +55,8 @@ TWINNED = {sync_cls.__name__ for sync_cls, _ in PAIRS}
 
 
 def as_async(annotation):
-    return re.sub(rf"\b({'|'.join(TWINNED)})\b", r"Async\1", annotation)
+    # Lookarounds keep string values such as `Literal['SpamComplaint']` intact
+    return re.sub(rf"(?<!')\b({'|'.join(TWINNED)})\b(?!')", r"Async\1", annotation)
 
 
 def public_members(cls):

@@ -1,8 +1,9 @@
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, Unpack
 
 from .base import AsyncModelManager, Model, ModelManager
+from .servers import ServerSettings
 
 
 class BaseServer(Model):
@@ -15,7 +16,7 @@ class BaseServer(Model):
 
 
 class Server(BaseServer):
-    def edit(self, **kwargs: Any) -> None:
+    def edit(self, **kwargs: Unpack[ServerSettings]) -> None:
         response = self._manager.edit(**kwargs)
         self._update(response)
 
@@ -30,14 +31,14 @@ class ServerManager(ModelManager[Server]):
         response = self.call("GET", "/server")
         return self._init_instance(response)
 
-    def edit(self, **kwargs: Any) -> Any:
+    def edit(self, **kwargs: Unpack[ServerSettings]) -> Any:
         return self.call("PUT", "/server", data=kwargs)
 
 
 class AsyncServer(BaseServer):
     """Async twin of :py:class:`Server`."""
 
-    async def edit(self, **kwargs: Any) -> None:
+    async def edit(self, **kwargs: Unpack[ServerSettings]) -> None:
         response = await self._manager.edit(**kwargs)
         self._update(response)
 
@@ -52,5 +53,5 @@ class AsyncServerManager(AsyncModelManager[AsyncServer]):
         response = await self.call("GET", "/server")
         return self._init_instance(response)
 
-    async def edit(self, **kwargs: Any) -> Any:
+    async def edit(self, **kwargs: Unpack[ServerSettings]) -> Any:
         return await self.call("PUT", "/server", data=kwargs)

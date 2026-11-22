@@ -6,11 +6,19 @@ Suppressed addresses of a message stream are available via the
 
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, Literal, TypedDict
 
 from .base import AsyncMessageModel, AsyncModelManager, MessageModel, Model, ModelManager
 
 DEFAULT_STREAM_ID = "outbound"
+
+
+class SuppressionResult(TypedDict):
+    """Postmark's result for one address of `suppressions.create` or `suppressions.delete`."""
+
+    EmailAddress: str
+    Status: Literal["Suppressed", "Deleted", "Failed"]
+    Message: str | None
 
 
 class Suppression(Model):
@@ -42,8 +50,8 @@ class SuppressionsManager(ModelManager[Suppression]):
     def all(
         self,
         stream_id: str = DEFAULT_STREAM_ID,
-        SuppressionReason: str | None = None,
-        Origin: str | None = None,
+        SuppressionReason: Literal["HardBounce", "SpamComplaint", "ManualSuppression"] | None = None,
+        Origin: Literal["Recipient", "Customer", "Admin"] | None = None,
         fromdate: Any = None,
         todate: Any = None,
         EmailAddress: str | None = None,
@@ -69,7 +77,7 @@ class SuppressionsManager(ModelManager[Suppression]):
         )
         return self._init_many(response["Suppressions"])
 
-    def create(self, emails: list[str], stream_id: str = DEFAULT_STREAM_ID) -> list[dict[str, Any]]:
+    def create(self, emails: list[str], stream_id: str = DEFAULT_STREAM_ID) -> list[SuppressionResult]:
         """Suppresses up to 50 addresses.
 
         :param emails: Email addresses.
@@ -78,7 +86,7 @@ class SuppressionsManager(ModelManager[Suppression]):
         """
         return self._change(f"/message-streams/{stream_id}/suppressions", emails)
 
-    def delete(self, emails: list[str], stream_id: str = DEFAULT_STREAM_ID) -> list[dict[str, Any]]:
+    def delete(self, emails: list[str], stream_id: str = DEFAULT_STREAM_ID) -> list[SuppressionResult]:
         """Reactivates up to 50 addresses. `SpamComplaint` suppressions can't be deleted.
 
         :param emails: Email addresses.
@@ -95,9 +103,9 @@ class SuppressionsManager(ModelManager[Suppression]):
         """
         return SubscriptionChange.from_json(json, manager=self)
 
-    def _change(self, endpoint: str, emails: list[str]) -> list[dict[str, Any]]:
+    def _change(self, endpoint: str, emails: list[str]) -> list[SuppressionResult]:
         data = {"Suppressions": [{"EmailAddress": email} for email in emails]}
-        statuses: list[dict[str, Any]] = self.call("POST", endpoint, data=data)["Suppressions"]
+        statuses: list[SuppressionResult] = self.call("POST", endpoint, data=data)["Suppressions"]
         return statuses
 
 
@@ -110,8 +118,8 @@ class AsyncSuppressionsManager(AsyncModelManager[Suppression]):
     async def all(
         self,
         stream_id: str = DEFAULT_STREAM_ID,
-        SuppressionReason: str | None = None,
-        Origin: str | None = None,
+        SuppressionReason: Literal["HardBounce", "SpamComplaint", "ManualSuppression"] | None = None,
+        Origin: Literal["Recipient", "Customer", "Admin"] | None = None,
         fromdate: Any = None,
         todate: Any = None,
         EmailAddress: str | None = None,
@@ -127,16 +135,16 @@ class AsyncSuppressionsManager(AsyncModelManager[Suppression]):
         )
         return self._init_many(response["Suppressions"])
 
-    async def create(self, emails: list[str], stream_id: str = DEFAULT_STREAM_ID) -> list[dict[str, Any]]:
+    async def create(self, emails: list[str], stream_id: str = DEFAULT_STREAM_ID) -> list[SuppressionResult]:
         return await self._change(f"/message-streams/{stream_id}/suppressions", emails)
 
-    async def delete(self, emails: list[str], stream_id: str = DEFAULT_STREAM_ID) -> list[dict[str, Any]]:
+    async def delete(self, emails: list[str], stream_id: str = DEFAULT_STREAM_ID) -> list[SuppressionResult]:
         return await self._change(f"/message-streams/{stream_id}/suppressions/delete", emails)
 
     def SubscriptionChange(self, json: str | bytes) -> AsyncSubscriptionChange:
         return AsyncSubscriptionChange.from_json(json, manager=self)
 
-    async def _change(self, endpoint: str, emails: list[str]) -> list[dict[str, Any]]:
+    async def _change(self, endpoint: str, emails: list[str]) -> list[SuppressionResult]:
         data = {"Suppressions": [{"EmailAddress": email} for email in emails]}
-        statuses: list[dict[str, Any]] = (await self.call("POST", endpoint, data=data))["Suppressions"]
+        statuses: list[SuppressionResult] = (await self.call("POST", endpoint, data=data))["Suppressions"]
         return statuses
