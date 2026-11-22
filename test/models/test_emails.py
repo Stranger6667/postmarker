@@ -359,6 +359,18 @@ async def test_email_str_multiple_recipients(client, flavor):
     assert str(email) == f"{twin(Email, flavor).__name__} from sender@example.com to a@example.com,b@example.com"
 
 
+def test_email_keeps_caller_collections(client):
+    attachments = [("readme.txt", "content", "text/plain")]
+    headers = {"X-Accept-Language": "en-us"}
+    email = client.emails.Email(
+        From="sender@example.com", To="receiver@example.com", TextBody="text", Attachments=attachments, Headers=headers
+    )
+    email.attach(("other.txt", "content", "text/plain"))
+    email["X-Priority"] = "1"
+    assert attachments == [("readme.txt", "content", "text/plain")]
+    assert headers == {"X-Accept-Language": "en-us"}
+
+
 async def test_email_set_header(email):
     assert email.Headers == {}
     email["X-Accept-Language"] = "en-us, en"
