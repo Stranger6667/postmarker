@@ -95,6 +95,9 @@ except ClientError as exc:
     print(exc.error_code)  # For example, 406 for an inactive recipient
 ```
 
+A request without a usable Postmark response, e.g. a network error, a timeout or an HTML 502 from a proxy, raises `TransportError`, the same in the sync and async clients.
+`status_code` is the HTTP status when there was a response, and the original `requests` or `httpx2` exception is in `__cause__`.
+
 ## Async
 
 `AsyncPostmarkClient` has the same API, with every method that makes a request as a coroutine.
